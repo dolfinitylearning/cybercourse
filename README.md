@@ -1,4 +1,4 @@
 cybercourse
 ===========
 
-A philosophy, method, and system for improving university skills courses.
+A philosophy, method, and software for improving university skills courses.
