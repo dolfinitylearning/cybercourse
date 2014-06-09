@@ -4,9 +4,9 @@ package = Date/Time
 configure = admin/config/regional/timezone_detect
 core = 7.x
 
-; Information added by Drupal.org packaging script on 2014-03-31
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2014-04-16
+version = "7.x-1.1+4-dev"
 core = "7.x"
 project = "timezone_detect"
-datestamp = "1396289074"
+datestamp = "1397666967"
 

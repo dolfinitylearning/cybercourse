@@ -9,15 +9,15 @@
  * Implements hook_enable().
  */
 function timezone_detect_enable() {
-  drupal_set_message($message = t('The Timezone Detect module was successfully enabled.'), $type = 'status');
+  drupal_set_message(t('The Timezone Detect module was successfully enabled.'), 'status');
 
   // Set default user timezone to "none." Otherwise this module will not do
-  // anything in its default configuration (set user timezone only if it
-  // is not set).
+  // anything in its default configuration ("set user timezone only if it
+  // is not set").
   $user_default_timezone = variable_get('user_default_timezone', DRUPAL_USER_TIMEZONE_DEFAULT);
   if ($user_default_timezone != DRUPAL_USER_TIMEZONE_EMPTY) {
     variable_set('user_default_timezone', DRUPAL_USER_TIMEZONE_EMPTY);
-    drupal_set_message($message = t('Default user timezone set to "empty timezone" for best results with Timezone Detect.'), $type = 'status');
+    drupal_set_message(t('Default user timezone set to "empty timezone" for best results with Timezone Detect.'), 'status');
   }
 
   // Disable "remind users at login if their time zone is not set." Otherwise
@@ -26,7 +26,7 @@ function timezone_detect_enable() {
   $empty_timezone_message = variable_get('empty_timezone_message', 0);
   if ($empty_timezone_message != 0) {
     variable_set('empty_timezone_message', 0);
-    drupal_set_message($message = t('"Remind users at login if their time zone is not set" set to FALSE for best results with Timezone Detect.'), $type = 'status');
+    drupal_set_message(t('"Remind users at login if their time zone is not set" set to FALSE for best results with Timezone Detect.'), 'status');
   }
 }
 

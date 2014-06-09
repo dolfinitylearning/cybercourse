@@ -12,7 +12,8 @@
  *   - Option to notify user when their timezone is set automatically.
  *   - Option to ASK user *before* their timezone gets set automatically.
  *   - Option to use cdnjs for jstz library, rather than local file.
- *   - Option to set $SESSION timezone for anonymouse users? See https://drupal.org/node/1985906.
+ *   - Option to set $SESSION timezone for anonymouse users?
+ *     See https://drupal.org/node/1985906.
  */
 function timezone_detect_admin_form($form, &$form_state) {
 

@@ -2,8 +2,11 @@
  INTRODUCTION
 ================================================================================
 
-Original author and current maintainer: 
-- Jordan Magnuson <http://drupal.org/user/269983>
+Original author and 7.x maintainer:
+- Jordan Magnuson <https://drupal.org/user/269983>
+
+Drupal 6.x port, and 6.x maintainer:
+- Alex Borsody <https://drupal.org/user/473596>
 
 Timezone Detect is a lightweight Drupal module that leverages the 
 jsTimezoneDetect library for automatic detection and setting of a user's 
