@@ -1,0 +1,73 @@
+@import url("swim_editing.css");
+@import url("rest/html4css1.css");
+@import url("rest/math.css");
+@import url("rest_overrides.css");
+@import url("swim_rest_classes.css");
+
+
+/*h3 {
+  text-shadow: 3px 3px 6px rgba(150, 150, 150, 1);;
+}*/
+body.swim .main-container blockquote, 
+body.swim .main-container blockquote p {
+  font-size: 100% !important;
+  line-height: 1.5 !important;
+  color: #666 !important;
+  /*margin-bottom: inherit !important;*/
+}
+
+div.field-name-body div.document div.sidebar {
+  border: none;
+  background-color: #EEE; 
+  border-radius: 8px;
+  margin: 2em;
+  padding: 1em;
+  float: right;
+  max-width: 15em;
+}
+
+div.field-name-body div.document div.sidebar img {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+div.field-name-body div.document img {
+  margin-bottom: 1em;
+}
+
+.swim-indent-image,
+.swim-indent-caption {
+  margin-left: 4em;
+}
+
+.swim-indent-caption {
+  color: #777;
+}
+
+/* reStructText warnings. */
+div.field-name-body div.document .system-message {
+  border: 0.2em red dotted;
+  margin-top: 1em;
+  padding: 0.2em;
+}
+
+@media (max-width: 767px) {
+/*  h3 {
+    text-shadow: none;
+  }*/
+  
+  aside.swim {
+    float: none;
+    margin: 1em 0 1em 0;
+    background-color: inherit;
+  }
+  
+  .swim-indent-image,
+  .swim-indent-caption {
+    margin-left: 0;
+  }
+  
+  
+}
+
+

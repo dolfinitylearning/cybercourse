@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_menu.
+ */
+function cybercourse_base_test_menu() {
+  $items = array();
+//  $items['cybercourse_base_test1'] = array(
+//    'title' => 'Cybercourse base test',
+//    'description' => 'Test of Cybercourse base module.',
+//    'page callback' => 'cybercourse_base_test1',
+//    'access arguments' => array('administer site configuration'),
+//  );
+  return $items;
+}
+

@@ -1,0 +1,95 @@
+Hi there, dog!
+==============
+
+Who am i? 
+
+.. pseudent:: 367 
+
+    What?
+
+This is a demo site for CyberCourse, an open source system for designing, creating, and running courses. CyCo is designed primarily for universities, but is useful for businesses, community colleges, high schools, and other organizations that do education and training. 
+ 
+.. authornote:: Problem
+
+    This might be too complicated.
+
+.. image:: picture.jpeg
+   :height: 100px
+   :width: 200 px
+   :scale: 50 %
+   :alt: alternate text
+   :align: right
+
+
+.. image:: /sites/default/files/aila_neutral1_0.png
+    :alt: Aila
+    :width: 105
+    :height: 123
+
+
+
+.. exercise:: 573
+
+This is nothing.
+
+.. pseudent:: arla_smile
+
+    This is nothing either.
+
+    Nope, nothing at all.
+
+.. sidebar:: Open source
+
+   CyCo is open source. You can use it for free.
+
+   Free is good.
+
+What's it all about?
+====================
+
+CyberCourse improves student productivity. How? By improving courses themselves, using principles supported by learning research. Such as:  
+
+* Deep learning. Fewer facts. More skills.
+* Outcome-based learning. Concentrate just on core skills.
+* Frequent formative feedback. Many exercises, making things. Good feedback. Not just a grade. Tell students what they could do better. Give them a chance to improve their work.
+* Interaction with experts. Give students personal help, when and where they need it.
+* Be neighborly. If a student falls behind, contact her, before it's impossible for her to catch up. "Are you OK? Do you need help?"
+
+CyberCourse is *not* a learning management system, like `Moodle <http://moodle.org>`_.
+
+* Moodle helps administer courses. Enrollment, syllabus, collecting assignments, giving online quizzes, reporting grades.
+* CyberCourse is a tool for creating good courses in the first place, and then running them in productive ways.
+
+CyberCourse supports a business model that improves student productivity, without changing the way universities operate. Professors are content experts. They don't lecture, or do mass grading (unless they want to). Students subscribe to CyCo courses, that can include feedback services. Courses can scale to..., well, to however large they need to be.
+
+Who makes CyberCourses? Professors, teachers, professionals... anyone willing to spend the time. Authors can sell access to courses. They get all the revenue, not a tiny royalty.
+
+CyCo is a continuation of the `CoreDogs <http://coredogs.com>`_ project, launched in 2008. CoreDogs pioneered flipped courses designed using learning research principles. CyCo refines the approach, making it scalable, author friendly, and future proof(ish).
+
+
+
+
+This site
+=========
+
+Imagine this is your site, on your server (or hosted for you). You own all the content. Log in as:
+
+Username: author
+
+Password: author
+
+Check out a course blueprint. Try the graphical course design tools. Create pseudo students. Write pages that work on a laptop, tablet, or smartphone.
+
+This site resets itself every two hours.
+
+Download
+========
+
+CyCo runs on `Drupal <http://drupal.org>`_, a popular open source content management system. The plan is to let you download your own copy of CyberCourse, and install it on your own server. The download is not ready yet, though.
+
+CyCo is in its early stages. It's under heavy development.
+
+What do you think?
+==================
+
+Check out the project's `Web site <http://cybercour.se>`_. Let us know what you think.

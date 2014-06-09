@@ -1,0 +1,18 @@
+/* 
+Classes to use with the figure and other directives.
+*/
+
+.bordered {
+  border: 1px solid #444;
+  padding: 1em;
+}
+
+/* Images are normally in their own block... */
+img {
+  display: block;
+}
+
+/* ... unless they have the inline class. */
+img.inline {
+  display: inline;
+}

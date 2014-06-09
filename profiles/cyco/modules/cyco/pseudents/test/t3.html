@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div>TODO write content</div>
+    <script>
+      var ns = ns || {};
+      
+      (function($){
+        ns.o = function() {
+          this.m1 = 1;
+        }
+        
+        ns.o.prototype.m = function(){
+          this.m2 = 2;
+        };
+        
+        $(document).ready( function() {
+          var i1 = new ns.o();
+          i1.m();
+          console.log( i1.m1, i1.m2 );
+        });
+      })(jQuery);
+      
+      (function($){
+        var i2 = new ns.o();
+        console.log( i2.m1 );
+      })(jQuery);
+    </script>
+  </body>
+</html>

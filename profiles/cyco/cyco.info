@@ -1,0 +1,74 @@
+name = CyberCourse
+description = A philosophy, method, and software for improving university skills courses.
+core = 7.x
+distribution_name = "CyberCourse"
+
+;Core modules
+dependencies[] = block
+dependencies[] = book
+dependencies[] = color
+dependencies[] = comment
+dependencies[] = contact
+dependencies[] = contextual
+dependencies[] = dblog
+dependencies[] = field
+dependencies[] = field_sql_storage
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = filter
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = node
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = rdf
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = taxonomy
+dependencies[] = text
+;dependencies[] = toolbar
+dependencies[] = update
+dependencies[] = user
+
+;Contrib, non-cyco
+dependencies[] = admin_menu
+dependencies[] = admin_menu_toolbar
+dependencies[] = allow_all_file_extensions
+dependencies[] = clone
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = date_views
+dependencies[] = date_popup
+dependencies[] = diff
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = extlink
+dependencies[] = features
+dependencies[] = field_group
+dependencies[] = filter_perms
+dependencies[] = globalredirect
+dependencies[] = insert
+dependencies[] = logintoboggan
+dependencies[] = module_filter
+dependencies[] = og
+dependencies[] = pathauto
+dependencies[] = porterstemmer
+dependencies[] = save_edit
+dependencies[] = scroll_to_top
+dependencies[] = services
+dependencies[] = services_definition
+dependencies[] = strongarm
+dependencies[] = timezone_detect
+dependencies[] = token
+dependencies[] = token_custom
+dependencies[] = views
+dependencies[] = views_bulk_operations
+
+;Cyco custom modules
+
+
+;Themes

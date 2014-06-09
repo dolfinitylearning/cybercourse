@@ -1,0 +1,864 @@
+<?php
+
+/**
+ * Implements hook_help().
+ */
+function swim_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim':
+      return '<p>' . t('Helpy helpy help help, <a href="@jquery">jQuery</a>.', 
+          array(
+            '@jquery' => 'http://jquery.com',
+          )) . '</p>';
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function swim_permission() {
+  return array(
+    'peek content' => array(
+      'title' => t('Peek at rendered content'),
+      'description' => t('When editing, see what the content looks like on various devices.')
+    ),
+    'access ckHtml field' => array(
+      'title' => t('Access hidden CKEditor HTML field.'),
+      'description' => t(
+          'In case body field gets out of sync with HTML used in CKEditor. '
+        . 'Should not be needed.'    
+      )
+    ),
+  );
+}
+
+/**
+ * Define two field types: swim, and swim_with_summary.
+ */
+function swim_field_info() {
+  $info = array(
+    'swim' => array(
+      'label' => t('SWIM'),
+      'description' => t('reStructured text and SWIM editor.'),
+      'default_widget' => 'swim_editor',
+      'default_formatter' => 'swim_default',
+    ),
+    'swim_with_summary' => array(
+      'label' => t('SWIM with summary'),
+      'description' => t('reStructured text and SWIM editor with summary.'),
+      'default_widget' => 'swim_editor_with_summary',
+      'default_formatter' => 'swim_default',
+    ),
+  );
+  return $info;
+}
+
+//Right? Need last false?
+function swim_field_is_empty($item, $field) {
+  if ($field['type'] == 'swim') {
+    $mt = ! $item['main'];
+    return $mt;
+  }
+  if ($field['type'] == 'swim_with_summary') {
+    $mt = (!$item['main'] ) && (!$item['summary'] );
+    return $mt;
+  }
+  return FALSE;
+}
+
+function swim_field_validate(
+    $obj_type, $object, $field, $instance, $langcode, &$items, &$errors
+  ) {
+  return TRUE;
+}
+
+/**
+ * Implement hook_field_widget_info().
+ * 
+ * Define two new widgets. Both have 'editor' in its name.
+ */
+function swim_field_widget_info() {
+  $info = array(
+    'swim_editor' => array(
+      'label' => t('SWIM editor'),
+      'description' => t(
+          'SWIM anti-WYSIWYG editor.'),
+      'field types' => array('swim'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+    'swim_editor_with_summary' => array(
+      'label' => t('SWIM editor with summary'),
+      'description' => t(
+          'SWIM anti-WYSIWYG editor with summary.'),
+      'field types' => array('swim_with_summary'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+  );
+  return $info;
+}
+
+function swim_field_widget_form(
+    &$form, &$form_state, $field, $instance, 
+    $langcode, $items, $delta, $element) {
+  $base = $element;
+  if (
+         $instance['widget']['type'] == 'swim_editor' 
+      || $instance['widget']['type'] == 'swim_editor_with_summary') {
+    $with_summary = ( $instance['widget']['type'] == 'swim_editor_with_summary' );
+    _swim_add_client_pieces();
+    $element['main'] = array(
+      '#type' => 'textarea',
+      '#title' => t( $element['#title'] ),
+      //Remove grippie.
+      '#resizable' => FALSE,
+      '#default_value' => 
+        isset( $items[$delta]['wysiwyg_rep'] ) 
+          ? $items[$delta]['wysiwyg_rep'] : '',
+      '#attributes' => array(
+        'class' => array('swim-editor swim-editor-main text-full'),
+      ),
+    ) + $base;
+    if ( $with_summary ) {
+      $element['summary'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Summary'),
+        '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
+        //Remove grippie.
+        '#resizable' => FALSE,
+        '#default_value' => 
+          isset( $items[$delta]['wysiwyg_rep_summary'] ) 
+            ? $items[$delta]['wysiwyg_rep_summary'] : '',
+        '#attributes' => array(
+          'class' => array('swim-editor swim-editor-summary'),
+        ),
+        '#prefix' => '<div class="swim-summary-wrapper">',
+        '#suffix' => '</div>',
+        '#weight' => -10,
+        '#attached' => array(
+          'js' => array(drupal_get_path('module', 'swim') 
+                  . '/js/swim_summary_links.js'),
+        ),
+      ) + $base;
+    } //End with_summary
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_libraries_info().
+ * 
+ * Define CKEditor in the libraries.
+ */
+function swim_libraries_info() {
+  $libraries = array();
+  $libraries['ckeditor'] = array(
+    'name' => 'CKEditor',
+    'vendor url' => 'http://ckeditor.com/',
+    'download url' => 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.2/ckeditor_4.3.2_standard.zip',
+    'version arguments' => array(
+      'file' => 'ckeditor.js',
+      // version:"4.3"
+      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
+//      // version:"4.3"
+//      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
+      'lines' => 10,
+    ),
+    'files' => array(
+      'js' => array(
+        'ckeditor.js',
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * 
+ * Add stuff the browser will need.
+ */
+function _swim_add_client_pieces() {
+  //Only run this once per page.
+  static $already_added = FALSE;
+  if ( $already_added ) {
+    return;
+  }
+  $already_added = TRUE;
+  global $base_url;
+  //Set up UI stuff.
+  drupal_add_library('system', 'ui.dialog');
+  //Load CKEditor.
+  $ckLibraryInfo = libraries_load('ckeditor');
+  $numFilesLoaded = libraries_load_files($ckLibraryInfo);
+//return;
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('SWIM error: no CKEditor files loaded. Is CK installed?');
+    cybercourse_base_handle_error( $mess );
+    return;
+  }
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
+  //Build a list of extra plugins to load.
+  //Array of arrays of form name=>?, path=>?.
+  $plugins = module_invoke_all('swim_load_ck_plugins');
+  //The array is flat if there is only one plugin. Unflatten it, if needed.
+  $plugins = _swim_unflatten( $plugins );
+  //Add peek CK plugin.
+  $plugins['name'][] = 'peek';
+  $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+        . '/ck_plugins/peek/';
+  //Add ReST help CK plugin.
+  $plugins['name'][] = 'rest_help';
+  $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+        . '/ck_plugins/rest_help/';
+  //Add modified MathJax CK plugin.
+  $plugins['name'][] = 'mathjax';
+  $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+        . '/ck_plugins/mathjax/';
+  //Make sure the last char in each path is /.
+  foreach ($plugins['path'] as $key => $value) {
+    if ( substr($value, -1) != '/' ) {
+      $plugins['path'][$key] .= '/';
+    }
+  }
+  //Obscurer code.
+  $obscurer = theme('obscurer');
+  //Send settings to JS.
+  $settings = array(
+    'base_url' => $base_url,
+    'extraPlugins' => $plugins,
+    'can_peek' => user_access('peek content') ? 'yes' : 'no',
+    'editing_stylesheet' => 
+      $base_url . '/' . drupal_get_path('module', 'swim') . '/css/swim_editing.css',
+    'peekIconsPath' =>
+      $base_url . '/' . drupal_get_path('module', 'swim') . '/ck_plugins/peek/icons/',
+    'obscurer' => $obscurer,
+  );
+  drupal_add_js(
+      array('swim' => $settings),
+      'setting'
+  );
+  //Create extraPlugins string.
+  $extra_plugins = implode(',', $plugins['name'] );
+  //Load SWIM JS.
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_base_config.js' );
+//  $js = 'Drupal.swimCkConfig.extraPlugins="mathedit,' . $extra_plugins . '";';
+  $js = 'Drupal.swimCkConfig.extraPlugins="' . $extra_plugins . '";';
+  drupal_add_js($js, 'inline');
+  //Let other modules change things.
+  //It could be changing config, like the line above.
+  //Could be adding other JS settings, CSS, etc.
+  $js_lines = module_invoke_all('swim_add_client_stuff');
+  drupal_add_js( implode(' ', $js_lines), 'inline');  
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim.js' );
+}
+
+/**
+ * Unflatten plugins array, if needed.
+ * @param array $plugins Original array.
+ * @return array Unflattened array.
+ */
+function _swim_unflatten ( $plugins ) {
+  if ( ! isset( $plugins['name'] ) ) {
+    return $plugins;
+  }
+  if ( is_array($plugins['name']) ) {
+    return $plugins;
+  }
+  $new_array = array(
+    'name' => array( $plugins['name'] ),
+    'path' => array( $plugins['path'] ),
+  );
+  return $new_array;
+}
+
+/**
+ * Implements hook_field_presave(). 
+ * 
+ * Convert from CKEditor's rep of the markup to pure ReST. Store both. 
+ */
+function swim_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  if ($field['type'] == 'swim' || $field['type'] == 'swim_with_summary') {
+    //Convert from CK HTML to pure ReST for storage.
+    $with_summary = ( $field['type'] == 'swim_with_summary' );
+    foreach ($items as $delta => $item) {
+      //Is aught in the main editor?
+      if ( isset( $item['main'] ) ) {
+        //Convert to ReST and save in ReST field.
+        $items[$delta]['pure_rest'] 
+             = _swim_ckhtml2rest( $item['main'] );
+        //Save content from editor.
+        $items[$delta]['wysiwyg_rep'] = $item['main'];
+      }
+      else {
+        $items[$delta]['pure_rest'] = '';
+        $items[$delta]['wysiwyg_rep'] = '';
+      }
+      //Is there a summary to process?
+      if ( $with_summary ) {
+        //Is aught in the main editor?
+        if ( isset( $item['summary'] ) ) {
+          //Convert to ReST and save in ReST field.
+          $items[$delta]['pure_rest_summary'] 
+               = _swim_ckhtml2rest( $item['summary'] );
+          //Save content from editor.
+          $items[$delta]['wysiwyg_rep_summary'] = $item['summary'];
+        }
+        else {
+          $items[$delta]['pure_rest_summary'] = '';
+          $items[$delta]['wysiwyg_rep_summary'] = '';
+        }
+      } //End $with_summary.
+    } //End for loop.
+  } //End process SWIM field. 
+} //End function.
+
+/**
+ * Implements hook_field_formatter_info().
+ * 
+ * Defines formatters for SWIM and SWIM with summary. They have the same
+ * ones as text.module's long text and long text summary, plus another two for 
+ * pure ReST. One of them shows the main content only, the other shows 
+ * summary and main (if there is a summary, of course).
+ */
+function swim_field_formatter_info() {
+  $info = array(
+    //Default shows main, no summary.
+    'swim_default' => array(
+      'label' => t('Default'),
+      'field types' => array('swim', 'swim_with_summary'),
+    ),
+    //Trimmed version of main, no summary.
+    'swim_trimmed' => array(
+      'label' => t('Trimmed'),
+      'field types' => array('swim', 'swim_with_summary'),
+      'settings' => array('trim_length' => 600),
+    ),
+    //Prefer summary, if not, use trimmed version of main.
+    'swim_summary_or_trimmed' => array(
+      'label' => t('Summary or trimmed'),
+      'field types' => array('swim', 'swim_with_summary'),
+      'settings' => array('trim_length' => 600),
+    ),
+    //ReST markup. Main only, no summary.
+    'swim_rest' => array(
+      'label' => t('ReST markup'),
+      'field types' => array('swim', 'swim_with_summary'),
+    ),
+    //ReST markup. Summary and main.
+    'swim_rest_with_summary' => array(
+      'label' => t('ReST markup with summary'),
+      'field types' => array('swim_with_summary'),
+    ),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ * 
+ * Trimmed formats have a trim length.
+ */
+function swim_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  if (   $display['type'] == 'swim_trimmed'
+      || $display['type'] == 'swim_summary_or_trimmed'
+     ) {
+    $element['trim_length'] = array(
+      '#title' => t('Trim length'),
+      '#type' => 'textfield',
+      '#size' => 10,
+      '#default_value' => $settings['trim_length'],
+      '#element_validate' => array('element_validate_integer_positive'),
+      '#required' => TRUE,
+    );
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ * 
+ * Return a short summary of a formatter's settings.
+ */
+function swim_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = '';
+  if (   $display['type'] == 'swim_trimmed'
+      || $display['type'] == 'swim_summary_or_trimmed'
+     ) {
+    $summary = t('Trim length') . ': ' . $settings['trim_length'];
+  }
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ * 
+ * Compute formatter output.
+ */
+function swim_field_formatter_view(
+    $obj_type, $object, $field, $instance, 
+    $langcode, $items, $display
+  ) {
+  //MathJax
+  $stuff = drupal_add_js('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+  $element = array();
+  switch ($display['type']) {
+    case 'swim_default':
+    case 'swim_trimmed':
+      foreach ($items as $delta => $item) {
+        //Replace tokens.
+        $tokenized = swim_process_tokens( 
+            $obj_type, $object, $field, $item['pure_rest']
+        );
+        //Convert from ReST to HTML
+        $output = swim_rest2html( $tokenized );
+//        $output = swim_rest2html( $item['pure_rest'] );
+        //$output = check_markup($output, NULL, $langcode);
+        if ($display['type'] == 'swim_trimmed') {
+          $output = text_summary($output, NULL, $display['settings']['trim_length']);
+        }
+        $element[$delta] = array('#markup' => $output);
+      }
+      break;
+
+    case 'swim_summary_or_trimmed':
+      foreach ($items as $delta => $item) {
+        if (!empty($item['pure_rest_summary'])) {
+          $output = swim_rest2html( $item['pure_rest_summary'] );
+        }
+        else {
+          $output = text_summary($item['pure_rest'], $item['format'], $display['settings']['trim_length']);
+          $output = swim_rest2html( $output );
+        }
+        $output = check_markup($output, $item['format'], $langcode);
+        $element[$delta] = array('#markup' => $output);
+      }
+      break;
+
+    case 'swim_rest':
+      foreach ($items as $delta => $item) {
+        $output_main = check_plain($item['pure_rest'], $item['format'], $langcode);
+        $element[$delta] = array('#markup' => 
+          theme('swim_rest', 
+              array(
+                'main' => $output_main, 
+              ) //End array().
+          ) // End theme().
+        ); //End array().
+      }
+      break;
+  
+    case 'swim_rest_summary':
+      foreach ($items as $delta => $item) {
+        if ( isset($item['pure_rest_summary']) ) {
+          $output_summary = check_plain($item['pure_rest_summary'], $item['format'], $langcode);
+          $element[$delta] = array('#markup' => 
+            theme('swim_rest', 
+                array(
+                  'summary' => $output_summary, 
+                ) //End array().
+            ) // End theme().
+          ); //End array().
+        } // End if there is a summary.
+      }
+      break;
+
+    case 'swim_rest_main_and_summary':
+      foreach ($items as $delta => $item) {
+        $output_main = check_plain($item['pure_rest'], $item['format'], $langcode);
+        $output_summary = '';
+        if ( isset($item['pure_rest_summary']) ) {
+          $output_summary = check_plain($item['pure_rest_summary'], $item['format'], $langcode);
+        }
+        $element[$delta] = array('#markup' => 
+          theme('swim_rest', 
+              array(
+                'main' => $output_main, 
+                'summary' => $output_summary
+              ) //End array().
+          ) // End theme().
+        ); //End array().
+      }
+      break;
+  
+  } //end switch
+  
+  return $element;
+}
+
+
+function swim_process_tokens( $obj_type, $object, $field, $content ) {
+  if ( $obj_type == 'node' ) {
+    //Is this a content type supporting tokens?
+    $content_type = $object->type;
+    $types_supporting_tokens = cybercourse_base_get_types_supporting_tokens();
+    if ( in_array( $content_type, $types_supporting_tokens ) ) {
+      //Is this a field that supports tokens?
+      $field_name = $field['field_name'];
+      $fields_supporting_tokens 
+          = cybercourse_base_get_fields_supporting_tokens($content_type);
+      if (in_array($field_name, $fields_supporting_tokens) ) {
+        //Is the page owned by a user allowed to substitute tokens?
+        $page_owner_uid = $object->uid;
+        $page_owner = user_load($page_owner_uid);
+        if (  cybercourse_base_user_has_role(
+                $page_owner,
+                array( 'author', 'administrator', 'grader', 'instructor')
+              ) 
+           ) {
+          //Replace tokens.
+          $content = token_replace($content);
+        }
+      }
+    }
+  }
+  return $content;
+}
+
+/**
+ * Render a SWIM field using a specified formatter.
+ * @param stdClass $entity Entity containing the field.
+ * @param string $field_name Field name, e.g., field_body.
+ * @param string $format Format: 
+ *  default - main.
+ *  summary - summary.
+ *  summary-or-trimmed - summary if not MT, else trimmed main.
+ * @param integer $trim_length Trim length.
+ * @param string $lang Language.
+ * @param integer $delta Delta, i.e., which value in a multivalued field.
+ * @return string Rendered content.
+ */
+function swim_render_field( $entity, $field_name, $format = 'default', 
+    $trim_length = 600, $lang = LANGUAGE_NONE, $delta = 0 ) {
+  $html = '';
+  try {
+    //Pick data to render.
+    if ( ! isset( $entity->$field_name ) ) {
+      throw new Exception('Entity does not have field ' . $field_name . '.');
+    }
+    $to_render = '';
+    //May be no data in the field.
+    if ( ! isset( $entity->{$field_name}[$lang][$delta] ) ) {
+      //Nothing to do.
+    }
+    else if ( $format == 'default' ) {
+      $to_render = $entity->{$field_name}[$lang][$delta]['pure_rest'];
+    }
+    else if ( $format == 'summary' || $format == 'summary-or-trimmed' ) {
+      //Is there a summary?
+    if ( isset( $entity->{$field_name}[$lang][$delta]['pure_rest_summary'] ) ) {
+        //There is a summary.
+        $to_render = $entity->{$field_name}[$lang][$delta]['pure_rest_summary'];
+      }
+      else {
+        //No summary. Trim main.
+        //Call the text module's summary function.
+        $to_render = text_summary(
+          $entity->${field_name}[$lang][$delta]['pure_rest'], NULL, $trim_length
+        );
+      }
+    }
+    else {
+      throw new Exception('Unknown format: ' . $format);
+    }
+    //Render it.
+    $html = swim_rest2html( $html );
+  } catch ( Exception $exc ) {
+    cybercourse_base_handle_error( $exc->getMessage() );
+  }
+  return $html;
+}
+
+/**
+ * Translate pure ReST into HTML.
+ * @param string $rest ReST
+ * @return string HTML
+ */
+function swim_rest2html( $rest ) {
+  //Run content through ReST translator. Returns mixed ReST and CyCo markup.
+  // descriptor array
+  $desc = array(
+      0 => array('pipe', 'r'), // 0 is STDIN for process
+      1 => array('pipe', 'w'), // 1 is STDOUT for process
+      2 => array('pipe', 'w') // 2 is STDERR for process
+  );
+  //Can't remember where this code was adapted from. Some human did it.
+  //Command to invoke markup engine. Reads custom config file.
+  $py_path = DRUPAL_ROOT . '/' 
+      . drupal_get_path('module', 'swim') .'/python/convert_rest.py';
+//  $py_path = DRUPAL_ROOT . '/' 
+//      . drupal_get_path('module', 'swim') .'/python/convert_rest.py';
+  $command =  'python convert_rest.py'; // . $py_path;
+  // spawn the process
+  $cwd = DRUPAL_ROOT . '/' . drupal_get_path('module', 'swim') .'/python/';
+  $env = array(
+    'PYTHONIOENCODING' => 'utf-8',
+    'path' => getenv('path'),
+  );
+  $p = proc_open($command, $desc, $pipes, $cwd, $env);
+  fwrite($pipes[0], $rest);
+  fclose($pipes[0]);
+  // read the output from the engine
+  $html = stream_get_contents($pipes[1]);
+  $error_message = stream_get_contents($pipes[2]);
+  // all done! Clean up
+  fclose($pipes[1]);
+  fclose($pipes[2]);
+  proc_close($p);
+  //Show error messages, if any. These are not CyCo errors, but author errors.
+  if ( $error_message ) {
+    $error_message = _swim_format_docutils_errors( $error_message );
+    drupal_set_message($error_message, 'warning');
+  }
+  //Remove extra formula markers added by docutils math directive.
+  $html = str_ireplace('\begin{equation*}', '', $html);
+  $html = str_ireplace('\end{equation*}', '', $html);
+  
+  //Translate the CyCo directives markup into HTML
+  //Trigger other module's translators.
+  drupal_alter( 'swim_betwixt_markup_2_html', $html );
+  return $html;
+}
+
+/**
+ * Convert content from CKHTML (HTML from CK field) to pure ReST.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function _swim_ckhtml2rest( $content ) {
+  //Convert to pure ReST.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to ReST.
+  $content = _swim_ck_mathjx_2_rest( $content );
+  //Remove the <br>s, leaving just the \ns.
+  _swim_remove_brs( $content );
+  
+  //Handle numeric codes correctly.
+  // See http://www.php.net/manual/en/function.html-entity-decode.php#47371
+//  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
+//  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml_2_directive', $content); //, $type );
+  //Replace image HTML tags with directives.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  _swim_img_2_path( $content );
+  //Strip all remaining HTML tags.
+  //This gets rid of paste errors. I hope!
+  $content = strip_tags($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Remove <br>s from $content. 
+ * @param type $content Content to remove <br>s from.
+ */
+function _swim_remove_brs( &$content ) {
+  $content = preg_replace('/\<\s*br\s*\/?\s*\>/i', '', $content);
+}
+
+/**
+ * Convert HTML inserted by mathjax CK plugin into ReSt math directive.
+ * @param type $content Content from CK.
+ */
+function _swim_ck_mathjx_2_rest( $content ) {
+  //Find equations on a line of their own.
+  $pattern = '/\<br\s*\/?\>\s*\<span\s*class\=\"math\"\>(.*?)\<\/span\>\s*\<br\s*\/?\>/im';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got one.
+        //Remove blank lines from match. Messes up ReST parser.
+        $result = str_replace("\n", '', $matches[1]);
+        //Output directive, not role.
+        $result = "\n\n.. math::\n\n    " . $result . "\n\n";
+        return $result;
+      },
+      $content
+  );  
+  
+  $pattern = '/\<span\s*class\=\"math\"\>(.*?)\<\/span\>/ims';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got one.
+        //Remove blank lines from match. Messes up ReST parser.
+        $result = str_replace("\n", '', $matches[1]);
+        //Remove the first two and last two characters.
+        $result = substr($result, 2);
+        $result = substr($result, 0, strlen($result)-2 );
+        //Output role.
+        $result = ':math:`' . $result . '`';
+        return $result;
+      },
+      $content
+  );
+  return $content;
+}
+
+/**
+ * Replace img tags with just the src attribute.
+ * @param string $content The entire img tag.
+ * @return string The src (path).
+ */
+function _swim_img_2_path( &$content ) {
+  //Pattern to find the img tags. Need the ? to make the match lazy, not greedy.
+  $pattern = '/<img.*?>/im';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got an image tag.
+        //Parse it with QueryPath
+        $src = htmlqp($matches[0], 'img')->attr('src');
+        return $src;
+      },
+      $content
+  );
+}
+
+/**
+ * Return a page with the right media queries and such, and a place to 
+ * put markup. MT otherwise.
+ */
+function _swim_mt_peek() {
+  //Check perm.
+  if ( !user_access('peek content') ) {
+    return MENU_ACCESS_DENIED;
+  }
+  //Suppress the admin menu.
+  if ( module_exists('admin_menu') ) {
+    module_invoke('admin_menu', 'suppress');
+  }
+  
+  
+  //Return some MT content. The theme system will wrap this in stuff that
+  //the theme usually wraps content in.
+  return '<div id="swim-mt-content-container"/>';
+}
+
+/**
+ * Return rendered HTML for preview.
+ */
+function _swim_peek() {
+  //Convert the content to HTML.
+  $content = $_POST['content'];
+  //Convert content to pure ReST, so can call the ReST input filter.
+  $content = _swim_ckhtml2rest($content);
+  //Convert the ReST content to HTML.
+  $html = swim_rest2html($content);
+  //Return rendered content. 
+  drupal_json_output( array( 
+        'status' => 'success',
+        'result' => $html,
+  ));
+  drupal_exit();  
+}
+
+/**
+ * Change error messages from Python's docutils into something that
+ * will look OK for a drupal_set_message(). Sample input:
+ * <string>:5: (ERROR/3) Error in "image" directive:
+ * 1 argument(s) required, 0 supplied.
+ * 
+ * .. image::
+ * 
+ * @param string $docutils_error_messages Error messages returned from Python.
+ * @return string Messages formatted for drupal_set_message().
+ */
+function _swim_format_docutils_errors( $docutils_error_messages ) {
+  $drupal_message = str_replace('<string>', '', $docutils_error_messages);
+  $drupal_message = preg_replace('/\:[0-9]+\:\ /m', '', $drupal_message);
+  // :, then 1 or more digits, then :, then space.
+  $drupal_message = str_replace("\n", '<br>', $drupal_message);
+  $themed_message = theme(
+      'swim_format_error', 
+      array(
+        'message' => $drupal_message,
+      )
+  );
+  return $themed_message;
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function swim_menu() {
+  $items = array();
+  //Return a page with no content, but all the stylesheets and other 
+  //themeing stuff in place. Used for previews.
+  $items['swim-mt-peek'] = array(
+    'page callback' => '_swim_mt_peek',
+    'access callback' => '_swim_check_peek_perm',
+    'type' => MENU_CALLBACK,
+  );
+  //Return rendered content to show in peek dialog.
+  $items['swim-peek'] = array(
+    'page callback' => '_swim_peek',
+    'access callback' => '_swim_check_peek_perm',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function _swim_check_peek_perm() {
+  if ( user_access( 'peek content' ) ) {
+    return TRUE;
+  }
+  //Check if other modules want to grant access.
+  $results = module_invoke_all('swim_peek_access');
+  $access_granted = FALSE;
+  foreach( $results as $result ) {
+    if ( $result ) {
+      $access_granted = TRUE;
+      break;
+    }
+  }
+  return $access_granted;
+}
+
+function swim_theme() {
+  global $base_url;
+  $info = array(
+    'obscurer' => array(
+      'template' => 'obscurer',
+      'variables' => array(
+        'obscurer_throbber_path' =>
+          $base_url . '/' . drupal_get_path('module', 'swim') . '/',
+      ),
+    ),
+    'swim_format_error' => array(
+      'variables' => array(
+        'message' => NULL,
+      ),
+    ),
+  );
+  return $info;
+}
+
+function theme_swim_format_error( $variables ) {
+  $message = $variables['message'];
+  $html = "Problems in translating your ReST.<br><br>" . $message
+        . "<br>ReST can be tricky. Check the CyberCourse wiki for help.";
+  return $html;
+}

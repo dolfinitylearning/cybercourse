@@ -1,0 +1,11 @@
+.. exercise:: 666
+
+This is nothing.
+
+.. pseudent:: arla_smile
+
+    This is nothing either.
+
+    Nope, nothing at *all*.
+
+This is more.

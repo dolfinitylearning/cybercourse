@@ -1,0 +1,16 @@
+/*
+Override standard ReST stylesheet.
+*/
+
+h1.title {
+  text-align: left;
+}
+
+div.figure {
+  margin-bottom: 2em;
+}
+
+div.figure img.bordered {
+  padding: 1em;
+  border: 1px solid #444;
+}

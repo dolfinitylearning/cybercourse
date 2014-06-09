@@ -1,0 +1,126 @@
+/*
+Styles for the pseudents module.
+*/
+
+#pseudent-grid-container {
+  padding: 0.5em;
+  background-color: #eee;
+  vertical-align: top;
+  text-align: center;
+  border: 1px solid #888;
+  float: left;
+}
+
+#pseudent-grid-container .pseudent-cell {
+  width: 100px;
+  display: inline-block;
+  float:left;
+  height: 100px;
+  text-align: center;
+  padding: 1em;
+  border: #e4e4e4 solid 1px;
+}
+
+#pseudent-grid-container .pseudent-cell .pseudent-preview-title {
+  text-align: center;
+}
+
+.pseudent-cell:hover {
+  cursor: pointer;
+  background-color: #ddd;
+}
+
+.pseudent-cell.selected {
+  background-color: #ffffe0;
+}
+
+.pseudent-cell img {
+  max-width: 80px;
+  max-height: 80px;
+  display: inline;
+}
+
+/*table#pseudent-choose-table th,*/
+/*table#pseudent-choose-table td {
+  padding: 0.5em;
+  vertical-align: middle;
+  background-color: #eee;
+  vertical-align: top;
+  text-align: center;
+  border: 1px solid #888;
+}*/
+
+/*table#pseudent-choose-table td .pseudent-preview-title {
+  font-size: 130%;
+}
+
+table#pseudent-choose-table td img {
+  max-width: 80px;
+}*/
+
+/*table#pseudent-choose-table tr {
+  background-color: #eee;
+}*/
+
+/*table#pseudent-choose-table td:hover {
+  cursor: pointer;
+  background-color: #ddd;
+}
+
+table#pseudent-choose-table td.selected {
+  background-color: #ffffe0;
+}*/
+
+
+/* For the admin table. */
+.admin-char table {
+  width: 0;
+}
+
+.admin-char-desc {
+  padding-right: 4em;
+}
+
+/* Char container */
+.pseudent {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: #f5f5f5; 
+  margin-top: 2em;
+  margin-bottom: 2em;
+  overflow: hidden;
+  padding: 1em;
+}
+
+/* Style the element following the pseudent container. */
+.pseudent+* {
+  clear: left;
+}
+
+/* Photo/caption container */
+.pseudent-image-container {
+  float: left;
+  text-align: center;
+  margin-right: 1.5em;
+}
+
+/* Caption for photo */
+.pseudent-image-caption {
+  margin-top: 0.5em;
+}
+
+.pseudent-content {
+  /*float: left;*/
+  overflow: hidden;
+}
+
+/* 'Back to pseudent list' link. */
+.pseudents-back-link {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#pseudent-table-container {
+  overflow: scroll;
+}

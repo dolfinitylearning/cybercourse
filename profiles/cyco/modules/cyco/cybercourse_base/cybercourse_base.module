@@ -1,0 +1,251 @@
+<?php
+
+/*
+ * Defines some basic CyCo stuff.
+ */
+
+include 'cybercourse_base_utilities.inc';
+include 'cybercourse_error_handler.inc';
+
+/**
+ * Implements hook_menu.
+ */
+function cybercourse_base_menu() {
+  $items = array();
+  $items['admin/config/cybercourse'] = array(
+    'title' => 'Cybercourse',
+    'description' => 'Configuration of the Cybercourse system.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('administer site configuration'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+  $items['admin/config/cybercourse/base'] = array(
+    'title' => 'Cybercourse base settings',
+    'description' => 'Base configuration of the Cybercourse system.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cybercourse_base_settings_form'),
+    'access arguments' => array('administer site configuration'),
+//    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  //Client-side error handler callback.
+  $items['cybercourse_handle_client_error'] = array(
+    'page callback' => 'cybercourse_base_client_error',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission.
+ */
+//function cybercourse_exercise_permission() {
+//  return array(
+//    'administer cybercourse' => array(
+//      'title' => t('Administer Cybercourse'),
+//      'restrict access' => TRUE,
+//    ),
+//  );
+//}
+//
+/**
+ * Define base config form.
+ */
+function cybercourse_base_settings_form($form, &$form_state) {
+  $form['nothing'] = array(
+    '#type' => 'markup',
+    '#markup' => 'Nothing',
+  );
+  return $form;
+}
+
+/**
+ * Handle a client-side error.
+ * Most of the error handling is in another file. This function is here so
+ * the menu processor can handle it.
+ * @param string $message The Bad Thing that happened.
+ */
+function cybercourse_base_client_error() {
+  $message = t( $_GET['message'] );
+  $message = 'Something bad happened on the client-side: ' . $message;
+  static $error_handler = NULL;
+  if ( is_null($error_handler) ) {
+    $error_handler = new CyberCourseErrorHandler();
+  }
+  $error_handler->reportError($message, FALSE);
+  drupal_json_output(
+      array('status' => TRUE)
+  );
+}
+
+/**
+ * Implements hook_form_alter().
+ * 
+ * Add display of available tokens.
+ */
+function cybercourse_base_form_alter(&$form, $form_state, $form_id) {
+  //$form_id ends in _node_form.
+  $pos = strpos( $form_id, '_node_form');
+  if ( $pos === FALSE ) {
+    return;
+  }
+  $content_type = substr($form_id, 0, $pos);
+  //Get a list of content types supporting tokens.
+  $types = cybercourse_base_get_types_supporting_tokens();
+  if (in_array($content_type, $types) ) {
+    //Compute the weight of the token display form element.
+    //What element should the display follow?
+    $element_to_follow = 'field_body';
+    //Pattern uses a different field.
+    if ( $form_id == 'pattern_node_form' ) {
+        $element_to_follow = 'field_situation';
+    }
+    $token_display_weight = null;
+    if ( isset( $form[$element_to_follow] ) ) {
+      if ( isset( $form[$element_to_follow]['#weight'] ) ) {
+        $token_display_weight = $form[$element_to_follow]['#weight'] + 1;
+      }
+    }
+    if ( !is_null($token_display_weight) ) {
+      //Increase weights of elements following the token display.
+      foreach( $form as $key => $value ) {
+        if ( substr($key, 0, 6) == 'field_' ) {
+          if ( isset( $value['#weight'] ) ) {
+            $weight = $form[$key]['#weight'];
+            if ( $weight >= $token_display_weight ) {
+              $form[$key]['#weight'] = $weight + 1;
+            }
+          }
+        }//End substr
+      }//End foreach
+      //Insert the token display.
+      $form['tokens'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Tokens'),
+        '#description' => 
+            t('Text like [current-user:field_last_name] are replaced with '
+              . 'values like Smith or Jones when content is displayed. '
+              . 'See the CyberCourse wiki for more information.'),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+        '#weight' => $token_display_weight,
+      );
+      $form['tokens']['list'] = array(
+        '#theme' => 'token_tree',
+        '#token_types' => array('node'),
+        '#global_types' => TRUE,
+        '#click_insert' => FALSE,
+      );
+    }
+  }
+
+
+}
+
+/**
+ * Return array of names of node types that support tokens.
+ * @return array Node type names
+ */
+function cybercourse_base_get_types_supporting_tokens() {
+  //No exer sub - students can use tokens.
+  $types = array(
+    'exercise',
+    'course',
+    'course_page',
+    'site_page',
+    'rubric_item',
+    'pattern',
+    'class',
+    'group',
+    'group_announcement'
+  );
+  return $types;
+}
+
+/**
+ * Get the fields supporting tokens for a content type.
+ * @param string $content_type Content type, e.g., exercise.
+ * @return array Field supporting tokens.
+ */
+function cybercourse_base_get_fields_supporting_tokens( $content_type ) {
+  $fields = array();
+  if ( in_array($content_type, cybercourse_base_get_types_supporting_tokens()) ) {
+    if ( $content_type == 'pattern' ) {
+      $fields = array( 'field_situation', 'field_actions', 'field_body', );
+    }
+    else {
+      $fields = array( 'field_body' );
+    }
+  }
+  return $fields;
+}
+
+
+function cybercourse_base_tokens_alter( &$replacements, $context) {
+  foreach( $replacements as $key => $value ) {
+    //Key has a value like [[thing:thang]].
+    $token = str_replace('[', '', $key);
+    $token = str_replace(']', '', $token);
+    switch( $key ) {
+      case 'current-user:field_first_name':
+      case 'current-user:field-first-name':
+        //If user is not logged in, or did not give first name...
+        global $user;
+        if ( 
+               $user->uid == 0 
+            || ! isset( $user->field_first_name[LANGUAGE_NONE][0] ) 
+           ) {
+          $replacements[$key] = 'Jane';
+        }
+        break;
+      case 'current-user:field_last_name':
+      case 'current-user:field-last-name':
+        //If user is not logged in, or did not give last name...
+        global $user;
+        if ( 
+               $user->uid == 0 
+            || ! isset( $user->field_last_name[LANGUAGE_NONE][0] ) 
+           ) {
+          $replacements[$key] = 'Doe';
+        }
+        break;
+      case 'current-user:name':
+        //If user is not logged in...
+        global $user;
+        if ( $user->uid == 0 ) {
+          $replacements[$key] = 'genericUser';
+        }
+        break;
+      
+    };
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ * 
+ * Check stuff in the user profile form.
+ */
+function cybercourse_base_form_user_profile_form_alter( &$form, $form_state ) {
+  $form['#validate'][] = '_cybercourse_base_user_profile_form_validate';
+}
+
+/**
+ * Validate the user profile form.
+ */
+function _cybercourse_base_user_profile_form_validate( $form, &$form_state ) {
+  if ( cybercourse_base_current_user_has_role('student') ) {
+    //Check first and last name.
+    if ( ! $form_state['values']['field_first_name'][LANGUAGE_NONE][0]['value'] ) {
+      drupal_set_message( t(
+          'You didn\'t give your first name. Your instructor might want you to.'
+      ) );
+    }
+    if ( ! $form_state['values']['field_last_name'][LANGUAGE_NONE][0]['value'] ) {
+      drupal_set_message( t(
+          'You didn\'t give your last name. Your instructor might want you to.'
+      ) );
+    }
+  }
+}

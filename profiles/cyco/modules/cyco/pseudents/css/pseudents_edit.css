@@ -1,0 +1,9 @@
+/*
+These styles override those in pseudent.css when editing. This 
+stylesheet is only loaded in the CKEditor iframe.
+*/
+
+.pseudent {
+  margin-top: 0;
+  margin-bottom: 0;  
+}

@@ -1,0 +1,40 @@
+<?php
+
+function swim_field_schema($field) {
+  if ($field['type'] == 'swim') {
+    $schema['columns']['pure_rest'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    $schema['columns']['wysiwyg_rep'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    return $schema;
+  }
+  if ($field['type'] == 'swim_with_summary') {
+    $schema['columns']['pure_rest'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    $schema['columns']['pure_rest_summary'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    $schema['columns']['wysiwyg_rep'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    $schema['columns']['wysiwyg_rep_summary'] = array(
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    );
+    return $schema;
+  }
+}

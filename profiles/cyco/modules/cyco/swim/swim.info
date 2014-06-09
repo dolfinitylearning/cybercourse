@@ -1,0 +1,7 @@
+name = Show What I Mean content field
+description = A field using reStructuredText, with a SWIM editor.
+package = CyberCourse
+core = 7.x
+dependencies[] = libraries
+dependencies[] = text
+stylesheets[all][] = css/swim.css

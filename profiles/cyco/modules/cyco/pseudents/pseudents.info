@@ -1,0 +1,6 @@
+name = Pseudents
+description = This module helps you define and use pseudents in your content.
+package = CyberCourse
+core = 7.x
+files[] = pseudents.module
+stylesheets[all][] = css/pseudents.css
