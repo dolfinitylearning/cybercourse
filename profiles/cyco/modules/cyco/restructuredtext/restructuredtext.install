@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Installing the restructuredtext module.
+ */
+
+/**
+ * Implements hook_install.
+ * 
+ * Create a ReST input format that contains the ReST filter.
+ */
+function restructuredtext_install() {
+  $rest_format = array(
+    'format' => 'rest',
+    'name' => 'reStructuredText',
+    'weight' => 1,
+    'filters' => array(
+      // ReST filter.
+      'rest' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+    ),
+  );
+  $rest_format = (object) $rest_format;
+  filter_format_save($rest_format);
+}

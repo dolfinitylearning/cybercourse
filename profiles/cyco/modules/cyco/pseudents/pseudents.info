@@ -2,5 +2,6 @@ name = Pseudents
 description = This module helps you define and use pseudents in your content.
 package = CyberCourse
 core = 7.x
-files[] = pseudents.module
+dependencies[] = cyco_base
+dependencies[] = views
 stylesheets[all][] = css/pseudents.css

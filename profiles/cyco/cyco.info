@@ -2,73 +2,98 @@ name = CyberCourse
 description = A philosophy, method, and software for improving university skills courses.
 core = 7.x
 distribution_name = "CyberCourse"
+exclusive = TRUE
+; System Requirements.
+php_memory_limit = 128M
 
-;Core modules
+;**************** Core *******************
+
 dependencies[] = block
 dependencies[] = book
 dependencies[] = color
 dependencies[] = comment
 dependencies[] = contact
 dependencies[] = contextual
-dependencies[] = dblog
-dependencies[] = field
-dependencies[] = field_sql_storage
-dependencies[] = field_ui
-dependencies[] = file
-dependencies[] = filter
+dependencies[] = dashboard
 dependencies[] = help
 dependencies[] = image
 dependencies[] = list
 dependencies[] = menu
-dependencies[] = node
 dependencies[] = number
 dependencies[] = options
 dependencies[] = path
-dependencies[] = rdf
+dependencies[] = taxonomy
+dependencies[] = dblog
 dependencies[] = search
 dependencies[] = shortcut
-dependencies[] = taxonomy
-dependencies[] = text
 ;dependencies[] = toolbar
-dependencies[] = update
-dependencies[] = user
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = rdf
 
-;Contrib, non-cyco
-dependencies[] = admin_menu
-dependencies[] = admin_menu_toolbar
-dependencies[] = allow_all_file_extensions
-dependencies[] = clone
+;**************** Contrib, non-cyco *******************
+
+;Infrastructure and utilities
+dependencies[] = libraries
 dependencies[] = ctools
+dependencies[] = entity
+dependencies[] = features
+dependencies[] = strongarm
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = filter_perms
+dependencies[] = services
+dependencies[] = services_definition
+dependencies[] = token
+dependencies[] = token_custom
+
+;Field related
+dependencies[] = field_group
+dependencies[] = allow_all_file_extensions
 dependencies[] = date
 dependencies[] = date_api
 dependencies[] = date_views
 dependencies[] = date_popup
-dependencies[] = diff
 dependencies[] = entity
 dependencies[] = entityreference
-dependencies[] = extlink
-dependencies[] = features
-dependencies[] = field_group
-dependencies[] = filter_perms
-dependencies[] = globalredirect
 dependencies[] = insert
-dependencies[] = logintoboggan
+
+;Admin
+dependencies[] = admin_menu
+dependencies[] = admin_menu_toolbar
 dependencies[] = module_filter
-dependencies[] = og
-dependencies[] = pathauto
-dependencies[] = porterstemmer
 dependencies[] = save_edit
-dependencies[] = scroll_to_top
-dependencies[] = services
-dependencies[] = services_definition
-dependencies[] = strongarm
-dependencies[] = timezone_detect
-dependencies[] = token
-dependencies[] = token_custom
-dependencies[] = views
+
+;Content management
+dependencies[] = clone
+dependencies[] = diff
 dependencies[] = views_bulk_operations
+dependencies[] = book_copy
 
-;Cyco custom modules
+;User stuff
+dependencies[] = logintoboggan
+
+;Search
+dependencies[] = porterstemmer
+dependencies[] = timezone_detect
+
+;UI
+dependencies[] = extlink
+dependencies[] = scroll_to_top
+
+;SEO
+dependencies[] = globalredirect
+dependencies[] = pathauto
+
+;Groups
+dependencies[] = og
+
+;**************** Cyco custom modules *******************
+dependencies[] = cyco_base
+;dependencies[] = restructuredtext
+dependencies[] = swim
+dependencies[] = book_rearrange_collapse
+
+;**************** Themes *******************
 
 
-;Themes

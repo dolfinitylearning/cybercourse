@@ -1,0 +1,47 @@
+diff --git a/timezone_detect/timezone_detect.constants.inc b/timezone_detect/timezone_detect.constants.inc
+new file mode 100644
+index 0000000..8b7933a
+--- /dev/null
++++ b/timezone_detect/timezone_detect.constants.inc
+@@ -0,0 +1,10 @@
++<?php
++
++// Detection modes configured via administration form.
++// Note these are strings instead of integers because system_settings_form()
++// saves variable values as strings.
++define('TIMEZONE_DETECT_MODE_DEFAULT', '0');
++define('TIMEZONE_DETECT_MODE_LOGIN', '1');
++define('TIMEZONE_DETECT_MODE_ALWAYS', '2');
++
++
+diff --git a/timezone_detect/timezone_detect.install b/timezone_detect/timezone_detect.install
+index 2f31b04..ac3614f 100644
+--- a/timezone_detect/timezone_detect.install
++++ b/timezone_detect/timezone_detect.install
+@@ -5,6 +5,8 @@
+  * (Un)installs the Timezone Detect module.
+  */
+ 
++require_once 'timezone_detect.constants.inc';
++
+ /**
+  * Implements hook_enable().
+  */
+diff --git a/timezone_detect/timezone_detect.module b/timezone_detect/timezone_detect.module
+index 3de0daa..0083c77 100644
+--- a/timezone_detect/timezone_detect.module
++++ b/timezone_detect/timezone_detect.module
+@@ -9,12 +9,7 @@
+ define('TIMEZONE_DETECT_LIBRARY_FILENAME', 'jstz.js');
+ define('TIMEZONE_DETECT_LIBRARY_DOWNLOAD_URL', 'https://bitbucket.org/pellepim/jstimezonedetect/raw/default/jstz.js');
+ 
+-// Detection modes configured via administration form.
+-// Note these are strings instead of integers because system_settings_form()
+-// saves variable values as strings.
+-define('TIMEZONE_DETECT_MODE_DEFAULT', '0');
+-define('TIMEZONE_DETECT_MODE_LOGIN', '1');
+-define('TIMEZONE_DETECT_MODE_ALWAYS', '2');
++require_once 'timezone_detect.constants.inc';
+ 
+ /**
+  * Implements hook_menu().

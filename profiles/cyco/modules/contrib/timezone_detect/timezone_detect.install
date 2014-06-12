@@ -5,6 +5,8 @@
  * (Un)installs the Timezone Detect module.
  */
 
+require_once 'timezone_detect.constants.inc';
+
 /**
  * Implements hook_enable().
  */

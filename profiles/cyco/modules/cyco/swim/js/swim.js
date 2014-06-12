@@ -4,6 +4,11 @@
     done: false,
     attach: function() {
 //console.log('attach');//return;
+//      $("#edit-submit").click(function() {
+//        var editorContent = CKEDITOR.instances['edit-field-body-und-0-main'].getData();
+//        console.log(editorContent);
+//        $("#edit-field-body-und-0-main").val( editorContent );
+//      });
       if ( this.done ) {
         return;
       }

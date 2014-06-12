@@ -1,36 +1,48 @@
 <?php
 
+/**
+ * @file
+ * Installing the SWIM module.
+ */
+
+/**
+ * Implements hook_install.
+ * 
+ * Create a ReST input format that contains the ReST filter.
+ */
+function swim_install() {
+  $rest_format = array(
+    'format' => 'rest',
+    'name' => 'reStructuredText',
+    'weight' => 1,
+    'filters' => array(
+      // ReST filter.
+      'rest' => array(
+        'weight' => 0,
+        'status' => 1,
+      ),
+    ),
+  );
+  $rest_format = (object) $rest_format;
+  filter_format_save($rest_format);
+}
+
 function swim_field_schema($field) {
-  if ($field['type'] == 'swim') {
-    $schema['columns']['pure_rest'] = array(
-      'type' => 'text',
-      'size' => 'big',
-      'not null' => FALSE,
-    );
-    $schema['columns']['wysiwyg_rep'] = array(
+  if ($field['type'] == 'swim_field') {
+    $schema['columns']['value'] = array(
       'type' => 'text',
       'size' => 'big',
       'not null' => FALSE,
     );
     return $schema;
   }
-  if ($field['type'] == 'swim_with_summary') {
-    $schema['columns']['pure_rest'] = array(
+  if ($field['type'] == 'swim_with_summary_field') {
+    $schema['columns']['value'] = array(
       'type' => 'text',
       'size' => 'big',
       'not null' => FALSE,
     );
-    $schema['columns']['pure_rest_summary'] = array(
-      'type' => 'text',
-      'size' => 'big',
-      'not null' => FALSE,
-    );
-    $schema['columns']['wysiwyg_rep'] = array(
-      'type' => 'text',
-      'size' => 'big',
-      'not null' => FALSE,
-    );
-    $schema['columns']['wysiwyg_rep_summary'] = array(
+    $schema['columns']['summary'] = array(
       'type' => 'text',
       'size' => 'big',
       'not null' => FALSE,

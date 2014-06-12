@@ -18,16 +18,16 @@
  * @param integer $delta Delta, i.e., which value in a multivalued field.
  * @return string Rendered content.
  */
-function swim_render_field( $entity, $field_name, $format = 'default', 
-    $trim_length = 600, $lang = LANGUAGE_UNKNOWN, $delta = 0 ) {
-}
+//function swim_render_field( $entity, $field_name, $format = 'default', 
+//    $trim_length = 600, $lang = LANGUAGE_UNKNOWN, $delta = 0 ) {
+//}
 
 /**
  * Translate SWIM content into HTML.
  * @param string $rest ReST
  * @return string HTML
  */
-function swim_rest2html( $rest ) {
+function restructuredtext_to_html( $rest ) {
 }
 
 /**
@@ -76,7 +76,7 @@ function hook_swim_ckhtml_2_directive_alter( &$content ) {
  * 
  * [[[animal 666|||note]]]
  * 
- * See SWIM docs for more. Check pseudent and authornote modules for examples.
+ * See SWIM docs for more. Check pseudent module for an example.
  * 
  * @param string $content The betwixt content.
  * @return string Content with betwixt markup replaced by HTML.

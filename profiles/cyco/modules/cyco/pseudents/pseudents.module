@@ -297,16 +297,15 @@ function _pseudents_make_directive_replacements($matches) {
 }
 
 /**
- * Implements swim_betwixt_markup_2_html().
+ * Implements hook_restructuredtext_to_html_alter.
  * 
  * Translate intermediate (betwixt) markup in $content (as inserted by
  * custom ReST directive) to its HTML equivalent. Sample betwixt markup:
  * 
  * [[[animal 666|||note]]]
  * 
- * See SWIM docs for more. Check pseudent and authornote modules for examples.
  */
-function pseudents_swim_betwixt_markup_2_html_alter(&$content) {
+function pseudents_restructuredtext_to_html_alter(&$content) { 
   $regex = 
       '/\[\[\[cycopseudent\s*(\d*?)\|\|\|(.*?)\]\]\]/is';
   //? is for lazy match.

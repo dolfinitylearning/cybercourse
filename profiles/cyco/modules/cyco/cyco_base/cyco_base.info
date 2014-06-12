@@ -1,0 +1,4 @@
+name = CyberCourse base
+description = CyberCourse infrastructure and basic configuration
+package = CyberCourse
+core = 7.x

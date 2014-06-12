@@ -2,6 +2,7 @@
 
 /**
  * Implements hook_help().
+ * @todo Write SWIMmy help in hook_help.
  */
 function swim_help($path, $arg) {
   switch ($path) {
@@ -22,54 +23,7 @@ function swim_permission() {
       'title' => t('Peek at rendered content'),
       'description' => t('When editing, see what the content looks like on various devices.')
     ),
-    'access ckHtml field' => array(
-      'title' => t('Access hidden CKEditor HTML field.'),
-      'description' => t(
-          'In case body field gets out of sync with HTML used in CKEditor. '
-        . 'Should not be needed.'    
-      )
-    ),
   );
-}
-
-/**
- * Define two field types: swim, and swim_with_summary.
- */
-function swim_field_info() {
-  $info = array(
-    'swim' => array(
-      'label' => t('SWIM'),
-      'description' => t('reStructured text and SWIM editor.'),
-      'default_widget' => 'swim_editor',
-      'default_formatter' => 'swim_default',
-    ),
-    'swim_with_summary' => array(
-      'label' => t('SWIM with summary'),
-      'description' => t('reStructured text and SWIM editor with summary.'),
-      'default_widget' => 'swim_editor_with_summary',
-      'default_formatter' => 'swim_default',
-    ),
-  );
-  return $info;
-}
-
-//Right? Need last false?
-function swim_field_is_empty($item, $field) {
-  if ($field['type'] == 'swim') {
-    $mt = ! $item['main'];
-    return $mt;
-  }
-  if ($field['type'] == 'swim_with_summary') {
-    $mt = (!$item['main'] ) && (!$item['summary'] );
-    return $mt;
-  }
-  return FALSE;
-}
-
-function swim_field_validate(
-    $obj_type, $object, $field, $instance, $langcode, &$items, &$errors
-  ) {
-  return TRUE;
 }
 
 /**
@@ -79,21 +33,21 @@ function swim_field_validate(
  */
 function swim_field_widget_info() {
   $info = array(
-    'swim_editor' => array(
+    'swim_widget' => array(
       'label' => t('SWIM editor'),
       'description' => t(
           'SWIM anti-WYSIWYG editor.'),
-      'field types' => array('swim'),
+      'field types' => array('swim_field'),
       'behaviors' => array(
         'multiple values' => FIELD_BEHAVIOR_DEFAULT,
         'default value' => FIELD_BEHAVIOR_DEFAULT,
       ),
     ),
-    'swim_editor_with_summary' => array(
+    'swim_with_summary_widget' => array(
       'label' => t('SWIM editor with summary'),
       'description' => t(
           'SWIM anti-WYSIWYG editor with summary.'),
-      'field types' => array('swim_with_summary'),
+      'field types' => array('swim_with_summary_field'),
       'behaviors' => array(
         'multiple values' => FIELD_BEHAVIOR_DEFAULT,
         'default value' => FIELD_BEHAVIOR_DEFAULT,
@@ -108,18 +62,18 @@ function swim_field_widget_form(
     $langcode, $items, $delta, $element) {
   $base = $element;
   if (
-         $instance['widget']['type'] == 'swim_editor' 
-      || $instance['widget']['type'] == 'swim_editor_with_summary') {
-    $with_summary = ( $instance['widget']['type'] == 'swim_editor_with_summary' );
+         $instance['widget']['type'] == 'swim_widget' 
+      || $instance['widget']['type'] == 'swim_with_summary_widget') {
+    $with_summary = ( $instance['widget']['type'] == 'swim_with_summary_widget' );
     _swim_add_client_pieces();
-    $element['main'] = array(
+    $element['value'] = array(
       '#type' => 'textarea',
       '#title' => t( $element['#title'] ),
       //Remove grippie.
       '#resizable' => FALSE,
       '#default_value' => 
-        isset( $items[$delta]['wysiwyg_rep'] ) 
-          ? $items[$delta]['wysiwyg_rep'] : '',
+        isset( $items[$delta]['value'] ) 
+          ? $items[$delta]['value'] : '',
       '#attributes' => array(
         'class' => array('swim-editor swim-editor-main text-full'),
       ),
@@ -132,8 +86,8 @@ function swim_field_widget_form(
         //Remove grippie.
         '#resizable' => FALSE,
         '#default_value' => 
-          isset( $items[$delta]['wysiwyg_rep_summary'] ) 
-            ? $items[$delta]['wysiwyg_rep_summary'] : '',
+          isset( $items[$delta]['summary'] ) 
+            ? $items[$delta]['summary'] : '',
         '#attributes' => array(
           'class' => array('swim-editor swim-editor-summary'),
         ),
@@ -149,6 +103,19 @@ function swim_field_widget_form(
   }
   return $element;
 }
+
+function swim_field_is_empty($item, $field) {
+  if ($field['type'] == 'swim_field') {
+    $mt = ! $item['value'];
+    return $mt;
+  }
+  if ($field['type'] == 'swim_with_summary_field') {
+    $mt = (!$item['value'] ) && (!$item['summary'] );
+    return $mt;
+  }
+  return FALSE;
+}
+
 
 /**
  * Implements hook_libraries_info().
@@ -246,7 +213,6 @@ function _swim_add_client_pieces() {
   $extra_plugins = implode(',', $plugins['name'] );
   //Load SWIM JS.
   drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_base_config.js' );
-//  $js = 'Drupal.swimCkConfig.extraPlugins="mathedit,' . $extra_plugins . '";';
   $js = 'Drupal.swimCkConfig.extraPlugins="' . $extra_plugins . '";';
   drupal_add_js($js, 'inline');
   //Let other modules change things.
@@ -276,83 +242,89 @@ function _swim_unflatten ( $plugins ) {
   return $new_array;
 }
 
+
+function swim_field_attach_presave($entity_type, $entity) {
+  $r=5;
+}
+
 /**
  * Implements hook_field_presave(). 
  * 
  * Convert from CKEditor's rep of the markup to pure ReST. Store both. 
  */
 function swim_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-  if ($field['type'] == 'swim' || $field['type'] == 'swim_with_summary') {
+  if ($field['type'] == 'text_long' || $field['type'] == 'text_with_summary') {
     //Convert from CK HTML to pure ReST for storage.
-    $with_summary = ( $field['type'] == 'swim_with_summary' );
+    $with_summary = ( $field['type'] == 'text_with_summary' );
     foreach ($items as $delta => $item) {
       //Is aught in the main editor?
-      if ( isset( $item['main'] ) ) {
+      if ( isset( $item['value'] ) ) {
         //Convert to ReST and save in ReST field.
-        $items[$delta]['pure_rest'] 
-             = _swim_ckhtml2rest( $item['main'] );
-        //Save content from editor.
-        $items[$delta]['wysiwyg_rep'] = $item['main'];
+        $items[$delta]['value'] 
+             = _swim_ckhtml2rest( $item['value'] );
       }
       else {
-        $items[$delta]['pure_rest'] = '';
-        $items[$delta]['wysiwyg_rep'] = '';
+        $items[$delta]['value'] = '';
       }
       //Is there a summary to process?
       if ( $with_summary ) {
         //Is aught in the main editor?
         if ( isset( $item['summary'] ) ) {
           //Convert to ReST and save in ReST field.
-          $items[$delta]['pure_rest_summary'] 
+          $items[$delta]['summary'] 
                = _swim_ckhtml2rest( $item['summary'] );
-          //Save content from editor.
-          $items[$delta]['wysiwyg_rep_summary'] = $item['summary'];
         }
         else {
-          $items[$delta]['pure_rest_summary'] = '';
-          $items[$delta]['wysiwyg_rep_summary'] = '';
+          $items[$delta]['summary'] = '';
         }
       } //End $with_summary.
     } //End for loop.
   } //End process SWIM field. 
 } //End function.
 
+ function swim_field_info() {
+  return array(
+    'swim_field' => array(
+      'label' => t('SWIM'),
+      'description' => t('Show What I Mean.'),
+      'default_widget' => 'swim_widget',
+      'default_formatter' => 'swim_default_formatter',
+    ),
+    'swim_with_summary_field' => array(
+      'label' => t('SWIM with summary'),
+      'description' => t('Show What I Mean.'),
+      'default_widget' => 'swim_with_summary_widget',
+      'default_formatter' => 'swim_default_formatter',
+    ),
+  );
+ } 
+
+
+
 /**
  * Implements hook_field_formatter_info().
  * 
  * Defines formatters for SWIM and SWIM with summary. They have the same
- * ones as text.module's long text and long text summary, plus another two for 
- * pure ReST. One of them shows the main content only, the other shows 
- * summary and main (if there is a summary, of course).
+ * ones as text.module's long text and long text summary.
  */
 function swim_field_formatter_info() {
   $info = array(
     //Default shows main, no summary.
-    'swim_default' => array(
+    'swim_default_formatter' => array(
       'label' => t('Default'),
-      'field types' => array('swim', 'swim_with_summary'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
     ),
     //Trimmed version of main, no summary.
-    'swim_trimmed' => array(
+    'swim_trimmed_formatter' => array(
       'label' => t('Trimmed'),
-      'field types' => array('swim', 'swim_with_summary'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
       'settings' => array('trim_length' => 600),
     ),
     //Prefer summary, if not, use trimmed version of main.
-    'swim_summary_or_trimmed' => array(
+    'swim_summary_or_trimmed_formatter' => array(
       'label' => t('Summary or trimmed'),
-      'field types' => array('swim', 'swim_with_summary'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
       'settings' => array('trim_length' => 600),
-    ),
-    //ReST markup. Main only, no summary.
-    'swim_rest' => array(
-      'label' => t('ReST markup'),
-      'field types' => array('swim', 'swim_with_summary'),
-    ),
-    //ReST markup. Summary and main.
-    'swim_rest_with_summary' => array(
-      'label' => t('ReST markup with summary'),
-      'field types' => array('swim_with_summary'),
     ),
   );
   return $info;
@@ -369,8 +341,8 @@ function swim_field_formatter_settings_form($field, $instance, $view_mode, $form
 
   $element = array();
 
-  if (   $display['type'] == 'swim_trimmed'
-      || $display['type'] == 'swim_summary_or_trimmed'
+  if (   $display['type'] == 'swim_trimmed_formatter'
+      || $display['type'] == 'swim_summary_or_trimmed_formatter'
      ) {
     $element['trim_length'] = array(
       '#title' => t('Trim length'),
@@ -393,12 +365,18 @@ function swim_field_formatter_settings_summary($field, $instance, $view_mode) {
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $summary = '';
-  if (   $display['type'] == 'swim_trimmed'
-      || $display['type'] == 'swim_summary_or_trimmed'
+  if (   $display['type'] == 'swim_trimmed_formatter'
+      || $display['type'] == 'swim_summary_or_trimmed_formatter'
      ) {
     $summary = t('Trim length') . ': ' . $settings['trim_length'];
   }
   return $summary;
+}
+
+function swim_field_formatter_prepare_view(
+    $entity_type, $entities, $field, $instances, $langcode, &$items, $displays
+  ) {
+  $r=5;
 }
 
 /**
@@ -410,88 +388,43 @@ function swim_field_formatter_view(
     $obj_type, $object, $field, $instance, 
     $langcode, $items, $display
   ) {
+  $r=4;
   //MathJax
   $stuff = drupal_add_js('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
   $element = array();
   switch ($display['type']) {
-    case 'swim_default':
-    case 'swim_trimmed':
+    case 'swim_default_formatter':
+    case 'swim_trimmed_formatter':
       foreach ($items as $delta => $item) {
         //Replace tokens.
         $tokenized = swim_process_tokens( 
-            $obj_type, $object, $field, $item['pure_rest']
+            $obj_type, $object, $field, $item['value']
         );
         //Convert from ReST to HTML
-        $output = swim_rest2html( $tokenized );
+        $output = swim_restructuredtext_to_html( $tokenized );
 //        $output = swim_rest2html( $item['pure_rest'] );
         //$output = check_markup($output, NULL, $langcode);
-        if ($display['type'] == 'swim_trimmed') {
+        if ($display['type'] == 'swim_trimmed_formatter') {
           $output = text_summary($output, NULL, $display['settings']['trim_length']);
         }
         $element[$delta] = array('#markup' => $output);
       }
       break;
 
-    case 'swim_summary_or_trimmed':
+    case 'swim_summary_or_trimmed_formatter':
       foreach ($items as $delta => $item) {
-        if (!empty($item['pure_rest_summary'])) {
-          $output = swim_rest2html( $item['pure_rest_summary'] );
+        if (!empty($item['summary'])) {
+          $output = swim_restructuredtext_to_html( $item['summary'] );
         }
         else {
-          $output = text_summary($item['pure_rest'], $item['format'], $display['settings']['trim_length']);
-          $output = swim_rest2html( $output );
+          $output = text_summary($item['summary'], $item['format'], $display['settings']['trim_length']);
+          $output = swim_restructuredtext_to_html( $output );
         }
         $output = check_markup($output, $item['format'], $langcode);
         $element[$delta] = array('#markup' => $output);
       }
       break;
 
-    case 'swim_rest':
-      foreach ($items as $delta => $item) {
-        $output_main = check_plain($item['pure_rest'], $item['format'], $langcode);
-        $element[$delta] = array('#markup' => 
-          theme('swim_rest', 
-              array(
-                'main' => $output_main, 
-              ) //End array().
-          ) // End theme().
-        ); //End array().
-      }
-      break;
-  
-    case 'swim_rest_summary':
-      foreach ($items as $delta => $item) {
-        if ( isset($item['pure_rest_summary']) ) {
-          $output_summary = check_plain($item['pure_rest_summary'], $item['format'], $langcode);
-          $element[$delta] = array('#markup' => 
-            theme('swim_rest', 
-                array(
-                  'summary' => $output_summary, 
-                ) //End array().
-            ) // End theme().
-          ); //End array().
-        } // End if there is a summary.
-      }
-      break;
-
-    case 'swim_rest_main_and_summary':
-      foreach ($items as $delta => $item) {
-        $output_main = check_plain($item['pure_rest'], $item['format'], $langcode);
-        $output_summary = '';
-        if ( isset($item['pure_rest_summary']) ) {
-          $output_summary = check_plain($item['pure_rest_summary'], $item['format'], $langcode);
-        }
-        $element[$delta] = array('#markup' => 
-          theme('swim_rest', 
-              array(
-                'main' => $output_main, 
-                'summary' => $output_summary
-              ) //End array().
-          ) // End theme().
-        ); //End array().
-      }
-      break;
-  
   } //end switch
   
   return $element;
@@ -539,53 +472,53 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
  * @param integer $delta Delta, i.e., which value in a multivalued field.
  * @return string Rendered content.
  */
-function swim_render_field( $entity, $field_name, $format = 'default', 
-    $trim_length = 600, $lang = LANGUAGE_NONE, $delta = 0 ) {
-  $html = '';
-  try {
-    //Pick data to render.
-    if ( ! isset( $entity->$field_name ) ) {
-      throw new Exception('Entity does not have field ' . $field_name . '.');
-    }
-    $to_render = '';
-    //May be no data in the field.
-    if ( ! isset( $entity->{$field_name}[$lang][$delta] ) ) {
-      //Nothing to do.
-    }
-    else if ( $format == 'default' ) {
-      $to_render = $entity->{$field_name}[$lang][$delta]['pure_rest'];
-    }
-    else if ( $format == 'summary' || $format == 'summary-or-trimmed' ) {
-      //Is there a summary?
-    if ( isset( $entity->{$field_name}[$lang][$delta]['pure_rest_summary'] ) ) {
-        //There is a summary.
-        $to_render = $entity->{$field_name}[$lang][$delta]['pure_rest_summary'];
-      }
-      else {
-        //No summary. Trim main.
-        //Call the text module's summary function.
-        $to_render = text_summary(
-          $entity->${field_name}[$lang][$delta]['pure_rest'], NULL, $trim_length
-        );
-      }
-    }
-    else {
-      throw new Exception('Unknown format: ' . $format);
-    }
-    //Render it.
-    $html = swim_rest2html( $html );
-  } catch ( Exception $exc ) {
-    cybercourse_base_handle_error( $exc->getMessage() );
-  }
-  return $html;
-}
+//function swim_render_field( $entity, $field_name, $format = 'default', 
+//    $trim_length = 600, $lang = LANGUAGE_NONE, $delta = 0 ) {
+//  $html = '';
+//  try {
+//    //Pick data to render.
+//    if ( ! isset( $entity->$field_name ) ) {
+//      throw new Exception('Entity does not have field ' . $field_name . '.');
+//    }
+//    $to_render = '';
+//    //May be no data in the field.
+//    if ( ! isset( $entity->{$field_name}[$lang][$delta] ) ) {
+//      //Nothing to do.
+//    }
+//    else if ( $format == 'default' ) {
+//      $to_render = $entity->{$field_name}[$lang][$delta]['value'];
+//    }
+//    else if ( $format == 'summary' || $format == 'summary-or-trimmed' ) {
+//      //Is there a summary?
+//    if ( isset( $entity->{$field_name}[$lang][$delta]['summary'] ) ) {
+//        //There is a summary.
+//        $to_render = $entity->{$field_name}[$lang][$delta]['summary'];
+//      }
+//      else {
+//        //No summary. Trim main.
+//        //Call the text module's summary function.
+//        $to_render = text_summary(
+//          $entity->${field_name}[$lang][$delta]['value'], NULL, $trim_length
+//        );
+//      }
+//    }
+//    else {
+//      throw new Exception('Unknown format: ' . $format);
+//    }
+//    //Render it.
+//    $html = swim_restructuredtext_to_html( $html );
+//  } catch ( Exception $exc ) {
+//    cybercourse_base_handle_error( $exc->getMessage() );
+//  }
+//  return $html;
+//}
 
 /**
  * Translate pure ReST into HTML.
  * @param string $rest ReST
  * @return string HTML
  */
-function swim_rest2html( $rest ) {
+function swim_restructuredtext_to_html( $rest ) {
   //Run content through ReST translator. Returns mixed ReST and CyCo markup.
   // descriptor array
   $desc = array(
@@ -765,7 +698,7 @@ function _swim_peek() {
   //Convert content to pure ReST, so can call the ReST input filter.
   $content = _swim_ckhtml2rest($content);
   //Convert the ReST content to HTML.
-  $html = swim_rest2html($content);
+  $html = restructuredtext_to_html($content);
   //Return rendered content. 
   drupal_json_output( array( 
         'status' => 'success',
@@ -861,4 +794,12 @@ function theme_swim_format_error( $variables ) {
   $html = "Problems in translating your ReST.<br><br>" . $message
         . "<br>ReST can be tricky. Check the CyberCourse wiki for help.";
   return $html;
+}
+
+function swim_form_page_node_form_alter(&$form, $form_state) {
+  $form['#submit'][] = 'xx';
+}
+
+function xx( $form, &$form_state ) {
+  $r=4;
 }
