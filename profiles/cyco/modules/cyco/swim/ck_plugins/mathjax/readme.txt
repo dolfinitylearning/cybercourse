@@ -1,0 +1,1 @@
+Patched version to have "Small" checkbox in dialog.

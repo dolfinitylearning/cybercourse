@@ -12,48 +12,23 @@
  * @see system_install()
  */
 function cyco_install() {
-  $filters = cyco_define_filters();
+//  $filters = cyco_define_filters();
   cyco_define_blocks();
-  cyco_content_types_setup();
-  cyco_rdf_setup();
-  cyco_taxonomy_setup();
-  cyco_user_setup($filters);
-  cyco_menu_setup();
-  cyco_admin_theme();
+//  cyco_content_types_setup();
+//  cyco_rdf_setup();
+//  cyco_taxonomy_setup();
+//  cyco_user_setup($filters);
+//  cyco_menu_setup();
+//  cyco_admin_theme();
+  //Set version of jQuery to use.
+  cyco_jquery_update();
 }
 
+/**
+ * Define input filters.
+ * @return array Filters.
+ */
 function cyco_define_filters() {
-  // Add text formats.
-//  $filtered_html_format = array(
-//    'format' => 'filtered_html',
-//    'name' => 'Filtered HTML',
-//    'weight' => 0,
-//    'filters' => array(
-//      // URL filter.
-//      'filter_url' => array(
-//        'weight' => 0,
-//        'status' => 1,
-//      ),
-//      // HTML filter.
-//      'filter_html' => array(
-//        'weight' => 1,
-//        'status' => 1,
-//      ),
-//      // Line break filter.
-//      'filter_autop' => array(
-//        'weight' => 2,
-//        'status' => 1,
-//      ),
-//      // HTML corrector filter.
-//      'filter_htmlcorrector' => array(
-//        'weight' => 10,
-//        'status' => 1,
-//      ),
-//    ),
-//  );
-//  $filtered_html_format = (object) $filtered_html_format;
-//  filter_format_save($filtered_html_format);
-
   $full_html_format = array(
     'format' => 'full_html',
     'name' => 'Full HTML',
@@ -79,25 +54,25 @@ function cyco_define_filters() {
   $full_html_format = (object) $full_html_format;
   filter_format_save($full_html_format);
   
-  $rest_format = array(
-    'format' => 'rest',
-    'name' => 'reStructuredText',
-    'weight' => 0,
-    'filters' => array(
-      // URL filter.
-      'rest' => array(
-        'weight' => 0,
-        'status' => 1,
-      ),
-    ),
-  );
-  $rest_format = (object) $rest_format;
-  filter_format_save($rest_format);
+//  $rest_format = array(
+//    'format' => 'rest',
+//    'name' => 'reStructuredText',
+//    'weight' => 0,
+//    'filters' => array(
+//      // URL filter.
+//      'rest' => array(
+//        'weight' => 0,
+//        'status' => 1,
+//      ),
+//    ),
+//  );
+//  $rest_format = (object) $rest_format;
+//  filter_format_save($rest_format);
   
   return array(
 //    'filtered' => $filtered_html_format,
     'full' => $full_html_format,
-    'rest' => $rest_format,
+//    'rest' => $rest_format,
   );
 }
 
@@ -123,16 +98,6 @@ function cyco_define_blocks() {
       'status' => 1,
       'weight' => -1,
       'region' => 'sidebar_first',
-      'pages' => '',
-      'cache' => -1,
-    ),
-    array(
-      'module' => 'node',
-      'delta' => 'recent',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => 10,
-      'region' => 'dashboard_main',
       'pages' => '',
       'cache' => -1,
     ),
@@ -206,26 +171,6 @@ function cyco_define_blocks() {
       'pages' => '',
       'cache' => -1,
     ),
-    array(
-      'module' => 'user',
-      'delta' => 'new',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'dashboard_sidebar',
-      'pages' => '',
-      'cache' => -1,
-    ),
-    array(
-      'module' => 'search',
-      'delta' => 'form',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => -10,
-      'region' => 'dashboard_sidebar',
-      'pages' => '',
-      'cache' => -1,
-    ),
   );
   $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
   foreach ($blocks as $block) {
@@ -238,16 +183,16 @@ function cyco_content_types_setup() {
   // Insert default pre-defined node types into the database. For a complete
   // list of available node type attributes, refer to the node type API
   // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
-  $types = array(
-    array(
-      'type' => 'page',
-      'name' => st('Basic page'),
-      'base' => 'node_content',
-      'description' => st("Use <em>basic pages</em> for your static content, such as an 'About us' page."),
-      'custom' => 1,
-      'modified' => 1,
-      'locked' => 0,
-    ),
+//  $types = array(
+//    array(
+//      'type' => 'page',
+//      'name' => st('Basic page'),
+//      'base' => 'node_content',
+//      'description' => st("Use <em>basic pages</em> for your static content, such as an 'About us' page."),
+//      'custom' => 1,
+//      'modified' => 1,
+//      'locked' => 0,
+//    ),
 //    array(
 //      'type' => 'article',
 //      'name' => st('Article'),
@@ -257,22 +202,22 @@ function cyco_content_types_setup() {
 //      'modified' => 1,
 //      'locked' => 0,
 //    ),
-  );
-
-  foreach ($types as $type) {
-    $type = node_type_set_defaults($type);
-    node_type_save($type);
-    node_add_body_field($type);
-  }
+//  );
+//
+//  foreach ($types as $type) {
+//    $type = node_type_set_defaults($type);
+//    node_type_save($type);
+//    node_add_body_field($type);
+//  }
   
-  // Create an image field named "Image", enabled for the 'article' content type.
+  // Create an image field named "Images.", enabled for the 'article' content type.
   // Many of the following values will be defaulted, they're included here as an illustrative examples.
   // See http://api.drupal.org/api/function/field_create_field/7
 
 //  $field = array(
-//    'field_name' => 'field_image',
+//    'field_name' => 'field_images',
 //    'type' => 'image',
-//    'cardinality' => 1,
+//    'cardinality' => -1, //Unlimited.
 //    'locked' => FALSE,
 //    'indexes' => array('fid' => array('fid')),
 //    'settings' => array(
@@ -290,11 +235,11 @@ function cyco_content_types_setup() {
   // Many of the following values will be defaulted, they're included here as an illustrative examples.
   // See http://api.drupal.org/api/function/field_create_instance/7
 //  $instance = array(
-//    'field_name' => 'field_image',
+//    'field_name' => 'field_images',
 //    'entity_type' => 'node',
-//    'label' => 'Image',
-//    'bundle' => 'article',
-//    'description' => st('Upload an image to go with this article.'),
+//    'label' => 'Images',
+//    'bundle' => 'page',
+//    'description' => st('Images for your content.'),
 //    'required' => FALSE,
 //
 //    'settings' => array(
@@ -306,7 +251,7 @@ function cyco_content_types_setup() {
 //      'alt_field' => TRUE,
 //      'title_field' => '',
 //    ),
-//
+
 //    'widget' => array(
 //      'type' => 'image_image',
 //      'settings' => array(
@@ -315,7 +260,7 @@ function cyco_content_types_setup() {
 //      ),
 //      'weight' => -1,
 //    ),
-//
+
 //    'display' => array(
 //      'default' => array(
 //        'label' => 'hidden',
@@ -337,14 +282,14 @@ function cyco_content_types_setup() {
 
 function cyco_rdf_setup() {
   // Insert default pre-defined RDF mapping into the database.
-  $rdf_mappings = array(
-    array(
-      'type' => 'node',
-      'bundle' => 'page',
-      'mapping' => array(
-        'rdftype' => array('foaf:Document'),
-      ),
-    ),
+//  $rdf_mappings = array(
+//    array(
+//      'type' => 'node',
+//      'bundle' => 'page',
+//      'mapping' => array(
+//        'rdftype' => array('foaf:Document'),
+//      ),
+//    ),
 //    array(
 //      'type' => 'node',
 //      'bundle' => 'article',
@@ -359,70 +304,70 @@ function cyco_rdf_setup() {
 //        ),
 //      ),
 //    ),
-  );
-  foreach ($rdf_mappings as $rdf_mapping) {
-    rdf_mapping_save($rdf_mapping);
-  }
-
-  // Default "Basic page" to not be promoted and have comments disabled.
-  variable_set('node_options_page', array('status'));
-  variable_set('comment_page', COMMENT_NODE_HIDDEN);
-
-  // Don't display date and author information for "Basic page" nodes by default.
-  variable_set('node_submitted_page', FALSE);
+//  );
+//  foreach ($rdf_mappings as $rdf_mapping) {
+//    rdf_mapping_save($rdf_mapping);
+//  }
+//
+//  // Default "Basic page" to not be promoted and have comments disabled.
+//  variable_set('node_options_page', array('status'));
+//  variable_set('comment_page', COMMENT_NODE_HIDDEN);
+//
+//  // Don't display date and author information for "Basic page" nodes by default.
+//  variable_set('node_submitted_page', FALSE);
 }
 
 
 function cyco_taxonomy_setup() {
 
   // Create a default vocabulary named "Tags", enabled for the 'article' content type.
-  $description = st('Use tags to group content on similar topics into categories.');
-  $vocabulary = (object) array(
-    'name' => st('Tags'),
-    'description' => $description,
-    'machine_name' => 'tags',
-  );
-  taxonomy_vocabulary_save($vocabulary);
+//  $description = st('Use tags to group content on similar topics into categories.');
+//  $vocabulary = (object) array(
+//    'name' => st('Tags'),
+//    'description' => $description,
+//    'machine_name' => 'tags',
+//  );
+//  taxonomy_vocabulary_save($vocabulary);
+//
+//  $field = array(
+//    'field_name' => 'field_' . $vocabulary->machine_name,
+//    'type' => 'taxonomy_term_reference',
+//    // Set cardinality to unlimited for tagging.
+//    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+//    'settings' => array(
+//      'allowed_values' => array(
+//        array(
+//          'vocabulary' => $vocabulary->machine_name,
+//          'parent' => 0,
+//        ),
+//      ),
+//    ),
+//  );
+//  field_create_field($field);
 
-  $field = array(
-    'field_name' => 'field_' . $vocabulary->machine_name,
-    'type' => 'taxonomy_term_reference',
-    // Set cardinality to unlimited for tagging.
-    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-    'settings' => array(
-      'allowed_values' => array(
-        array(
-          'vocabulary' => $vocabulary->machine_name,
-          'parent' => 0,
-        ),
-      ),
-    ),
-  );
-  field_create_field($field);
-
-  $help = st('Enter a comma-separated list of words to describe your content.');
-  $instance = array(
-    'field_name' => 'field_' . $vocabulary->machine_name,
-    'entity_type' => 'node',
-    'label' => 'Tags',
-    'bundle' => 'page',
-    'description' => $help,
-    'widget' => array(
-      'type' => 'taxonomy_autocomplete',
-      'weight' => -4,
-    ),
-    'display' => array(
-      'default' => array(
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 10,
-      ),
-      'teaser' => array(
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 10,
-      ),
-    ),
-  );
-  field_create_instance($instance);
+//  $help = st('Enter a comma-separated list of words to describe your content.');
+//  $instance = array(
+//    'field_name' => 'field_' . $vocabulary->machine_name,
+//    'entity_type' => 'node',
+//    'label' => 'Tags',
+//    'bundle' => 'page',
+//    'description' => $help,
+//    'widget' => array(
+//      'type' => 'taxonomy_autocomplete',
+//      'weight' => -4,
+//    ),
+//    'display' => array(
+//      'default' => array(
+//        'type' => 'taxonomy_term_reference_link',
+//        'weight' => 10,
+//      ),
+//      'teaser' => array(
+//        'type' => 'taxonomy_term_reference_link',
+//        'weight' => 10,
+//      ),
+//    ),
+//  );
+//  field_create_instance($instance);
   
 }
 
@@ -447,11 +392,11 @@ function cyco_user_setup( $filters ) {
   );
 
   // Enable permissions for the ReST filter.
-  $rest_format = $filters['rest'];
-  $rest_permission = filter_permission_name($rest_format);
-  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, 
-      array( $rest_permission )
-  );
+//  $rest_format = $filters['rest'];
+//  $rest_permission = filter_permission_name($rest_format);
+//  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, 
+//      array( $rest_permission )
+//  );
 
   // Create a default role for site administrators, with all available permissions assigned.
   $admin_role = new stdClass();
@@ -491,4 +436,12 @@ function cyco_admin_theme() {
     ->execute();
   variable_set('admin_theme', 'seven');
   variable_set('node_admin_theme', '1');
+}
+
+/**
+ * Configure jquery_update module to load the right version of jQuery.
+ */
+function cyco_jquery_update() {
+  variable_set('jquery_update_jquery_version', '1.10');
+  variable_set('jquery_update_jquery_cdn', 'google');  
 }

@@ -19,7 +19,6 @@
         editor.ui.addButton( 'Peek', {
             label: 'Peek: see what readers see',
             command: 'peek',
-//            toolbar: 'clipboard',
             state: CKEDITOR.TRISTATE_DISABLED,
             icon: this.path + 'icons/peek.png',
             toolbar: 'tools,1'

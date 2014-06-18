@@ -1,0 +1,1 @@
+MathJax plugin is customized to add a "Small" checkbox to the dialog box.

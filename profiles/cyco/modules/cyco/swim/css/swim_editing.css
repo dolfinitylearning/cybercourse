@@ -82,14 +82,6 @@ a.cke_button.swim-button {
   height: inherit;
 }
 
-/* Brokeh */
-.swim-button:active {
-/*  background: #b5b5b5;
-  background-image: -webkit-gradient(linear,left top,left bottom,from(#aaa),to(#cacaca));
-  -webkit-box-shadow: 0 1px 5px rgba(0,0,0,.6) inset,0 1px 0 rgba(0,0,0,.2);
-  box-shadow: 0 1px 5px rgba(0,0,0,.6) inset,0 1px 0 rgba(0,0,0,.2);*/
-}
-
 .tips-code-look {
     background-color: #F7F7F9;
     border: 1px solid #E1E1E8;

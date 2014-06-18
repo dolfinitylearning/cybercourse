@@ -1,0 +1,8 @@
+/**
+ * @file
+ * Styles for the content-only template, used, e.g., for ReST help popup.
+ */
+
+#content-only {
+  font-family: sans-serif;
+}

@@ -4,6 +4,36 @@ from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.roles import set_classes
 from docutils.utils.code_analyzer import Lexer, LexerError, NumberLines
 
+class Math(Directive):
+    """
+    Render TeX.
+    """
+    has_content = True
+    required_arguments = 0
+    def run(self):
+        #title = self.arguments[0]
+        text = '\n'.join(self.content)
+        # Make a node with the content
+        content_node = self.node_class(rawsource=text)
+        # Parse the directive contents into the new node.
+        self.state.nested_parse(
+            self.content,
+            self.content_offset,
+            content_node
+        )
+        # Create a new node with the prefix marker text for
+        # Drupal custom filter to find.
+        # Can apply permissions checks and other things on the
+        # server side.
+        prefix_text = '[[[cycomath \n'
+        prefix_node = nodes.raw('', prefix_text, format='html')
+        # Create a new node with the postfix marker text for
+        # Cyco to find.
+        postfix_text = ']]]\n'
+        postfix_node = nodes.raw('', postfix_text, format='html')
+        # Return the nodes in sequence.
+        return [prefix_node, content_node, postfix_node]
+
 class Authornote(Directive):
     """
     Render author notes.

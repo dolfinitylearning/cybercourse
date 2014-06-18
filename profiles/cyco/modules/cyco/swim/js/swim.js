@@ -1,67 +1,49 @@
 (function ($) {
-  
+  //Convenience scoping variable.
+  var nameSpaceyThing;
   Drupal.behaviors.swim = {
     done: false,
     attach: function() {
-//console.log('attach');//return;
-//      $("#edit-submit").click(function() {
-//        var editorContent = CKEDITOR.instances['edit-field-body-und-0-main'].getData();
-//        console.log(editorContent);
-//        $("#edit-field-body-und-0-main").val( editorContent );
-//      });
       if ( this.done ) {
         return;
       }
       this.done = true;
-//      CKEDITOR.on("instanceCreated", function(evnt) {
-//        f=4;
-//      });
+      //Get CSRF token, if needed.
+      if ( ! cycoUtilitiesServices.csrfToken ) {
+        cycoUtilitiesServices.getCsrfToken();
+      }
+      //Set convenience reference.
+      nameSpaceyThing = this;
       //Setup code to run after CKEDITOR instances have been created.
       CKEDITOR.on("instanceReady", function(evnt) {
-//console.log('armeshlew');//return;
         var editor = evnt.editor;
-        //When editor gains/loses focus, trigger underlying textarea events.
+        //When editor gains focus, show that it is active.
         //Needed for insert module to work.
-//console.log('spider');//return;
         editor.on('focus',function(evnt) {
-          $(editor.element.$).trigger('focus');
+          Drupal.ckeditorInstance = evnt.editor;
+          Drupal.ckeditorActiveId = evnt.editor.name;
+//          $(editor.element.$).trigger('focus');
         });
-        editor.on('blur',function(evnt) {
-          $(editor.element.$).trigger('blur');
-        });
-//console.log('turtles all the way down');//return;
+//        editor.on('blur',function(evnt) {
+//          $(editor.element.$).trigger('blur');
+//        });
         editor.document.appendStyleSheet( Drupal.settings.swim.editing_stylesheet );
         //Size the editor.
-        var heightFrac = 0.70; //Default.
-        if ( Drupal.settings.swim.heightFraction ) {
-          heightFrac = Drupal.settings.swim.heightFraction;
-        }
-        if ( editor.name.search('summary') != -1 ) {
-          heightFrac = 0.20;
-        }
-        editor.resize('100%', window.innerHeight * heightFrac);
-//console.log('and kittens');//return;
-        Drupal.behaviors.swim.swimSetup(editor);
+        nameSpaceyThing.sizeEditor( editor );
+        //Main setup.
+        nameSpaceyThing.swimSetup(editor);
         //Add a class for customization of the body.
-//console.log('snaaakes');//return;
         editor.document.getBody().addClass('swim_body')
-//        $(editor.document.$.body).addClass("swim_body");
-        
         //Flag the editor as initialized.
         $( "#" + editor.id ).attr("data-swim-init", "yes");
-//console.log('ostriches');return;
       });
-//console.log('dog');//return;
       //Check that the config exists.
       if ( ! Drupal.swimCkConfig ) {
         console.log("Missing config");
         return;
       }
-//console.log('cat');//return;
-      //Add plugins.
-//      CKEDITOR.plugins.addExternal( 'rest_help', 
-//      '/sites/all/modules/cybercourse/swim/ck_plugins/rest_help/' );
-      if ( Drupal.settings.swim.extraPlugins.name ) {
+      //Add plugins, if there are any.
+      if ( Drupal.settings.swim.extraPlugins ) {
         $.each( Drupal.settings.swim.extraPlugins.name, function(index, pluginName) {
           CKEDITOR.plugins.addExternal( 
             pluginName, 
@@ -69,19 +51,51 @@
           ); //End addExternal.
         } ); //End each.
       } //End if there are extraPlugins.
+      if ( Drupal.settings.swim.extraPlugins ) {
+        //Add extraPlugins list to config.
+        var extraPlugins = "";
+        var pluginNames = Drupal.settings.swim.extraPlugins.name;
+        for ( var i = 0; i < pluginNames.length; i++) {
+          if ( i > 0 ) {
+            extraPlugins += ",";
+          }
+          extraPlugins += pluginNames[i];
+        }//End for.
+        Drupal.swimCkConfig.extraPlugins = extraPlugins;
+      }
+      
       //Replace the textareas with CKEditors.
       //This will trigger instanceReady above.
-//console.log('llama');//return;
       var textAreas = $("textarea.swim-editor");
       $(textAreas).each(function(index, element) {
-//console.log('zebra');//return;
         //Make sure element has not already been initialized.
         if ( ! $(element).attr("data-swim-init") ) {
           CKEDITOR.replace(element.id, Drupal.swimCkConfig);
         }
       });
-//console.log('cow');return;
     }, //End attach.
+    sizeEditor: function(editor) {
+      //Size the editor, based on data in swim.settings.
+      var lines;
+      if ( editor.name.search('summary') == -1 ) {
+        //Not a summary editor, so use regular height.
+        lines = Drupal.settings.swim.editor_height
+            ? Drupal.settings.swim.editor_height
+            : 15;
+      }
+      else {
+        lines = Drupal.settings.swim.editor_summary_height
+            ? Drupal.settings.swim.editor_summary_height
+            : 5;
+      }
+      var fontHeight 
+          = parseInt(editor.document.getBody().getComputedStyle('font-size'));
+      var lineHeight = fontHeight * 1.5;
+      var toolbarHeight = 45;
+      var resizeWidgetHeight = 28; //The status bar.
+      editor.resize( '100%', 
+          lines * lineHeight + toolbarHeight + resizeWidgetHeight);
+    },
     swimSetup: function (editor) {    
       this.setupBeforeUnload(editor);
       if ( editor.commands.peek ) {
@@ -92,7 +106,7 @@
       //Disable peek button until ready.
       editor.commands.peek.disable();
       //Compute the URL for the iframe that simulates the device.
-      var iframeSrc = Drupal.settings.swim.base_url + "/swim-mt-peek";      
+//      var iframeSrc = Drupal.settings.swim.base_url + "/swim-mt-peek";      
       //Make peek toolbar.
       var iconPath = Drupal.settings.swim.peekIconsPath;
       //Define the toolbar for this instance. Include an id.
@@ -112,12 +126,6 @@
       +        "src='" + iconPath + "phone.png' title='Phone'>"
       +     "</a>"
       +   "</span>"
-//      +   "<span class='cke_toolgroup' role='presentation'>"
-//      +     "<a id='" + editor.id + "-refresh' "
-//      +        "class='swim-peek-refresh cke_button cke_button_off swim-button'><img "
-//      +        "src='" + iconPath + "refresh.png' title='Refresh'>"
-//      +     "</a>"
-//      +   "</span>"
       + "</div>";
       var peekHtml = 
         "<div id='" + editor.id + "-swim-peek-outer' class='swim-peek-outer'>" //Everything in the dialog.
@@ -130,23 +138,23 @@
       $("body").append( peekHtml );
       //Hide what was just added.
       $("#" + editor.id + "-swim-peek-outer").hide();
-      $("#" + editor.id + "-swim-peek-device").attr("src", iframeSrc);
-      this.loadedAlready = false;
-      var thisythis = this; //For closure.
-      $("#" + editor.id + "-swim-peek-device").load(function() {
-        //Do this only once. Sometimes there is more than one load event?
-        if ( ! thisythis.loadedAlready ) {
-          thisythis.continueInit(editor);
-        }
-      });
-    }, //End attach.
-    continueInit: function(editor) {
+//      $("#" + editor.id + "-swim-peek-device").attr("src", iframeSrc);
+//      this.loadedAlready = false;
+//      var thisythis = this; //For closure.
+//      $("#" + editor.id + "-swim-peek-device").load(function() {
+//        //Do this only once. Sometimes there is more than one load event?
+//        if ( ! thisythis.loadedAlready ) {
+//          thisythis.continueInit(editor);
+//        }
+//      });
+//    }, //End attach.
+//    continueInit: function(editor) {
       //Make a clone of the HTML to use as a template.
       //KRM - Do this once for all editors on the page?
       //      They should have the same template HTML. 
-      this.templateBodyHtml 
-        = $("#" + editor.id + "-swim-peek-device").contents()
-          .children("html").children("body").clone();
+//      this.templateBodyHtml 
+//        = $("#" + editor.id + "-swim-peek-device").contents()
+//          .children("html").children("body").clone();
       //Prep the dialog.
       $( "#" + editor.id + "-swim-peek-outer" )
         .dialog({
@@ -259,52 +267,60 @@
       }
       //Get editor's current content.
       var markup = editor.getData();
+      var dataToSend = {};
+      dataToSend.markup = markup;
+      dataToSend = JSON.stringify( dataToSend );
       //Get rendering from server.
       var promise = $.ajax(
-        Drupal.settings.basePath + 'swim-peek',
+        Drupal.settings.basePath + 'swim/peek/peek',
         {
           type: "POST",
-          data: {
-            'content': markup
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          data: dataToSend,
+          beforeSend: function (request) {
+            request.setRequestHeader("X-CSRF-Token", cycoUtilitiesServices.csrfToken);
           }
-      });
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Fail in swim.showPeek "  
+              + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
+        });//End fail.
       //Keep a ref to the editor this applies to.
       promise.editor = editor;
       var thisRef = this;
-      promise.done( function (data) {
-        thisRef.peekDataReturned(data, promise.editor);
+      promise.done( function (result) {
+        thisRef.peekDataReturned(result, promise.editor);
       });
-      promise.fail( this.peekFailed );
-      promise.always( this.peekFinished );
+//      promise.always( this.peekFinished );
 //      this.showThrobber(, "Loading");
     }, // end showpeek.
-    peekDataReturned : function( data, editor ) {
-      if ( data.status == 'success' ) {
+    peekDataReturned : function( result, editor ) {
         
 //        data.result += "<script>jQuery(document).ready(function(){jQuery(this).find('body').html('Squee');});</script>";
         
         //Restore body template content.
         //Get the template code.
-        var templateCode = this.templateBodyHtml.clone();
+//        var templateCode = this.templateBodyHtml.clone();
         //Erase contents of the MT container, if any.
-        templateCode = $(templateCode).find("#swim-mt-content-container").first().html('');
-        //Insert the MT template code into the preview iframe.
-        $("#" + editor.id + "-swim-peek-device").contents().find("body").first()
-            .html( templateCode );
+//        templateCode = $(templateCode).find("#swim-mt-content-container").first().html('');
+//        //Insert the MT template code into the preview iframe.
+//        $("#" + editor.id + "-swim-peek-device").contents().find("body").first()
+//            .html( templateCode );
         //Insert new content.
-        $("#" + editor.id + "-swim-peek-device").contents().find("body").find("#swim-mt-content-container")
-            .append(data.result);
-      }
-      else {
-        throw "showPeek: Ajax preview call failed.";
-      } // end data.status not success.      
+        var doc = document.getElementById(editor.id + "-swim-peek-device").contentWindow.document;
+        doc.open();
+        doc.write(result);
+        doc.close();
+//        $("#" + editor.id + "-swim-peek-device").contents().find("html").html(result);
+//        $("#" + editor.id + "-swim-peek-device").contents().find("body").find("#swim-mt-content-container")
+//            .append(data.result);
     },
-    peekFailed : function( textStatus ) {
-      throw new Exception( "Ajax preview request failed: " + textStatus );
-    },
-    peekFinished: function() {
-      
-    },
+//    peekFinished: function() {
+//      
+//    },
     showThrobber : function( afterThisElement, message ) {
       if ( ! message ) {
         message = "";

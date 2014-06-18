@@ -2,7 +2,7 @@ name = CyberCourse
 description = A philosophy, method, and software for improving university skills courses.
 core = 7.x
 distribution_name = "CyberCourse"
-exclusive = TRUE
+;exclusive = TRUE
 ; System Requirements.
 php_memory_limit = 128M
 
@@ -14,7 +14,7 @@ dependencies[] = color
 dependencies[] = comment
 dependencies[] = contact
 dependencies[] = contextual
-dependencies[] = dashboard
+;dependencies[] = dashboard
 dependencies[] = help
 dependencies[] = image
 dependencies[] = list
@@ -44,8 +44,10 @@ dependencies[] = views_ui
 dependencies[] = filter_perms
 dependencies[] = services
 dependencies[] = services_definition
+dependencies[] = rest_server
 dependencies[] = token
 dependencies[] = token_custom
+dependencies[] = jquery_update
 
 ;Field related
 dependencies[] = field_group
@@ -68,7 +70,6 @@ dependencies[] = save_edit
 dependencies[] = clone
 dependencies[] = diff
 dependencies[] = views_bulk_operations
-dependencies[] = book_copy
 
 ;User stuff
 dependencies[] = logintoboggan
@@ -89,9 +90,10 @@ dependencies[] = pathauto
 dependencies[] = og
 
 ;**************** Cyco custom modules *******************
-dependencies[] = cyco_base
-;dependencies[] = restructuredtext
+dependencies[] = cyco_utilities
+dependencies[] = cybercourse_core
 dependencies[] = swim
+dependencies[] = swim_services_definition
 dependencies[] = book_rearrange_collapse
 
 ;**************** Themes *******************
