@@ -1,6 +1,7 @@
 name = Show What I Mean content field
 description = A field using reStructuredText, with a SWIM editor.
 package = CyberCourse
+version = 7.x-1.0
 core = 7.x
 dependencies[] = libraries
 dependencies[] = text

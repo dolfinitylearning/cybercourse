@@ -1,0 +1,666 @@
+<?php
+
+/**
+ * Max number characters link text can be.
+ */
+define('CBB_MAX_CHARS', 50);
+
+/**
+ * Max number of recursion levels when generating tree menu..
+ */
+define('CBB_MAX_RECURSION_LEVELS', 20);
+
+/**
+ * Implements hook_menu_link_alter().
+ * 
+ * Clears book menu caches for book containing item.
+ * Runs more often than it should. Runs when the content of a page changes, 
+ * but its menu data has not.
+ */
+function cyco_book_blocks_menu_link_alter(&$item){
+  if ( isset( $item['bid'] ) ) {
+    $bid = $item['bid'];
+    $book_root = node_load($bid);
+    //Perm for whether the current user can see unpublished items.
+    $book_type = $book_root->type;
+    if ( $book_type == 'blueprint_page' || $book_type == 'course_page' ) {
+      $see_unpublished = TRUE;
+      $cache_name = _ccbb_compute_cache_name($bid, $see_unpublished );
+      variable_del($cache_name);
+      $see_unpublished = FALSE;
+      $cache_name = _ccbb_compute_cache_name($bid, $see_unpublished );
+      variable_del($cache_name);
+    }
+  }
+}
+
+
+function cyco_book_blocks_permission() {
+  return array(
+    'view unpublished cyco course content' => array(
+      'title' => t('View unpublished course content'),
+      'description' => t('User can see course content that has not been published.'),
+    ),
+    'view unpublished cyco blueprint content' => array(
+      'title' => t('View unpublished blueprint content'),
+      'description' => t('User can see blueprint content that has not been published.'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function cyco_book_blocks_block_info() {
+  $blocks = array();
+  $blocks['courses'] = array(
+    'info' => 'Contents',
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+  $blocks['blueprints'] = array(
+    'info' => 'Blueprints',
+    'cache' => DRUPAL_CACHE_CUSTOM,
+  );
+  return $blocks;  
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cyco_book_blocks_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'courses' :
+      $block['subject'] = '';
+      $block['content'] = _cbb_create_block_content( 'course_page' );
+      return $block;
+    case 'blueprints' :
+      $block['subject'] = ''; 
+      $block['content'] = _cbb_create_block_content( 'blueprint_page' );
+      return $block;
+  }
+}
+
+/**
+ * Create content for a book block.
+ * @param string $type Block type - course or blueprint.
+ * @global stdClass $user You know what it is.
+ * @return string Content representing the block.
+ */
+function _cbb_create_block_content( $type ) {
+  if ( $type != 'course_page' && $type != 'blueprint_page') {
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' unknown type: ' . $type;
+      cyco_utilities_handle_error( $message );
+      return FALSE;
+  }
+  $output = '';
+  $nids = _cbb_get_nids_book_roots( $type );
+  //Get the template nid. Template is an MT book that is cloned.
+//  $template_nid = _cbb_find_template_nid( $type );
+//  if ( $template_nid ) {
+//    //Remove it from the nid array.
+//    $index = array_search( $template_nid, $nids );
+//    if ( $index !== FALSE ) {
+//      unset( $nids[$index] );
+//    }
+//  }
+  if ( sizeof( $nids ) == 0 ) {
+    return _cbb_make_empty_message( $type );
+  }
+  foreach ( $nids as $nid ) {
+    $rendered_tree = _cbb_get_book_tree( $nid );
+    $output .= $rendered_tree;
+  }
+  return $output;
+}
+
+/**
+ * 
+ * @return nid, or FALSE if not found.
+ */
+//function _cbb_find_template_nid( $book_type ) {
+//  //Find the nid of the blueprint template root.
+//  $query = new EntityFieldQuery;
+//  $query
+//    ->entityCondition('entity_type', 'node')
+//    ->entityCondition('bundle', $book_type)
+////    ->propertyCondition('status', 1)
+//    ->propertyCondition('title', 
+//        $book_type == 'blueprint' ? BLUEPRINT_TO_COPY_TITLE : COURSE_TO_COPY_TITLE
+//      );
+//  $query_result = $query->execute();
+//  if ( sizeof($query_result['node']) != 1 ) {
+//    return FALSE;
+//  }
+//  foreach( $query_result['node'] as $key=>$value ) {
+//    $template_nid = $key;
+//  }
+//  return $template_nid;
+//}
+
+/**
+ * Find the nids for book roots of a given bundle.
+ * @param string $bundle_name The name of the bundle.
+ * @return array The nids.
+ */
+function _cbb_get_nids_book_roots( $bundle_name ) {
+  $nids = array();
+  $sql = 
+    "SELECT DISTINCT b.bid AS book_root_nid
+       FROM {book} AS b
+       INNER JOIN {node} ON b.bid = node.nid
+       WHERE node.type = :bundle";
+    $query_result = db_query($sql, array( ':bundle' => $bundle_name ) );
+    foreach ( $query_result as $record ) {
+      $nids[] = $record->book_root_nid;
+    }
+  return $nids;
+}
+
+/**
+ * Create content for the blueprints block.
+ * Exclude the blueprint template.
+ * @global stdClass $user You know what it is.
+ * @return string Content representing the block.
+ */
+//function _cbb_blueprints() {
+//  $output = '';
+//  $nids = _cbb_get_nids_of_type('blueprint');
+//  //Get the blueprint template nid.
+//  $template_nid = cccblueprint_find_template_nid('blueprint');
+//  if ( $template_nid ) {
+//    //Remove it from the nid array.
+//    $index = array_search( $template_nid, $nids );
+//    if ( $index !== FALSE ) {
+//      unset( $nids[$index] );
+//    }
+//  }
+//  if ( sizeof( $nids ) == 0 ) {
+//    //Tell the user that there are no blueprints.
+//    return _cbb_make_empty_message('blueprints');
+//  }
+//  foreach ( $nids as $nid ) {
+//    $rendered_tree = _cbb_get_book_tree( $nid );
+//    $output .= $rendered_tree;
+//  }
+//  return $output;
+//}
+
+
+/**
+ * Make a message to show when there are no books.
+ * @param string $book_type_label_plural Book type, e.g., dolfins.
+ * @return string Message.
+ */
+function _cbb_make_empty_message( $book_type_label_plural ) {
+  $message = '<p>' . t('No ') . t($book_type_label_plural) . '.</p>';
+  $make_message = 
+      '<p>' .
+      t('Administrators can create @type in the control panel.', 
+          array('@type' => $book_type_label_plural)
+      ) . 
+      '</p>';
+  return $message . $make_message;
+}
+
+//Array of content types that, if published status changes, will cause
+//rebuild of tree
+//$_ccbb_content_types = array(
+//  'blueprint_page_node_form',
+//  'course_page_node_form',  
+//);
+
+/**
+ * Make a tree for a node
+ * @param int $nid Nid.
+ * @return string Content.
+ */
+function _cbb_get_book_tree( $nid ) {
+  drupal_add_js(
+      drupal_get_path('module', 'cyco_book_blocks') 
+          . '/js/cyco_book_blocks.js', 
+      'file'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cyco_book_blocks') 
+          . '/css/cyco_book_blocks.css', 
+      'file'
+  );
+  //Sent path of current page. Client code will highlight the path to that page.
+  $current_path = request_path();
+  if ( drupal_substr($current_path, -4) == 'edit' ) {
+    //On the edit page. Still want to highlight it in the menu.
+    //So make the current path the path to the view page.
+    $current_path = drupal_substr($current_path, 0, -5);
+    $current_path = drupal_get_path_alias( $current_path );
+  }
+  global $base_url;
+  $settings = array(
+    'current_path' => $current_path,
+    'base_url' => $base_url,
+  );
+  drupal_add_js(
+      array('cyco_book_blocks' => $settings),
+      'setting'
+  );
+  $node = node_load($nid);
+  //Perm for whether the current user can see unpublished items.
+  $book_type = $node->type;     
+  $perm_to_check = "view unpublished cyco $book_type content";
+  $see_unpublished = user_access($perm_to_check);
+  //Use cached menu?
+  $cache_name = _ccbb_compute_cache_name($nid, $see_unpublished );
+  $cache = variable_get($cache_name, NULL);
+  if ( ! is_null($cache) ) {
+    return $cache;
+  }
+  //Regenerate the menu.
+  $current_recusion_level = 0;
+  $tree = array();
+  $tree[$node->title] = _cyco_book_blocks_make_tree(
+      $node->book['mlid'],
+      $node->nid,
+      $node->title,
+      $node->status,
+      $current_recusion_level
+  );
+  $trail = array ( current_path() );
+  global $_cbb_root_path;
+  $_cbb_root_path = 'node/' . $nid;
+  //Render, with unpublished nodes.
+  $rendered = theme(
+      'cbb_book_tree', 
+      array(
+        'tree' => $tree, 
+        'trail' => $trail,
+        'include_unpublished' => $see_unpublished,
+      )
+  );
+  $rendered = '<div class="cycoBookBlock menuTop">' . $rendered . '</div>';
+  variable_set( $cache_name, $rendered);
+  return $rendered;
+}
+
+/**
+ * Compute the name of the cache to use.
+ * @param string $book_type Course or blueprint.
+ * @param boolean $see_unpublished True if current user can see unpublished pages.
+ */
+function _ccbb_compute_cache_name( $nid, $see_unpublished ) {
+  if ( $see_unpublished ) {
+    $name = '_cbb_menu_cache_w_unpublished' . $nid;
+  }
+  else {
+    $name = '_cbb_menu_cache_wo_unpublished' . $nid;
+  }
+  return $name;
+}
+
+/**
+ * Implements hook_theme().
+ * Tells Drupal about custom theme functions.
+ */
+function cyco_book_blocks_theme() {
+  return array(
+    
+    'cbb_book_tree' => array(
+      'variables' => array(
+        'tree' => NULL,
+        'trail' => NULL,
+      ),
+    ),
+    
+    'cbb_listitem' => array(
+      'variables' => array(
+        'item' => NULL,
+        'link_text' => NULL,
+        'path' => NULL,
+        'options' => NULL,
+        'state' => NULL,
+        'classes' => NULL,
+        'has_children' => NULL,
+        'nextlevel' => NULL,
+      ),
+    ),
+
+    'cbb_links' => array(
+      'variables' => array(
+        'link_text' => NULL,
+        'path' => NULL,
+        'options' => NULL,
+        'state' => NULL,
+        'classes' => NULL,
+        'has_children' => NULL,
+      ),
+    ),
+  );
+}
+
+function _cyco_book_blocks_make_tree( $mlid, $nid, $title, $published,
+  $current_recusion_level ) {
+  $this_level = array(); 
+  $sql= "SELECT DISTINCT n.nid as nid, m.plid as plid, m.mlid as mlid,  
+            n.title as title, n.status as status
+         FROM {book} as b
+         inner join {menu_links} as m ON b.mlid = m.mlid
+         inner join {node} as n ON n.nid = b.nid
+         WHERE m.plid = :mlid
+         ORDER by m.weight, n.title
+         ";
+  //ATTENTION --- DB_REWRITE MISSING --- 
+  $query_result = db_query($sql, array(':mlid'=>$mlid) );
+  //Output the current link.
+  $this_level['link'] = array(
+    'path' => 'node/' . $nid,
+    'link_text' => $title,
+    'has_children' => 0, //Code below might change this.
+    'published' => $published,
+    'options' => array(
+      'attributes' => array(
+        'title' => $title,
+      ),
+    ),
+  );
+  $current_recusion_level++;
+  if ( $current_recusion_level < CBB_MAX_RECURSION_LEVELS ){
+    $children = array();
+    foreach ( $query_result as $child ) {
+      $children[$child->title] = _cyco_book_blocks_make_tree($child->mlid,
+          $child->nid, $child->title, $child->status,
+          $current_recusion_level );
+    }
+    if ( sizeof($children) > 0 ) {
+      $this_level['link']['has_children'] = 1;
+      $this_level['below'] = $children;
+    }
+  }
+  return $this_level;
+}
+
+function theme_cbb_book_tree($variables) {
+  $tree = $variables['tree'];
+  $trail = $variables['trail'];
+  $include_unpublished = $variables['include_unpublished'];
+  $menu_output = cbb_recursive_link_creator($include_unpublished, $tree, $trail);
+  if (!empty($menu_output)) {
+    $output = '';
+    // We create the shell to hold the menu outside the recursive function.
+    $output .= '<ul class="cycobb">';
+    $output .= $menu_output;
+    $output .= '</ul>';
+    return $output;
+  }
+}
+
+function cbb_recursive_link_creator(
+    $include_unpublished,
+    $items = array(), 
+    $trail, 
+    $parentid = ''
+) {
+  static $menucount = 0;
+  $count = 0;
+  $output = '';
+  $nextlevel = '';
+  if ( $parentid == '' ) {
+    $menucount ++;
+    $parentid = $menucount;
+  }
+  $user_is_author = _cacpl_user_is_author_admin();
+  $url_array = $trail;
+
+  $i = 0;
+  if ( ! empty($items) ) {
+    foreach ( $items as $item ) {
+      //Skip processing for a nonauthor trying to see an 
+      //  unpublished page.
+      if (    isset( $item['link'] ) 
+           && ( 
+                  $item['link']['published'] 
+               || $include_unpublished
+              )
+         ) {
+        $count++;
+        $id = $parentid . '-' . $count;
+        $classes = array();
+        //All closed to begin with.
+        $state = 'closed';
+        $classes[] = 'closed-branch';
+        // If there are submenu items we assign the parent a class.
+        if ( ! empty($item['below'])  ) {
+          $nextlevel = '';
+          $nextlevel = cbb_recursive_link_creator(
+              $include_unpublished, $item['below'], $url_array, $id
+          );
+          if (!empty($nextlevel)) {
+            $classes[] = 'parent_li';
+          }
+        }
+        if ($count == 1) {
+          $classes[] = 'first';
+        }
+        if ($count == count($items)) {
+          $classes[] = 'last';
+        }
+        $options = array();
+        if (isset($item['link']['options'])) {
+          $options = $item['link']['options'];
+        }
+        $output .= theme('cbb_listitem', array(
+          'item' => $item,
+          'id' => $id,
+          'link_text' => $item['link']['link_text'],
+          'path' => $item['link']['path'],
+          'options' => $options,
+          'state' => $state,
+          'classes' => $classes,
+          'has_children' => $item['link']['has_children'],
+          'published' => $item['link']['published'],
+          'nextlevel' => $nextlevel,
+        ));
+      } //End author or published page.
+    } //End for.
+  } //End not MT items.
+  return $output;
+}
+
+/**
+ * Render a list item containing one or more links.
+ */
+function theme_cbb_listitem($variables) {
+  $item         = $variables['item'];
+  $id           = $variables['id'];
+  $link_text    = $variables['link_text'];
+  $path         = $variables['path'];
+  $options      = $variables['options'];
+  $state        = $variables['state'];
+  $classes      = $variables['classes'];
+  $nextlevel    = $variables['nextlevel'];
+  $has_children = $variables['has_children'];
+  $published    = $variables['published'];
+  
+  if (!isset($output)) {
+    $output = '';
+  }
+  
+  //Everything hidden initially, except the root.
+  $output .= '<li id="' . $id . '" ' 
+      . (empty($classes) ? '>' : ' class="' . implode(' ', $classes) 
+      . '" ');
+  global $_cbb_root_path;
+  if ( $path != $_cbb_root_path ) {
+    $output .= ' style="display:none;" ';
+  }
+  $output .= '>';
+
+  $output .= theme('cbb_links', array(
+    'link_text' => $item['link']['link_text'], //KRM ?? $link_text?
+    'path' => $path,
+    'options' => $options,
+    'state' => $state,
+    'classes' => $classes,
+    'has_children' => $has_children, //$item['link']['has_children'],
+    'published' => $published,
+  ));
+
+  if (!empty($item['link']['has_children'])) {
+    if (!empty($nextlevel)) {
+      $output .= '<ul>';
+      // If the link has children call the function on itself.
+      $output .= $nextlevel;
+      $output .= '</ul>';
+    }
+  }
+
+  $output .= '</li>';
+  return $output;
+}
+
+/**
+ * Render a single link, possibly with open/close link and/or edit button.
+ */
+function theme_cbb_links($variables) {
+  // create values from the parameter array
+  $link_text    = $variables["link_text"];
+  $path         = $variables["path"];
+  $options      = $variables["options"];
+  $state        = $variables["state"];
+  $classes      = $variables["classes"];
+  $has_children = $variables["has_children"];
+  $published    = $variables['published'];
+  
+  //Add published status as attribute for unpublished items.
+  if ( $published == 0 ) {
+    $options['attributes']['data-published'] = 'no';
+  }
+  
+//  $parentlink = variable_get('jquerymenu_parentlink', 0);
+
+  $icon_class = '';
+  $title_attr = '';
+  //Choose one of three icon classes.
+  if ( ! $has_children ) {
+    $icon_class = 'no-branch';
+  }
+  else {
+    $icon_class = 'opened-branch';
+  }
+  $output = '<span ' . $title_attr . ' class="' . $icon_class . '">&nbsp;</span> ';
+  //Add the unpublished marker if needed.
+  $link_text = ( $published == 0 )
+        ? '(u) ' . $link_text 
+        : $link_text;
+  //Enforce maximum length of title.
+  $link_text = _cbb_max_len($link_text);
+  $link = l(
+      $link_text, 
+      $path, 
+      $options
+  );
+//  if ($has_children != 0) {
+//    $output .= $parentlink ? $plus . $link_text : $plus . $link;
+//  }
+//  else {
+    $output .= $link;
+//  }
+  return $output;
+}
+
+/**
+ * Limit a string to a length. Add elipsis if too long.
+ * @param string $string String to limit.
+ * @return string Limited string
+ */
+function _cbb_max_len($string) {
+  if ( strlen($string) > ( CBB_MAX_CHARS - 3 ) ) {
+    $string = drupal_substr($string, 0, CBB_MAX_CHARS - 3) . '...';
+  }
+  return $string;
+}
+
+/**
+ * Implements hook_form_FORM_alter().
+ * 
+ * Check for changes in publication status of content.
+ */
+//function cyco_book_blocks_form_blueprint_node_form_alter(&$form, &$form_state) {
+//  _ccbb_remember_published_state($form);
+//}
+//
+//function cyco_book_blocks_form_blueprint_page_node_form_alter(&$form, &$form_state) {
+//  _ccbb_remember_published_state($form);
+//}
+//
+//function cyco_book_blocks_form_course_node_form_alter(&$form, &$form_state) {
+//  _ccbb_remember_published_state($form);
+//}
+//
+//function cyco_book_blocks_form_course_page_node_form_alter(&$form, &$form_state) {
+//  _ccbb_remember_published_state($form);
+//}
+//
+//function cyco_book_blocks_form_learning_map_node_form_alter(&$form, &$form_state) {
+//  _ccbb_remember_published_state($form);
+//}
+//
+//
+//function _ccbb_remember_published_state(&$form) {
+//  $published = '';
+//  if ( isset( $form['options']['status']['#default_value'] ) ) {
+//    $published = $form['options']['status']['#default_value'];
+//  }
+//  $form['old_published'] = array(
+//    '#type' => 'hidden',
+//    '#value' => $published,
+//  );
+//  $form['#submit'][] = '_ccbb_check_published_change';
+//}
+//
+//function _ccbb_check_published_change($form, &$form_state) {
+//  //Get the old state.
+//  $old_status = $form_state['values']['old_published'];
+//  //Get the new state.
+//  $new_status = $form_state['values']['status'];
+//  //Erase the book block tree caches if they are not the same. 
+//  //Trees will be rebuilt as required.
+//  if ( $new_status != $old_status ) {
+//    $bid = $form['#entity']->book['bid'];
+//    variable_del(_ccbb_compute_cache_name($bid, TRUE) );
+//    variable_del(_ccbb_compute_cache_name($bid, FALSE) );
+//  }
+//}
+
+function cyco_book_blocks_node_update($node) {
+  _ccbb_maybe_erase_menu_cache( $node );
+}
+
+
+function cyco_book_blocks_node_insert($node) {
+  _ccbb_maybe_erase_menu_cache( $node );
+}
+
+
+function cyco_book_blocks_node_delete($node) {
+  _ccbb_maybe_erase_menu_cache( $node );
+}
+
+/**
+ * Erase the cache for book menu a node is in.
+ */
+function _ccbb_maybe_erase_menu_cache( $node ) {
+  if ( isset($node->book) ) {
+    if (_ccbb_relevant_content_type( $node ) ) {
+      $bid = $node->book['bid'];
+      variable_del(_ccbb_compute_cache_name($bid, TRUE) );
+      variable_del(_ccbb_compute_cache_name($bid, FALSE) );    
+    }
+  }
+}
+
+function _ccbb_relevant_content_type( $node ) {
+  static $types = array('course', 'course_page', 'page', 'blueprint_page');
+  return in_array($node->type, $types);
+} 
+

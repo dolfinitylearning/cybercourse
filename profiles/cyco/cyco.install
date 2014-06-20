@@ -22,6 +22,8 @@ function cyco_install() {
 //  cyco_admin_theme();
   //Set version of jQuery to use.
   cyco_jquery_update();
+  //Remove book page content type.
+  node_type_delete('book');
 }
 
 /**

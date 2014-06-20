@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implement hook_node_view_alter().
+ * Add toc handling to pages that need it.
+ */
+function cyco_toc_node_view_alter(&$build) {
+  if ( isset($build['#node']->field_show_toc) ) {
+    if ( isset($build['#node']->field_show_toc['und'][0]['value']) ) {
+      if ( $build['#node']->field_show_toc['und'][0]['value'] == 1 ) {
+        drupal_add_js(drupal_get_path('module', 'cyco_toc') . '/cyco_toc.js', 'file');
+        drupal_add_css(drupal_get_path('module', 'cyco_toc') . '/cyco_toc.css', 'file');
+      }
+    }
+  }
+}

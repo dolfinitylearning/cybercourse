@@ -1,0 +1,25 @@
+/* Styles for the cyco table of contents module. */
+
+#label {
+  font-weight: bold;
+}
+
+#cyco_toc p {
+}
+
+#cyco_toc p.toc_h1 {
+  margin-left: 0;
+}
+
+#cyco_toc p.toc_h2 {
+  margin-left: 2em;
+}
+
+#cyco_toc p.toc_h3 {
+  margin-left: 4em;
+}
+
+#cyco_toc p.toc_h4 {
+  margin-left: 6em;
+}
+

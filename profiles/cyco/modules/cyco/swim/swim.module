@@ -831,7 +831,7 @@ function _swim_ckhtml2rest( $content ) {
 //  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
 //  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
   //Trigger other module's translators.
-  drupal_alter( 'swim_ckhtml_2_directive', $content); //, $type );
+  drupal_alter( 'swim_ckhtml2rest', $content); //, $type );
   //Replace image HTML tags with directives.
   //  These must be after other module's hooks are called, so that other 
   //  modules have processes the images they own.

@@ -1,0 +1,65 @@
+/* Based on jquerymenu CSS. */
+
+/* Redo stuff from the tree menu CSS. */
+.region .block div.cycoBookBlock,
+.pane-block div.cycoBookBlock {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow:none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background-color: transparent;
+  border: none;
+  margin-bottom: 0;
+  max-height: none;
+  min-height: none;
+  overflow-y: visible;
+  padding: 0;
+}
+
+div.cycoBookBlock {
+  margin-left: -15px;
+}
+
+div.cycoBookBlock ul {
+  margin-left: 1em;
+}
+
+div.cycoBookBlock li::after {
+  border-top: none;
+}
+
+div.cycoBookBlock li::before {
+  border-left: none;
+}
+
+div.cycoBookBlock li {
+  list-style-type: none;
+  margin-bottom: 0.2em;
+}
+
+div.cycoBookBlock .currentPage > span + a {
+  font-weight: bold;
+}
+
+div.cycoBookBlock li span {
+  border: 1px transparent solid;
+}
+
+div.cycoBookBlock li span.opened-branch,
+div.cycoBookBlock li span.closed-branch,
+div.cycoBookBlock li span.no-branch {
+  width: 16px;
+  height: 16px;
+}
+
+div.cycoBookBlock li span.opened-branch {
+  background-image: url(../images/minus_alt_16x16.png);
+}
+div.cycoBookBlock li span.closed-branch {
+  background-image: url(../images/plus_alt_16x16.png);
+}
+div.cycoBookBlock li span.no-branch {
+  background-image: none;
+}

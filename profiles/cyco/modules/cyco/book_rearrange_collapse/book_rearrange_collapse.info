@@ -1,4 +1,5 @@
 name = Book rearrange collapse 
 description = Add collapse behavior to book rearrange UI.
 package = CyberCourse
+version = 7.x-1.0
 core = 7.x

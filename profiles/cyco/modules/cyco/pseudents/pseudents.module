@@ -8,13 +8,6 @@ define('POSES_PREVIW_DIRTY_FLAG_VAR', 'pseudents_poses_preview_dirty');
  */
 define('POSES_PREVIEW_DATA_VAR', 'pseudents_poses_preview_data');
 
-
-//function pseudents_init() {
-//  drupal_add_css(
-//    drupal_get_path('module', 'pseudents') . '/css/pseudents.css'
-//  );
-//}
-
 /**
  * Implements hook_help().
  */
@@ -128,7 +121,11 @@ function _pseudents_generate_ck_pseudent_table() {
     foreach ( $query_result['node'] as $nid => $value ) {
       $node = node_load($nid);
       $title = $node->title;
-      $notes = swim_render_field( $node, 'field_body', 'summary-or-trimmed');
+      $renderable_array = field_view_field(
+          'node', $node, 'field_notes', 'swim_summary_or_trimmed_formatter'
+      );
+      $notes = drupal_render( $renderable_array );
+//      $notes = swim_render_field( $node, 'field_body', 'summary-or-trimmed');
       //Caption is not a required field.
       if ( isset($node->field_caption[LANGUAGE_NONE][0]['safe_value']) ) {
         $caption = $node->field_caption[LANGUAGE_NONE][0]['safe_value'];
@@ -142,7 +139,7 @@ function _pseudents_generate_ck_pseudent_table() {
           $categories[ $term['tid'] ] = $term_names[ $term['tid'] ];
         }
       }
-      $usable_url = _pseudents_uri_2_path(
+      $usable_url = _pseudents_uri2path(
           $node->field_image[LANGUAGE_NONE][0]['uri']
       );
       $pseudents[$nid] = array(
@@ -266,10 +263,10 @@ function pseudents_swim_add_client_stuff() {
 
 
 /**
- * Implements hook_swim_ckhtml_2_directive_alter().
+ * Implements hook_swim_ckhtml2rest_alter().
  * @param string $content Content to change.
  */
-function pseudents_swim_ckhtml_2_directive_alter( &$content ) {
+function pseudents_swim_ckhtml2rest_alter( &$content ) {
   $regex = 
       '/\<div class\=\"pseudent\".*?data\-pseudent\-id\=\"(.*?)\"*.\>\s*'
       .  '\<div class\=\"pseudent\-image\-container\"\>\s*'
@@ -328,7 +325,7 @@ function _pseudents_make_view_replacements($matches) {
   if (sizeof( $node->field_caption ) > 0 ) {
     $caption = $node->field_caption[LANGUAGE_NONE][0]['value'];
   }
-  $usable_url = _pseudents_uri_2_path(
+  $usable_url = _pseudents_uri2path(
      $node->field_image[LANGUAGE_NONE][0]['uri']
   );
   $html =   '<div class="pseudent">'
@@ -350,7 +347,7 @@ function _pseudents_make_view_replacements($matches) {
  * @param string $uri Drupal URI
  * @return string Usable URL
  */
-function _pseudents_uri_2_path( $uri ) {
+function _pseudents_uri2path( $uri ) {
   $absolute_url = file_create_url( $uri );
   //Convert to local URL.
   //This will only work for Drupals in the root of sub/domain?
