@@ -1,0 +1,77 @@
+/*
+Changes to views styles.
+*/
+
+/* Filter form, all views. */
+h2.views-filter-header {
+  margin-top: 0;  
+}
+div.view-filters {
+  margin-bottom: 2em;
+}
+div.views-exposed-widget {
+  margin-bottom: 2em;
+}
+div.views-exposed-widget.views-submit-button {
+  margin-bottom: 0;
+}
+
+/* Header (below title), all views. */
+div.view-header {
+  margin-bottom: 2em;
+}
+
+/* Exercises */
+
+/* The exercise name. */
+.view-exercises .exercise-view-exercise-title {
+  margin-left: -1em;
+  text-align: left;
+  font-size: 150%;
+  margin-bottom: 1em;
+}
+
+.view-exercises .exercise-view-exercise-body {
+  text-align: left;
+  margin-bottom: 1em;
+}
+
+.view-exercises .exercise-view-exercise-edit {
+  text-align: left;
+  margin-bottom: 1em;
+}
+
+
+/* The rubric item table. */
+.view-exercises table {
+  margin-left: 2em;
+  width: 90%;
+}
+
+.view-exercises .views-field-field-rubric-item-weight {
+  /*text-align: center;*/
+}
+
+.view-exercises .views-field-edit-node {
+  /*text-align: right;*/
+}
+
+/* Comments list. */
+.view-comments .views-row {
+  margin-bottom: 2em;
+}
+
+.view-comments .views-row .views-field-subject {
+  font-size: 120%;
+}
+
+/* Public exercises list. */
+.view-exercises-public .views-row {
+  margin-bottom: 1em;
+}
+
+/* Public patterns list. */
+.view-patterns.view-display-id-page .views-field-title div.categories {
+  font-size: 80%;
+  padding-left: 1em;
+}

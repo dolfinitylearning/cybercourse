@@ -47,43 +47,6 @@ function cyco_pseudents_field_default_field_instances() {
         'size' => 20,
       ),
       'type' => 'text_textfield',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'node-pseudent_pose-field_categories'
-  $field_instances['node-pseudent_pose-field_categories'] = array(
-    'bundle' => 'pseudent_pose',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Categories for this student pose, e.g., Jill, Happy.',
-    'display' => array(
-      'default' => array(
-        'label' => 'inline',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 4,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_categories',
-    'label' => 'Categories',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
       'weight' => 4,
     ),
   );
@@ -152,7 +115,7 @@ function cyco_pseudents_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -190,6 +153,43 @@ function cyco_pseudents_field_default_field_instances() {
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
       'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-pseudent_pose-field_pseudent_categories'
+  $field_instances['node-pseudent_pose-field_pseudent_categories'] = array(
+    'bundle' => 'pseudent_pose',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Categories for this student pose, e.g., Jill, Happy.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_pseudent_categories',
+    'label' => 'Categories',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 2,
     ),
   );
 

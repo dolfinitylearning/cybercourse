@@ -1,0 +1,270 @@
+
+@import url("book.css");
+@import url("control-panel.css");
+
+/* Without this, there is a horiz scroll bar. The standard value is -15px. */
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+
+body, body h1, body h2, body h3, body h4, body h5, body h6 {
+  line-height: 1.5em;
+}
+
+p {
+  margin: 0 0 1.5em;
+}
+
+ul, ol {
+  padding: 0;
+  margin: 0 0 1.5em 25px;
+}
+
+/* Wait cursors */
+.wait, .wait * { 
+  cursor: wait !important;
+}
+
+.node-unpublished {
+  border-left: 1px solid #fff4f4;
+  border-right: 1px solid #fff4f4;
+  background-color: #fff4f4;
+}
+
+.create-page-links {
+  padding-bottom: 10px;
+  border-bottom: dotted 1px #585858;
+  margin-bottom: 10px;
+}
+
+.create-page-links a {
+  margin-right: 20px;
+}
+
+/* For the operations menu on the control panel. */
+/*
+li.expanded.author-menu-parent ul {
+  margin-left: 2em;
+  margin-bottom: 0.3em;
+}
+*/
+
+/*.field-type-taxonomy-term-reference {
+  margin-bottom: 1em;
+}*/
+
+/* Help text a little strange in FF by default.  */
+.help-block, .control-group .help-inline {
+  margin: 0 0 10px;
+}
+
+/*  */
+.code-look {
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+  color: #DD1144;
+  border: 1px solid #E1E1E8;
+  padding: 2px 4px;
+  white-space: nowrap;
+  background-color: #F7F7F9;
+  border-radius: 3px;
+}
+
+/* Space betwixt workflow tags and content. */
+.field-name-field-workflow-tags {
+  margin-bottom: 1em;
+}
+
+.view-tagged-content thead th,
+.view-tagged-content tbody td,
+.view-character-poses thead th,
+.view-character-poses tbody td {
+  padding: 0.7em;
+}
+
+/* Space out editing form elements. */
+.field-name-field-show-toc, #edit-body-file-upload {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+/* Show workflow tags inline on node display. */
+.field-name-field-workflow-tags .field-item {
+  display: inline-block;
+  margin-left: 2em;
+}
+
+/* Some views stuff */
+.view-recent-content-changes .views-row {
+  border-top: 1px solid #DDDDDD;
+  line-height: 20px;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Panels random stuff. */
+
+.panel-pane .more-link {
+  text-align: right;
+}
+
+
+#comment-form-wrapper {
+  margin-bottom: 0;
+}
+
+/* Header user menu. */
+/*header nav > ul.pull-right > li {
+  display: inline-block;
+}*/
+header nav > ul.pull-right > li a {
+  /*padding: 15px;*/
+/*  color: #444;
+  background-color: #EEE;*/
+}
+
+#block-menu-menu-footer-menu {
+  margin-bottom: 0;
+}
+
+#block-menu-menu-footer-menu ul {
+  margin-bottom: 0;
+}
+
+#block-menu-menu-footer-menu ul li {
+  display: inline-block;
+  margin-right: 3em;
+}
+
+.footer {
+  padding: 0 20px 0 20px;
+  margin-bottom: 20px;
+  border: none;
+  margin-top: 20px;
+}
+
+/* Make small wells have less padding. */
+
+.well-sm {
+  padding: 0.5em;
+}
+
+/* Sidebar blocks look a little strange. Same for when they're in panels. */
+
+div.region-sidebar-first section.block {
+  margin-left: 0.5em;
+}
+
+h3.block-title,
+.panel-pane .pane-title {
+  margin: 0;
+}
+
+ul.cycobb {
+  margin-bottom: 0.5em;
+  /*font-size: 85%;*/
+}
+
+/* To make the modules page work. */
+/* Undo evil from module filter. */
+#module-filter-squeeze {
+    background-color: inherit;
+    border-color: inherit;
+}
+table.package tr.enabling {
+    background-color: #DDFFDD;
+}
+/* From admin module (core)  */
+div.admin-requirements, div.admin-required {
+    color: inherit;
+}
+
+li.user-menu {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+/* Adminy buttons. Replicate Shiny's input.form-submit. */
+li.user-menu a {
+  color: #5A5A5A;
+  background: #e0e0e0;
+  background: -moz-linear-gradient(top, #fefefe 0%, #e0e0e0 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefefe), color-stop(100%, #e0e0e0));
+  background: -webkit-linear-gradient(top, #fefefe 0%, #e0e0e0 100%);
+  background: -o-linear-gradient(top, #fefefe 0%, #e0e0e0 100%);
+  background: -ms-linear-gradient(top, #fefefe 0%, #e0e0e0 100%);
+  background: linear-gradient(to bottom, #fefefe 0%, #e0e0e0 100%);
+  border: 1px solid #cccccc;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -moz-box-shadow: 0 1px 2px #cccccc, inset 0 1px 1px white;
+  -webkit-box-shadow: 0 1px 2px #cccccc, inset 0 1px 1px white;
+  box-shadow: 0 1px 2px #cccccc, inset 0 1px 1px white;
+  font: normal 500 16px/16px "Open Sans", Arial, sans-serif;
+  margin-left: 1px;
+  margin-top: 1px;
+  padding: 6px 30px;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+li.user-menu a:hover,
+li.user-menu a:focus,
+li.user-menu a:active,
+li.user-menu a:disabled
+{
+  /*background: #eeeeee;*/
+  color: #5A5A5A;
+  text-shadow: 0 -1px 1px #fff;
+  text-decoration: underline;
+}
+
+/* Tabs on, e.g., node edit page. */
+.nav-tabs {
+  margin-bottom: 1em;
+}
+
+
+.field-type-taxonomy-term-reference {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Modules admin page - make modules names stand out. */
+#permissions .module {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+/* Used on admin pages. */
+.form-horizontal .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.panel-body .form-type-select {
+  margin-left: 1em;
+}
+
+/* Tools block */
+#block-menu-menu-tools ul {
+  margin-left: 0;
+  line-height: 1;
+}
+
+#block-menu-menu-tools a {
+  padding-top: 0;
+}
+
+#block-menu-menu-tools a:hover {
+  text-decoration: underline;
+  padding-top: 0;
+  background-color: transparent;
+}

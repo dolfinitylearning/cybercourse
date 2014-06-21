@@ -6,45 +6,6 @@
  */
 
 /**
- * Implements hook_init().
- */
-function cyco_core_init() {
-  //Add client-side error handling.
-  drupal_add_js( 
-      drupal_get_path('module', 'cyco_core') . '/js/cyco_core_error_handler.js'
-  );
-}
-
-/**
- * Implements hook_menu().
- */
-function cyco_core_menu() {
-  $items = array();
-  $items['admin/config/cyco'] = array(
-    'title' => 'CyberCourse',
-    'description' => 'Configuration of the CyberCourse system.',
-    'page callback' => 'system_admin_menu_block_page',
-    'access arguments' => array('administer site configuration'),
-    'file' => 'system.admin.inc',
-    'file path' => drupal_get_path('module', 'system'),
-  );
-  $items['admin/config/cyco/base'] = array(
-    'title' => 'Basic settings',
-    'description' => 'Base configuration of the CyberCourse system.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('cyco_core_settings_form'),
-    'access arguments' => array('administer site configuration'),
-  );
-  //Client-side error handler callback.
-  $items['cyco_handle_client_error'] = array(
-    'page callback' => 'cyco_core_client_error',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  return $items;
-}
-
-/**
  * Add client-side library for services.
  */
 function _cyco_core_add_client_services_lib() {

@@ -91,15 +91,14 @@ function cyco_pseudents_views_default_views() {
     ),
   );
   $handler->display->display_options['style_options']['sticky'] = TRUE;
-  /* Header: Global: Text area */
-  $handler->display->display_options['header']['area']['id'] = 'area';
-  $handler->display->display_options['header']['area']['table'] = 'views';
-  $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['empty'] = TRUE;
-  $handler->display->display_options['header']['area']['content'] = '<p>Here are pseudent poses you can add to your course pages and other places. You can read about them in the <a href=\'http://wiki.cybercour.se/\'>CyberCourse wiki</a>.</p>
+  /* Header: Global: Unfiltered text */
+  $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are pseudent poses you can add to your course pages and other places. You can read about them in the <a href=\'http://wiki.cybercour.se/\'>CyberCourse wiki</a>.</p>
 
-<p><a class=\'btn btn-default\' href=\'node/add/pseudent-pose\'>Add</a></p>';
-  $handler->display->display_options['header']['area']['format'] = 'full_html';
+<p><a class=\'btn btn-default\' href=\'node/add/pseudent-pose\'>Add pseudent pose</a></p>';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';

@@ -1,5 +1,34 @@
 <?php
 /**
+ * @file
+ * CyberCourse centralized error handler.
+ */
+
+/**
+ * Contribute to hook_init.
+ */
+function _cyco_core_error_init() {
+  //Add client-side error handling.
+  drupal_add_js( 
+      drupal_get_path('module', 'cyco_core') . '/custom/js/cyco_core_error_handler.js'
+  );
+}
+
+
+/**
+ * Add a menu item. 
+ * @param type $items
+ */
+function _cyco_core_error_add_menu_items( &$items ){
+  //Client-side error handler callback.
+  $items['cyco_handle_client_error'] = array(
+    'page callback' => 'cyco_core_client_error',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+}
+
+/**
  * Handle an error.
  * @staticvar CycoErrorHandler $error_handler Error handling class.
  * @param string $explanation Why? Oh, god, WHY?
@@ -33,7 +62,7 @@ function cyco_core_js_alter(&$javascript) {
   //Make sure that JS error handling code is included.
   global $base_url;
   $path = drupal_get_path('module', 'cyco_core') 
-        . '/js/cyco_core_error_handler.js';
+        . '/custom/js/cyco_core_error_handler.js';
   $javascript[$path] = array(
     'data' => $base_url. '/' . $path,
     'scope' => 'header',
