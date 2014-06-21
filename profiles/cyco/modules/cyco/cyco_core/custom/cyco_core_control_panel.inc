@@ -53,25 +53,25 @@ function _cyco_render_control_panel() {
       '#markup' => $groups,
     );
   }
-  if ( cyco_base_current_user_has_role( array('administrator') ) ) {
+  if ( cyco_core_current_user_has_role( array('administrator') ) ) {
     $result['all_content']['admin_title'] =
         _cyco_control_panel_show_title( 'Administrator actions' );
     $result['all_content']['admin_menu'] =
         _cyco_control_panel_show_menu_block( 'menu-cp-administrators' );
   }
-  if ( cyco_base_current_user_has_role( array('author') ) ) {
+  if ( cyco_core_current_user_has_role( array('author') ) ) {
     $result['all_content']['author_title'] = 
         _cyco_control_panel_show_title( 'Author actions' );
     $result['all_content']['author_menu'] = 
         _cyco_control_panel_show_menu_block( 'menu-cp-authors' );
   }
-  if ( cyco_base_current_user_has_role( array('instructor') ) ) {
+  if ( cyco_core_current_user_has_role( array('instructor') ) ) {
     $result['all_content']['instructor_title'] = 
         _cyco_control_panel_show_title( 'Instructor actions' );
     $result['all_content']['instructor_menu'] = 
         _cyco_control_panel_show_menu_block( 'menu-cp-instructors' );
   }
-  if ( cyco_base_current_user_has_role( array('grader') ) ) {
+  if ( cyco_core_current_user_has_role( array('grader') ) ) {
     $result['all_content']['grader_title'] = 
         _cyco_control_panel_show_title( 'Grader actions' );
     $result['all_content']['num_submissions'] = 
@@ -79,13 +79,13 @@ function _cyco_render_control_panel() {
     $result['all_content']['grader_menu'] = 
         _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
   }
-  if ( cyco_base_current_user_has_role( array('reviewer') ) ) {
+  if ( cyco_core_current_user_has_role( array('reviewer') ) ) {
     $result['all_content']['reviewer_title'] = 
       _cyco_control_panel_show_title( 'Reviewer actions' );
     $result['all_content']['reviewer_menu'] = 
       _cyco_control_panel_show_menu_block( 'menu-cp-reviewers' );
   }
-  if ( cyco_base_current_user_has_role( array('student') ) ) {
+  if ( cyco_core_current_user_has_role( array('student') ) ) {
     $result['all_content']['student_title'] = 
       _cyco_control_panel_show_title( 'Student actions' );
     $result['all_content']['student_menu'] = 
