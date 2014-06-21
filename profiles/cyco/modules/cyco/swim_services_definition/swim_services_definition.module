@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the SWIM services definition feature.
- */
-
-include_once 'swim_services_definition.features.inc';

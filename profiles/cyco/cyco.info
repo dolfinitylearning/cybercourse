@@ -15,7 +15,6 @@ dependencies[] = color
 dependencies[] = comment
 dependencies[] = contact
 dependencies[] = contextual
-;dependencies[] = dashboard
 dependencies[] = help
 dependencies[] = image
 dependencies[] = list
@@ -92,10 +91,8 @@ dependencies[] = pathauto
 dependencies[] = og
 
 ;**************** Cyco custom modules *******************
-dependencies[] = cyco_utilities
-dependencies[] = cybercourse_core
 dependencies[] = swim
-dependencies[] = swim_services_definition
+dependencies[] = cyco_core
 dependencies[] = cyco_control_panel
 dependencies[] = pseudents
 dependencies[] = book_rearrange_collapse

@@ -1,5 +1,0 @@
-name = Cybercourse base test
-description = Tests for CyberCourse base module.
-package = CyberCourse
-dependencies[] = cybercourse_base
-core = 7.x

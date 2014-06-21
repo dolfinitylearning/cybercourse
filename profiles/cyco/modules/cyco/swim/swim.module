@@ -54,6 +54,19 @@ function swim_permission() {
 }
 
 /**
+ * Implements hook_ctools_plugin_api().
+ */
+function swim_ctools_plugin_api($owner, $api) {
+  if ($owner == 'services' && $api == 'services') {
+    return array(
+      'version' => 3,
+      'file' => 'swim.services.inc', // File to load.
+      'path' => drupal_get_path('module', 'swim') . '/includes', // If specifying the file key, path is required.
+    );
+  }
+}
+
+/**
  * Implement hook_field_widget_info().
  * 
  * Define two new widgets. Both have 'editor' in its name.
@@ -211,13 +224,13 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   $numFilesLoaded = libraries_load_files($ckLibraryInfo);
   if ( $numFilesLoaded <= 0 ) {
     $mess = t('SWIM error: no CKEditor files loaded. Is CK installed?');
-    cyco_utilities_handle_error( $mess );
+    cyco_core_handle_error( $mess );
     return;
   }
   //Add CSS.
   drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
   //Add CyCo services library.
-  _cyco_utilities_add_client_services_lib();
+  _swim_add_client_services_lib();
   //Obscurer code.
   $obscurer = theme('obscurer');
   //Send settings to JS.
@@ -281,6 +294,23 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
 }
 
 /**
+ * Add client-side library for services.
+ */
+function _swim_add_client_services_lib() {
+  global $base_url;
+  $settings = array(
+    'baseUrl' => $base_url,
+  );
+  drupal_add_js(
+      array('swimServices' => $settings),
+      'setting'
+  );
+  drupal_add_js( 
+      drupal_get_path('module', 'swim') . '/js/swim_services.js' 
+  );    
+}
+
+/**
  * Unflatten plugins array, if needed.
  * @param array $plugins Original array.
  * @return array Unflattened array.
@@ -300,41 +330,9 @@ function _swim_unflatten ( $plugins ) {
 }
 
 /**
- * Implements hook_field_presave(). 
- * 
- * Convert from CKEditor's rep of the markup to pure ReST. Store both. 
+ * Implements hook_field_info().
  */
-//function swim_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-//  if ($field['type'] == 'text_long' || $field['type'] == 'text_with_summary') {
-//    //Convert from CK HTML to pure ReST for storage.
-//    $with_summary = ( $field['type'] == 'text_with_summary' );
-//    foreach ($items as $delta => $item) {
-//      //Is aught in the main editor?
-//      if ( isset( $item['value'] ) ) {
-//        //Convert to ReST and save in ReST field.
-//        $items[$delta]['value'] 
-//             = _swim_ckhtml2rest( $item['value'] );
-//      }
-//      else {
-//        $items[$delta]['value'] = '';
-//      }
-//      //Is there a summary to process?
-//      if ( $with_summary ) {
-//        //Is aught in the main editor?
-//        if ( isset( $item['summary'] ) ) {
-//          //Convert to ReST and save in ReST field.
-//          $items[$delta]['summary'] 
-//               = _swim_ckhtml2rest( $item['summary'] );
-//        }
-//        else {
-//          $items[$delta]['summary'] = '';
-//        }
-//      } //End $with_summary.
-//    } //End for loop.
-//  } //End process SWIM field. 
-//} //End function.
-
- function swim_field_info() {
+function swim_field_info() {
   return array(
     'swim_field' => array(
       'label' => t('SWIM'),
@@ -350,8 +348,6 @@ function _swim_unflatten ( $plugins ) {
     ),
   );
  } 
-
-
 
 /**
  * Implements hook_field_formatter_info().
@@ -425,12 +421,6 @@ function swim_field_formatter_settings_summary($field, $instance, $view_mode) {
   return $summary;
 }
 
-//function swim_field_formatter_prepare_view(
-//    $entity_type, $entities, $field, $instances, $langcode, &$items, $displays
-//  ) {
-//  $r=5;
-//}
-
 /**
  * Implements hook_field_formatter_view().
  * 
@@ -453,8 +443,6 @@ function swim_field_formatter_view(
         );
         //Convert from ReST to HTML
         $output = swim_rest2html( $tokenized );
-//        $output = swim_rest2html( $item['pure_rest'] );
-        //$output = check_markup($output, NULL, $langcode);
         if ($display['type'] == 'swim_trimmed_formatter') {
           $output = text_summary($output, NULL, $display['settings']['trim_length']);
         }
@@ -486,17 +474,17 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
   if ( $obj_type == 'node' ) {
     //Is this a content type supporting tokens?
     $content_type = $object->type;
-    $types_supporting_tokens = cyco_utilities_content_types_supporting_tokens();
+    $types_supporting_tokens = cyco_core_content_types_supporting_tokens();
     if ( in_array( $content_type, $types_supporting_tokens ) ) {
       //Is this a field that supports tokens?
       $field_name = $field['field_name'];
       $fields_supporting_tokens 
-          = cyco_utilities_fields_supporting_tokens($content_type);
+          = cyco_core_fields_supporting_tokens($content_type);
       if (in_array($field_name, $fields_supporting_tokens) ) {
         //Is the page owned by a user allowed to substitute tokens?
         $page_owner_uid = $object->uid;
         $page_owner = user_load($page_owner_uid);
-        if (  cyco_utilities_user_has_role(
+        if (  cyco_core_user_has_role(
                 $page_owner,
                 array( 'author', 'administrator', 'grader', 'instructor')
               ) 
@@ -509,60 +497,6 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
   }
   return $content;
 }
-
-/**
- * Render a SWIM field using a specified formatter.
- * @param stdClass $entity Entity containing the field.
- * @param string $field_name Field name, e.g., field_body.
- * @param string $format Format: 
- *  default - main.
- *  summary - summary.
- *  summary-or-trimmed - summary if not MT, else trimmed main.
- * @param integer $trim_length Trim length.
- * @param string $lang Language.
- * @param integer $delta Delta, i.e., which value in a multivalued field.
- * @return string Rendered content.
- */
-//function swim_render_field( $entity, $field_name, $format = 'default', 
-//    $trim_length = 600, $lang = LANGUAGE_NONE, $delta = 0 ) {
-//  $html = '';
-//  try {
-//    //Pick data to render.
-//    if ( ! isset( $entity->$field_name ) ) {
-//      throw new Exception('Entity does not have field ' . $field_name . '.');
-//    }
-//    $to_render = '';
-//    //May be no data in the field.
-//    if ( ! isset( $entity->{$field_name}[$lang][$delta] ) ) {
-//      //Nothing to do.
-//    }
-//    else if ( $format == 'default' ) {
-//      $to_render = $entity->{$field_name}[$lang][$delta]['value'];
-//    }
-//    else if ( $format == 'summary' || $format == 'summary-or-trimmed' ) {
-//      //Is there a summary?
-//    if ( isset( $entity->{$field_name}[$lang][$delta]['summary'] ) ) {
-//        //There is a summary.
-//        $to_render = $entity->{$field_name}[$lang][$delta]['summary'];
-//      }
-//      else {
-//        //No summary. Trim main.
-//        //Call the text module's summary function.
-//        $to_render = text_summary(
-//          $entity->${field_name}[$lang][$delta]['value'], NULL, $trim_length
-//        );
-//      }
-//    }
-//    else {
-//      throw new Exception('Unknown format: ' . $format);
-//    }
-//    //Render it.
-//    $html = swim_restructuredtext_to_html( $html );
-//  } catch ( Exception $exc ) {
-//    cybercourse_base_handle_error( $exc->getMessage() );
-//  }
-//  return $html;
-//}
 
 /**
  * Translate pure ReST into HTML.
@@ -654,6 +588,13 @@ function _swim_rest2ck_mathjx_part_1( $content ) {
   return array( $content, $replacements );
 }
 
+/**
+ * Replace .. math:: directives with temp tag, used later to 
+ * add HTML tags CK uses.
+ * @param string $content Da goods, ReSTy.
+ * @param string $tag Temp tag to use.
+ * @return array, content and array of replacement info.
+ */
 function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
   $math_tags = array();
   $pattern = '/\.\.\s+math\:\:.*\r?\n/i';
@@ -683,7 +624,7 @@ function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
     $done = false;
     while( ! $done ) {
       list( $break_pos, $break_length) 
-          = cyco_utilities_find_next_line_break($content, $search_start);
+          = cyco_core_find_next_line_break($content, $search_start);
       if ( $break_pos == -1 ) {
         //Not found. Formula goes to the end of the content.
         $formula_end = strlen( $content ) - 1;
@@ -717,7 +658,13 @@ function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
   return array($content, $replacements);
 }
 
-
+/**
+ * Replace :math: roles with temp tag, used later to 
+ * add HTML tags CK uses.
+ * @param string $content Da goods, ReSTy.
+ * @param string $tag Temp tag to use.
+ * @return array, content and array of replacement info.
+ */
 function _swim_rest2ck_mathjax_add_role_temp_tags($content, $tag) {
   $replacements = array();
   //Count of formula found so far.
@@ -768,9 +715,6 @@ function _swim_rest2ck_mathjax_add_role_temp_tags($content, $tag) {
   }
   return array($content, $replacements);  
 }
-
-
-
 
 /**
  * Replace math temp markers with HTML tags used by MathJax.
@@ -869,7 +813,7 @@ function _swim_ck_mathjx_2_rest( $content ) {
         $match = $matches[1];
         //Make sure that all the TeX is indented if the user types line breaks
         //into the TeX.
-        $result = cyco_utilities_follow_break_w_spaces( $match );
+        $result = cyco_core_follow_break_w_spaces( $match );
         //Output directive, not role.
         $result = "\n\n.. math::\n\n    " . $result . "\n\n";
         return $result;
@@ -887,7 +831,7 @@ function _swim_ck_mathjx_2_rest( $content ) {
         $match = _swim_remove_brs($match);
         //Make sure that all the TeX is indented if the user types line breaks
         //into the TeX.
-        $result = cyco_utilities_follow_break_w_spaces( $match );
+        $result = cyco_core_follow_break_w_spaces( $match );
         //Remove the first two and last two characters. \( and \)
         $result = substr($result, 2);
         $result = substr($result, 0, strlen($result)-2 );
@@ -921,26 +865,6 @@ function _swim_img_2_path( $content ) {
   );
   return $content;
 }
-
-/**
- * Add img tags to picture and image directives, so they render in CK.
- * Used when loading ReST into CK for editing.
- * @param string $content Content with directives.
- */
-//function _swim_path_2_img( $content ) {
-//  //Pattern to find the img tags. Need the ? to make the match lazy, not greedy.
-//  $pattern = '/\.\.\s(image|figure)(\:\:\s)(.*?)\s/im';
-//  $content = preg_replace_callback(
-//      $pattern, 
-//      function ($matches) {
-//        //Wrap in an image tag.
-//        $result = '.. ' . $matches[1] . $matches[2] . '<img src="' . $matches[3] . '">';
-//        return $result;
-//      },
-//      $content
-//  );
-//  return $content;
-//}
 
 /**
  * Grab paths in image/figure directives, and replace them
@@ -999,7 +923,7 @@ function _swim_client_peek( $data ) {
   if ( !isset($data['markup']) ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' markup missing.';
-    cyco_utilities_handle_services_error( $message );
+    cyco_core_handle_services_error( $message );
     return;
   }
   $markup = $data['markup'];
@@ -1027,9 +951,6 @@ function _swim_client_peek( $data ) {
   return $themed;
 }
 
-  
-
-
 /**
  * Change error messages from Python's docutils into something that
  * will look OK for a drupal_set_message(). Sample input:
@@ -1046,7 +967,6 @@ function _swim_format_docutils_errors( $docutils_error_messages ) {
   $drupal_message = preg_replace('/\:[0-9]+\:\ /m', '', $drupal_message);
   // :, then 1 or more digits, then :, then space.
   $drupal_message = '<pre>' . $drupal_message . '</pre>';
-//  $drupal_message = str_replace("\n", '<br>', $drupal_message);
   $themed_message = theme(
       'swim_format_error',
       array(
@@ -1056,7 +976,11 @@ function _swim_format_docutils_errors( $docutils_error_messages ) {
   return $themed_message;
 }
 
-
+/**
+ * Check if use has 'peek content' access. Other modules
+ * can implement a hook to give access.
+ * @return boolean Yea or nay.
+ */
 function _swim_check_peek_perm() {
   if ( user_access( 'peek content' ) ) {
     return TRUE;
@@ -1073,6 +997,9 @@ function _swim_check_peek_perm() {
   return $access_granted;
 }
 
+/**
+ * Implements hook_theme().
+ */
 function swim_theme() {
   global $base_url;
   $info = array(
@@ -1101,6 +1028,9 @@ function swim_theme() {
   return $info;
 }
 
+/**
+ * Theme a format error message from Docutils.
+ */
 function theme_swim_format_error( $variables ) {
   $message = $variables['message'];
   $html = "Problems in translating your ReST.<br><br>" . $message

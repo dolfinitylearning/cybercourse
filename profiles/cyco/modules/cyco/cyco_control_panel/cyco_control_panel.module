@@ -12,7 +12,7 @@ function cyco_control_panel_menu() {
     'title' => 'Control panel',
     'description' => 'CyberCourse control panel.',
     'page callback' => '_cyco_render_control_panel',
-    'access callback' => 'cyco_base_current_user_has_role',
+    'access callback' => 'cyco_core_current_user_has_role',
     'access arguments' => array('authenticated user'),
     'type' => MENU_NORMAL_ITEM,
   );

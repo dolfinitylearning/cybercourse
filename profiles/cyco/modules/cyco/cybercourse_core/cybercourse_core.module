@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the CyberCourse core feature.
- */
-
-include_once 'cybercourse_core.features.inc';

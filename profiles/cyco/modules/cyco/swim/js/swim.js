@@ -9,8 +9,8 @@
       }
       this.done = true;
       //Get CSRF token, if needed.
-      if ( ! cycoUtilitiesServices.csrfToken ) {
-        cycoUtilitiesServices.getCsrfToken();
+      if ( ! swimServices.csrfToken ) {
+        swimServices.getCsrfToken();
       }
       //Set convenience reference.
       nameSpaceyThing = this;
@@ -279,7 +279,7 @@
           dataType: "json",
           data: dataToSend,
           beforeSend: function (request) {
-            request.setRequestHeader("X-CSRF-Token", cycoUtilitiesServices.csrfToken);
+            request.setRequestHeader("X-CSRF-Token", swimServices.csrfToken);
           }
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
