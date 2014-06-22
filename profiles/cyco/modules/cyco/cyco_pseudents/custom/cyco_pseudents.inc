@@ -24,7 +24,7 @@ function cyco_pseudents_help($path, $arg) {
 
 function cyco_pseudents_menu() {
   $items = array();
-  $items['admin/config/cybercourse/cyco-pseudents'] = array(
+  $items['admin/config/cyco/cyco-pseudents'] = array(
     'title' => 'Pseudents',
     'description' => 'Pseudents configuration',
     'page callback' => 'drupal_get_form',
@@ -237,13 +237,15 @@ function _cyco_pseudents_load_client_side_stuff() {
     return;
   }
   $already_added = TRUE;
-  drupal_add_css(drupal_get_path('module', 'pseudents') . '/css/pseudents.css' );
+  drupal_add_css( drupal_get_path('module', 'cyco_pseudents') 
+      . '/custom/css/cyco_pseudents.css' );
   global $base_url;
-  $css_path = $base_url . '/' . drupal_get_path('module', 'pseudents') . '/css/';
+  $css_path = $base_url . '/' . drupal_get_path('module', 'cyco_pseudents') 
+      . '/custom/css/';
   $settings = array(
     'posePreviews' => cyco_pseudents_get_editor_previews(),
-    'poseStylesheet' => $css_path . 'pseudents.css',
-    'poseStylesheetEdit' => $css_path . 'pseudents_edit.css',
+    'poseStylesheet' => $css_path . 'cyco_pseudents.css',
+    'poseStylesheetEdit' => $css_path . 'cyco_pseudents_edit.css',
   );
   drupal_add_js(
       array('pseudents' => $settings),
@@ -301,7 +303,7 @@ function _cyco_pseudents_make_directive_replacements($matches) {
  * [[[animal 666|||note]]]
  * 
  */
-function cyco_pseudents_restructuredtext_to_html_alter(&$content) { 
+function cyco_pseudents_swim_betwixt_markup2html_alter(&$content) {
   $regex = 
       '/\[\[\[cycopseudent\s*(\d*?)\|\|\|(.*?)\]\]\]/is';
   //? is for lazy match.

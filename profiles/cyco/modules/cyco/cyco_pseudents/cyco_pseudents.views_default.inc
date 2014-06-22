@@ -125,15 +125,11 @@ function cyco_pseudents_views_default_views() {
     'image_style' => 'thumbnail',
     'image_link' => 'content',
   );
-  /* Field: Content: Body */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = 'Notes';
-  $handler->display->display_options['fields']['body']['type'] = 'text_summary_or_trimmed';
-  $handler->display->display_options['fields']['body']['settings'] = array(
-    'trim_length' => '600',
-  );
   /* Field: Content: Workflow tags */
   $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
   $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';

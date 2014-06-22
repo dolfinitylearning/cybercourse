@@ -1,0 +1,6 @@
+name = CyberCourse Table of Contents
+description = Table of contents for CyberCourse pages.
+package = CyberCourse
+version = 7.x-1.0
+core = 7.x
+dependencies[] = cyco_core

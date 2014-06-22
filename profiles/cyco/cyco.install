@@ -24,6 +24,10 @@ function cyco_install() {
   cyco_jquery_update();
   //Remove book page content type.
   node_type_delete('book');
+  //Set the default theme.
+  cyco_set_default_theme('cybercourse');
+  //Give user 1 the administrator role.
+  cyco_make_user_1_admin();
 }
 
 /**
@@ -444,6 +448,27 @@ function cyco_admin_theme() {
  * Configure jquery_update module to load the right version of jQuery.
  */
 function cyco_jquery_update() {
-  variable_set('jquery_update_jquery_version', '1.10');
+  variable_set('jquery_update_jquery_version', '1.9');
   variable_set('jquery_update_jquery_cdn', 'google');  
+}
+
+/**
+ * Set the default theme.
+ * @param string $theme Theme name.
+ */
+function cyco_set_default_theme( $theme ) {
+  theme_enable(array($theme));
+  variable_set('theme_default', $theme);
+//  menu_rebuild();
+}
+
+/**
+ * Give user 1 the administrator role.
+ */
+function cyco_make_user_1_admin() {
+//See https://api.drupal.org/api/drupal/modules!user!user.module/function/user_multiple_role_edit/7
+  $role = user_role_load_by_name( 'administrator' );
+  if ( $role ) {
+    user_multiple_role_edit(array(1), 'add_role', $role->rid);
+  }
 }

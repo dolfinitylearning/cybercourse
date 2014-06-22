@@ -1,9 +1,0 @@
-name = Cybercourse control panel
-description = Implements the Cybercourse control panel
-package = CyberCourse
-version = 7.x-1.0
-core = 7.x
-dependencies[] = cyco_core
-;dependencies[] = cyco_groups
-;dependencies[] = cyco_exercise
-stylesheets[all][] = css/cyco_control_panel.css

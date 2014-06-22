@@ -539,7 +539,7 @@ function swim_rest2html( $rest ) {
   $html = str_ireplace('\begin{equation*}', '', $html);
   $html = str_ireplace('\end{equation*}', '', $html);
   //Trigger other module's translators.
-  drupal_alter( 'swim_betwixt_markup_2_html', $html );
+  drupal_alter( 'swim_betwixt_markup2html', $html );
   //Wrap everything in a SWIM wrapper.
   $html = '<div class="swim">' . $html . '</div>';
   return $html;

@@ -1,5 +1,0 @@
-name = reStructuredText input filter.
-description = Implements ReST for Drupal.
-package = CyberCourse
-core = 7.x
-stylesheets[all][] = css/restructuredtext.css

@@ -5,6 +5,8 @@
  * API documentation for SWIM field type.
  */
 
+// ******************** OUT OF DATE? *******************
+
 /**
  * Render a SWIM field using a specified format.
  * @param stdClass $entity Entity containing the field.
@@ -81,7 +83,7 @@ function hook_swim_ckhtml_2_directive_alter( &$content ) {
  * @param string $content The betwixt content.
  * @return string Content with betwixt markup replaced by HTML.
  */
-function hook_swim_betwixt_markup_2_html_alter(&$content) {
+function hook_swim_betwixt_markup2html_alter(&$content) {
 }
 
 /**

@@ -48,6 +48,10 @@ dependencies[] = rest_server
 dependencies[] = token
 dependencies[] = token_custom
 dependencies[] = jquery_update
+dependencies[] = backup_migrate
+dependencies[] = uuid
+dependencies[] = node_export
+dependencies[] = node_export_features
 
 ;Field related
 dependencies[] = field_group
@@ -93,8 +97,7 @@ dependencies[] = og
 ;**************** Cyco custom modules *******************
 dependencies[] = swim
 dependencies[] = cyco_core
-dependencies[] = cyco_control_panel
-dependencies[] = pseudents
+dependencies[] = cyco_pseudents
 dependencies[] = book_rearrange_collapse
 dependencies[] = book_top_navbar
 dependencies[] = cyco_add_pages

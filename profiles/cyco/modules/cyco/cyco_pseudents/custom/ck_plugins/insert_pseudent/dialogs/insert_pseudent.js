@@ -27,10 +27,21 @@
               label: "Select a category",
               items: makeSelectList(Drupal.settings.pseudents.catTerms),
               setup: function( widget ) {
+                if ( ! widget.data.pseudentCategory ) {
+                  //No category - it's a new insertion.
+                  //Use category from last time, if there is one.
+                  if ( Drupal.settings.pseudents.lastCategory ) {
+                    widget.data.pseudentCategory 
+                        = Drupal.settings.pseudents.lastCategory;
+                  }
+                }
                 this.setValue( widget.data.pseudentCategory );
               },
               commit: function( widget ) {
                 widget.setData( "pseudentCategory", this.getValue() );
+                //Store the category for next time user clicks psuedent button
+                //on this page.
+                Drupal.settings.pseudents.lastCategory = this.getValue();
               },
               validate: function(evt) {
                 if ( $(".pseudent-cell.selected").length == 0 ) {
@@ -83,7 +94,6 @@
                 this.setupClickEvents( widget );
               },
               onHide: function( x ) {
-                console.log('hiding');
                 $(".pseudent-cell").unbind('click');
               },
               commit: function( widget ) {

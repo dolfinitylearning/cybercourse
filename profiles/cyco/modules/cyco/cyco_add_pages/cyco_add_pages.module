@@ -16,6 +16,10 @@ function cyco_add_pages_node_view_alter(&$build) {
   if ( $build['#view_mode'] != 'full' ) {
     return;
   }
+  //Only when the page is part of a book.
+  if ( !isset( $node->book ) ) {
+    return;
+  }
   //Check that it's a content type that gets create links added.
   $relevant_content_types = array(
     'course_page',
@@ -27,7 +31,7 @@ function cyco_add_pages_node_view_alter(&$build) {
   }
   //Only for authors and admins.
   if ( 
-      ! cyco_utilities_current_user_has_role( 
+      ! cyco_core_current_user_has_role( 
           array('author', 'administrator') ) 
      ) {
     return;
@@ -197,7 +201,7 @@ function _cacpl_remember_operation( $link_text, $content_type, $parent_mlid, $op
     if ( is_null($left_sib_mlid) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' addsib missing sib mlid.';
-      cyco_utilities_handle_error( $message );
+      cyco_core_handle_error( $message );
       return FALSE;
     }
     $query_params['left_sib_mlid'] = $left_sib_mlid;
@@ -205,7 +209,7 @@ function _cacpl_remember_operation( $link_text, $content_type, $parent_mlid, $op
   else {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' bad operator, naughty operator: ' . $op;
-    cyco_utilities_handle_error( $message );
+    cyco_core_handle_error( $message );
     return FALSE;
   }
   $options = array();

@@ -6,7 +6,7 @@
 Drupal.swimCkConfig = {
   disableObjectResizing : true,
   basicEntities : true, //Entity encode <, >.
-  forcePasteAsPlainText : true,
+  forcePasteAsPlainText : false,
   mathJaxClass : 'math',
   mathJaxLib : 'https:\/\/c328740.ssl.cf1.rackcdn.com\/mathjax\/latest\/MathJax.js\?config\=TeX\-AMS\-MML\_HTMLorMML',
   tabSpaces: 4,
