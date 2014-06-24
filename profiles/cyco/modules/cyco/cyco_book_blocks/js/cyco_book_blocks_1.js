@@ -11,40 +11,44 @@
       var liForChapters = $(firstLi).find("ul:first > li");
       $(liForChapters).each(function(i, item){
         $(ulTopLevel).append(item);
-        $(item).removeClass("open-branch").addClass("close-branch").show();
+        $(item).removeClass("closed-branch").addClass("opened-branch").show();
       });
       $(firstLi).remove();
     });
-    var parentyThings = $('.cyco-book-tree-menu').find('li:has(ul)');
-    parentyThings.addClass('parent_li');
-    parentyThings.find(' > span').attr('title', 'Expand this branch');
-    $('.cyco-book-tree-menu')
-        .on('click', 'li:has(ul) > span', function(e) { 
-          var $this = $(e.currentTarget);
-          $this.bookBlockMenuClicked( $this ); 
-          e.stopPropagation();
-        } );
+    
+    $('.cyco-book-tree-menu > ul').attr('role', 'cycoBookBlock').find('ul').attr('role', 'group');
+    $('.cyco-book-tree-menu').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem')
+        .find(' > span').attr('title', 'Collapse this branch').on('click',
+           function(e) { 
+             var $this = $(e.currentTarget);
+             $this.bookBlockMenuClicked( $this ); 
+             e.stopPropagation();
+           } );
+    
+    //Animation to show. None to start with.
+    //$.bccMenuAnimation = '';
     
     $.fn.bookBlockMenuClicked = function( $this ) {
       if ( ! $this ) {
         $this = $(this);
       }
       var children = $this.parent('li.parent_li').find(' > ul > li');
-      if ( $this.hasClass('open-branch') ) {
-        $this.removeClass('open-branch').addClass('close-branch');
-        children.show('fast');// $.bccMenuAnimation );
-        $this.attr('title', 'Collapse this branch');
-      }
-      else {
-        $this.removeClass('close-branch').addClass('open-branch');
-        children.hide('fast');// $.bccMenuAnimation );
+      if ( children.hasClass('opened-branch') ) {
+        children.removeClass('opened-branch').addClass('closed-branch');
+        children.hide();// $.bccMenuAnimation );
         $this.attr('title', 'Expand this branch');
       }
-
+      else {
+        children.removeClass('closed-branch').addClass('opened-branch');
+        children.show();// $.bccMenuAnimation );
+        $this.attr('title', 'Collapse this branch');
+      }
     };
     
     //Find the menu item that is the link to the current page.
     var currentPagePath = 
+//          Drupal.settings.cyco_book_blocks.base_url
+//        + Drupal.settings.basePath
          Drupal.settings.cyco_book_blocks.current_path;
     var active = $(".cyco-book-tree-menu li a[href$='" + currentPagePath + "']");
     if ( active.length > 0 ) {
@@ -56,9 +60,9 @@
         foundParent = false;
         while ( ! foundParent ) {
           active = active.parent();
-          foundParent = ( active.hasClass("menu-top") || active.hasClass("parent_li"));
+          foundParent = ( active.hasClass("menuTop") || active.hasClass("parent_li"));
         }
-        if ( active.hasClass("menu-top") ) {
+        if ( active.hasClass("menuTop") ) {
           reachedMenuTop = true;
         }
         else {
@@ -71,6 +75,8 @@
       $(".cyco-book-tree-menu .active-path").each(function(){
         $(this).bookBlockMenuClicked();
       });
+      //Animations from now on.
+      $.bccMenuAnimation = ''; //'fast';
     }
   });
 

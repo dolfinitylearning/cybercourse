@@ -22,7 +22,7 @@ function cyco_core_menu() {
     'file path' => drupal_get_path('module', 'system'),
   );
   $items['admin/config/cyco/base'] = array(
-    'title' => 'Basic settings',
+    'title' => 'Basic CyberCourse stuff',
     'description' => 'Base configuration of the CyberCourse system.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('cyco_core_settings_form'),
@@ -41,6 +41,41 @@ function cyco_core_menu() {
 function cyco_core_init() {
   //Let other files add their stuff.
   _cyco_core_error_init();
+}
+
+/**
+ * Define base config form.
+ */
+function cyco_core_settings_form($form, &$form_state) {
+  $form['explanation'] = array(
+    '#type' => 'markup',
+    '#markup' => t( 
+      'If the tree menus get out of sync with the course/blueprint '
+        . 'pages, click this button to rebuild the tree menus.' 
+    ),
+  );
+  $form['clear_cache'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear tree menu caches'),
+    '#submit' => array('cyco_core_flush_tree_menu_caches'),
+  );  
+  return $form;
+}
+
+/** 
+ * Flush all the tree menu caches.
+ */
+function cyco_core_flush_tree_menu_caches() {
+  if ( function_exists('cyco_book_blocks_flush_all_tree_menu_caches') ) {
+    cyco_book_blocks_flush_all_tree_menu_caches();
+    drupal_set_message( t('Tree menu caches cleared.') );
+  }
+  else {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Flush function not found.';
+    cyco_core_handle_error( $message );
+  }
+  drupal_goto('admin/config/cyco/base');  
 }
 
 /**

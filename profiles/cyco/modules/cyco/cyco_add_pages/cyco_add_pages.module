@@ -21,12 +21,7 @@ function cyco_add_pages_node_view_alter(&$build) {
     return;
   }
   //Check that it's a content type that gets create links added.
-  $relevant_content_types = array(
-    'course_page',
-    'blueprint_page',
-    'learning_map',
-  );
-  if ( ! in_array( $node->type, $relevant_content_types ) ) {
+  if ( ! cyco_core_is_book_content_type($node) ) {
     return;
   }
   //Only for authors and admins.
@@ -42,6 +37,7 @@ function cyco_add_pages_node_view_alter(&$build) {
   //Course main page.
   if ( $node->type == 'course_page' ) {
     _cacpl_remember_operation(
+        $node->nid,
         'Create child page',
         'course-page',
         $node->book['mlid'], //Parent id for book module.
@@ -51,6 +47,7 @@ function cyco_add_pages_node_view_alter(&$build) {
     //Can't add a sibling if it's a root node.
     if ( $node->book['bid'] != 0 ) {
       _cacpl_remember_operation(
+          $node->nid,
           'Create sibling page',
           'course-page',
           $node->book['plid'], //Parent id for book module.
@@ -63,6 +60,7 @@ function cyco_add_pages_node_view_alter(&$build) {
   //Blueprint main page.
   if ( $node->type == 'blueprint_page' ) {
     _cacpl_remember_operation(
+        $node->nid,
         'Create child page',
         'blueprint-page',
         $node->book['mlid'], //Parent id for book module.
@@ -70,6 +68,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['menu_name'] //Name of the menu for this level in the book.
     );
     _cacpl_remember_operation(
+        $node->nid,
         'Create child learning map',
         'learning-map',
         $node->book['mlid'], //Parent id for book module.
@@ -79,6 +78,7 @@ function cyco_add_pages_node_view_alter(&$build) {
     //Can't add a sibling if it's a root node.
     if ( $node->book['bid'] != 0 ) {
       _cacpl_remember_operation(
+          $node->nid,
           'Create sibling page',
           'blueprint-page',
           $node->book['plid'], //Parent id for book module.
@@ -87,6 +87,7 @@ function cyco_add_pages_node_view_alter(&$build) {
           $node->book['mlid'] //Menu link id for the current page in the book menu.
       );
       _cacpl_remember_operation(
+          $node->nid,
           'Create sibling learning map',
           'learning-map',
           $node->book['plid'], //Parent id for book module.
@@ -99,6 +100,7 @@ function cyco_add_pages_node_view_alter(&$build) {
   //Learning map page.
   if ( $node->type == 'learning_map' ) {
     _cacpl_remember_operation(
+        $node->nid,
         'Create child page',
         'blueprint-page',
         $node->book['mlid'], //Parent id for book module.
@@ -106,6 +108,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['menu_name'] //Name of the menu for this level in the book.
     );
     _cacpl_remember_operation(
+        $node->nid,
         'Create sibling page',
         'blueprint-page',
         $node->book['plid'], //Parent id for book module.
@@ -114,6 +117,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['mlid'] //Menu link id for the current page in the book menu.
     );
     _cacpl_remember_operation(
+        $node->nid,
         'Create child learning map',
         'learning-map',
         $node->book['mlid'], //Parent id for book module.
@@ -121,6 +125,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['menu_name'] //Name of the menu for this level in the book.
     );
     _cacpl_remember_operation(
+        $node->nid,
         'Create sibling learning map',
         'learning-map',
         $node->book['plid'], //Parent id for book module.
@@ -138,13 +143,8 @@ function cyco_add_pages_node_view_alter(&$build) {
         'setting'
     );
     drupal_add_js(
-        drupal_get_path('module', 'cybercourse_add_create_page_links') 
+        drupal_get_path('module', 'cyco_add_pages') 
             . '/js/cacpl.js', 
-        'file'
-    );
-    drupal_add_css(
-        drupal_get_path('module', 'cybercourse_add_create_page_links') 
-            . '/css/cybercourse_add_create_page_links.css', 
         'file'
     );
     //Add links to the page build.
@@ -161,20 +161,8 @@ function cyco_add_pages_node_view_alter(&$build) {
 }
 
 /**
- * Is the logged in user an author?
- * @global stdClass $user The thing, you know.
- * @return boolean True if the user is an author.
- */
-//function _cacpl_user_is_author_admin() {
-//  global $user;
-//  return 
-//         in_array( 'author', $user->roles )
-//      || in_array( 'administrator', $user->roles )
-//      || ( isset( $user->id ) && $user->id == 1 );
-//}
-
-/**
  * Create a link to add new child or sibling to a book.
+ * @param int $source_nid Nid of the node page on which user clicked Add.
  * @param string $link_text Link text.
  * @param string $content_type Content type.
  * @param int $parent_mlid mlid (menu link id) of parent.
@@ -184,12 +172,15 @@ function cyco_add_pages_node_view_alter(&$build) {
  * @param int $left_sib_mlid mlid of the sibling to the left of the new node.
  * @return array Data to render a link. addsib operation only.
  */
-function _cacpl_remember_operation( $link_text, $content_type, $parent_mlid, $op, 
-                            $book_level_menu_name, $left_sib_mlid = NULL ) {
+function _cacpl_remember_operation( 
+    $source_nid,
+    $link_text, $content_type, $parent_mlid,
+                           $op, $book_level_menu_name, $left_sib_mlid = NULL ) {
   $query_params = array(
     //Not parent, so don't call normal book stuff.
     //Do own processing instead.
 //    'prnt' => $parent_mlid,
+    'source_nid' => $source_nid,
     'parent' => $parent_mlid,
     'book_op' => $op,
     'book_level_menu' => $book_level_menu_name,
@@ -220,30 +211,171 @@ function _cacpl_remember_operation( $link_text, $content_type, $parent_mlid, $op
   $_cacpl_add_info->appendAddData( $link_text, $url );
 }
 
-//function cyco_add_pages_form_alter( &$form, &$form_state, $form_id) {
-//  $page_types_to_work_on = array(
-//    'course_page_node_form',
-//    'blueprint_page_node_form',
-//    'learning_map_node_form',
-//  );
-//  if ( in_array($form_id, $page_types_to_work_on) ) {
-//    if ( isset($_GET['parent']) ) {
-//      $form['#submit'][] = '_cacpl_form_submitted';
-//    }
-//  }
-//}
+function cyco_add_pages_form_alter( &$form, &$form_state, $form_id) {
+  $page_types_to_work_on = array(
+    'course_page_node_form',
+    'blueprint_page_node_form',
+    'learning_map_node_form',
+  );
+  //Create a title for addng a child or sibling book.
+  if ( in_array($form_id, $page_types_to_work_on) ) {
+    $message = '';
+    if ( isset( $_GET['source_nid'] ) && isset( $_GET['book_op'] ) ) {
+      $source_nid = check_plain( $_GET['source_nid'] );
+      $source_node = node_load($source_nid);
+      $title = $source_node->title;
+      $op_desc = ( check_plain( $_GET['book_op'] ) == 'addsib')
+          ? 'sibling' : 'child';
+      $message = t('Adding a ') . t($op_desc) . t(' of the page: ') 
+          . t($title) . t('.');
+    }
+    else if ( isset( $_GET['book_op'] ) ) {
+      //Creating a new course/blueprint.
+      if ( check_plain( $_GET['book_op'] ) == 'newbook' ) {
+        $content_type = $form['#bundle'];
+        if ( $content_type == 'blueprint_page' ) {
+          $type_name = 'blueprint';
+        }
+        else if ( $content_type == 'course_page' ) {
+          $type_name = 'course';
+        }
+        else {
+          return;
+        }
+        $message = t( 'Creating a new ') . t( $type_name ) . t('.');
+      }
+    }
+    else {
+      return;
+    }
+    //Put it before the title field.
+    $weight = $form['title']['#weight'] - 1;
+    $form['reminder'] = array(
+      '#type' => 'markup',
+      '#markup' => t( $message ),
+      '#weight' => $weight,
+      '#prefix' => '<div class="cyco-add-pages-reminder">',
+      '#suffix' => '</div>',        
+    );
+    //Add a submit function.
+    $form['#submit'][] = '_cacpl_form_submitted';
+  }
+}
 
 /**
  * Process form submission.
  * 
- * Set up the node object, then call the book module to do most of the 
- * processing. Then adjust menu weights, if needed, to get siblings in the right
- * spot.
+ * If add sib, then:
+ * 1. Set weight of new node.
+ * 2. Change weights of existing sib nodes.
  */
-//function _cacpl_form_submitted( $form, &$form_state ) {
-//  $f=4;
-//  $node = $form['#node'];
-//  }
+function _cacpl_form_submitted( $form, &$form_state ) {
+  if ( isset( $_GET['book_op'] ) ) {
+    $op = check_plain( $_GET['book_op'] );
+    if ( $op == 'addsib' ) {
+      //The new node becomes the next sib of the source node.
+      //Nid of node add op done on.
+      $left_sib_nid = check_plain( $_GET['source_nid'] );
+      $left_sib = node_load( $left_sib_nid );
+      //Get the plid of the sib. This is the mlid of the parent.
+      //The new node will have the same parent.
+      $left_sib_plid = $left_sib->book['plid'];
+      //Left sib's mild passed in URL.
+      if ( ! isset( $_GET['left_sib_mlid'] ) ) {
+        $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+            . ' left_sib_mlid missing';
+        cyco_core_handle_error( $message );
+        return;
+      }
+      $left_sib_mlid = check_plain( $_GET['left_sib_mlid'] );
+      //Load data about all nodes with the same parent.
+      //Sort them in the same order as they currently appear.
+      $sql = "select mlid, weight
+              from {menu_links}
+              where plid = :plid
+              order by weight, link_title";
+      $query_result = db_query($sql, array(':plid'=>$left_sib_plid) );
+      //Create array with new sequence of weights.
+      $new_weights = array();
+      $weight = 0;
+      foreach ( $query_result as $record ) {
+        //Move the current record into the new array.
+        $new_weights[] = array(
+          'mlid' => $record->mlid,
+          'weight' => $weight,
+        );
+        $weight ++;
+        //Is this the left sib?
+        if ( $record->mlid == $left_sib_mlid ) {
+          //Record the weight into the current node's (child's) weight
+          //field, for later writing to the DB (by Drupal).
+          $form_state['values']['book']['weight'] = $weight;
+          //Move to next weight.
+          $weight ++;
+        }
+      }//End foreach.
+      //Now update the weights of each node in the menu.
+      foreach ( $new_weights as $new_weight ) {
+        $mlid = $new_weight['mlid'];
+        $weight = $new_weight['weight'];
+        db_update('menu_links')
+            ->fields(array(
+              'weight' => $weight,
+            ))
+            ->condition('mlid', $mlid)
+            ->execute();
+      }//End updating foreach.
+    } //End addsib.
+    else if ( $op == 'addkid' ) {
+      //Make sure the new child goes at the end of the list.
+      $parent_nid = check_plain( $_GET['source_nid'] );
+      $parent_mlid = check_plain( $_GET['parent'] );
+      //Find other nodes with that parent.
+      $sql = "select mlid, weight
+              from {menu_links}
+              where plid = :plid
+              order by weight, link_title";
+      $query_result = db_query($sql, array(':plid'=>$parent_mlid) );
+      //Create array with new sequence of weights.
+      $new_weights = array();
+      $weight = 0;
+      foreach ( $query_result as $record ) {
+        //Move the current record into the new array.
+        $new_weights[] = array(
+          'mlid' => $record->mlid,
+          'weight' => $weight,
+        );
+        $weight ++;
+      }//End foreach.
+      //The new record goes at the end.
+      $form_state['values']['book']['weight'] = $weight;
+      //Now update the weights of each node in the menu.
+      foreach ( $new_weights as $new_weight ) {
+        $mlid = $new_weight['mlid'];
+        $weight = $new_weight['weight'];
+        db_update('menu_links')
+            ->fields(array(
+              'weight' => $weight,
+            ))
+            ->condition('mlid', $mlid)
+            ->execute();
+      }//End updating foreach.      
+    }//End addkid.
+    else if ( $op == 'newbook' ) {
+      //New book. Set $form_state values to tell the book module that.
+      $form_state['values']['book']['bid'] = 'new';
+      $form_state['values']['book']['nid'] = 'new';
+      $form_state['values']['book']['plid'] = -1;
+      $form_state['values']['book']['has_children'] = 0;
+      $form_state['values']['book']['menu_name'] = '';
+    }
+    else {
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' unknown operation: ' . $op . '</pre>';
+      cyco_core_handle_error( $message );
+    }
+  } //End there is a book op.
+}
 
 //function cyco_add_pages_path_insert($path) {
 //  $f = 9;
@@ -292,19 +424,26 @@ function _cacpl_remember_operation( $link_text, $content_type, $parent_mlid, $op
  * Implements hook_menu_local_tasks_alter().
  * Change the title of some links.
  */
-function cyco_add_pages_menu_local_tasks_alter(&$data, $router_item, $root_path){
-  if ( isset($data['tabs'][0]['output'][0]['#link']['title']) ) {
-    $tabs = $data['tabs'][0]['output'];
-    foreach ( $tabs as $index => $item ) {
-      $link = $item['#link'];
-      if ( $link['title'] == 'Reorder the book' ) {
-        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Rearrange pages';
-      }
-      if ( $link['title'] == 'Clone content' ) {
-        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Clone page';
-      }
-    }
-  }
+//function cyco_add_pages_menu_local_tasks_alter(&$data, $router_item, $root_path){
+//  if ( isset($data['tabs'][0]['output'][0]['#link']['title']) ) {
+//    $tabs = $data['tabs'][0]['output'];
+//    foreach ( $tabs as $index => $item ) {
+//      $link = $item['#link'];
+//      if ( $link['title'] == 'Reorder the book' ) {
+//        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Rearrange pages';
+//      }
+//      if ( $link['title'] == 'Clone content' ) {
+//        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Clone page';
+//      }
+//    }
+//  }
+//}
+
+
+function cyco_add_pages_form_page_node_form_alter(&$form, $form_state) {
+  $form['#submit'][] = 'x';
 }
 
-
+function x($form, &$form_state) {
+  $f=7;
+}

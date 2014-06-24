@@ -62,7 +62,7 @@ function cyco_core_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -100,7 +100,7 @@ function cyco_core_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -140,7 +140,7 @@ function cyco_core_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -200,7 +200,46 @@ function cyco_core_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 5,
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-blueprint_page-field_short_title'
+  $field_instances['node-blueprint_page-field_short_title'] = array(
+    'bundle' => 'blueprint_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Title used in tree menus. If blank, the full title will be used.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_short_title',
+    'label' => 'Short title',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
     ),
   );
 
@@ -242,7 +281,7 @@ function cyco_core_field_default_field_instances() {
         'display_label' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -279,7 +318,7 @@ function cyco_core_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -335,7 +374,7 @@ function cyco_core_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -375,7 +414,7 @@ function cyco_core_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -435,7 +474,7 @@ function cyco_core_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -473,6 +512,45 @@ function cyco_core_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-course_page-field_short_title'
+  $field_instances['node-course_page-field_short_title'] = array(
+    'bundle' => 'course_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Title used in tree menus. If blank, the full title will be used.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_short_title',
+    'label' => 'Short title',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
       'weight' => 1,
     ),
   );
@@ -515,7 +593,7 @@ function cyco_core_field_default_field_instances() {
         'display_label' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -552,7 +630,7 @@ function cyco_core_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -845,8 +923,10 @@ function cyco_core_field_default_field_instances() {
   t('Keywords describing this page.');
   t('Keywords relevant to course design. Shown in the blueprint only.');
   t('Page content.');
+  t('Short title');
   t('Show table of contents');
   t('Tasks for this page.');
+  t('Title used in tree menus. If blank, the full title will be used.');
   t('What work needs to be done on this page?');
   t('Workflow tags');
 

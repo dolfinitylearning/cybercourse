@@ -1,0 +1,87 @@
+<?php
+/**
+ * @file
+ * Changes to the way CyberCourse books are handled.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function cyco_book_mods_menu() {
+  $items = array();
+  //Hide the normal outline tab.
+  $items['node/%/outline'] = array(
+    'access callback' => FALSE,
+  );
+  //Show a tab for rearranging pages, if appropriate.
+  $items['node/%/rearrange'] = array(
+    'title' => 'Rearrange pages',
+    'description' => 'Change the order of pages in a course or blueprint',
+    'page callback' => '_cyco_book_mods_rearrange',
+    'page arguments' => array(1),
+    'access callback' => '_cyco_book_mods_rearrange_visible',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+  
+  return $items;
+}
+
+/**
+ * Check whether the rearrange tab should be visible.
+ * @param integer $nid Node id.
+ * @return boolean True if it should.
+ */
+function _cyco_book_mods_rearrange_visible( $nid ) {
+  $node = node_load($nid);
+  //User has permission?
+  if ( ! user_access('administer book outlines') ) {
+    return FALSE;
+  }
+  //Is it part of a book?
+  if ( ! isset($node->book['bid']) ) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Jump to rearrange form for book that a node is in.
+ * @param integer $nid Node id.
+ */
+function _cyco_book_mods_rearrange( $nid ) {
+  $node = node_load( $nid );
+  $bid = $node->book['bid'];
+  drupal_goto( base_path() . 'admin/content/book/' . $bid );
+}
+
+/**
+ * Move page clone action, make it a task (tab).
+ * @param string $items
+ */
+function cyco_book_mods_menu_alter(&$items) {
+  if ( isset( $items['node/%node/clone/%clone_token'] ) ) {
+    $items['node/%node/clone/%clone_token']['type'] = MENU_LOCAL_TASK;
+  }
+}
+
+/**
+ * Implements hook_form_alter.
+ */
+function cyco_book_mods_form_alter( &$form, &$form_state, $form_id) {
+  //Hide the book action for nonadmins.
+  if ( isset( $form['book'] ) ) {
+    $page_types_to_work_on = array(
+      'course_page_node_form',
+      'blueprint_page_node_form',
+      'learning_map_node_form',
+    );
+    if ( in_array($form_id, $page_types_to_work_on) ) {
+      if (! cyco_core_current_user_has_role('administrator') ) {
+
+        $form['author']['#access'] = FALSE;
+        $form['book']['#access'] = FALSE;  
+      }
+    } //End content type check.
+  } //End book action exists check.
+}

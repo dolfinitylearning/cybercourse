@@ -18,5 +18,11 @@ function book_rearrange_collapse_form_book_admin_edit_alter( &$form, $form_state
     drupal_get_path('module', 'book_rearrange_collapse') 
       . '/css/book_rearrange_collapse.css',
   );
+  $form['instructions'] = array(
+    '#type' => 'markup',
+    '#markup' => t('Drag the icons to rearrange. Double-click the icons to '
+        . 'collapse/expand. Type in the text fields to change page titles.'),
+    '#weight' => 0,
+  );
 }
 

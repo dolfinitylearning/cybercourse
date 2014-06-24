@@ -28,13 +28,13 @@ function cyco_pseudents_menu() {
     'title' => 'Pseudents',
     'description' => 'Pseudents configuration',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('pseudents_admin_form'),
+    'page arguments' => array('_cyco_pseudents_admin_form'),
     'access arguments' => array('administer pseudents'),
   );
   return $items;
 }
 
-function cyco_pseudents_admin_form($form, &$form_state) {
+function _cyco_pseudents_admin_form($form, &$form_state) {
   $form['clear_cache'] = array(
     '#type' => 'submit',
     '#value' => t('Clear pseudent cache'),
@@ -46,7 +46,7 @@ function cyco_pseudents_admin_form($form, &$form_state) {
 function cyco_pseudents_flush_cache() {
   _cyco_pseudents_generate_ck_pseudent_table();
   drupal_set_message( t('Pseudent cache cleared.') );
-  drupal_goto('admin/config/cybercourse/cyco-pseudents');
+  drupal_goto('admin/config/cyco/cyco-pseudents');
 }
 
 /**

@@ -14,8 +14,20 @@ function _cyco_core_cp_add_menu_items( &$items ) {
     'page callback' => '_cyco_render_control_panel',
     'access callback' => 'cyco_core_current_user_has_role',
     'access arguments' => array('authenticated user'),
+    'menu_name' => 'user-menu',
+    'weight' => 0,
     'type' => MENU_NORMAL_ITEM,
   );
+}
+
+/**
+ * Implements hook_menu_link_alter().
+ */
+function cyco_core_menu_link_alter(&$link) {
+  // Force the control panel link to appear on the top-level of 'user-menu'.
+  if ($link['link_path'] == 'user/control-panel') {
+    $link['plid'] = 0;
+  }
 }
 
 /**

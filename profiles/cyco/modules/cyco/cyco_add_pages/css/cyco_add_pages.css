@@ -8,3 +8,8 @@ For the CyCo add/create page links module.
   padding: 0.5em;
   background-color: #F8F8F8;
 }
+
+.cyco-add-pages-reminder {
+  font-size: 120%;
+  margin-bottom: 1em;
+}

@@ -23,17 +23,6 @@ function _cyco_core_add_client_services_lib() {
 }
 
 /**
- * Define base config form.
- */
-function cyco_core_settings_form($form, &$form_state) {
-  $form['nothing'] = array(
-    '#type' => 'markup',
-    '#markup' => 'Nothing',
-  );
-  return $form;
-}
-
-/**
  * Handle a client-side error.
  * Most of the error handling is in another file. 
  * This function is here so the menu processor can handle it.
@@ -391,4 +380,29 @@ function cyco_core_highest_content_weight(
     }
   }
   return $weight;
+}
+
+/**
+ * Is a node of a type that can be in a book?
+ * @staticvar array $types
+ * @param string/stdClass $node Node (stdClass) or content type (string)
+ * @return boolean. True of this content type is normally in a book.
+ */
+function cyco_core_is_book_content_type( $node ) {
+  static $types = array('course_page', 'blueprint_page', 'learning_map');
+  if ( isset($node->type) ) {
+    $type_to_test = $node->type;
+  }
+  else {
+    $type_to_test = $node;
+  }
+  return in_array($type_to_test, $types);
+} 
+
+/**
+ * Get the content types that can be roots of books.
+ * @return array Names of content types.
+ */
+function cyco_core_get_book_root_types() {
+  return array('course_page', 'blueprint_page', 'learning_map');
 }
