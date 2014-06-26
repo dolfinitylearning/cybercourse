@@ -15,7 +15,7 @@ function cyco_pseudents_field_default_field_instances() {
     'bundle' => 'pseudent_pose',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Caption underneath the image. Keep it short. If empty, the pseudent\'s name will be used (this is usually what you want).',
+    'description' => 'Caption underneath the image. Keep it short. If empty, the pseudent\'s name will be used.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
@@ -235,7 +235,7 @@ function cyco_pseudents_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('A photo or drawing of your pseudent.');
   t('Caption');
-  t('Caption underneath the image. Keep it short. If empty, the pseudent\'s name will be used (this is usually what you want).');
+  t('Caption underneath the image. Keep it short. If empty, the pseudent\'s name will be used.');
   t('Categories');
   t('Categories for this student pose, e.g., Jill, Happy.');
   t('Image');

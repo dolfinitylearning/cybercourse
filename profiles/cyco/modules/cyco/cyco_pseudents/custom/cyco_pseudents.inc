@@ -130,7 +130,7 @@ function _cyco_pseudents_generate_ck_pseudent_table() {
         $caption = $node->field_caption[LANGUAGE_NONE][0]['safe_value'];
       }
       else {
-        $caption = '';
+        $caption = $node->title;
       }
       $categories = array();
       if ( isset($node->field_pseudent_categories[LANGUAGE_NONE]) ) {
@@ -138,7 +138,7 @@ function _cyco_pseudents_generate_ck_pseudent_table() {
           $categories[ $term['tid'] ] = $term_names[ $term['tid'] ];
         }
       }
-      $usable_url = _cyco_pseudents_uri2path(
+      $usable_url = cyco_core_uri2path(
           $node->field_image[LANGUAGE_NONE][0]['uri']
       );
       $pseudents[$nid] = array(
@@ -290,9 +290,144 @@ function _cyco_pseudents_make_directive_replacements($matches) {
   $content = str_replace("\n", "\n    ", $content);
   $replacement = 
       '.. pseudent:: ' . $nid . "\n\n"
-    . '    ' . $content . "\n\n";
+    . ' ' . $content . "\n\n";
   return $replacement;
 }
+
+/**
+ * Replace .. pseudent:: directives with betwixt tag, used later to 
+ * add HTML tags CK uses. Note: betwixt tags can't have spaces that the user
+ * didna' type.
+ * @param string $content Da goods, ReSTy.
+ */
+function cyco_pseudents_swim_rest2betwixt_alter( &$content ) {
+  $rest_tags = array();
+  $pattern = '/\.\.\s+pseudent\:\:\s+(\d+).*\r?\n/i';
+  preg_replace_callback(
+      $pattern, 
+      function ($matches) use (&$rest_tags) {
+        //Got one.
+        $rest_tags[] = array(
+          'tag' => $matches[0],
+          'nid' => $matches[1],
+        );
+      },
+      $content
+  );
+  if ( sizeof($rest_tags) == 0 ) {
+    //Didna' find nuthin', lass.
+    return;
+  }
+  //Count of ReST tags found so far.
+  $rest_tag_count = 0;
+  foreach ( $rest_tags as $rest_tag ) {
+    //Find position of the rest directive tag.
+    $rest_tag_start = stripos($content, $rest_tag['tag']);
+    //Remove the directive from the content.
+    $content = substr($content, 0, $rest_tag_start) 
+        . substr( $content, $rest_tag_start + strlen($rest_tag['tag']) );
+    //Find the next line that isn't indented.
+    $search_start = $rest_tag_start;
+    $done = false;
+    while( ! $done ) {
+      list( $break_pos, $break_length) 
+          = cyco_core_find_next_line_break($content, $search_start);
+      if ( $break_pos == -1 ) {
+        //Not found. Formula goes to the end of the content.
+        $rest_tag_end = strlen( $content ) - 1;
+        $done = TRUE;
+      }
+      else if ( ($break_pos + $break_length) >= strlen($content) )  {
+        //Line break is at the end of string.
+        $rest_tag_end = strlen( $content ) - 1;
+        $done = TRUE;
+      }
+      else {
+        $next_char = substr($content, $break_pos + $break_length, 1);
+        if ( ! ctype_space($next_char) ) {
+          //Line starts with non-whitespace, so not indented. It's the end.
+          $rest_tag_end = $break_pos + $break_length - 1;
+          $done = TRUE;
+        }
+      }
+      $search_start = $break_pos + $break_length;
+    }
+    //$rest_tag_end points to char after the whitespace that ended
+    //the content. We don't want that. Work backwards until hit a
+    //non-whitespace char. That's the real end of the content.
+    $content_end = $rest_tag_end;
+    while ( ctype_space( substr($content, $content_end, 1 ) ) ) {
+      $content_end --;
+    }
+    //Do the same for the start tag.
+    $content_start = $rest_tag_start;
+    while ( ctype_space( substr($content, $content_start, 1 ) ) ) {
+      $content_start ++;
+    }
+    //Grab the ReST tag's content.
+    $rest_tag_content 
+        = substr($content, 
+                 $content_start, 
+                 $content_end - $content_start + 1
+          );
+    //Construct the betwixt.
+    $replacement = '[[[cycopseudent:' . $rest_tag['nid'] . '|||'
+        . $rest_tag_content . ']]]' . PHP_EOL;
+        //Add the EOL because one was eaten by the regex.
+    //Replace directive in content with betwixt. Using $rest_tag_start/end
+    //in the replacement, so that the whitespace that separated the pseudent
+    //content from the other ReST tags is replaced, too. 
+    $content = substr($content, 0, $rest_tag_start) 
+        . $replacement . substr($content, $rest_tag_end + 1);
+    $rest_tag_count++;
+  } //End foreach.
+}
+
+/*
+ * Implements hook_swim_betwixt2ckhtml_alter().
+ * 
+ * This doesn't set the pseudent category - that information is not stored
+ * in the DB.
+ */
+function cyco_pseudents_swim_betwixt2ckhtml_alter( &$content ) {
+  $template = <<<EOT
+<div class="pseudent" data-pseudent-id="**NID**">
+  <div class="pseudent-image-container">
+    <img class="pseudent-image" src="**IMAGE_PATH**" />
+    <div class="pseudent-image-caption">**CAPTION**</div>
+  </div>
+  <div class="pseudent-content">**CONTENT**</div>
+</div>
+EOT;
+  //Replace temp directives tags with HTML.
+  $pattern = '/\[\[\[cycopseudent\:(\d+)\|\|\|(.*?)\]\]\]/is';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($match) use ($template) {
+        $pseudent_nid = $match[1];
+        $content = $match[2];
+        $pseudent_node = node_load($pseudent_nid);
+        if ( isset( $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'] ) ) {
+          $caption = $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'];
+        }
+        else {
+          $caption = $pseudent_node->title;
+        }
+        //Get the path to the pseudent's image file.
+        $usable_url = cyco_core_uri2path(
+            $pseudent_node->field_image[LANGUAGE_NONE][0]['uri']
+        );
+        $replacement = str_replace('**NID**', $pseudent_nid, $template);
+        $replacement = str_replace('**CAPTION**', $caption, $replacement);
+        $replacement = str_replace('**CONTENT**', $content, $replacement);
+        $replacement = str_replace('**IMAGE_PATH**', $usable_url, $replacement);
+        return $replacement;
+      },
+      $content
+  );
+
+}
+
 
 /**
  * Implements hook_restructuredtext_to_html_alter.
@@ -303,9 +438,9 @@ function _cyco_pseudents_make_directive_replacements($matches) {
  * [[[animal 666|||note]]]
  * 
  */
-function cyco_pseudents_swim_betwixt_markup2html_alter(&$content) {
+function cyco_pseudents_swim_betwixt2html_alter(&$content) {
   $regex = 
-      '/\[\[\[cycopseudent\s*(\d*?)\|\|\|(.*?)\]\]\]/is';
+      '/\[\[\[cycopseudent\:(\d*?)\|\|\|(.*?)\]\]\]/is';
   //? is for lazy match.
       //s option so it can contain new line chars.
   $content
@@ -313,12 +448,12 @@ function cyco_pseudents_swim_betwixt_markup2html_alter(&$content) {
 }
 
 function _cyco_pseudents_make_view_replacements($matches) {
-  $nid = $matches[1];
+  $pseudent_nid = $matches[1];
   $content = $matches[2];
   //Load pseudent data.
-  $node = node_load($nid);
+  $node = node_load($pseudent_nid);
   if ( !$node ) {
-    $message = '_cyco_pseudents_make_view_replacements: bad nid: ' . $nid;
+    $message = '_cyco_pseudents_make_view_replacements: bad nid: ' . $pseudent_nid;
     watchdog('pseudents', $message);
     throw new Exception($message);
   }
@@ -326,7 +461,10 @@ function _cyco_pseudents_make_view_replacements($matches) {
   if (sizeof( $node->field_caption ) > 0 ) {
     $caption = $node->field_caption[LANGUAGE_NONE][0]['value'];
   }
-  $usable_url = _cyco_pseudents_uri2path(
+  else {
+    $caption = $node->title;
+  }
+  $usable_url = cyco_core_uri2path(
      $node->field_image[LANGUAGE_NONE][0]['uri']
   );
   $html =   '<div class="pseudent">'
@@ -344,23 +482,12 @@ function _cyco_pseudents_make_view_replacements($matches) {
 }
 
 /**
- * Convert a Drupal URI to a URL usable on the Web.
- * @param string $uri Drupal URI
- * @return string Usable URL
+ * Implements hook_node_view().
  */
-function _cyco_pseudents_uri2path( $uri ) {
-  $absolute_url = file_create_url( $uri );
-  //Convert to local URL.
-  //This will only work for Drupals in the root of sub/domain?
-  $url = parse_url($absolute_url);
-  $usable_url = $url['path'];
-  return $usable_url;
-}
-
-
 function cyco_pseudents_node_view($node, $view_mode, $langcode) {
   global $base_url;
   if ( $node->type == 'pseudent_pose' ){
+    //Add links - "Add another" and "Back to list."
     if ( $view_mode == 'full' ) {
           $weight = cyco_core_highest_content_weight( 
               $node->content, 

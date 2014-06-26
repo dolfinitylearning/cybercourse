@@ -10,6 +10,39 @@
 function cyco_core_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'comment-comment_node_page-comment_body'
+  $field_instances['comment-comment_node_page-comment_body'] = array(
+    'bundle' => 'comment_node_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'comment',
+    'field_name' => 'comment_body',
+    'label' => 'Comment',
+    'required' => TRUE,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'node-blueprint_page-field_attachments'
   $field_instances['node-blueprint_page-field_attachments'] = array(
     'bundle' => 'blueprint_page',
@@ -27,7 +60,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 1,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
@@ -74,18 +107,18 @@ function cyco_core_field_default_field_instances() {
     'description' => 'Keywords relevant to course design. Shown in the blueprint only.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
         'weight' => 2,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
-        'type' => 'taxonomy_term_reference_plain',
-        'weight' => 3,
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
@@ -112,14 +145,14 @@ function cyco_core_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
         'weight' => 3,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(
           'trim_length' => 600,
@@ -160,7 +193,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'node',
@@ -221,7 +254,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
@@ -243,48 +276,6 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-blueprint_page-field_show_table_of_contents'
-  $field_instances['node-blueprint_page-field_show_table_of_contents'] = array(
-    'bundle' => 'blueprint_page',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => 'Do you want to show a table of contents on this page?',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 5,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_show_table_of_contents',
-    'label' => 'Show table of contents',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 0,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 5,
-    ),
-  );
-
   // Exported field_instance: 'node-blueprint_page-field_workflow_tags'
   $field_instances['node-blueprint_page-field_workflow_tags'] = array(
     'bundle' => 'blueprint_page',
@@ -293,7 +284,7 @@ function cyco_core_field_default_field_instances() {
     'description' => 'Tasks for this page.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
@@ -303,7 +294,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 4,
+        'weight' => 5,
       ),
     ),
     'entity_type' => 'node',
@@ -339,7 +330,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 6,
       ),
     ),
     'entity_type' => 'node',
@@ -386,14 +377,14 @@ function cyco_core_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
         'weight' => 2,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(
           'trim_length' => 600,
@@ -434,7 +425,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 5,
       ),
     ),
     'entity_type' => 'node',
@@ -486,7 +477,7 @@ function cyco_core_field_default_field_instances() {
     'description' => 'Keywords describing this page.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
@@ -497,7 +488,7 @@ function cyco_core_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 0,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
@@ -533,7 +524,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
@@ -555,48 +546,6 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-course_page-field_show_table_of_contents'
-  $field_instances['node-course_page-field_show_table_of_contents'] = array(
-    'bundle' => 'course_page',
-    'default_value' => array(
-      0 => array(
-        'value' => 1,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => 'Do you want to show a table of contents on this page?',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 5,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_show_table_of_contents',
-    'label' => 'Show table of contents',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 0,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 6,
-    ),
-  );
-
   // Exported field_instance: 'node-course_page-field_workflow_tags'
   $field_instances['node-course_page-field_workflow_tags'] = array(
     'bundle' => 'course_page',
@@ -605,7 +554,7 @@ function cyco_core_field_default_field_instances() {
     'description' => 'What work needs to be done on this page?',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
@@ -615,7 +564,7 @@ function cyco_core_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
@@ -698,14 +647,14 @@ function cyco_core_field_default_field_instances() {
     'description' => 'Page content.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
         'weight' => 2,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'swim',
         'settings' => array(
           'trim_length' => 600,
@@ -798,14 +747,14 @@ function cyco_core_field_default_field_instances() {
     'description' => 'Keywords describing this page.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
         'weight' => 0,
       ),
       'teaser' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
@@ -828,48 +777,6 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-page-field_show_table_of_contents'
-  $field_instances['node-page-field_show_table_of_contents'] = array(
-    'bundle' => 'page',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => 'Do you want to show a table of contents on this page?',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 5,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 4,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_show_table_of_contents',
-    'label' => 'Show table of contents',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'display_label' => 1,
-      ),
-      'type' => 'options_onoff',
-      'weight' => 4,
-    ),
-  );
-
   // Exported field_instance: 'node-page-field_workflow_tags'
   $field_instances['node-page-field_workflow_tags'] = array(
     'bundle' => 'page',
@@ -878,7 +785,7 @@ function cyco_core_field_default_field_instances() {
     'description' => 'What work needs to be done on this page?',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
@@ -912,7 +819,7 @@ function cyco_core_field_default_field_instances() {
   t('Attachments');
   t('Blueprint keywords');
   t('Body');
-  t('Do you want to show a table of contents on this page?');
+  t('Comment');
   t('Files attached to this page.');
   t('Files for this page.');
   t('Images');
@@ -924,7 +831,6 @@ function cyco_core_field_default_field_instances() {
   t('Keywords relevant to course design. Shown in the blueprint only.');
   t('Page content.');
   t('Short title');
-  t('Show table of contents');
   t('Tasks for this page.');
   t('Title used in tree menus. If blank, the full title will be used.');
   t('What work needs to be done on this page?');

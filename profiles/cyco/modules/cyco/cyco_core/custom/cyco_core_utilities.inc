@@ -391,7 +391,7 @@ function cyco_core_highest_content_weight(
 function cyco_core_is_book_content_type( $node ) {
   static $types = array('course_page', 'blueprint_page', 'learning_map');
   if ( isset($node->type) ) {
-    $type_to_test = $node->type;
+    $type_to_test = $node->type; 
   }
   else {
     $type_to_test = $node;
@@ -405,4 +405,16 @@ function cyco_core_is_book_content_type( $node ) {
  */
 function cyco_core_get_book_root_types() {
   return array('course_page', 'blueprint_page', 'learning_map');
+}
+
+/**
+ * Convert a Drupal URI to a URL usable on the Web.
+ * @param string $uri Drupal URI
+ * @return string Usable URL
+ */
+function cyco_core_uri2path( $uri ) {
+  $absolute_url = file_create_url( $uri );
+  $url = parse_url($absolute_url);
+  $usable_url = $url['path'];
+  return $usable_url;
 }

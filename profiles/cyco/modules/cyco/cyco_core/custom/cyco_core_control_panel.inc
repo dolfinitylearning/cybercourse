@@ -65,12 +65,6 @@ function _cyco_render_control_panel() {
       '#markup' => $groups,
     );
   }
-  if ( cyco_core_current_user_has_role( array('administrator') ) ) {
-    $result['all_content']['admin_title'] =
-        _cyco_control_panel_show_title( 'Administrator actions' );
-    $result['all_content']['admin_menu'] =
-        _cyco_control_panel_show_menu_block( 'menu-cp-administrators' );
-  }
   if ( cyco_core_current_user_has_role( array('author') ) ) {
     $result['all_content']['author_title'] = 
         _cyco_control_panel_show_title( 'Author actions' );

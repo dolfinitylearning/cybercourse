@@ -3,40 +3,34 @@
 /**
  * @file
  * API documentation for SWIM field type.
+ * 
+ * swim_rest2html() is a function you can call to translate ReST into HTML.
+ * It will invoke the appropriate hooks.
+ * 
+ * The hooks are functions you should implement in your SWIM component. 
+ * See cyco_pseudents for an example. 
  */
-
-// ******************** OUT OF DATE? *******************
-
-/**
- * Render a SWIM field using a specified format.
- * @param stdClass $entity Entity containing the field.
- * @param string $field_name Field name, e.g., field_body.
- * @param string $format Format: 
- *  default - main.
- *  summary - summary.
- *  summary-or-trimmed - summary if not MT, else trimmed main.
- * @param integer $trim_length Trim length.
- * @param string $lang Language.
- * @param integer $delta Delta, i.e., which value in a multivalued field.
- * @return string Rendered content.
- */
-//function swim_render_field( $entity, $field_name, $format = 'default', 
-//    $trim_length = 600, $lang = LANGUAGE_UNKNOWN, $delta = 0 ) {
-//}
 
 /**
  * Translate SWIM content into HTML.
  * @param string $rest ReST
  * @return string HTML
  */
-function restructuredtext_to_html( $rest ) {
+function swim_rest2html( $rest ) {
+}
+
+/**
+ * Translate ReST to betwixt tags.
+ * @param string $content Coontent to translate.
+ */
+function hook_swim_rest2betwixt_alter( &$content ) {
+  
 }
 
 /**
  * Return info about CKEditor plugins to use.
  * For more than one, return array of (name, path) arrays.
  * The outer array will be flattened (I think!).
- * See pseudent module for an example.
  */
 function hook_swim_load_ck_plugins() {
   return array(
@@ -63,27 +57,45 @@ function hook_swim_add_client_stuff() {
 }
 
 /**
- * Parse $content (from CKEditor), and replace target tags
+ * Parse $content (HTML from CKEditor), and replace target tags
  * with ReST. Usually some regex. 
  * @param string $content Content to change.
- * See pseudent and authornote modules for examples.
  */
-function hook_swim_ckhtml_2_directive_alter( &$content ) {
+function hook_swim_ckhtml2rest_alter( &$content ) {
   
 }
 
 /**
+ * From betwixt tags to HTML ready for editing on CKEditor.
+ * @param string $content Content to translate.
+ */
+function hook_swim_betwixt2ckhtml_alter( &$content ) {
+  
+}
+/**
  * Translate intermediate (betwixt) markup in $content (as inserted by
  * custom ReST directive) to its HTML equivalent. Sample betwixt markup:
  * 
- * [[[animal 666|||note]]]
+ * [[[animal:666|||note]]]
  * 
- * See SWIM docs for more. Check pseudent module for an example.
+ * There should be no spaces in the betwixt tags, except those typed by the
+ * user. E.g., this is OK:
+ * 
+ * [[[animal:666|||Note: dogs are the best animals.]]]
+ * 
+ * Check the cyco_pseudents module for an example.
  * 
  * @param string $content The betwixt content.
  * @return string Content with betwixt markup replaced by HTML.
  */
-function hook_swim_betwixt_markup2html_alter(&$content) {
+function hook_swim_betwixt2html_alter(&$content) {
+}
+
+/**
+ * Does the user have access to the peek function?
+ * @return boolean True if the user is allowed to peek.
+ */
+function hook_swim_peek_access() {
 }
 
 /**

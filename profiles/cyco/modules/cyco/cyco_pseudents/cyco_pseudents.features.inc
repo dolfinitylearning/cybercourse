@@ -30,7 +30,7 @@ function cyco_pseudents_node_info() {
       'base' => 'node_content',
       'description' => t('A look for a pseudent, e.g., happy, sad, or confused. '),
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Name'),
       'help' => '',
     ),
   );

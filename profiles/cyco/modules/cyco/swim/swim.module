@@ -97,6 +97,15 @@ function swim_field_widget_info() {
   return $info;
 }
 
+function swim_field_load($entity_type, $entities, $field, $instances, 
+    $langcode, &$items, $age ) {
+  $r=6;
+}
+
+function swim_field_storage_load($entity_type, $entities, $age, $fields, $options) {
+  $r=7;
+}
+    
 function swim_field_widget_form(
     &$form, &$form_state, $field, $instance, 
     $langcode, $items, $delta, $element) {
@@ -106,31 +115,35 @@ function swim_field_widget_form(
       || $instance['widget']['type'] == 'swim_with_summary_widget') {
     $with_summary = ( $instance['widget']['type'] == 'swim_with_summary_widget' );
     _swim_add_client_pieces();
+    //Prep content for widget.
+    $value = '';
+    if ( isset( $items[$delta]['value'] ) ) {
+      $value = _swim_prep_widget_content($items[$delta]['value']);
+    }
     $element['value'] = array(
       '#type' => 'textarea',
       '#title' => t( $element['#title'] ),
       //Remove grippie.
       '#resizable' => FALSE,
-      '#default_value' => 
-        isset( $items[$delta]['value'] ) 
-          ? _swim_rest2ckhtml( $items[$delta]['value'] )
-          : '',
+      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
       '#attributes' => array(
         'class' => array('swim-editor swim-editor-main text-full'),
       ),
       '#value_callback' => '_swim_field_widget_value',
     ) + $base;
     if ( $with_summary ) {
+      //Prep content for widget.
+      $summary = '';
+      if ( isset( $items[$delta]['summary'] ) ) {
+        $summary = _swim_prep_widget_content($items[$delta]['summary']);
+      }
       $element['summary'] = array(
         '#type' => 'textarea',
         '#title' => t('Summary'),
         '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
         //Remove grippie.
         '#resizable' => FALSE,
-        '#default_value' => 
-          isset( $items[$delta]['summary'] ) 
-          ? _swim_rest2ckhtml( $items[$delta]['summary'] )
-          : '',
+        '#default_value' => $summary ? swim_rest2ckhtml( $summary ) : '',
         '#attributes' => array(
           'class' => array('swim-editor swim-editor-summary'),
         ),
@@ -148,6 +161,12 @@ function swim_field_widget_form(
   return $element;
 }
 
+
+function _swim_prep_widget_content( $content ) {
+  //Strip \r from content.
+  $content = str_replace("\r", '', $content);
+  return $content;
+}
 
 function swim_field_is_empty($item, $field) {
   if ($field['type'] == 'swim_field') {
@@ -539,7 +558,7 @@ function swim_rest2html( $rest ) {
   $html = str_ireplace('\begin{equation*}', '', $html);
   $html = str_ireplace('\end{equation*}', '', $html);
   //Trigger other module's translators.
-  drupal_alter( 'swim_betwixt_markup2html', $html );
+  drupal_alter( 'swim_betwixt2html', $html );
   //Wrap everything in a SWIM wrapper.
   $html = '<div class="swim">' . $html . '</div>';
   return $html;
@@ -548,7 +567,7 @@ function swim_rest2html( $rest ) {
 /**
  * Prepare some ReST for editing in CK.
  */
-function _swim_rest2ckhtml( $content ) {
+function swim_rest2ckhtml( $content ) {
   //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
   //Doesn't insert HTML tags directly, since they would be messed up
   //by the other translation code below. Instead, inserts temp markers that
@@ -556,15 +575,20 @@ function _swim_rest2ckhtml( $content ) {
   list( $content, $math_replacements ) = _swim_rest2ck_mathjx_part_1($content);
   //Grab image paths and wrap them in <img> tags that can be inserted later.
   list( $content, $image_replacements ) = _swim_rest2ck_images_part_1($content);
+  //Trigger other module's translators.
+  drupal_alter( 'swim_rest2betwixt', $content);
   //Encode everything the user typed.
   $content = htmlspecialchars( $content );  
-  $content = str_replace("\n", "<br/>\n", $content);
+  $content = str_replace("\n", "<br>", $content);
+//  $content = str_replace("\n", "<br/>\n", $content);
   //Replace spaces with &nbsp;. Otherwise, CK collapses multiple spaces.
   $content = str_replace(' ', '&nbsp;', $content);
   //Replace math temp markers with HTML tags used by MathJax.
   $content = _swim_rest2ck_mathjx_part_2( $content, $math_replacements );
   //Replace image temp markers with HTML tags.
   $content = _swim_rest2ck_images_part_2( $content, $image_replacements );
+  //Trigger other module's translators.
+  drupal_alter( 'swim_betwixt2ckhtml', $content);
   return $content;
 }
 

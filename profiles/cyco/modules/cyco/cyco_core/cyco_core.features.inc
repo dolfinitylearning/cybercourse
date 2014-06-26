@@ -24,6 +24,15 @@ function cyco_core_views_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_features_site_frontpage_features_default_frontpage().
+ */
+function cyco_core_features_site_frontpage_features_default_frontpage() {
+  return array(
+    'enabled' => 'UUID:546ff16e-718d-40b0-88c4-2a4c2f55b036',
+  );
+}
+
+/**
  * Implements hook_node_info().
  */
 function cyco_core_node_info() {

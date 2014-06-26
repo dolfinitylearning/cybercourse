@@ -4,7 +4,10 @@
  * Plugins are added dynamically, as needed.
  */
 Drupal.swimCkConfig = {
+  autoParagraph: false,
+  
   disableObjectResizing : true,
+//  basicEntities : false, //Entity encode <, >.
   basicEntities : true, //Entity encode <, >.
   forcePasteAsPlainText : false,
   mathJaxClass : 'math',
@@ -25,9 +28,9 @@ Drupal.swimCkConfig = {
     { name: 'about' }
   ],
   removePlugins : "scayt,elementspath,list,liststyle,tabletools,contextmenu,about,"
-    + "blockquote,indentlist,indentblock,sourcearea,"
+    + "blockquote,indentlist,indentblock," //sourcearea,"
     + "colorbutton,colordialog,flash,font,indent,forms.horizontalrule",
   removeButtons : "Bold,Italic,Underline,Strike,Superscript,Subscript,"
     + "ShowBlocks,Save,NewPage,DocProps,Preview,Print,Templates,"
-    + "About,Source"
+    + "About" //,Source"
 };

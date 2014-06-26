@@ -23,6 +23,7 @@ function cyco_core_user_default_permissions() {
   $permissions['access content'] = array(
     'name' => 'access content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -59,6 +60,7 @@ function cyco_core_user_default_permissions() {
   $permissions['administer nodes'] = array(
     'name' => 'administer nodes',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -111,6 +113,7 @@ function cyco_core_user_default_permissions() {
   $permissions['create blueprint_page content'] = array(
     'name' => 'create blueprint_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -120,6 +123,7 @@ function cyco_core_user_default_permissions() {
   $permissions['create course_page content'] = array(
     'name' => 'create course_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -138,6 +142,7 @@ function cyco_core_user_default_permissions() {
   $permissions['create page content'] = array(
     'name' => 'create page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -147,6 +152,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete any blueprint_page content'] = array(
     'name' => 'delete any blueprint_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -156,6 +162,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete any course_page content'] = array(
     'name' => 'delete any course_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -165,6 +172,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete any page content'] = array(
     'name' => 'delete any page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -174,6 +182,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete own blueprint_page content'] = array(
     'name' => 'delete own blueprint_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -183,6 +192,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete own course_page content'] = array(
     'name' => 'delete own course_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -192,6 +202,7 @@ function cyco_core_user_default_permissions() {
   $permissions['delete own page content'] = array(
     'name' => 'delete own page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -228,6 +239,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit any blueprint_page content'] = array(
     'name' => 'edit any blueprint_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -237,6 +249,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit any course_page content'] = array(
     'name' => 'edit any course_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -246,6 +259,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit any page content'] = array(
     'name' => 'edit any page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -255,6 +269,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit own blueprint_page content'] = array(
     'name' => 'edit own blueprint_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -273,6 +288,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit own course_page content'] = array(
     'name' => 'edit own course_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -282,6 +298,7 @@ function cyco_core_user_default_permissions() {
   $permissions['edit own page content'] = array(
     'name' => 'edit own page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -327,6 +344,7 @@ function cyco_core_user_default_permissions() {
   $permissions['revert revisions'] = array(
     'name' => 'revert revisions',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -354,6 +372,7 @@ function cyco_core_user_default_permissions() {
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',
@@ -363,6 +382,7 @@ function cyco_core_user_default_permissions() {
   $permissions['view revisions'] = array(
     'name' => 'view revisions',
     'roles' => array(
+      'administrator' => 'administrator',
       'author' => 'author',
     ),
     'module' => 'node',

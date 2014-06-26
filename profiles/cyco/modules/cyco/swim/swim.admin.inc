@@ -18,7 +18,7 @@ function _swim_settings_form() {
     ),
     //Remove grippie.
     '#resizable' => FALSE,
-    '#default_value' => _swim_rest2ckhtml(
+    '#default_value' => swim_rest2ckhtml(
         variable_get('swim_help_message', '') 
     ),
     '#attributes' => array(

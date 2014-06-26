@@ -93,7 +93,7 @@ class Authornote(Directive):
         # Drupal custom filter to find.
         # Can apply permissions checks and other things on the
         # server side.
-        prefix_text = '[[[cycoauthornote ' + self.arguments[0] + '|||\n'
+        prefix_text = '[[[cycoauthornote:' + self.arguments[0] + '|||\n'
         prefix_node = nodes.raw('', prefix_text, format='html')
         # Create a new node with the postfix marker text for
         # Cyco to find.
@@ -111,7 +111,7 @@ class Exercise(Directive):
         # Put in pattern that is replaced in Drupal by a custom filter.
         # Can apply permissions checks and other things on the
         # server side.
-        result = '[[[cycoexercise ' + self.arguments[0] + ']]]\n'
+        result = '[[[cycoexercise:' + self.arguments[0] + ']]]\n'
         raw_node = nodes.raw('', result, format='html')
         return [raw_node]
 
@@ -138,11 +138,11 @@ class Pseudent(Directive):
         # Drupal custom filter to find.
         # Can apply permissions checks and other things on the
         # server side.
-        prefix_text = '[[[cycopseudent ' + self.arguments[0] + '|||\n'
+        prefix_text = '[[[cycopseudent:' + self.arguments[0] + '|||'
         prefix_node = nodes.raw('', prefix_text, format='html')
         # Create a new node with the postfix marker text for
         # Cyco to find.
-        postfix_text = ']]]\n'
+        postfix_text = ']]]'
         postfix_node = nodes.raw('', postfix_text, format='html')
         # Return the nodes in sequence.
         return [prefix_node, content_node, postfix_node]
@@ -155,7 +155,7 @@ class Pattern(Directive):
         # Put in pattern that is replaced in Drupal by a custom filter.
         # Can apply permissions checks and other things on the
         # server side.
-        result = '[[[cycopattern ' + self.arguments[0] + ']]]\n'
+        result = '[[[cycopattern:' + self.arguments[0] + ']]]\n'
         raw_node = nodes.raw('', result, format='html')
         return [raw_node]
 

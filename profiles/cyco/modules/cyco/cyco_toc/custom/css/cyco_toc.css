@@ -1,0 +1,39 @@
+/* Styles for the cyco table of contents module. */
+
+#label {
+  font-weight: bold;
+}
+
+#cyco_toc {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  padding: 0.5em;
+  background-color: #f8f8f8;
+  margin-bottom: 1em;
+}
+
+#cyco_toc #cyco_toc_label {
+  font-weight: bold;
+}
+
+#cyco_toc p {
+  margin-bottom: 0;
+}
+
+#cyco_toc p.cyco_toc_h1 {
+  margin-left: 0;
+}
+
+#cyco_toc p.cyco_toc_h2 {
+  margin-left: 2em;
+}
+
+#cyco_toc p.cyco_toc_h3 {
+  margin-left: 4em;
+}
+
+#cyco_toc p.cyco_toc_h4 {
+  margin-left: 6em;
+}
+
