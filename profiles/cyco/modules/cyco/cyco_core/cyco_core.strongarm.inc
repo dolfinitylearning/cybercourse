@@ -13,8 +13,15 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'book_top_navbar_content_field_names';
+  $strongarm->value = 'body field_body field_notes field_explanation field_description';
+  $export['book_top_navbar_content_field_names'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'clean_url';
-  $strongarm->value = '1';
+  $strongarm->value = '0';
   $export['clean_url'] = $strongarm;
 
   $strongarm = new stdClass();

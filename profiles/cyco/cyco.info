@@ -51,7 +51,6 @@ dependencies[] = jquery_update
 dependencies[] = backup_migrate
 dependencies[] = uuid
 dependencies[] = node_export
-dependencies[] = node_export_features
 
 ;Field related
 dependencies[] = field_group
@@ -86,6 +85,7 @@ dependencies[] = search_config
 ;UI
 dependencies[] = extlink
 dependencies[] = scroll_to_top
+dependencies[] = block_class
 
 ;SEO
 dependencies[] = globalredirect
@@ -98,11 +98,13 @@ dependencies[] = og
 dependencies[] = swim
 dependencies[] = cyco_core
 dependencies[] = cyco_pseudents
+dependencies[] = cyco_patterns
 dependencies[] = book_rearrange_collapse
 dependencies[] = book_top_navbar
 dependencies[] = cyco_add_pages
 dependencies[] = cyco_book_blocks
 dependencies[] = cyco_toc
+dependencies[] = cyco_collapse_summary
 
 
 ;**************** Themes *******************

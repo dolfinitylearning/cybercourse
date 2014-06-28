@@ -11,6 +11,10 @@ var cycoCoreServices = cycoCoreServices || {};
   * @returns {unresolved} Promise.
   */
   cycoCoreServices.getCsrfToken = function(){
+   if ( cycoCoreServices.csrfToken ) {
+     //Already have it.
+     return;
+   }
    //Connect and get token.
    var webServiceUrl 
      = Drupal.settings.cycoCoreServices.baseUrl + Drupal.settings.basePath 

@@ -6,9 +6,9 @@
  */
 
 /**
- * Add client-side library for services.
+ * Add client-side data for services.
  */
-function _cyco_core_add_client_services_lib() {
+function _cyco_core_config_client_services() {
   global $base_url;
   $settings = array(
     'baseUrl' => $base_url,
@@ -17,9 +17,6 @@ function _cyco_core_add_client_services_lib() {
       array('cycoCoreServices' => $settings),
       'setting'
   );
-  drupal_add_js( 
-      drupal_get_path('module', 'cyco_core') . '/js/cyco_core_services.js' 
-  );    
 }
 
 /**

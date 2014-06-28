@@ -5,6 +5,9 @@
  * (Un)installs the Timezone Detect module.
  */
 
+/**
+ * Load constants.
+ */
 require_once 'timezone_detect.constants.inc';
 
 /**

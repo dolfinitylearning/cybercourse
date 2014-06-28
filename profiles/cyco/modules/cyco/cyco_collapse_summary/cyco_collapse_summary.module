@@ -1,0 +1,38 @@
+<?php
+/**
+ * @file
+ * Collapse the summary field on swim-with-summary fields.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function cyco_collapse_summary_form_alter( &$form, &$form_state, $form_id ) {
+  //Only add to node edit forms.
+  if (strpos($form_id, 'node') !== FALSE) {
+    drupal_add_js(
+        drupal_get_path('module', 'cyco_collapse_summary') 
+          . '/js/cyco_collapse_summary.js'
+    );
+//    drupal_add_css(
+//        drupal_get_path('module', 'cyco_collapse_summary') 
+//          . '/cyco_collapse_summary.css'
+//    );
+  }
+}
+
+/**
+ * Implements hook_help().
+ */
+function cyco_collapse_summary_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#collapse_summary':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t(
+          'For text-with-summary widgets, the summary is always collapsed. '
+        . 'An indicator shows whether there is content in the summary.'
+      ) . '</p>';
+      return $output;
+  }
+}

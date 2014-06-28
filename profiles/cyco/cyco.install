@@ -12,91 +12,32 @@
  * @see system_install()
  */
 function cyco_install() {
-//  $filters = cyco_define_filters();
   cyco_define_blocks();
-//  cyco_content_types_setup();
-//  cyco_rdf_setup();
-//  cyco_taxonomy_setup();
-//  cyco_user_setup($filters);
-//  cyco_menu_setup();
-//  cyco_admin_theme();
   //Set version of jQuery to use.
   cyco_jquery_update();
   //Remove book page content type.
   node_type_delete('book');
   //Set the default theme.
   cyco_set_default_theme('cybercourse');
-  //Give user 1 the administrator role.
-  cyco_make_user_1_admin();
 }
 
-/**
- * Define input filters.
- * @return array Filters.
- */
-function cyco_define_filters() {
-  $full_html_format = array(
-    'format' => 'full_html',
-    'name' => 'Full HTML',
-    'weight' => 1,
-    'filters' => array(
-      // URL filter.
-      'filter_url' => array(
-        'weight' => 0,
-        'status' => 1,
-      ),
-      // Line break filter.
-      'filter_autop' => array(
-        'weight' => 1,
-        'status' => 1,
-      ),
-      // HTML corrector filter.
-      'filter_htmlcorrector' => array(
-        'weight' => 10,
-        'status' => 1,
-      ),
-    ),
-  );
-  $full_html_format = (object) $full_html_format;
-  filter_format_save($full_html_format);
-  
-//  $rest_format = array(
-//    'format' => 'rest',
-//    'name' => 'reStructuredText',
-//    'weight' => 0,
-//    'filters' => array(
-//      // URL filter.
-//      'rest' => array(
-//        'weight' => 0,
-//        'status' => 1,
-//      ),
-//    ),
-//  );
-//  $rest_format = (object) $rest_format;
-//  filter_format_save($rest_format);
-  
-  return array(
-//    'filtered' => $filtered_html_format,
-    'full' => $full_html_format,
-//    'rest' => $rest_format,
-  );
-}
+
 
 function cyco_define_blocks() {
   // Enable some standard blocks.
   $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'seven';
   $blocks = array(
-    array(
-      'module' => 'system',
-      'delta' => 'main',
-      'theme' => $default_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'content',
-      'pages' => '',
-      'cache' => -1,
-    ),
+//    array(
+//      'module' => 'system',
+//      'delta' => 'main',
+//      'theme' => $default_theme,
+//      'status' => 1,
+//      'weight' => 0,
+//      'region' => 'content',
+//      'pages' => '',
+//      'cache' => -1,
+//    ),
     array(
       'module' => 'search',
       'delta' => 'form',
@@ -118,25 +59,35 @@ function cyco_define_blocks() {
       'cache' => -1,
     ),
     array(
-      'module' => 'system',
-      'delta' => 'navigation',
-      'theme' => $default_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'sidebar_first',
-      'pages' => '',
-      'cache' => -1,
-    ),
-    array(
-      'module' => 'system',
-      'delta' => 'powered-by',
-      'theme' => $default_theme,
+      'module' => 'user',
+      'delta' => 'login',
+      'theme' => $admin_theme,
       'status' => 1,
       'weight' => 10,
-      'region' => 'footer',
+      'region' => 'content',
       'pages' => '',
       'cache' => -1,
     ),
+//    array(
+//      'module' => 'system',
+//      'delta' => 'navigation',
+//      'theme' => $default_theme,
+//      'status' => 1,
+//      'weight' => 0,
+//      'region' => 'sidebar_first',
+//      'pages' => '',
+//      'cache' => -1,
+//    ),
+//    array(
+//      'module' => 'system',
+//      'delta' => 'powered-by',
+//      'theme' => $default_theme,
+//      'status' => 1,
+//      'weight' => 10,
+//      'region' => 'footer',
+//      'pages' => '',
+//      'cache' => -1,
+//    ),
     array(
       'module' => 'system',
       'delta' => 'help',
@@ -167,16 +118,6 @@ function cyco_define_blocks() {
       'pages' => '',
       'cache' => -1,
     ),
-    array(
-      'module' => 'user',
-      'delta' => 'login',
-      'theme' => $admin_theme,
-      'status' => 1,
-      'weight' => 10,
-      'region' => 'content',
-      'pages' => '',
-      'cache' => -1,
-    ),
   );
   $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
   foreach ($blocks as $block) {
@@ -185,253 +126,8 @@ function cyco_define_blocks() {
   $query->execute();  
 }
 
-function cyco_content_types_setup() {
-  // Insert default pre-defined node types into the database. For a complete
-  // list of available node type attributes, refer to the node type API
-  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
-//  $types = array(
-//    array(
-//      'type' => 'page',
-//      'name' => st('Basic page'),
-//      'base' => 'node_content',
-//      'description' => st("Use <em>basic pages</em> for your static content, such as an 'About us' page."),
-//      'custom' => 1,
-//      'modified' => 1,
-//      'locked' => 0,
-//    ),
-//    array(
-//      'type' => 'article',
-//      'name' => st('Article'),
-//      'base' => 'node_content',
-//      'description' => st('Use <em>articles</em> for time-sensitive content like news, press releases or blog posts.'),
-//      'custom' => 1,
-//      'modified' => 1,
-//      'locked' => 0,
-//    ),
-//  );
-//
-//  foreach ($types as $type) {
-//    $type = node_type_set_defaults($type);
-//    node_type_save($type);
-//    node_add_body_field($type);
-//  }
-  
-  // Create an image field named "Images.", enabled for the 'article' content type.
-  // Many of the following values will be defaulted, they're included here as an illustrative examples.
-  // See http://api.drupal.org/api/function/field_create_field/7
-
-//  $field = array(
-//    'field_name' => 'field_images',
-//    'type' => 'image',
-//    'cardinality' => -1, //Unlimited.
-//    'locked' => FALSE,
-//    'indexes' => array('fid' => array('fid')),
-//    'settings' => array(
-//      'uri_scheme' => 'public',
-//      'default_image' => FALSE,
-//    ),
-//    'storage' => array(
-//      'type' => 'field_sql_storage',
-//      'settings' => array(),
-//    ),
-//  );
-//  field_create_field($field);
 
 
-  // Many of the following values will be defaulted, they're included here as an illustrative examples.
-  // See http://api.drupal.org/api/function/field_create_instance/7
-//  $instance = array(
-//    'field_name' => 'field_images',
-//    'entity_type' => 'node',
-//    'label' => 'Images',
-//    'bundle' => 'page',
-//    'description' => st('Images for your content.'),
-//    'required' => FALSE,
-//
-//    'settings' => array(
-//      'file_directory' => 'field/image',
-//      'file_extensions' => 'png gif jpg jpeg',
-//      'max_filesize' => '',
-//      'max_resolution' => '',
-//      'min_resolution' => '',
-//      'alt_field' => TRUE,
-//      'title_field' => '',
-//    ),
-
-//    'widget' => array(
-//      'type' => 'image_image',
-//      'settings' => array(
-//        'progress_indicator' => 'throbber',
-//        'preview_image_style' => 'thumbnail',
-//      ),
-//      'weight' => -1,
-//    ),
-
-//    'display' => array(
-//      'default' => array(
-//        'label' => 'hidden',
-//        'type' => 'image',
-//        'settings' => array('image_style' => 'large', 'image_link' => ''),
-//        'weight' => -1,
-//      ),
-//      'teaser' => array(
-//        'label' => 'hidden',
-//        'type' => 'image',
-//        'settings' => array('image_style' => 'medium', 'image_link' => 'content'),
-//        'weight' => -1,
-//      ),
-//    ),
-//  );
-//  field_create_instance($instance);
-}  
-
-
-function cyco_rdf_setup() {
-  // Insert default pre-defined RDF mapping into the database.
-//  $rdf_mappings = array(
-//    array(
-//      'type' => 'node',
-//      'bundle' => 'page',
-//      'mapping' => array(
-//        'rdftype' => array('foaf:Document'),
-//      ),
-//    ),
-//    array(
-//      'type' => 'node',
-//      'bundle' => 'article',
-//      'mapping' => array(
-//        'field_image' => array(
-//          'predicates' => array('og:image', 'rdfs:seeAlso'),
-//          'type' => 'rel',
-//        ),
-//        'field_tags' => array(
-//          'predicates' => array('dc:subject'),
-//          'type' => 'rel',
-//        ),
-//      ),
-//    ),
-//  );
-//  foreach ($rdf_mappings as $rdf_mapping) {
-//    rdf_mapping_save($rdf_mapping);
-//  }
-//
-//  // Default "Basic page" to not be promoted and have comments disabled.
-//  variable_set('node_options_page', array('status'));
-//  variable_set('comment_page', COMMENT_NODE_HIDDEN);
-//
-//  // Don't display date and author information for "Basic page" nodes by default.
-//  variable_set('node_submitted_page', FALSE);
-}
-
-
-function cyco_taxonomy_setup() {
-
-  // Create a default vocabulary named "Tags", enabled for the 'article' content type.
-//  $description = st('Use tags to group content on similar topics into categories.');
-//  $vocabulary = (object) array(
-//    'name' => st('Tags'),
-//    'description' => $description,
-//    'machine_name' => 'tags',
-//  );
-//  taxonomy_vocabulary_save($vocabulary);
-//
-//  $field = array(
-//    'field_name' => 'field_' . $vocabulary->machine_name,
-//    'type' => 'taxonomy_term_reference',
-//    // Set cardinality to unlimited for tagging.
-//    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-//    'settings' => array(
-//      'allowed_values' => array(
-//        array(
-//          'vocabulary' => $vocabulary->machine_name,
-//          'parent' => 0,
-//        ),
-//      ),
-//    ),
-//  );
-//  field_create_field($field);
-
-//  $help = st('Enter a comma-separated list of words to describe your content.');
-//  $instance = array(
-//    'field_name' => 'field_' . $vocabulary->machine_name,
-//    'entity_type' => 'node',
-//    'label' => 'Tags',
-//    'bundle' => 'page',
-//    'description' => $help,
-//    'widget' => array(
-//      'type' => 'taxonomy_autocomplete',
-//      'weight' => -4,
-//    ),
-//    'display' => array(
-//      'default' => array(
-//        'type' => 'taxonomy_term_reference_link',
-//        'weight' => 10,
-//      ),
-//      'teaser' => array(
-//        'type' => 'taxonomy_term_reference_link',
-//        'weight' => 10,
-//      ),
-//    ),
-//  );
-//  field_create_instance($instance);
-  
-}
-
-function cyco_user_setup( $filters ) {
-  // Enable user picture support and set the default to a square thumbnail option.
-  variable_set('user_pictures', '1');
-  variable_set('user_picture_dimensions', '1024x1024');
-  variable_set('user_picture_file_size', '800');
-  variable_set('user_picture_style', 'thumbnail');
-
-  // Allow visitor account creation with administrative approval.
-  variable_set('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
-  
-  //Basic permissions.
-  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, 
-      array(
-        'access content', 
-        'access comments', 
-        'post comments', 
-        'skip comment approval',
-      )
-  );
-
-  // Enable permissions for the ReST filter.
-//  $rest_format = $filters['rest'];
-//  $rest_permission = filter_permission_name($rest_format);
-//  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, 
-//      array( $rest_permission )
-//  );
-
-  // Create a default role for site administrators, with all available permissions assigned.
-  $admin_role = new stdClass();
-  $admin_role->name = 'administrator';
-  $admin_role->weight = 2;
-  user_role_save($admin_role);
-  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
-  // Set this as the administrator role.
-  variable_set('user_admin_role', $admin_role->rid);
-
-  // Assign user 1 the "administrator" role.
-  db_insert('users_roles')
-    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
-    ->execute();
-
-}
-
-function cyco_menu_setup() {
-  // Create a Home link in the main menu.
-  $item = array(
-    'link_title' => st('Home'),
-    'link_path' => '<front>',
-    'menu_name' => 'main-menu',
-  );
-  menu_link_save($item);
-
-  // Update the menu router information.
-  menu_rebuild();
-}
 
 function cyco_admin_theme() {
   // Enable the admin theme.
@@ -462,13 +158,3 @@ function cyco_set_default_theme( $theme ) {
 //  menu_rebuild();
 }
 
-/**
- * Give user 1 the administrator role.
- */
-function cyco_make_user_1_admin() {
-//See https://api.drupal.org/api/drupal/modules!user!user.module/function/user_multiple_role_edit/7
-  $role = user_role_load_by_name( 'administrator' );
-  if ( $role ) {
-    user_multiple_role_edit(array(1), 'add_role', $role->rid);
-  }
-}

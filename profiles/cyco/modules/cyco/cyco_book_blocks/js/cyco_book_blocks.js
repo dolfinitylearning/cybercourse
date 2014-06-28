@@ -2,7 +2,11 @@
 
 
   $(document).ready(function() {
-    
+    //If no settings set, exit. Will happen when there are no
+    //book blocks to show.
+    if ( ! Drupal.settings.cyco_book_blocks ) {
+      return;
+    }
     /**
      * Move all items under the first level to the top level. 
      */

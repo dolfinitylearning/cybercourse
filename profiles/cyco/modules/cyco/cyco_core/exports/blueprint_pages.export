@@ -1,0 +1,338 @@
+array(
+  (object) array(
+      'vid' => '41',
+      'uid' => '1',
+      'title' => 'Outcomes',
+      'log' => '',
+      'status' => '1',
+      'comment' => '2',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '13877a57-ff99-47aa-a753-bf6f4659d04a',
+      'nid' => '13',
+      'type' => 'blueprint_page',
+      'language' => 'und',
+      'created' => '1403968872',
+      'changed' => '1403968872',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => 'c8424374-1612-4278-a1fe-46085f450dbe',
+      'revision_timestamp' => '1403968872',
+      'revision_uid' => '1',
+      'field_attachments' => array(),
+      'field_blueprint_keywords' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "Outcomes are the \"so what?\" of a CyCo. What should be different because students have taken a course?\n\nTypical outcomes for a skills course:\n\n* Students should be able to do this task and that task independently.\n* Students should have a portfolio of outputs they can show to employers.\n* Students should understand core ideas that will be used in later courses.\n* Students are enthused about the topic.\n\n\n ",
+            'summary' => 'What is different at the end of the course?',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_short_title' => array(),
+      'field_workflow_tags' => array(),
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403968872',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'a:1:{s:7:"contact";i:1;}',
+      'path' => array(
+        'pid' => '16',
+        'source' => 'node/13',
+        'alias' => 'content/outcomes',
+        'language' => 'und',
+      ),
+      'menu' => NULL,
+      'node_export_drupal_version' => '7',
+    ),
+  (object) array(
+      'vid' => '40',
+      'uid' => '1',
+      'title' => 'Context',
+      'log' => '',
+      'status' => '1',
+      'comment' => '2',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '8480ab4b-a7b9-4256-a75e-8e6429a1b069',
+      'nid' => '12',
+      'type' => 'blueprint_page',
+      'language' => 'und',
+      'created' => '1403968522',
+      'changed' => '1403968522',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => '8f3a1a31-23ce-4a70-8b59-928431a32eba',
+      'revision_timestamp' => '1403968522',
+      'revision_uid' => '1',
+      'field_attachments' => array(),
+      'field_blueprint_keywords' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "Context is the course's environment. \n\n* Who are the students? What do they know at the beginning of the course? What are their goals?\n* Who are the instructors? <span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">What are their goals?\n* Who are other important stakeholders? Employers, administrators...\n* What resources will students and instructors need? Time, software, supplies...\n\nPay attention to the time constraints of a course. Realistically, how much time do students and instructors have?\n\nAn important question: who decides which textbook or CyCo will be used in the context? What are they looking for?</span>\n ",
+            'summary' => "The course's environment. Who are the students? Who are the instructors? ...",
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_short_title' => array(),
+      'field_workflow_tags' => array(),
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403968522',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'a:1:{s:7:"contact";i:1;}',
+      'path' => array(
+        'pid' => '15',
+        'source' => 'node/12',
+        'alias' => 'content/context',
+        'language' => 'und',
+      ),
+      'menu' => NULL,
+      'node_export_drupal_version' => '7',
+    ),
+  (object) array(
+      'vid' => '39',
+      'uid' => '1',
+      'title' => 'Your blueprint',
+      'log' => '',
+      'status' => '1',
+      'comment' => '2',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => 'af3f32bb-37ac-457b-ae02-8681ed89f67f',
+      'nid' => '11',
+      'type' => 'blueprint_page',
+      'language' => 'und',
+      'created' => '1403967962',
+      'changed' => '1403967962',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => 'f98f9aae-7e0a-4342-93a0-bcb49cafe34e',
+      'revision_timestamp' => '1403967962',
+      'revision_uid' => '1',
+      'field_attachments' => array(),
+      'field_blueprint_keywords' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "<span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">A blueprint is a design for a course. Design is key. Create a good design, and you're halfway to making a good course.\n\nThis sample blueprint shows some of the things you should think about.</span>",
+            'summary' => 'A blueprint is a design for a course.',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_short_title' => array(),
+      'field_workflow_tags' => array(),
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403967962',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'a:1:{s:7:"contact";i:1;}',
+      'path' => array(
+        'pid' => '14',
+        'source' => 'node/11',
+        'alias' => 'content/your-blueprint',
+        'language' => 'und',
+      ),
+      'menu' => NULL,
+      'node_export_drupal_version' => '7',
+    ),
+)

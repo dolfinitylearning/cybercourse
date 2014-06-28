@@ -34,6 +34,10 @@
                     widget.data.pseudentCategory 
                         = Drupal.settings.pseudents.lastCategory;
                   }
+                  else {
+                    //Nothing there - use All.
+                    widget.data.pseudentCategory = 0;
+                  }
                 }
                 this.setValue( widget.data.pseudentCategory );
               },
@@ -58,7 +62,7 @@
 //                $(".pseudent-cell.selected").removeClass("selected");
                 var selectedCategory = this.getValue();
                 //Anything selected?
-                if (selectedCategory) {
+//                if (selectedCategory) {
                   //Add spaces around the selected category.
                   //This avoids, e.g., 7 being a false positive for 171.
                   var selectedCategoryString = " " + selectedCategory + " ";
@@ -66,16 +70,22 @@
                           function(index, element) {
                             //Does this element have any categories?
                             var $element = $(element);
-                            if ($element.attr("data-pseudent-categories")) {
-                              //Does this element have the selected category?
-                              if ($element.attr("data-pseudent-categories")
-                                      .indexOf(selectedCategoryString) != -1) {
-                                $element.show();
+                            if ( selectedCategory == 0 ) {
+                              //"All" was selected.
+                              $element.show();
+                            }
+                            else {
+                              if ($element.attr("data-pseudent-categories")) {
+                                //Does this element have the selected category?
+                                if ($element.attr("data-pseudent-categories")
+                                        .indexOf(selectedCategoryString) != -1) {
+                                  $element.show();
+                                }
                               }
                             }
                           } //End function run on each element.
                   ); //End each.
-                } //End if selectedCategory.
+//                } //End if selectedCategory.
               }
             },
             {
@@ -90,6 +100,11 @@
                 if ( widget.data.pseudentId ) {
                   $("#pseudent-cell-" + widget.data.pseudentId)
                           .addClass('selected');
+                }
+                else {
+                  //Nothing chosen - show everything in the selected
+                  //category.
+                  
                 }
                 this.setupClickEvents( widget );
               },
@@ -175,6 +190,8 @@
     });
     //Sort them.
     selectItems.sort();
+    //Add "All" category.
+    selectItems.unshift(["All", 0]);
     return selectItems;
   }
 

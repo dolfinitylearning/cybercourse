@@ -1,0 +1,119 @@
+array(
+  (object) array(
+      'vid' => '48',
+      'uid' => '1',
+      'title' => 'Write down patterns',
+      'log' => '',
+      'status' => '1',
+      'comment' => '2',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '7869221e-a2d7-44a7-96bc-a43a7f0edb22',
+      'nid' => '17',
+      'type' => 'pattern',
+      'language' => 'und',
+      'created' => '1403973125',
+      'changed' => '1403973125',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => '08337d96-9e92-4af0-851b-09cfe2d0e18b',
+      'revision_timestamp' => '1403973125',
+      'revision_uid' => '1',
+      'field_actions' => array(
+        'und' => array(
+          array(
+            'value' => 'Write down the pattern. Describe the task, goals, or whatever it is that in similar across situations. The describe the actions to take. ',
+          ),
+        ),
+      ),
+      'field_attachments' => array(),
+      'field_explanation' => array(
+        'und' => array(
+          array(
+            'value' => "When you <span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">notice that people are doing similar tasks in similar ways, write down what's happening.</span>",
+            'summary' => 'Write down patterns that you notice.',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_pattern_categories' => array(),
+      'field_situation' => array(
+        'und' => array(
+          array(
+            'value' => 'You notice that people are doing similar tasks in similar ways.',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403973125',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'a:1:{s:7:"contact";i:1;}',
+      'path' => array(
+        'pid' => '20',
+        'source' => 'node/17',
+        'alias' => 'content/write-down-patterns',
+        'language' => 'und',
+      ),
+      'menu' => NULL,
+      'node_export_drupal_version' => '7',
+    ),
+)

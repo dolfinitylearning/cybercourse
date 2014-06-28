@@ -14,6 +14,37 @@
       }
       //Set convenience reference.
       nameSpaceyThing = this;
+      CKEDITOR.on("instanceLoaded", function(evnt) {
+        var editor = evnt.editor;
+       
+//ev.editor.dataProcessor.writer.setRules( 'p',
+//{
+//indent : false,
+//breakBeforeOpen : false,
+//breakAfterOpen : false,
+//breakBeforeClose : false,
+//breakAfterClose : true
+//});
+//alert('poot');
+editor.dataProcessor.writer.selfClosingEnd = '>';
+editor.dataProcessor.writer.setRules( 'br',
+{
+indent : false,
+breakBeforeOpen : false,
+breakAfterOpen : false,
+breakBeforeClose : false,
+breakAfterClose : false
+});
+editor.dataProcessor.writer.setRules( 'div',
+{
+indent : false,
+breakBeforeOpen : false,
+breakAfterOpen : false,
+breakBeforeClose : false,
+breakAfterClose : false
+});
+        
+      });
       //Setup code to run after CKEDITOR instances have been created.
       CKEDITOR.on("instanceReady", function(evnt) {
         var editor = evnt.editor;

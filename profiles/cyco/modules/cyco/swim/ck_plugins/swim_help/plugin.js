@@ -17,7 +17,7 @@
           else {
             //Don't have help yet. Get it and show.
             $.when(
-              cycoUtilitiesServices.getCsrfToken()
+              cycoCoreServices.getCsrfToken()
             )
             .then(function() {
               $.when(
@@ -45,7 +45,7 @@
 
   cycoSwimHelp.getHelpFromServer = function() {
     var webServiceUrl 
-        = Drupal.settings.cycoUtilities.baseUrl + Drupal.settings.basePath 
+        = Drupal.settings.cycoCoreServices.baseUrl + Drupal.settings.basePath 
           + "swim/swim_help/swimHelp";
     var promise = $.ajax({
       type: "POST",
@@ -53,7 +53,7 @@
       dataType: "json",
       url: webServiceUrl,
       beforeSend: function (request) {
-        request.setRequestHeader("X-CSRF-Token", cycoUtilitiesServices.csrfToken);
+        request.setRequestHeader("X-CSRF-Token", swimServices.csrfToken);
       }
     })
     .done(function(result) {

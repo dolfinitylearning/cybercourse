@@ -301,6 +301,7 @@ function _cyco_pseudents_make_directive_replacements($matches) {
  * @param string $content Da goods, ReSTy.
  */
 function cyco_pseudents_swim_rest2betwixt_alter( &$content ) {
+//  $content = str_replace("\r", '', $content);
   $rest_tags = array();
   $pattern = '/\.\.\s+pseudent\:\:\s+(\d+).*\r?\n/i';
   preg_replace_callback(
@@ -367,7 +368,7 @@ function cyco_pseudents_swim_rest2betwixt_alter( &$content ) {
     //Grab the ReST tag's content.
     $rest_tag_content 
         = substr($content, 
-                 $content_start, 
+                 $content_start, //$content_start, 
                  $content_end - $content_start + 1
           );
     //Construct the betwixt.
@@ -458,7 +459,7 @@ function _cyco_pseudents_make_view_replacements($matches) {
     throw new Exception($message);
   }
   $caption = '';
-  if (sizeof( $node->field_caption ) > 0 ) {
+  if ( isset( $node->field_caption[LANGUAGE_NONE][0]['value'] ) ) {
     $caption = $node->field_caption[LANGUAGE_NONE][0]['value'];
   }
   else {

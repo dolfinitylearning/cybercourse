@@ -8,7 +8,7 @@
 /**
  * Implements hook_default_services_endpoint().
  */
-function hook_default_services_endpoint() {
+function swim_default_services_endpoint() {
   $endpoint = new stdClass();
   $endpoint->disabled = FALSE; /* Edit this to true to make a default endpoint disabled initially */
   $endpoint->api_version = 3;

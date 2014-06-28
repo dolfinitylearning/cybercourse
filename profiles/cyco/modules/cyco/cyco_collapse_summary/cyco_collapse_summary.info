@@ -1,0 +1,7 @@
+name = Collapse summary
+description = Collapse summary on SWIM-with-summary fields.
+package = CyberCourse
+core = 7.x
+version = 7.x-1.0-beta1
+dependencies[] = swim
+stylesheets[all][] = css/cyco_collapse_summary.css

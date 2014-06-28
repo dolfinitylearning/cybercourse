@@ -1,0 +1,254 @@
+array(
+  (object) array(
+      'vid' => '13',
+      'uid' => '0',
+      'title' => 'Welcome',
+      'log' => '',
+      'status' => '1',
+      'comment' => '1',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => 'bcc60946-265e-4384-bea9-7d71df262e14',
+      'nid' => '1',
+      'type' => 'page',
+      'language' => 'und',
+      'created' => '1403874607',
+      'changed' => '1403894892',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => '546ff16e-718d-40b0-88c4-2a4c2f55b036',
+      'revision_timestamp' => '1403894892',
+      'revision_uid' => '1',
+      'field_attachments' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "Welcome to the site.\r\n ",
+            'summary' => 'Welcome to the site.',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_keywords' => array(),
+      'field_workflow_tags' => array(),
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403874607',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '0',
+      'comment_count' => '0',
+      'name' => '',
+      'picture' => '0',
+      'data' => NULL,
+      'path' => array(
+        'pid' => '1',
+        'source' => 'node/1',
+        'alias' => 'content/welcome',
+        'language' => 'und',
+      ),
+      'menu' => array(
+        'link_title' => 'Home',
+        'mlid' => 0,
+        'plid' => '0',
+        'menu_name' => 'main-menu',
+        'weight' => '-50',
+        'options' => array(),
+        'module' => 'menu',
+        'expanded' => '0',
+        'hidden' => '0',
+        'has_children' => '0',
+        'customized' => 0,
+        'parent_depth_limit' => 8,
+        'description' => '',
+        'enabled' => 1,
+      ),
+      'node_export_drupal_version' => '7',
+    ),
+  (object) array(
+      'vid' => '6',
+      'uid' => '0',
+      'title' => 'About',
+      'log' => '',
+      'status' => '1',
+      'comment' => '1',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '73380895-4e3b-47b7-b4f1-96392e70a0f7',
+      'nid' => '4',
+      'type' => 'page',
+      'language' => 'und',
+      'created' => '1403874607',
+      'changed' => '1403882514',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => 'e1faa190-d982-4cdf-ba11-31a73cc85eb2',
+      'revision_timestamp' => '1403882514',
+      'revision_uid' => '1',
+      'field_attachments' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => 'About this site.',
+            'summary' => 'About this site.',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_keywords' => array(),
+      'field_workflow_tags' => array(),
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1403874607',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '0',
+      'comment_count' => '0',
+      'name' => '',
+      'picture' => '0',
+      'data' => NULL,
+      'path' => array(
+        'pid' => '4',
+        'source' => 'node/4',
+        'alias' => 'content/about',
+        'language' => 'und',
+      ),
+      'menu' => array(
+        'link_title' => 'About',
+        'mlid' => 0,
+        'plid' => '0',
+        'menu_name' => 'main-menu',
+        'weight' => '-49',
+        'options' => array(),
+        'module' => 'menu',
+        'expanded' => '0',
+        'hidden' => '0',
+        'has_children' => '0',
+        'customized' => 0,
+        'parent_depth_limit' => 8,
+        'description' => '',
+        'enabled' => 1,
+      ),
+      'node_export_drupal_version' => '7',
+    ),
+)

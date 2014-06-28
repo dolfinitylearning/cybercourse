@@ -41,6 +41,7 @@ function cyco_core_menu() {
 function cyco_core_init() {
   //Let other files add their stuff.
   _cyco_core_error_init();
+  _cyco_core_config_client_services();
 }
 
 /**
@@ -49,9 +50,9 @@ function cyco_core_init() {
 function cyco_core_settings_form($form, &$form_state) {
   $form['explanation'] = array(
     '#type' => 'markup',
-    '#markup' => t( 
+    '#markup' => '<p>' . t( 
       'If the tree menus get out of sync with the course/blueprint '
-        . 'pages, click this button to rebuild the tree menus.' 
+        . 'pages, click this button to rebuild the tree menus.' . '</p>'
     ),
   );
   $form['clear_cache'] = array(

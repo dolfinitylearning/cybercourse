@@ -5,7 +5,7 @@
  */
 Drupal.swimCkConfig = {
   autoParagraph: false,
-  
+  fillEmptyBlocks: false,
   disableObjectResizing : true,
 //  basicEntities : false, //Entity encode <, >.
   basicEntities : true, //Entity encode <, >.

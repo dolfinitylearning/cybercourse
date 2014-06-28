@@ -96,15 +96,6 @@ function swim_field_widget_info() {
   );
   return $info;
 }
-
-function swim_field_load($entity_type, $entities, $field, $instances, 
-    $langcode, &$items, $age ) {
-  $r=6;
-}
-
-function swim_field_storage_load($entity_type, $entities, $age, $fields, $options) {
-  $r=7;
-}
     
 function swim_field_widget_form(
     &$form, &$form_state, $field, $instance, 
@@ -819,7 +810,7 @@ function _swim_ckhtml2rest( $content ) {
  * @param type $content Content to remove <br>s from.
  */
 function _swim_remove_brs( $content ) {
-  $result = preg_replace('/\<\s*br\s*\/?\s*\>/i', '', $content);
+  $result = preg_replace('/\<\s*br\s*\/?\s*\>/i', "\n", $content);
   return $result;
 }
 
@@ -900,14 +891,14 @@ function _swim_img_2_path( $content ) {
 function _swim_rest2ck_images_part_1( $content ) {
   $image_paths = array();
   $path_counter = 0;
-  $pattern = '/\.\.\s(image|figure)(\:\:\s)(.*?)\s/im';
+  $pattern = '/\.\.\s*(image|figure)(\:\:\s+)(\S*?)\s*\r?\n/im';
   $content = preg_replace_callback(
       $pattern, 
       function ($matches) use (&$image_paths, &$path_counter) {
         //Got one.
         $image_paths[ $path_counter ] = $matches[3];
         $tag = '[imagepath' . $path_counter . ']';
-        $result = '.. ' . $matches[1] . $matches[2] . $tag;
+        $result = '.. ' . $matches[1] . $matches[2] . $tag . "\n";
         $path_counter ++;
         return $result;
       },
@@ -963,6 +954,7 @@ function _swim_client_peek( $data ) {
       'title' => 'Peek',
       'stylesheets' => array(
         $module_path . 'css/swim.css',
+        $module_path . 'content_only/content_only.css',
       ),
       'javascript_files' => array(
          'http://cdn.mathjax.org/mathjax/latest/MathJax.js'

@@ -40,6 +40,16 @@ function cyco_patterns_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete terms in pattern_categories'.
+  $permissions['delete terms in pattern_categories'] = array(
+    'name' => 'delete terms in pattern_categories',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'taxonomy',
+  );
+
   // Exported permission: 'edit any pattern content'.
   $permissions['edit any pattern content'] = array(
     'name' => 'edit any pattern content',
@@ -58,6 +68,16 @@ function cyco_patterns_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
+  );
+
+  // Exported permission: 'edit terms in pattern_categories'.
+  $permissions['edit terms in pattern_categories'] = array(
+    'name' => 'edit terms in pattern_categories',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'taxonomy',
   );
 
   return $permissions;
