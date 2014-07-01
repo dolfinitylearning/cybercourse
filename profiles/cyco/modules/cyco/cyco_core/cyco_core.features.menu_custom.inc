@@ -22,18 +22,6 @@ function cyco_core_menu_default_menu_custom() {
     'title' => 'CP authors',
     'description' => 'Control panel menu for authors.',
   );
-  // Exported menu: menu-cp-graders.
-  $menus['menu-cp-graders'] = array(
-    'menu_name' => 'menu-cp-graders',
-    'title' => 'CP graders',
-    'description' => 'Control panel menu for graders.',
-  );
-  // Exported menu: menu-cp-instructors.
-  $menus['menu-cp-instructors'] = array(
-    'menu_name' => 'menu-cp-instructors',
-    'title' => 'CP instructors',
-    'description' => 'Control panel menu for instructors.',
-  );
   // Exported menu: menu-cp-reviewers.
   $menus['menu-cp-reviewers'] = array(
     'menu_name' => 'menu-cp-reviewers',
@@ -45,6 +33,18 @@ function cyco_core_menu_default_menu_custom() {
     'menu_name' => 'menu-cp-students',
     'title' => 'CP students',
     'description' => 'Control panel menu for students.',
+  );
+  // Exported menu: menu-menu-cp-graders.
+  $menus['menu-menu-cp-graders'] = array(
+    'menu_name' => 'menu-menu-cp-graders',
+    'title' => 'CP graders',
+    'description' => 'Control panel menu for graders.',
+  );
+  // Exported menu: menu-menu-cp-instructors.
+  $menus['menu-menu-cp-instructors'] = array(
+    'menu_name' => 'menu-menu-cp-instructors',
+    'title' => 'CP instructors',
+    'description' => 'Control panel menu for instructors.',
   );
   // Exported menu: menu-tools.
   $menus['menu-tools'] = array(

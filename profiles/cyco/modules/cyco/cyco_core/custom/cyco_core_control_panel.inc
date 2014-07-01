@@ -36,9 +36,13 @@ function cyco_core_menu_link_alter(&$link) {
  */
 function _cyco_render_control_panel() {
   //Add JS to show menu titles as text.
+  //Flag to tell JS to do its Evil Work.
+  $settings = array(
+    'showMenuTitles' => TRUE,
+  );
   drupal_add_js(
-      drupal_get_path('module', 'cyco_control_panel')
-        . '/js/cyco_control_panel.js'
+      array('cycoControlPanel' => $settings),
+      'setting'
   );
   $result = array();
   //Wrap all in a class with a known name, so JS menu code can target.
@@ -51,10 +55,12 @@ function _cyco_render_control_panel() {
     ),
   );
   //Add intro elements.
-//  $result['all_content']['introduction'] = array(
-//    '#type' => 'markup',
-//    '#markup' => t('The control panel lets you manage your course options.'),
-//  );
+  $wiki_link = l( t('The CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
+  $message = $wiki_link . t( ' explains how to use the control panel.' );
+  $result['all_content']['introduction'] = array(
+    '#type' => 'markup',
+    '#markup' => $message,
+  );
   //Show user's groups.
   if ( module_exists( 'cyco_groups' ) ) {
     $groups = cyco_groups_render_basic_list();

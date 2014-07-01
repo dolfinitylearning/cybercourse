@@ -1,6 +1,4 @@
 (function($) {
-
-
   $(document).ready(function() {
     //If no settings set, exit. Will happen when there are no
     //book blocks to show.
@@ -23,7 +21,7 @@
     parentyThings.addClass('parent_li');
     parentyThings.find(' > span').attr('title', 'Expand this branch');
     $('.cyco-book-tree-menu')
-        .on('click', 'li:has(ul) > span', function(e) { 
+        .on('click', 'li:has(ul) > span', function(e) {
           var $this = $(e.currentTarget);
           $this.bookBlockMenuClicked( $this ); 
           e.stopPropagation();

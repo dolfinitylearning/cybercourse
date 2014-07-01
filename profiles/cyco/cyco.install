@@ -43,7 +43,7 @@ function cyco_define_blocks() {
       'delta' => 'form',
       'theme' => $default_theme,
       'status' => 1,
-      'weight' => -1,
+      'weight' => 20,
       'region' => 'sidebar_first',
       'pages' => '',
       'cache' => -1,
@@ -157,4 +157,5 @@ function cyco_set_default_theme( $theme ) {
   variable_set('theme_default', $theme);
 //  menu_rebuild();
 }
+
 

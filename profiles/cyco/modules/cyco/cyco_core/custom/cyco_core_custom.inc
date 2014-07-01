@@ -9,6 +9,11 @@ include_once realpath(dirname(__FILE__)) . '/cyco_core_error_handler.inc';
 include_once realpath(dirname(__FILE__)) . '/cyco_core_control_panel.inc';
 
 /**
+ * URL of the CyCo wiki home page.
+ */
+define('CYCO_WIKI_MAIN_URL', 'https://wiki.cybercour.se');
+
+/**
  * Implements hook_menu().
  */
 function cyco_core_menu() {
@@ -33,6 +38,19 @@ function cyco_core_menu() {
   _cyco_core_cp_add_menu_items( $items );
   
   return $items;
+}
+
+function cyco_core_menu_alter(&$items) {
+  $items['user']['title callback'] = '_cyco_core_user_menu_item_title';
+}
+
+
+function _cyco_core_user_menu_item_title() {
+  global $user;
+  if ( $user->uid != 0 ) {
+    $title = 'Your account (' . $user->name . ')';
+    return $title;
+  }
 }
 
 /**

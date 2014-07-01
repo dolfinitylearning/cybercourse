@@ -1,0 +1,11 @@
+/*
+* @file
+* Styles for the CyberCourse control panel menus.
+*/
+.cyco-cp-menu-title {
+  display: inline-block;
+  margin-left: 1em;
+  font-size: 80%;
+  color: #666;
+  line-height: 1.2em;
+}

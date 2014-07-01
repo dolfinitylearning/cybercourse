@@ -113,13 +113,14 @@ function cyco_book_blocks_block_view($delta = '') {
   if ( $pos === FALSE ) {
     return;
   }
+  //$root_nid is the nid of the book's root.
   $root_nid = substr($delta, 4); //4 is len of _cbb
   if ( !is_numeric($root_nid) ) {
     return;
   }
-  //$root_nid is the nid of the book's root.
+  $root_node = node_load( $root_nid );
   $block = array();
-  $block['subject'] = '';
+  $block['subject'] = $root_node->title;
   $block['content'] = _cbb_create_block_content( $root_nid );
   return $block;
 }
@@ -137,7 +138,6 @@ function _cbb_create_block_content( $root_nid ) {
       cyco_utilities_handle_error( $message );
       return FALSE;
   }
-  $output = '';
   $rendered_tree = _cbb_get_book_tree( $root_nid );
   return $rendered_tree;
 }
@@ -161,22 +161,6 @@ function _cbb_get_nids_book_roots( $bundle_name ) {
     }
   return $result;
 }
-
-/**
- * Make a message to show when there are no books.
- * @param string $book_type_label_plural Book type, e.g., dolfins.
- * @return string Message.
- */
-//function _cbb_make_empty_message( $book_type_label_plural ) {
-//  $message = '<p>' . t('No ') . t($book_type_label_plural) . '.</p>';
-//  $make_message = 
-//      '<p>' .
-//      t('Administrators can create @type in the control panel.', 
-//          array('@type' => $book_type_label_plural)
-//      ) . 
-//      '</p>';
-//  return $message . $make_message;
-//}
 
 /**
  * Make a tree for a node
@@ -364,11 +348,7 @@ function theme_cbb_book_tree($variables) {
   $include_unpublished = $variables['include_unpublished'];
   $menu_output = cbb_recursive_link_creator($trail, $include_unpublished, $tree);
   if (!empty($menu_output)) {
-    $output 
-        =   '<div class="cyco-book-tree-title">'
-          .   '<a href="' . $root_url . '">' . t($block_title) . '</a>'
-          . '</div>';
-    $output .= '<ul class="cyco-book-tree-menu menu-top">';
+    $output = '<ul class="cyco-book-tree-menu menu-top">';
     $output .= $menu_output;
     $output .= '</ul>';
     return $output;
@@ -407,9 +387,15 @@ function cbb_recursive_link_creator(
         //All closed to begin with.
         $state = 'closed';
         //Action is to open.
-        $classes[] = 'open-branch';
+//        $classes[] = 'open-branch';
         // If there are submenu items we assign the parent a class.
-        if ( ! empty($item['below'])  ) {
+        if ( empty($item['below'])  ) {
+          $classes[] = 'no-branch';
+        }
+        else {
+          //All closed to begin with.
+          //Action is to open.
+          $classes[] = 'open-branch';
           $nextlevel = '';
           $nextlevel = cbb_recursive_link_creator(
               $id, $include_unpublished, $item['below'], $url_array
@@ -460,11 +446,9 @@ function theme_cbb_listitem($variables) {
   $nextlevel    = $variables['nextlevel'];
   $has_children = $variables['has_children'];
   $published    = $variables['published'];
-  
   if (!isset($output)) {
     $output = '';
   }
-  
   //Everything hidden initially, except the root.
   $output .= '<li ' //id="' . $id . '" ' 
       . (empty($classes) ? '>' : ' class="' . implode(' ', $classes) 
@@ -474,7 +458,6 @@ function theme_cbb_listitem($variables) {
     $output .= ' style="display:none;" ';
   }
   $output .= '>';
-
   $output .= theme('cbb_links', array(
     'link_text' => $item['link']['link_text'], //KRM ?? $link_text?
     'path' => $path,
@@ -493,7 +476,6 @@ function theme_cbb_listitem($variables) {
       $output .= '</ul>';
     }
   }
-
   $output .= '</li>';
   return $output;
 }
@@ -510,7 +492,6 @@ function theme_cbb_links($variables) {
   $classes      = $variables["classes"];
   $has_children = $variables["has_children"];
   $published    = $variables['published'];
-  
   //Add published status as attribute for unpublished items.
   if ( $published == 0 ) {
     $options['attributes']['data-published'] = 'no';
@@ -570,7 +551,7 @@ function cyco_book_blocks_node_delete($node) {
  * Erase the cache for book menu a node is in.
  */
 function _ccbb_maybe_erase_menu_cache( $node ) {
-  if ( isset($node->book) ) {
+  if ( isset($node->book['bid']) ) {
     if ( cyco_core_is_book_content_type( $node ) ) {
       $bid = $node->book['bid'];
       variable_del(_ccbb_compute_cache_name($bid, TRUE) );

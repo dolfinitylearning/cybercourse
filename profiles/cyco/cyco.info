@@ -13,7 +13,6 @@ dependencies[] = block
 dependencies[] = book
 dependencies[] = color
 dependencies[] = comment
-dependencies[] = contact
 dependencies[] = contextual
 dependencies[] = help
 dependencies[] = image
@@ -62,6 +61,8 @@ dependencies[] = date_popup
 dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = insert
+dependencies[] = field_permissions
+dependencies[] = filefield_sources
 
 ;Admin
 dependencies[] = admin_menu
@@ -93,6 +94,9 @@ dependencies[] = pathauto
 
 ;Groups
 dependencies[] = og
+
+;Help
+dependencies[] = advanced_help
 
 ;**************** Cyco custom modules *******************
 dependencies[] = swim

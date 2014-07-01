@@ -90,5 +90,17 @@ function cyco_pseudents_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
+  // Exported permission: 'search pseudent_pose content'.
+  $permissions['search pseudent_pose content'] = array(
+    'name' => 'search pseudent_pose content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'reviewer' => 'reviewer',
+    ),
+    'module' => 'search_config',
+  );
+
   return $permissions;
 }

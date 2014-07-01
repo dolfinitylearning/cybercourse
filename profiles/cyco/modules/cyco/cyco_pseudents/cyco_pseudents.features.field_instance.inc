@@ -10,6 +10,39 @@
 function cyco_pseudents_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'comment-comment_node_pseudent_pose-comment_body'
+  $field_instances['comment-comment_node_pseudent_pose-comment_body'] = array(
+    'bundle' => 'comment_node_pseudent_pose',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'comment',
+    'field_name' => 'comment_body',
+    'label' => 'Comment',
+    'required' => TRUE,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'node-pseudent_pose-field_caption'
   $field_instances['node-pseudent_pose-field_caption'] = array(
     'bundle' => 'pseudent_pose',
@@ -97,6 +130,20 @@ function cyco_pseudents_field_default_field_instances() {
       'active' => 1,
       'module' => 'image',
       'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 0,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
         'insert' => 0,
         'insert_absolute' => 0,
         'insert_class' => '',
@@ -238,6 +285,7 @@ function cyco_pseudents_field_default_field_instances() {
   t('Caption underneath the image. Keep it short. If empty, the pseudent\'s name will be used.');
   t('Categories');
   t('Categories for this student pose, e.g., Jill, Happy.');
+  t('Comment');
   t('Image');
   t('Image source, copyright...');
   t('Notes');

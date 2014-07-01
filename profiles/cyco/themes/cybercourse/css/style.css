@@ -1,3 +1,19 @@
 /**
- * Styles for the {{ THEME NAME }} theme.
+ * Styles for the CyberCourse theme.
  */
+
+nav[role=navigation] #block-system-user-menu {
+  float: right;
+}
+
+nav[role=navigation] #block-system-user-menu ul {
+  list-style: none;
+}
+
+nav[role=navigation] #block-system-user-menu ul li {
+  display: inline-block;
+}
+
+h2.block-title {
+  margin-top: 0;
+}

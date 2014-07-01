@@ -15,11 +15,10 @@ function cyco_form_install_configure_form_alter(&$form, $form_state) {
       = 'CyberCourse instance';
 }
 
-
 function cyco_install_tasks() {
   $task = array();
   $task['finalize'] = array(
-    'display_name' => st('Finalizing the awesome'),
+    'display_name' => st('Finalize the awesome'),
     'display' => TRUE,
     'type' => 'normal',
     'function' => '_cyco_finalize_install',
@@ -37,17 +36,22 @@ function _cyco_finalize_install() {
   _cyco_add_workflow_terms();
   //Add starting content. Basic pages, course pages, blueprint pages.
   _cyco_add_content();
-  //Add page to main menu.
-  _cyco_add_pages_main_menu();
   //Add terms to content.
   _cyco_add_terms_to_content();
+  //Link pages into books.
+  _cyco_make_books();
+  //Add pages to the main menu.
+  _cyco_add_links_main_menu();
   //Put course and blueprint blocks in sidebar.
   _cyco_place_blocks();
-  
-  
+  //Add class to some blocks.
+  _cyco_add_classes2blocks();
   //Set the front page.
   _cyco_set_frontpage();
-  return '<p>' . st('Awesomeness achieved.') . '</p>';
+  //Turn off some modules.
+  _cyco_disable_modules();
+  node_access_rebuild();
+  cache_clear_all();
 }
 
 
@@ -79,11 +83,11 @@ function _cyco_add_workflow_terms() {
 
 function _cyco_add_terms_to_content() {
   //Add the Create content term to some nodes.
-  $tid = _cyco_get_tid_from_term_name('workflow_tags', 'create-content');
-  _cyco_add_term2no_cyco_add_term2node(
+  $tid = _cyco_get_tid_from_term_name('workflow_tags', 'Create content');
+  _cyco_add_term2node(
       'Welcome', 'page', 'field_workflow_tags', $tid
   );
-  _cyco_add_term2no_cyco_add_term2node(
+  _cyco_add_term2node(
       'About', 'page', 'field_workflow_tags', $tid
   );
   
@@ -111,7 +115,7 @@ function _cyco_taxonomy_terms_save_terms($terms, $vocab_name){
  */
 function _cyco_add_term2node( $node_title, $node_type, $field, $tid ) {
   $node = _cyco_node_load_by_title($node_title, $node_type);
-  $node->$field[$node->language][0]['tid'] = $tid;
+  $node->{$field}[$node->language][0]['tid'] = $tid;
   node_save($node);
 }
 
@@ -153,7 +157,11 @@ function _cyco_node_load_by_title($title, $node_type) {
     ->range(0,1)
     ->execute();
   if(!empty($entities)) {
-    return node_load(array_shift(array_keys($entities['node'])));
+    $nodes = $entities['node'];
+    $nids = array_keys($nodes);
+    $nid = $nids[0];
+    $node = node_load($nid);
+    return $node;
   }
   else {
     return NULL;
@@ -173,11 +181,30 @@ function _cyco_clean_urls() {
  */
 function _cyco_add_content() {
   //Basic pages.
-  _cyco_import_nodes('basic_pages.export');
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
+      . 'basic_pages.export'
+  );
   //Course pages.
-  _cyco_import_nodes('course_pages.export');
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
+      . 'course_pages.export'
+  );
   //Blueprint pages.
-  _cyco_import_nodes('blueprint_pages.export');
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
+      . 'blueprint_pages.export'
+  );
+  //Pseudents.
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_pseudents') . '/custom/exports/' 
+      . 'pseudents.export'
+  );
+  //Patterns.
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_patterns') . '/custom/exports/' 
+      . 'patterns.export'
+  );  
 }
 
 /**
@@ -186,9 +213,7 @@ function _cyco_add_content() {
  * @return array Import messages.
  */
 function _cyco_import_nodes( $filename ) {
-  $file_name 
-      = drupal_get_path('module', 'cyco_core') . '/exports/' . $filename;
-  $data = file_get_contents($file_name);
+  $data = file_get_contents($filename);
   $messages = node_export_import($data);
   return $messages;
 }
@@ -209,75 +234,105 @@ function _cyco_make_books() {
   _cyco_make_book('blueprint_page', 'Your blueprint', $children);
 }
 
+/**
+ * Make content into a book.
+ * @param string $content_type Content type.
+ * @param string $root_title Title of the book's root node.
+ * @param array $children_titles Titles of the child pages of the root.
+ */
 function _cyco_make_book( $content_type, $root_title, $children_titles ) {
   //Make the root a book root.
   $root_node = _cyco_node_load_by_title($root_title, $content_type);
   $root_node->book = array('bid' =>'new', 'plid' => 0 );
   node_save($root_node);
   $root_nid = $root_node->nid;
-  //Get the root's mlid.
-  $sql = 'SELECT mlid FROM menu_links WHERE link_path = :path';
-  $root_mlid = db_query($sql, array(':path' => 'node/' . $root_nid))
-      ->fetchField();
+  //Get the root's mlid and menu_name.
+  $sql = 'SELECT mlid, menu_name FROM menu_links WHERE link_path = :path';
+  $row = (object)db_query($sql, array(':path' => 'node/' . $root_nid))->fetchAssoc();
+  $root_mlid  = $row->mlid;
+  $root_menu_name = $row->menu_name;
   //Load the children.
   $children = array();
   foreach ( $children_titles as $child_title ) {
     $child_node = _cyco_node_load_by_title($child_title, $content_type);
-    $child_nid = $child_node->nid;
-    $child_mlid  = db_query($sql, array(':path' => 'node/' . $child_nid))
-      ->fetchField();
-    $children[] = array(
-      'nid' => $child_nid,
-      'node' => $child_node,
-      'mlid' => $child_mlid,
-    );
+    $children[] = $child_node;
   } //End foreach.
   //Add each child into the book.
   foreach( $children as $child ) {
-    db_update('menu_links')
-      ->fields(array(
-        'plid' => $root_mlid,
-      ))
-      ->condition('mlid', $child['mlid'])
-      ->execute();
-    db_insert('book')
-      ->fields(array(
-        'mlid' => $child['mlid'],
-        'nid' => $child['nid'],
-        'bid' => $root_nid,
-      ))
-      ->execute();
+    //Add a new menu item.
+    $item = array(
+      'link_path' => 'node/' . $child->nid,
+      'link_title' => $child->title,
+      'menu_name' => $root_menu_name,
+      'weight' => 0,
+      'language' => $child->language,
+      'plid' => $root_mlid,
+      'module' => 'menu',
+    );
+    $child_mlid = menu_link_save($item);
+    //Add child to the book.
+    if ( $child_mlid !== FALSE ) {
+      db_insert('book')
+        ->fields(array(
+          'mlid' => $child_mlid,
+          'nid' => $child->nid,
+          'bid' => $root_nid,
+        ))
+        ->execute();
+    }
   } //End foreach.
 }
 
 /**
  * Put a block in a region
  * https://www.drupal.org/node/796500#comment-4514446
+ * @param string $module Module creating the block.
+ * @param string $block Block machine name.
+ * @param string $region Region machine name.
+ * @param string $theme Theme this block setting applies to.
+ * @param string $pages Pages with special visibility.
+ * @param int $visibility 1 if show in $pages, 0 if not.
+ * @param int $weight Block weight in region.
+ * 
  */
-function _cyco_activate_block($module, $block, $region, $theme, $pages, $visibility) {
-  drupal_set_message("Activating block $module:$block\n");
+function _cyco_activate_block($module, $block, $region, $theme, 
+    $pages, $visibility, $weight) {
+//  drupal_set_message("Activating block $module:$block\n");
   db_merge('block')
-  ->key(array('theme' => $theme, 'delta' => $block, 'module' => $module))
-  ->fields(array(
-    'region' => ($region == BLOCK_REGION_NONE ? '' : $region),
-    'pages' => trim($pages),
-    'status' => (int) ($region != BLOCK_REGION_NONE),
-    'visibility' => $visibility,
+    ->key(array('theme' => $theme, 'delta' => $block, 'module' => $module))
+    ->fields(array(
+      'region' => ($region == BLOCK_REGION_NONE ? '' : $region),
+      'pages' => trim($pages),
+      'status' => (int) ($region != BLOCK_REGION_NONE),
+      'visibility' => $visibility,
+      'weight' => $weight,
   ))
   ->execute();
 }
 
+/**
+ * Place blocks in regions.
+ */
 function _cyco_place_blocks() {
-  $blueprint_node 
-      = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
-  $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
-  _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_first', 
-      'cybercourse', '', 1);
   $course_node 
       = _cyco_node_load_by_title('Your course', 'course_page');
+  //Cache the menu tree for this block.
+  $rendered = _cbb_get_book_tree( $course_node->nid );
   $course_block_id = 'cbb_' . $course_node->nid;
   _cyco_activate_block('cyco_book_blocks', $course_block_id, 'sidebar_first', 
-      'cybercourse', '', 1);
+      'cybercourse', '', 0, 0);
+  $blueprint_node 
+      = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
+  $rendered = _cbb_get_book_tree( $blueprint_node->nid );
+  $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
+  _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_first', 
+      'cybercourse', '', 0, 1);
+  _cyco_activate_block('menu', 'menu-tools', 'sidebar_first',
+      'cybercourse', '', 0, 2);
+  _cyco_activate_block('system', 'user-menu', 'sidebar_first',
+      'cybercourse', '', 0, 3);
+  _cyco_activate_block('user', 'login', 'sidebar_first',
+      'cybercourse', '', 0, 4);
 }
 
 /**
@@ -286,11 +341,13 @@ function _cyco_place_blocks() {
 function _cyco_set_frontpage() {
   $welcome = _cyco_node_load_by_title('Welcome', 'page');
   $welcome_nid = $welcome->nid;
-  variable_get('site_frontpage', 'node/' . $welcome_nid);
+  variable_set('site_frontpage', 'node/' . $welcome_nid);
 }
 
-
-function _cyco_add_pages_main_menu() {
+/**
+ * Add links to the main menu.
+ */
+function _cyco_add_links_main_menu() {
   _cyco_add_menu_item('Welcome', 'page', 'main-menu', 0);
   _cyco_add_menu_item('About', 'page', 'main-menu', 1);
 }
@@ -314,4 +371,49 @@ function _cyco_add_menu_item($node_title, $node_type, $menu, $weight) {
     'module' => 'menu',
   );
   menu_link_save($item);
+}
+
+/**
+ * Add classes to blocks.
+ */
+function _cyco_add_classes2blocks() {
+  //Tools menu block.
+  _cyco_add_classes2block('menu', 'menu-tools', 'well well-sm');
+  //User menu block.
+  _cyco_add_classes2block('system', 'user-menu', 'well well-sm');
+  //Course block.
+  $course_node 
+      = _cyco_node_load_by_title('Your course', 'course_page');
+  $course_block_id = 'cbb_' . $course_node->nid;
+  _cyco_add_classes2block('cyco_book_blocks', $course_block_id, 'well well-sm');
+  //Blueprint block.
+  $blueprint_node 
+      = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
+  $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
+  _cyco_add_classes2block('cyco_book_blocks', $blueprint_block_id, 'well well-sm');
+}
+
+/**
+ * Add classes to a block.
+ * @param string $module Name of the module defining the block.
+ * @param string $block Name of the block.
+ * @param string $classes Classes, no ., space separated.
+ */
+function _cyco_add_classes2block( $module, $block, $classes ) {
+  db_update('block')
+    ->fields(array('css_class' => $classes))
+    ->condition('module', $module)
+    ->condition('delta', $block)
+    ->execute();  
+}
+
+/**
+ * Turn off some modules.
+ */
+function _cyco_disable_modules() {
+  $modules = array(
+    'node_export',
+    'features_orphans',
+  );
+  module_disable( $modules );
 }

@@ -80,5 +80,16 @@ function cyco_patterns_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
+  // Exported permission: 'search pattern content'.
+  $permissions['search pattern content'] = array(
+    'name' => 'search pattern content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'search_config',
+  );
+
   return $permissions;
 }

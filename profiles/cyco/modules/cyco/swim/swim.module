@@ -466,10 +466,9 @@ function swim_field_formatter_view(
           $output = swim_rest2html( $item['summary'] );
         }
         else {
-          $output = text_summary($item['summary'], $item['format'], $display['settings']['trim_length']);
+          $output = text_summary($item['value']);
           $output = swim_rest2html( $output );
         }
-        $output = check_markup($output, $item['format'], $langcode);
         $element[$delta] = array('#markup' => $output);
       }
       break;
@@ -484,26 +483,29 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
   if ( $obj_type == 'node' ) {
     //Is this a content type supporting tokens?
     $content_type = $object->type;
-    $types_supporting_tokens = cyco_core_content_types_supporting_tokens();
-    if ( in_array( $content_type, $types_supporting_tokens ) ) {
-      //Is this a field that supports tokens?
-      $field_name = $field['field_name'];
-      $fields_supporting_tokens 
-          = cyco_core_fields_supporting_tokens($content_type);
-      if (in_array($field_name, $fields_supporting_tokens) ) {
-        //Is the page owned by a user allowed to substitute tokens?
-        $page_owner_uid = $object->uid;
-        $page_owner = user_load($page_owner_uid);
-        if (  cyco_core_user_has_role(
-                $page_owner,
-                array( 'author', 'administrator', 'grader', 'instructor')
-              ) 
-           ) {
-          //Replace tokens.
-          $content = token_replace($content);
+    //The function might not exist during installation.
+//    if ( function_exists('cyco_core_content_types_supporting_tokens') ) {
+      $types_supporting_tokens = cyco_core_content_types_supporting_tokens();
+      if ( in_array( $content_type, $types_supporting_tokens ) ) {
+        //Is this a field that supports tokens?
+        $field_name = $field['field_name'];
+        $fields_supporting_tokens 
+            = cyco_core_fields_supporting_tokens($content_type);
+        if (in_array($field_name, $fields_supporting_tokens) ) {
+          //Is the page owned by a user allowed to substitute tokens?
+          $page_owner_uid = $object->uid;
+          $page_owner = user_load($page_owner_uid);
+          if (  cyco_core_user_has_role(
+                  $page_owner,
+                  array( 'author', 'administrator', 'grader', 'instructor')
+                ) 
+             ) {
+            //Replace tokens.
+            $content = token_replace($content);
+          }
         }
       }
-    }
+//    }
   }
   return $content;
 }
@@ -573,7 +575,7 @@ function swim_rest2ckhtml( $content ) {
   $content = str_replace("\n", "<br>", $content);
 //  $content = str_replace("\n", "<br/>\n", $content);
   //Replace spaces with &nbsp;. Otherwise, CK collapses multiple spaces.
-  $content = str_replace(' ', '&nbsp;', $content);
+  //$content = str_replace(' ', '&nbsp;', $content);
   //Replace math temp markers with HTML tags used by MathJax.
   $content = _swim_rest2ck_mathjx_part_2( $content, $math_replacements );
   //Replace image temp markers with HTML tags.

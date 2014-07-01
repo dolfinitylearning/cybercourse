@@ -14,7 +14,7 @@ function cyco_patterns_menu_default_menu_links() {
   $menu_links['menu-cp-authors_add-a-pattern:node/add/pattern'] = array(
     'menu_name' => 'menu-cp-authors',
     'link_path' => 'node/add/pattern',
-    'router_path' => 'node/add/pattern',
+    'router_path' => 'node/add',
     'link_title' => 'Add a pattern',
     'options' => array(
       'attributes' => array(
