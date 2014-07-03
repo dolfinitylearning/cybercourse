@@ -106,3 +106,9 @@ function cyco_core_theme() {
   _cyco_control_panel_theme( $theme_defs );
   return $theme_defs;
 }
+
+
+function hook_ckeditor_settings_alter(&$settings, $conf) {
+  // Change the ckeditor config path.
+  $settings['customConfig'] = drupal_get_path('module', 'ckeditor') . '/ckeditor.config.js';
+}
