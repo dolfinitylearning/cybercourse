@@ -301,43 +301,6 @@ function cyco_core_format_time( $when = NULL ) {
 }
 
 /**
- * Make sure that line breaks inside a string have spaces following them.
- * Used when moving TeX from CK to ReST, keeping indentation when the 
- * user puts TeX over multiple lines.
- * 
- * @param string $string String to process.
- * @return string Processed string.
- */
-function cyco_core_follow_break_w_spaces( $string ) {
-  $start = 0;
-  list( $pos, $eol_length ) = cyco_core_find_next_line_break($string, $start);
-  while ( $pos != -1 ) {
-    if ( $pos == 0 ) {
-      //At the start of the string.
-    }
-    else if ( $pos == ( strlen( $string ) - $eol_length ) ) {
-      //At the end. 
-    }
-    else {
-      //EOL in the middle of the text.
-      //Make sure there's a space after the EOL.
-      $next_char = substr($string, $pos + $eol_length, 1);
-      if ( $next_char != ' ' ) {
-        $left = substr( $string, 0, $pos + $eol_length );
-        $right = substr( $string, $pos + $eol_length );
-        $string = $left . ' ' . $right;
-        $start++;
-      }
-    }
-    //Skip the processed line break.
-    $start += $eol_length;
-    //Next one.
-    list( $pos, $eol_length ) = cyco_core_find_next_line_break($string, $start);
-  }
-  return $string;
-}
-
-/**
  * Find the next line break in a string, whether it's \r\n, or \n.
  * @param string $string String to search.
  * @param int $start Where to start searching.

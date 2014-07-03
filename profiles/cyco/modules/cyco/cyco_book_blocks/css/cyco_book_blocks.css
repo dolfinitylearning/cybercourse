@@ -41,4 +41,6 @@ ul.cyco-book-tree-menu li span.open-branch {
 }
 ul.cyco-book-tree-menu li span.no-branch {
   background-image: url(../images/stop.svg);
+  width: 0.6em;
+  height: 0.6em;
 }

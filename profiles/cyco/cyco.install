@@ -144,7 +144,8 @@ function cyco_admin_theme() {
  * Configure jquery_update module to load the right version of jQuery.
  */
 function cyco_jquery_update() {
-  variable_set('jquery_update_jquery_version', '1.9');
+  //Needs to be 1.7 until admin menu bug is fixed.
+  variable_set('jquery_update_jquery_version', '1.7');
   variable_set('jquery_update_jquery_cdn', 'google');  
 }
 

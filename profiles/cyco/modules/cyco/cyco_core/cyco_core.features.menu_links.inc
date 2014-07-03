@@ -181,7 +181,7 @@ function cyco_core_menu_default_menu_links() {
   $menu_links['menu-cp-authors_create-a-new-course:node/add/course-page'] = array(
     'menu_name' => 'menu-cp-authors',
     'link_path' => 'node/add/course-page',
-    'router_path' => 'node/add/course-page',
+    'router_path' => 'node/add',
     'link_title' => 'Create a new course',
     'options' => array(
       'query' => array(
@@ -491,46 +491,6 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -50,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_list-tagged-content:workflow-tagged',
-  );
-  // Exported menu link: menu-menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords
-  $menu_links['menu-menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords'] = array(
-    'menu_name' => 'menu-menu-cp-instructors',
-    'link_path' => 'blueprints-and-keywords',
-    'router_path' => 'blueprints-and-keywords',
-    'link_title' => 'Blueprints and keywords',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'See blueprint pages and keywords',
-      ),
-      'identifier' => 'menu-menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => 3,
-    'customized' => 1,
-  );
-  // Exported menu link: menu-menu-cp-instructors_courses-and-keywords:courses-and-keywords
-  $menu_links['menu-menu-cp-instructors_courses-and-keywords:courses-and-keywords'] = array(
-    'menu_name' => 'menu-menu-cp-instructors',
-    'link_path' => 'courses-and-keywords',
-    'router_path' => 'courses-and-keywords',
-    'link_title' => 'Courses and keywords',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'See course pages and keywords',
-      ),
-      'identifier' => 'menu-menu-cp-instructors_courses-and-keywords:courses-and-keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => 0,
-    'customized' => 1,
   );
   // Translatables
   // Included for use with string extractors like potx.

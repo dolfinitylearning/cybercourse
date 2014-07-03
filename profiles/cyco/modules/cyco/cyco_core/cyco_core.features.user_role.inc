@@ -13,13 +13,13 @@ function cyco_core_user_default_roles() {
   // Exported role: administrator.
   $roles['administrator'] = array(
     'name' => 'administrator',
-    'weight' => 6,
+    'weight' => 7,
   );
 
   // Exported role: author.
   $roles['author'] = array(
     'name' => 'author',
-    'weight' => 5,
+    'weight' => 6,
   );
 
   // Exported role: grader.
@@ -28,10 +28,16 @@ function cyco_core_user_default_roles() {
     'weight' => 3,
   );
 
+  // Exported role: instructor.
+  $roles['instructor'] = array(
+    'name' => 'instructor',
+    'weight' => 4,
+  );
+
   // Exported role: reviewer.
   $roles['reviewer'] = array(
     'name' => 'reviewer',
-    'weight' => 4,
+    'weight' => 5,
   );
 
   // Exported role: student.

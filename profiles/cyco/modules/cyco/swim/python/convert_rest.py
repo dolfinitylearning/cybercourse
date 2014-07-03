@@ -93,10 +93,10 @@ class Authornote(Directive):
         # Drupal custom filter to find.
         # Can apply permissions checks and other things on the
         # server side.
-        prefix_text = '[[[cycoauthornote:' + self.arguments[0] + '|||\n'
+        prefix_text = '[[[swimauthornote:' + self.arguments[0] + '|||\n'
         prefix_node = nodes.raw('', prefix_text, format='html')
         # Create a new node with the postfix marker text for
-        # Cyco to find.
+        # SWIM to find.
         postfix_text = ']]]\n'
         postfix_node = nodes.raw('', postfix_text, format='html')
         # Return the nodes in sequence.
@@ -176,9 +176,9 @@ directives.register_directive('vimeo', Vimeo)
 #        self.assert_has_content()
 #        if cyco_user.can_swear:
 #            target = ''.join(self.content.data)
-#            text = '<p>FUCK ' + target.upper() + '</p>'
+#            text = '<p>*#&@$ ' + target.upper() + '</p>'
 #        else:
-#            text = '<p>You are not allowed to swear, fuckhead.</p>'
+#            text = '<p>You are not allowed to swear, *#&@$.</p>'
 #        return [nodes.raw('', text, format='html')]
 #
 ##Register the new directive.

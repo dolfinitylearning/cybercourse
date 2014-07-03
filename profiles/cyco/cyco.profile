@@ -42,12 +42,22 @@ function _cyco_finalize_install() {
   _cyco_make_books();
   //Add pages to the main menu.
   _cyco_add_links_main_menu();
+  //Add links to control panel menu. I can't make features do it, 
+  //except for cp-author.
+  _cyco_add_links_cp_menus();
   //Put course and blueprint blocks in sidebar.
   _cyco_place_blocks();
   //Add class to some blocks.
   _cyco_add_classes2blocks();
   //Set the front page.
   _cyco_set_frontpage();
+  //Secondary links source - none.
+  variable_set('menu_secondary_links_source', '');
+  //Tell extlink to open external targets in a new window.
+  variable_set(' 	extlink_target', '_blank');
+  //Theme stuff
+//  _cyco_theme_stuff();
+  
   //Turn off some modules.
   _cyco_disable_modules();
   node_access_rebuild();
@@ -350,6 +360,7 @@ function _cyco_set_frontpage() {
 function _cyco_add_links_main_menu() {
   _cyco_add_menu_item('Welcome', 'page', 'main-menu', 0);
   _cyco_add_menu_item('About', 'page', 'main-menu', 1);
+  _cyco_add_menu_item('Help', 'page', 'main-menu', 2);
 }
 
 /**
@@ -404,7 +415,7 @@ function _cyco_add_classes2block( $module, $block, $classes ) {
     ->fields(array('css_class' => $classes))
     ->condition('module', $module)
     ->condition('delta', $block)
-    ->execute();  
+    ->execute();
 }
 
 /**
@@ -416,4 +427,173 @@ function _cyco_disable_modules() {
     'features_orphans',
   );
   module_disable( $modules );
+}
+
+//function _cyco_theme_stuff() {
+//  $settings = unserialize(variable_get('theme_cybercourse_settings', NULL));
+//  if ( !is_null($settings) ) {
+//    $settings['bootstrap_bootswatch'] = 'cerulean';
+//  }
+//  variable_set('theme_cybercourse_settings', serialize($settings));
+//}
+
+
+function _cyco_add_links_cp_menus() {
+  //Links in instructor menu.
+  $items = array();
+  $menu_name = 'menu-cp-instructors';
+  $language = LANGUAGE_NONE;
+  $module = 'menu';
+  $plid = 0;
+  $items[] = array(
+    'link_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'weight' => 3,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/people',
+    'link_title' => 'Users',
+    'weight' => 4,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+
+  $mlids = array();
+  foreach ( $items as $item ) {
+    $mlids[ $item['link_path'] ] = menu_link_save($item);
+  }
+
+  $items = array();
+  $items[] = array(
+    'link_path' => 'admin/people',
+    'link_title' => 'List users',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'admin/people' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/people/create',
+    'link_title' => 'Add user',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'admin/people' ],
+    'module' => $module,
+  );
+  
+  $menu_name = 'menu-cp-graders';
+  $items[] = array(
+    'link_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'weight' => 3,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  
+  $menu_name = 'menu-cp-reviewers';
+  $items[] = array(
+    'link_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'weight' => 3,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+
+  foreach ( $items as $item ) {
+    menu_link_save($item);
+  }
+
 }

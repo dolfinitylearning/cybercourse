@@ -97,6 +97,7 @@ function cyco_pseudents_user_default_permissions() {
       'administrator' => 'administrator',
       'author' => 'author',
       'grader' => 'grader',
+      'instructor' => 'instructor',
       'reviewer' => 'reviewer',
     ),
     'module' => 'search_config',

@@ -220,6 +220,9 @@ function cyco_core_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_workflow_tags',
+    'field_permissions' => array(
+      'type' => 2,
+    ),
     'foreign keys' => array(
       'tid' => array(
         'columns' => array(

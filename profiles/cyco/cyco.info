@@ -50,6 +50,7 @@ dependencies[] = jquery_update
 dependencies[] = backup_migrate
 dependencies[] = uuid
 dependencies[] = node_export
+dependencies[] = content_access
 
 ;Field related
 dependencies[] = field_group

@@ -234,12 +234,13 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   $numFilesLoaded = libraries_load_files($ckLibraryInfo);
   if ( $numFilesLoaded <= 0 ) {
     $mess = t('SWIM error: no CKEditor files loaded. Is CK installed?');
-    cyco_core_handle_error( $mess );
+    drupal_set_message( $mess );
+    watchdog('SWIM', $message);
     return;
   }
   //Add CSS.
   drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
-  //Add CyCo services library.
+  //Add services library.
   _swim_add_client_services_lib();
   //Obscurer code.
   $obscurer = theme('obscurer');
@@ -480,6 +481,9 @@ function swim_field_formatter_view(
 
 
 function swim_process_tokens( $obj_type, $object, $field, $content ) {
+  //Replace tokens.
+  $content = token_replace($content);
+  return $content;
   if ( $obj_type == 'node' ) {
     //Is this a content type supporting tokens?
     $content_type = $object->type;
@@ -516,7 +520,7 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
  * @return string HTML
  */
 function swim_rest2html( $rest ) {
-  //Run content through ReST translator. Returns mixed ReST and CyCo markup.
+  //Run content through ReST translator. Returns mixed ReST and betwixt markup.
   // descriptor array
   $desc = array(
       0 => array('pipe', 'r'), // 0 is STDIN for process
@@ -542,7 +546,7 @@ function swim_rest2html( $rest ) {
   fclose($pipes[1]);
   fclose($pipes[2]);
   proc_close($p);
-  //Show error messages, if any. These are not CyCo errors, but author errors.
+  //Show error messages, if any. These are author errors.
   if ( $error_message ) {
     $error_message = _swim_format_docutils_errors( $error_message );
     drupal_set_message($error_message, 'warning');
@@ -565,9 +569,14 @@ function swim_rest2ckhtml( $content ) {
   //Doesn't insert HTML tags directly, since they would be messed up
   //by the other translation code below. Instead, inserts temp markers that
   //are replaced by HTML after other translation is done.
-  list( $content, $math_replacements ) = _swim_rest2ck_mathjx_part_1($content);
+  //Make sure there is a \n at the end.
+  $last_char = substr($content, strlen( $content ) - 1, 1);
+  if ( $last_char != "\n") {
+    $content .= "\n";
+  }
+  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
   //Grab image paths and wrap them in <img> tags that can be inserted later.
-  list( $content, $image_replacements ) = _swim_rest2ck_images_part_1($content);
+  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
   //Trigger other module's translators.
   drupal_alter( 'swim_rest2betwixt', $content);
   //Encode everything the user typed.
@@ -577,30 +586,30 @@ function swim_rest2ckhtml( $content ) {
   //Replace spaces with &nbsp;. Otherwise, CK collapses multiple spaces.
   //$content = str_replace(' ', '&nbsp;', $content);
   //Replace math temp markers with HTML tags used by MathJax.
-  $content = _swim_rest2ck_mathjx_part_2( $content, $math_replacements );
+  $content = _swim_betwixt2ckhtml_mathjx( $content, $math_replacements );
   //Replace image temp markers with HTML tags.
-  $content = _swim_rest2ck_images_part_2( $content, $image_replacements );
+  $content = _swim_betwixt2ckhtml_images( $content, $image_replacements );
   //Trigger other module's translators.
   drupal_alter( 'swim_betwixt2ckhtml', $content);
   return $content;
 }
 
 /**
- * 
+ * Replace ReST math tags with betwixt tags.
  * @param type $content
  * @return string Content with temporary math tag replacements.
  */
-function _swim_rest2ck_mathjx_part_1( $content ) {
+function _swim_rest2betwixt_mathjx( $content ) {
   $replacements = array();
   //Process directives.
   list($content, $replacements['directives']) = 
       _swim_rest2ck_mathjax_add_directive_temp_tags( 
-          $content, 'cycomathdirective'
+          $content, 'swimmathdirective'
       );
   //Process roles.
   list($content, $replacements['roles']) = 
  _swim_rest2ck_mathjax_add_role_temp_tags( 
-          $content, 'cycomathrole'
+          $content, 'swimmathrole'
       );
   return array( $content, $replacements );
 }
@@ -641,7 +650,7 @@ function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
     $done = false;
     while( ! $done ) {
       list( $break_pos, $break_length) 
-          = cyco_core_find_next_line_break($content, $search_start);
+          = _swim_find_next_line_break($content, $search_start);
       if ( $break_pos == -1 ) {
         //Not found. Formula goes to the end of the content.
         $formula_end = strlen( $content ) - 1;
@@ -740,9 +749,9 @@ function _swim_rest2ck_mathjax_add_role_temp_tags($content, $tag) {
  * @param array $replacements Forumala. [x] => formula to replace marker x.
  * @return string Content with HTML tags.
  */
-function _swim_rest2ck_mathjx_part_2( $content, $replacements ) {
+function _swim_betwixt2ckhtml_mathjx( $content, $replacements ) {
   //Replace temp directives tags with HTML.
-  $pattern = '/\[cycomathdirective(\d+)\]/i';
+  $pattern = '/\[swimmathdirective(\d+)\]/i';
   $content = preg_replace_callback(
       $pattern, 
       function ($match) use ($replacements) {
@@ -753,7 +762,7 @@ function _swim_rest2ck_mathjx_part_2( $content, $replacements ) {
       $content
   );
   //Replace temp roles tags with HTML.
-  $pattern = '/\[cycomathrole(\d+)\]/i';
+  $pattern = '/\[swimmathrole(\d+)\]/i';
   $content = preg_replace_callback(
       $pattern, 
       function ($match) use ($replacements) {
@@ -808,7 +817,8 @@ function _swim_ckhtml2rest( $content ) {
 }
 
 /**
- * Remove <br>s from $content. 
+ * Remove <br>s from $content.
+ * Replae with \n.
  * @param type $content Content to remove <br>s from.
  */
 function _swim_remove_brs( $content ) {
@@ -830,7 +840,7 @@ function _swim_ck_mathjx_2_rest( $content ) {
         $match = $matches[1];
         //Make sure that all the TeX is indented if the user types line breaks
         //into the TeX.
-        $result = cyco_core_follow_break_w_spaces( $match );
+        $result = _swim_follow_break_w_spaces( $match );
         //Output directive, not role.
         $result = "\n\n.. math::\n\n    " . $result . "\n\n";
         return $result;
@@ -848,7 +858,7 @@ function _swim_ck_mathjx_2_rest( $content ) {
         $match = _swim_remove_brs($match);
         //Make sure that all the TeX is indented if the user types line breaks
         //into the TeX.
-        $result = cyco_core_follow_break_w_spaces( $match );
+        $result = _swim_follow_break_w_spaces( $match );
         //Remove the first two and last two characters. \( and \)
         $result = substr($result, 2);
         $result = substr($result, 0, strlen($result)-2 );
@@ -890,7 +900,7 @@ function _swim_img_2_path( $content ) {
  * @return array [0] = content, [1] array of paths, where index matches
  *    token number.
  */
-function _swim_rest2ck_images_part_1( $content ) {
+function _swim_rest2betwixt_images( $content ) {
   $image_paths = array();
   $path_counter = 0;
   $pattern = '/\.\.\s*(image|figure)(\:\:\s+)(\S*?)\s*\r?\n/im';
@@ -917,7 +927,7 @@ function _swim_rest2ck_images_part_1( $content ) {
  *    token number.
  * @return string New content.
  */
-function _swim_rest2ck_images_part_2( $content, $replacements ) {
+function _swim_betwixt2ckhtml_images( $content, $replacements ) {
   //Replace temp directives tags with HTML.
   $pattern = '/\[imagepath(\d+)\]/i';
   $content = preg_replace_callback(
@@ -940,7 +950,8 @@ function _swim_client_peek( $data ) {
   if ( !isset($data['markup']) ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' markup missing.';
-    cyco_core_handle_services_error( $message );
+    drupal_set_message( $message );
+    watchdog('SWIM', $message);
     return;
   }
   $markup = $data['markup'];
@@ -1131,4 +1142,63 @@ function _swim_client_help() {
     )
   );
   return $themed_help;
+}
+
+/**
+ * Find the next line break in a string, whether it's \r\n, or \n.
+ * @param string $string String to search.
+ * @param int $start Where to start searching.
+ * @return array Result array. 
+ *   [0] = position (-1 if not found).
+ *   [1] = EOL length (0 if not found, 1 if \n, 2 if \r\n). 
+ */
+function _swim_find_next_line_break( $string, $start ) {
+  $pos = stripos( $string, "\n", $start );
+  if ( $pos === FALSE ) {
+    return array(-1, 0);
+  }
+  if ( $pos == 0 ) {
+    return array(0, 1);
+  }
+  if ( substr($string, $pos - 1, 1) == "\r" ) {
+    return array( $pos - 1, 2);
+  }
+  return array( $pos, 1 );
+}
+
+/**
+ * Make sure that line breaks inside a string have spaces following them.
+ * Used when moving TeX from CK to ReST, keeping indentation when the 
+ * user puts TeX over multiple lines.
+ * 
+ * @param string $string String to process.
+ * @return string Processed string.
+ */
+function _swim_follow_break_w_spaces( $string ) {
+  $start = 0;
+  list( $pos, $eol_length ) = _swim_find_next_line_break($string, $start);
+  while ( $pos != -1 ) {
+    if ( $pos == 0 ) {
+      //At the start of the string.
+    }
+    else if ( $pos == ( strlen( $string ) - $eol_length ) ) {
+      //At the end. 
+    }
+    else {
+      //EOL in the middle of the text.
+      //Make sure there's a space after the EOL.
+      $next_char = substr($string, $pos + $eol_length, 1);
+      if ( $next_char != ' ' ) {
+        $left = substr( $string, 0, $pos + $eol_length );
+        $right = substr( $string, $pos + $eol_length );
+        $string = $left . ' ' . $right;
+        $start++;
+      }
+    }
+    //Skip the processed line break.
+    $start += $eol_length;
+    //Next one.
+    list( $pos, $eol_length ) = _swim_find_next_line_break($string, $start);
+  }
+  return $string;
 }

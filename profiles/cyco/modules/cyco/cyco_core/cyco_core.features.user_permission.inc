@@ -10,6 +10,16 @@
 function cyco_core_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: 'access administration menu'.
+  $permissions['access administration menu'] = array(
+    'name' => 'access administration menu',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'admin_menu',
+  );
+
   // Exported permission: 'access administration pages'.
   $permissions['access administration pages'] = array(
     'name' => 'access administration pages',
@@ -27,6 +37,26 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'views',
+  );
+
+  // Exported permission: 'access backup and migrate'.
+  $permissions['access backup and migrate'] = array(
+    'name' => 'access backup and migrate',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'backup_migrate',
+  );
+
+  // Exported permission: 'access backup files'.
+  $permissions['access backup files'] = array(
+    'name' => 'access backup files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'access comments'.
@@ -61,6 +91,15 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'access contextual links'.
+  $permissions['access contextual links'] = array(
+    'name' => 'access contextual links',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'contextual',
+  );
+
   // Exported permission: 'access printer-friendly version'.
   $permissions['access printer-friendly version'] = array(
     'name' => 'access printer-friendly version',
@@ -71,7 +110,9 @@ function cyco_core_user_default_permissions() {
   // Exported permission: 'access private fields'.
   $permissions['access private fields'] = array(
     'name' => 'access private fields',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'field_permissions',
   );
 
@@ -80,6 +121,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'access site in maintenance mode',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'system',
   );
@@ -126,6 +168,15 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'system',
+  );
+
+  // Exported permission: 'administer backup and migrate'.
+  $permissions['administer backup and migrate'] = array(
+    'name' => 'administer backup and migrate',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'administer block classes'.
@@ -196,8 +247,19 @@ function cyco_core_user_default_permissions() {
   // Exported permission: 'administer field permissions'.
   $permissions['administer field permissions'] = array(
     'name' => 'administer field permissions',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'administer fieldgroups'.
+  $permissions['administer fieldgroups'] = array(
+    'name' => 'administer fieldgroups',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'field_group',
   );
 
   // Exported permission: 'administer filters'.
@@ -226,6 +288,15 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'menu',
+  );
+
+  // Exported permission: 'administer module filter'.
+  $permissions['administer module filter'] = array(
+    'name' => 'administer module filter',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'module_filter',
   );
 
   // Exported permission: 'administer modules'.
@@ -265,6 +336,34 @@ function cyco_core_user_default_permissions() {
     'module' => 'user',
   );
 
+  // Exported permission: 'administer save and edit'.
+  $permissions['administer save and edit'] = array(
+    'name' => 'administer save and edit',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'save_edit',
+  );
+
+  // Exported permission: 'administer scroll to top'.
+  $permissions['administer scroll to top'] = array(
+    'name' => 'administer scroll to top',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'scroll_to_top',
+  );
+
+  // Exported permission: 'administer search'.
+  $permissions['administer search'] = array(
+    'name' => 'administer search',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'search',
+  );
+
   // Exported permission: 'administer services'.
   $permissions['administer services'] = array(
     'name' => 'administer services',
@@ -272,6 +371,15 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'services',
+  );
+
+  // Exported permission: 'administer shortcuts'.
+  $permissions['administer shortcuts'] = array(
+    'name' => 'administer shortcuts',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'shortcut',
   );
 
   // Exported permission: 'administer site configuration'.
@@ -328,6 +436,15 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'user',
+  );
+
+  // Exported permission: 'administer uuid'.
+  $permissions['administer uuid'] = array(
+    'name' => 'administer uuid',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'uuid',
   );
 
   // Exported permission: 'administer views'.
@@ -411,6 +528,16 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'create field_workflow_tags'.
+  $permissions['create field_workflow_tags'] = array(
+    'name' => 'create field_workflow_tags',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'create new books'.
   $permissions['create new books'] = array(
     'name' => 'create new books',
@@ -438,6 +565,15 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'path',
+  );
+
+  // Exported permission: 'customize shortcut links'.
+  $permissions['customize shortcut links'] = array(
+    'name' => 'customize shortcut links',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'shortcut',
   );
 
   // Exported permission: 'delete any blueprint_page content'.
@@ -468,6 +604,16 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
+  );
+
+  // Exported permission: 'delete backup files'.
+  $permissions['delete backup files'] = array(
+    'name' => 'delete backup files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'delete own blueprint_page content'.
@@ -540,6 +686,16 @@ function cyco_core_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
+  // Exported permission: 'display drupal links'.
+  $permissions['display drupal links'] = array(
+    'name' => 'display drupal links',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'admin_menu',
+  );
+
   // Exported permission: 'edit any blueprint_page content'.
   $permissions['edit any blueprint_page content'] = array(
     'name' => 'edit any blueprint_page content',
@@ -570,6 +726,16 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit field_workflow_tags'.
+  $permissions['edit field_workflow_tags'] = array(
+    'name' => 'edit field_workflow_tags',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit own blueprint_page content'.
   $permissions['edit own blueprint_page content'] = array(
     'name' => 'edit own blueprint_page content',
@@ -598,6 +764,16 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
+  );
+
+  // Exported permission: 'edit own field_workflow_tags'.
+  $permissions['edit own field_workflow_tags'] = array(
+    'name' => 'edit own field_workflow_tags',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
   );
 
   // Exported permission: 'edit own page content'.
@@ -640,22 +816,14 @@ function cyco_core_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
-  // Exported permission: 'export nodes'.
-  $permissions['export nodes'] = array(
-    'name' => 'export nodes',
+  // Exported permission: 'flush caches'.
+  $permissions['flush caches'] = array(
+    'name' => 'flush caches',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
-    'module' => 'node_export',
-  );
-
-  // Exported permission: 'export own nodes'.
-  $permissions['export own nodes'] = array(
-    'name' => 'export own nodes',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node_export',
+    'module' => 'admin_menu',
   );
 
   // Exported permission: 'generate features'.
@@ -694,6 +862,24 @@ function cyco_core_user_default_permissions() {
     'module' => 'services',
   );
 
+  // Exported permission: 'grant content access'.
+  $permissions['grant content access'] = array(
+    'name' => 'grant content access',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'content_access',
+  );
+
+  // Exported permission: 'grant own content access'.
+  $permissions['grant own content access'] = array(
+    'name' => 'grant own content access',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'content_access',
+  );
+
   // Exported permission: 'list custom tokens'.
   $permissions['list custom tokens'] = array(
     'name' => 'list custom tokens',
@@ -723,8 +909,21 @@ function cyco_core_user_default_permissions() {
   // Exported permission: 'peek content'.
   $permissions['peek content'] = array(
     'name' => 'peek content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'swim',
+  );
+
+  // Exported permission: 'perform backup'.
+  $permissions['perform backup'] = array(
+    'name' => 'perform backup',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'perform unlimited index queries'.
@@ -744,6 +943,15 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'comment',
+  );
+
+  // Exported permission: 'restore from backup'.
+  $permissions['restore from backup'] = array(
+    'name' => 'restore from backup',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'retrieve definition'.
@@ -801,9 +1009,21 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
       'author' => 'author',
       'grader' => 'grader',
+      'instructor' => 'instructor',
       'reviewer' => 'reviewer',
     ),
     'module' => 'search_config',
+  );
+
+  // Exported permission: 'search content'.
+  $permissions['search content'] = array(
+    'name' => 'search content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'search',
   );
 
   // Exported permission: 'search course_page content'.
@@ -815,6 +1035,7 @@ function cyco_core_user_default_permissions() {
       'authenticated user' => 'authenticated user',
       'author' => 'author',
       'grader' => 'grader',
+      'instructor' => 'instructor',
       'reviewer' => 'reviewer',
       'student' => 'student',
     ),
@@ -828,6 +1049,11 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+      'student' => 'student',
     ),
     'module' => 'search_config',
   );
@@ -858,13 +1084,34 @@ function cyco_core_user_default_permissions() {
     'module' => 'comment',
   );
 
-  // Exported permission: 'use PHP to import nodes'.
-  $permissions['use PHP to import nodes'] = array(
-    'name' => 'use PHP to import nodes',
+  // Exported permission: 'switch shortcut sets'.
+  $permissions['switch shortcut sets'] = array(
+    'name' => 'switch shortcut sets',
     'roles' => array(
       'administrator' => 'administrator',
     ),
-    'module' => 'node_export',
+    'module' => 'shortcut',
+  );
+
+  // Exported permission: 'use advanced search'.
+  $permissions['use advanced search'] = array(
+    'name' => 'use advanced search',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'search',
+  );
+
+  // Exported permission: 'use save and edit'.
+  $permissions['use save and edit'] = array(
+    'name' => 'use save and edit',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'save_edit',
   );
 
   // Exported permission: 'use text format rest'.
@@ -875,6 +1122,59 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'filter',
+  );
+
+  // Exported permission: 'view advanced help index'.
+  $permissions['view advanced help index'] = array(
+    'name' => 'view advanced help index',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'advanced_help',
+  );
+
+  // Exported permission: 'view advanced help popup'.
+  $permissions['view advanced help popup'] = array(
+    'name' => 'view advanced help popup',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'advanced_help',
+  );
+
+  // Exported permission: 'view advanced help topic'.
+  $permissions['view advanced help topic'] = array(
+    'name' => 'view advanced help topic',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'advanced_help',
+  );
+
+  // Exported permission: 'view field_workflow_tags'.
+  $permissions['view field_workflow_tags'] = array(
+    'name' => 'view field_workflow_tags',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view own field_workflow_tags'.
+  $permissions['view own field_workflow_tags'] = array(
+    'name' => 'view own field_workflow_tags',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
   );
 
   // Exported permission: 'view own unpublished content'.

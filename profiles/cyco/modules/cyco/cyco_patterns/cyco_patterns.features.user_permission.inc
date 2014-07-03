@@ -87,6 +87,11 @@ function cyco_patterns_user_default_permissions() {
       'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+      'student' => 'student',
     ),
     'module' => 'search_config',
   );
