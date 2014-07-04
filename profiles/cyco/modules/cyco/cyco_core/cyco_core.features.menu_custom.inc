@@ -46,6 +46,12 @@ function cyco_core_menu_default_menu_custom() {
     'title' => 'CP students',
     'description' => 'Control panel menu for students.',
   );
+  // Exported menu: menu-footer.
+  $menus['menu-footer'] = array(
+    'menu_name' => 'menu-footer',
+    'title' => 'Footer',
+    'description' => 'Menu for the bottom of the page.',
+  );
   // Exported menu: menu-tools.
   $menus['menu-tools'] = array(
     'menu_name' => 'menu-tools',
@@ -70,7 +76,9 @@ function cyco_core_menu_default_menu_custom() {
   t('Control panel menu for instructors.');
   t('Control panel menu for reviewers.');
   t('Control panel menu for students.');
+  t('Footer');
   t('Main menu');
+  t('Menu for the bottom of the page.');
   t('The <em>Main</em> menu is used on many sites to show the major sections of the site, often in a top navigation bar.');
   t('The <em>User</em> menu contains links related to the user\'s account, as well as the \'Log out\' link.');
   t('Tools');

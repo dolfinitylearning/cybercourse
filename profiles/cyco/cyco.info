@@ -53,7 +53,7 @@ dependencies[] = node_export
 dependencies[] = content_access
 
 ;Field related
-dependencies[] = field_group
+;dependencies[] = field_group
 dependencies[] = allow_all_file_extensions
 dependencies[] = date
 dependencies[] = date_api
@@ -110,7 +110,8 @@ dependencies[] = cyco_add_pages
 dependencies[] = cyco_book_blocks
 dependencies[] = cyco_toc
 dependencies[] = cyco_collapse_summary
-
+dependencies[] = cyco_exercise
+dependencies[] = cyco_exercise_services
 
 ;**************** Themes *******************
 

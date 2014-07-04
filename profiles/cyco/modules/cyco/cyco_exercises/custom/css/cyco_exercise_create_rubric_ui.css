@@ -1,0 +1,57 @@
+/* Create/edit/view rubric item UI. */
+
+#rubric-create-ui {
+  width: 48em;
+  padding: 1em;
+}
+
+.rubric-create-ui-table {
+  display: table;  
+}
+
+.rubric-create-ui-row {
+  display: table-row;
+}
+
+.rubric-create-ui-cell {
+  display: table-cell;
+}
+
+#rubric-create-extra-actions {
+  text-align: left;
+}
+
+#rubric-create-finish-buttons {
+  text-align: right;
+}
+
+#rubric-create-ui input,
+#rubric-create-ui textarea {
+  width: 20em;
+}
+
+#rubric-create-ui textarea {
+  height: 5em;
+}
+#rubric-create-categories .fancytree-container {
+  max-height: 25em;
+  overflow: auto;
+}
+
+#rubric-create-phrases-container {
+  padding-left: 1em;
+}
+
+.rubric-create-mt-phrase {
+  color: #CCC;
+}
+
+.rubric-create-phrases-container {
+  padding-top: 1em;
+}
+.rubric-create-phrase-container {
+  padding: 0.5em;
+}
+
+
+

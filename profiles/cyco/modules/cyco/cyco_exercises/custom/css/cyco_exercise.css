@@ -1,0 +1,57 @@
+/*
+Styles for exercises.
+*/
+.cyco-inserted-exercise {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  overflow: hidden;
+  padding: 1em;
+}
+
+.cyco-inserted-exercise-title {
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+/* 
+  Styles for exercise submission links.
+*/
+.cyco-inserted-exercise-links-container {
+  margin-top: 1em;
+}
+
+.cyco-inserted-exercise-link-container {
+  margin-top: 0.5em;
+}
+
+.cyco-inserted-exercise-link-version {
+  display: inline;
+  margin-right: 2em;
+}
+
+.cyco-inserted-exercise-link-status {
+  display: inline;
+  margin-right: 2em;
+}
+
+.cyco-inserted-exercise-link-link {
+  display: inline;
+  margin-right: 2em;
+}
+
+/* 
+For file selection widget on submission form, hide the description.
+It's misleading.
+*/
+.file-widget .form-item form-type-textfield .description {
+  display: none;
+}
+
+.cyco-feedback-phrases-preview-container div {
+  margin-top: 1em;
+}

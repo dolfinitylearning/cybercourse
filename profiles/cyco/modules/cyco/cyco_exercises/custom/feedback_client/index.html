@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CyberCourse feedback system</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="lib/jquery-layout/layout-default.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <link charset="utf-8" media="screen" type="text/css" href="css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/custom.css">
+    <!--[if lte IE 9]><script>
+    //Adds timeout compatibility. 
+    //See https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout.
+    (function(f){
+    window.setTimeout =f(window.setTimeout);
+    window.setInterval =f(window.setInterval);
+    })(function(f){return function(c,t){
+    var a=[].slice.call(arguments,2);return f(function(){c.apply(this,a)},t)}
+    });
+    </script><![endif]-->
+  </head>
+  <body>
+    <script id="submissionListTemplate" type="text/template">
+      <table>
+      {{#submissionMeta}}
+        <tr data-submission-nid="{{submissionNid}}">
+          <td class="cybercourse_timeago" title="{{timeAgo}}">
+            {{timeAgo}}
+          </td>
+          <td title="Exercise">
+            {{exerciseName}}
+          </td>
+          <td title="Student">
+            {{studentName}}
+          </td>
+          <td title="Group">
+            {{#each groups}}
+              {{#if @last}}
+                {{title}}
+              {{else}}
+                {{title}}<br>
+              {{/if}}
+            {{/each}}
+          </td>
+          <td class="cyco-submission-list-wait" data-submission-nid="{{submissionNid}}">
+          </td>
+        </tr>
+      {{/submissionMeta}}
+      </table>
+    </script>
+    
+    <script id="rubricItemTemplate" type="text/template">
+      <div class="cybercourse-rubric-item-container" data-rubric-item-nid="{{rubricItemNid}}">
+        <div class="cybercourse-rubric-item-title">
+          {{title}}
+          <span class="button display-state">▴</span>
+        </div>
+        <div class="cybercourse-rubric-item-chosen-text">
+          (Nothing chosen)
+        </div>
+        <div class="cybercourse-rubric-item-details">
+          {{#if notes}}
+            <div class="cybercourse-rubric-item-notes">{{notes}}</div>
+          {{/if}}
+          {{#each commentsGroups }}
+            {{> commentsGroup}}
+          {{/each}}
+        </div>
+      </div>
+    </script>
+    
+    <!-- Partial for set of good/needs work/poor comments. -->
+    <script id="rubricItemCommentsTemplate" type="text/template">
+      <div class="cybercourse-rubric-item-comment-set" data-comment-set="{{setId}}">
+        <p class="cybercourse-rubric-item-comment-title">
+          {{set}}
+        </p>
+        {{#each comments}}
+          <p class="cybercourse-rubric-item-comment">{{comment}}</p>
+        {{/each}}
+        {{> newCommentContainer }}
+      </div>
+    </script>
+    
+    <!-- Partial for new comment container. -->
+    <script id="newCommentContainerTemplate" type="text/template">
+      <p class="cybercourse-rubric-item-new-comment-container">
+        <input type="checkbox" 
+          class="cybercourse-rubric-item-new-comment-remember"
+          title="Remember this comment">
+        <textarea class="cybercourse-rubric-item-new-comment-text"
+          title="Custom comment"></textarea>
+      </p>
+    </script>
+    
+    <!-- Wait throbber -->
+    <script id="throbberTemplate" type="text/template">
+      <div id='{{id}}'>
+        {{message}}
+        <div class='ajax-progress ajax-progress-throbber'>
+          <div class='throbber'>&nbsp;</div>
+        </div>
+      </div>
+    </script>
+    
+    
+    <div id="global-wait-message" class="wait-message">
+      Preparing...
+      <div class='ajax-progress ajax-progress-throbber'>
+        <div class='throbber'>&nbsp;</div>
+      </div>
+    </div>
+
+    <!-- Outer north -->
+    <div id="submission-list-pane" class="ui-layout-north">
+      <header>Submission list</header>
+      <div class="pane-content"></div>
+    </div>
+
+    <!-- Outer west -->
+    <div class="ui-layout-west" id="outer-west">
+
+      <div id="model-solution-pane" class="ui-layout-center">
+        <header>Model solution</header>
+        <div class="pane-content"></div>
+      </div>
+
+      <div id="exercise-pane" class="ui-layout-south">
+        <header>Exercise</header>
+        <div class="pane-content"></div>
+      </div>
+      
+    </div>
+
+    <!-- Outer center -->
+    <div class="ui-layout-center" id="outer-center">
+    
+      <div id="submission-pane" class="ui-layout-center">
+        <header>Submission</header>
+        <div class="pane-content"></div>
+      </div>
+
+      <div id="feedback-pane" class="ui-layout-south">
+        <header>Feedback</header>
+        <div class="pane-content">
+          <textarea id="cyco-feedback-editor"></textarea>
+          <p id="send-feedback-button-container">
+            <span id="send-feedback-button" class="button"
+                  title="Send the feedback to the student">Save</span>
+            <span id="exercise-complete">Not complete</span>
+          </p>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Outer east -->
+    <div class="ui-layout-east" id="outer-east">
+      
+      <div id="rubric-pane">
+        <header>Rubric</header>
+        <div class="cyco-rubric-top-controls-container">
+          <span class="button generate-feedback-button above"
+                title="Create feedback message">
+            Create feedback
+          </span>
+          <span class="cyco-exercise-complete-container">
+            <label title="Mark exercise as complete">
+            <input type="checkbox" class="cyco-exercise-complete">
+            Complete</label>
+          </span>
+        </div>
+        <div class="pane-content"></div>
+        <div class="cyco-rubric-top-controls-container">
+          <span class="button generate-feedback-button above"
+                title="Create feedback message">
+            Create feedback
+          </span>
+          <span class="cyco-exercise-complete-container">
+            <label title="Mark exercise as complete">
+            <input type="checkbox" class="cyco-exercise-complete">
+            Complete</label>
+          </span>
+        </div>
+      </div>
+      
+    </div>
+    
+    <script src="lib/jquery-layout/jquery.js"></script>
+    <script src="lib/jquery-layout/jquery-ui.js"></script>
+    <script src="lib/jquery-layout/jquery-layout.js"></script>
+    <!--<script src="lib/mustache.js/mustache.js"></script>-->
+    <script src="lib/handlebars-v1.3.0.js"></script>
+    <script src="lib/jquery.timeago.js"></script>
+    
+    <script>
+      //Mimic the global Drupal object.
+      //Give standard CyCo error handler something to attach.
+      //Also for other things, like the basePath.
+      var Drupal = { behaviors: {}, settings: {} };
+      //Add basePath.
+      Drupal.settings.basePath = window.opener.Drupal.settings.basePath;
+    </script>
+    
+    <script src="../../cybercourse_base/js/cybercourse_base_error_handling.js"></script>
+    
+    <script src="js/app.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/server_data_handling.js"></script>
+    <script src="js/data_models.js"></script>
+    <script src="js/submission_list_view_controller.js"></script>
+    <script src="js/submission_pane_view_controller.js"></script>
+    <script src="js/exercise_pane_view_controller.js"></script>
+    <script src="js/model_solution_view_controller.js"></script>
+    <script src="js/rubric_pane_view_controller.js"></script>
+    <script src="js/feedback_pane_view_controller.js"></script>
+    <script>
+      $(document).ready(function(){
+        app.start();
+      });
+    </script>
+  </body>
+</html>

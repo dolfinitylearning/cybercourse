@@ -42,6 +42,8 @@ function _cyco_finalize_install() {
   _cyco_make_books();
   //Add pages to the main menu.
   _cyco_add_links_main_menu();
+  //Add pages to the footer.
+  _cyco_add_links_footer_menu();
   //Add links to control panel menu. I can't make features do it, 
   //except for cp-author.
   _cyco_add_links_cp_menus();
@@ -54,9 +56,9 @@ function _cyco_finalize_install() {
   //Secondary links source - none.
   variable_set('menu_secondary_links_source', '');
   //Tell extlink to open external targets in a new window.
-  variable_set(' 	extlink_target', '_blank');
+  variable_set('extlink_target', '_blank');
   //Theme stuff
-//  _cyco_theme_stuff();
+  _cyco_theme_stuff();
   
   //Turn off some modules.
   _cyco_disable_modules();
@@ -100,8 +102,15 @@ function _cyco_add_terms_to_content() {
   _cyco_add_term2node(
       'About', 'page', 'field_workflow_tags', $tid
   );
-  
-  
+  _cyco_add_term2node(
+      'Copyright, you, 20xx', 'page', 'field_workflow_tags', $tid
+  );
+  _cyco_add_term2node(
+      'Terms of use', 'page', 'field_workflow_tags', $tid
+  );
+  _cyco_add_term2node(
+      'Credits', 'page', 'field_workflow_tags', $tid
+  );
 }
 
 function _cyco_taxonomy_terms_save_terms($terms, $vocab_name){
@@ -343,6 +352,10 @@ function _cyco_place_blocks() {
       'cybercourse', '', 0, 3);
   _cyco_activate_block('user', 'login', 'sidebar_first',
       'cybercourse', '', 0, 4);
+  _cyco_activate_block('search', 'form', 'sidebar_first',
+      'cybercourse', '', 0, 5);
+  _cyco_activate_block('menu', 'menu-footer', 'footer',
+      'cybercourse', '', 0, 1);
 }
 
 /**
@@ -361,6 +374,15 @@ function _cyco_add_links_main_menu() {
   _cyco_add_menu_item('Welcome', 'page', 'main-menu', 0);
   _cyco_add_menu_item('About', 'page', 'main-menu', 1);
   _cyco_add_menu_item('Help', 'page', 'main-menu', 2);
+}
+
+/**
+ * Add links to the footer menu.
+ */
+function _cyco_add_links_footer_menu() {
+  _cyco_add_menu_item('Copyright, you, 20xx', 'page', 'main-footer', 0);
+  _cyco_add_menu_item('Credits', 'page', 'main-footer', 1);
+  _cyco_add_menu_item('Terms of use', 'page', 'main-footer', 2);
 }
 
 /**
@@ -429,13 +451,9 @@ function _cyco_disable_modules() {
   module_disable( $modules );
 }
 
-//function _cyco_theme_stuff() {
-//  $settings = unserialize(variable_get('theme_cybercourse_settings', NULL));
-//  if ( !is_null($settings) ) {
-//    $settings['bootstrap_bootswatch'] = 'cerulean';
-//  }
-//  variable_set('theme_cybercourse_settings', serialize($settings));
-//}
+function _cyco_theme_stuff() {
+  theme_disable(array('bartik'));
+}
 
 
 function _cyco_add_links_cp_menus() {

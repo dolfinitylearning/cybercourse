@@ -1,0 +1,469 @@
+<?php
+
+/**
+ * Implements hook_menu.
+ */
+function cybercourse_exercise_test_menu() {
+  $items = array();
+  $items['cyco-et1'] = array(
+    'title' => 'Exercise test 1',
+    'page callback' => 'cyco_et1',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et2'] = array(
+    'title' => 'Exercise test 2',
+    'page callback' => 'cyco_et2',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et3'] = array(
+    'title' => 'Exercise test 3',
+    'page callback' => 'cyco_et3',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et4'] = array(
+    'title' => 'Exercise test 4',
+    'page callback' => 'cyco_et4',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et5'] = array(
+    'title' => 'Exercise test 5',
+    'page callback' => 'cyco_et5',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et6'] = array(
+    'title' => 'Exercise test 6',
+    'page callback' => 'cyco_et6',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et7'] = array(
+    'title' => 'Exercise test 7',
+    'page callback' => 'cyco_et7',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et8'] = array(
+    'title' => 'Exercise test 8',
+    'page callback' => 'cyco_et8',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et9'] = array(
+    'title' => 'Exercise test 9',
+    'page callback' => 'cyco_et9',
+    'access callback' => '_cybercourse_exercise_test_access',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et10'] = array(
+    'title' => 'Exercise test 10',
+    'page callback' => 'cyco_et10',
+    'access callback' => '_cybercourse_exercise_test_authenticated_user',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et11'] = array(
+    'title' => 'Exercise test 11',
+    'page callback' => 'cyco_et11',
+    'access callback' => TRUE,
+//    'access callback' => '_cybercourse_exercise_test_authenticated_user',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et12'] = array(
+    'title' => 'Exercise test 12',
+    'page callback' => 'cyco_et12',
+    'access callback' => TRUE,
+//    'access callback' => '_cybercourse_exercise_test_authenticated_user',
+    'type' => MENU_CALLBACK,
+  );
+  $items['cyco-et13'] = array(
+    'title' => 'Exercise test 13',
+    'page callback' => 'cyco_et13',
+    'access callback' => TRUE,
+//    'access callback' => '_cybercourse_exercise_test_authenticated_user',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+//Return true if the user can access tests.
+function _cybercourse_exercise_test_access() {
+  global $user;
+  $admin_key = array_search('administrator', $user->roles);
+  return $admin_key !== FALSE;
+}
+
+//Return true if the user is authenticated.
+function _cybercourse_exercise_test_authenticated_user() {
+  global $user;
+  $key = array_search('authenticated user', $user->roles);
+  return $key !== FALSE;
+}
+
+
+/**
+ * Test function.
+ */
+function cyco_et1() {
+  global $base_url;
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et1.js'
+  );
+  return '<div id="t1"></div>';
+}
+
+/**
+ * Test function.
+ */
+function cyco_et2() {
+  global $base_url;
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et2.js'
+  );
+  return '<div id="t2"></div>';
+}
+
+/**
+ * Test function.
+ */
+function cyco_et3() {
+  drupal_add_library('system', 'ui.dialog');
+  //Load Fancytree.
+  $ftLibraryInfo = libraries_load('fancytree');
+  $numFilesLoaded = libraries_load_files($ftLibraryInfo);
+//return;
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('Error: no Fancytree files loaded. Is Fancytree installed?');
+    watchdog('cybercourse_exercise', $mess);
+    services_error($mess, 666);
+  }
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et3.js'
+  );
+  return '<div id="t3">asdf</div>';
+}
+
+/**
+ * Test function.
+ */
+function cyco_et4() {
+  drupal_add_library('system', 'ui.dialog');
+  //Load Fancytree.
+  $ftLibraryInfo = libraries_load('fancytree');
+  $numFilesLoaded = libraries_load_files($ftLibraryInfo);
+//return;
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('Error: no Fancytree files loaded. Is Fancytree installed?');
+    watchdog('cybercourse_exercise', $mess);
+    services_error($mess, 666);
+  }
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et4.js'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/css/cyco_et4.css'
+  );
+  return '<div id="t4">asdf</div>';
+}
+
+/**
+ * Test function.
+ */
+function cyco_et5() {
+  drupal_add_library('system', 'ui.dialog');
+  //Load Fancytree.
+  $ftLibraryInfo = libraries_load('fancytree');
+  $numFilesLoaded = libraries_load_files($ftLibraryInfo);
+//return;
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('Error: no Fancytree files loaded. Is Fancytree installed?');
+    watchdog('cybercourse_exercise', $mess);
+    services_error($mess, 666);
+  }
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et5.js'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/css/cyco_et5.css'
+  );
+  return '<div id="t5">asdf</div>';
+}
+
+/**
+ * Test function.
+ */
+function cyco_et6() {
+  drupal_add_library('system', 'ui.dialog');
+  //Load Fancytree.
+  $ftLibraryInfo = libraries_load('fancytree');
+  $numFilesLoaded = libraries_load_files($ftLibraryInfo);
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('Error: no Fancytree files loaded. Is Fancytree installed?');
+    watchdog('cybercourse_exercise', $mess);
+    services_error($mess, 666);
+  }
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et6.js'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/css/cyco_et6.css'
+  );
+  $html = theme( 'select_rubric_item' );
+  $html = '<p id="t6">asdf</p>' . $html;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et7() {
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et7.js'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/css/cyco_et7.css'
+  );
+  $html = <<<EOT
+<div id="t7">
+    nid: <input type="text" id="nid"><br>
+    title: <input type="text" id="title"><br>
+    <button id="test">Test</button>
+</div>
+EOT;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et8() {
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et8.js'
+  );
+  $html = <<<EOT
+<div id="t8">
+    nid: <input type="text" id="nid"><br>
+    title: <input type="text" id="title"><br>
+    <button id="test">Test</button>
+</div>
+EOT;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et9() {
+//  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et9.js'
+  );
+  $html = <<<EOT
+<div id="t9">
+  <a href="/node/add/exercise-submission" data-target="popup">Test</a>
+</div>
+EOT;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et10() {
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et10.js'
+  );
+  $html = <<<EOT
+<div id="t10">
+    student uid: <input type="text" id="student"><br>
+    exer nid: <input type="text" id="exercise"><br>
+    <button id="test">Test</button>
+      <p id="loading">Loading...</p>
+</div>
+EOT;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et11($uid = NULL) {
+  if ( is_null($uid) ) {
+    global $user;
+    $uid = $user->uid;
+  }
+  /*
+  $query = db_select('users', 'u');
+  $query
+    ->condition('u.uid', 0, '<>')
+    ->condition('u.status', 1, '=')
+    ->fields('u', array('uid', 'name'))
+    ->join('og_membership', 'ogm', "ogm.gid = :gid AND u.uid = ogm.etid AND ogm.entity_type = 'user'", array(':gid' => $gid));
+  $result = $query->execute();
+  */
+
+  //Get the id of the grader group role.
+  $query = db_select('og_role')
+    ->fields('og_role', array('rid'))
+    ->condition('group_type', 'node')
+    ->condition('group_bundle', 'class')
+    ->condition('name', 'grader');
+  $grader_role_id = $query->execute()->fetchField();
+  
+  //Get the groups the user is a grader in.
+  $query = db_select('og_membership', 'ogm');
+  $query->fields('ogm', array('id', 'gid', 'group_type'))
+    ->condition('entity_type', 'user')
+    ->condition('etid', $uid)
+    ->innerJoin('og_users_roles', 'usersroles', 
+        'usersroles.uid = ' . $uid . ' and ogm.gid = usersroles.gid');
+  $query->condition('usersroles.rid', $grader_role_id);
+  $records = $query
+    ->execute()
+    ->fetchAll();
+  $gids = array();
+  foreach ( $records as $record ) {
+    $gids[] = $record->gid;
+  }
+  
+  //Get all the members of those groups.
+  $query = db_select('og_membership', 'ogm');
+  $query
+      ->distinct()
+      ->fields( 'ogm', array('etid') )
+      ->condition('entity_type', 'user')
+      ->condition('gid', $gids, 'IN');
+  $records = $query->execute()->fetchAll();
+  $users_in_groups = array();
+  foreach( $records as $record ) {
+    $users_in_groups[] = $record->etid;
+  }
+
+  $sql = <<<EOT
+select 
+  submission_node.nid as submission_nid,
+  submission_node.uid as submitter_uid,
+  lastname_table.field_last_name_value as last_name,
+  firstname_table.field_first_name_value as first_name,
+  when_submitted_table.field_when_submitted_value as when_submitted,
+  when_feedback_table.field_when_feedback_given_value as when_feedback_given,
+  exercise_node.nid as exercise_nid,
+  exercise_node.title as exercise_title
+from {node} as submission_node
+/* Grab the submitter's last name. */
+inner join {field_data_field_last_name} as lastname_table on 
+  lastname_table.entity_id = submission_node.uid
+/* Grab the submitter's first name. */
+inner join {field_data_field_first_name} as firstname_table on 
+  firstname_table.entity_id = submission_node.uid
+/* Grab the exericse title. */
+inner join {field_data_field_exercise} as exercise_ref_table on 
+  exercise_ref_table.entity_id = submission_node.nid
+inner join {node} as exercise_node on 
+  exercise_ref_table.field_exercise_target_id = exercise_node.nid
+/* Grab the date submitted for testing. */
+inner join {field_data_field_when_submitted} as when_submitted_table on 
+  when_submitted_table.entity_id = submission_node.nid
+/* Grab the feedback date for testing. */
+left join {field_data_field_when_feedback_given} as when_feedback_table on 
+  when_feedback_table.entity_id = submission_node.nid
+where
+  submission_node.type = 'exercise_submission'
+  and when_submitted_table.field_when_submitted_value is not null
+  and when_feedback_table.field_when_feedback_given_value is null
+order by submission_node.created;
+EOT;
+
+  $records = db_query($sql);
+  $submissions = array();
+  if ( $records ) {
+    while ( $row = $records->fetchAssoc() ) {
+      $submissions[] = $row;
+    }
+  }
+
+  
+  //Get submissions of those users that have been submitted, but there is no
+  //feeedback.
+//  $efq = new EntityFieldQuery();
+//  $efq->entityCondition('entity_type', 'node')
+//    ->entityCondition('bundle', 'exercise_submission')
+//    ->propertyCondition('status', 1)
+//    ->propertyCondition('uid', $users_in_groups, 'in')
+//    ->fieldCondition('field_when_submitted', 'value', '', '<>')
+////    ->fieldCondition('field_when_feedback_given', 'value', '', '=')
+//    ->propertyOrderBy('created');
+//  $result = $efq->execute();
+//  if (isset($result['node'])) {
+//    $submission_nids = array_keys($result['node']);
+//    $submissions = entity_load('node', $submission_nids);
+//  }
+  
+  $html = '';
+  $html .= '<pre>grader role id: ' . $grader_role_id . '</pre>';
+  $html .= '<pre>uid: ' . $uid . '</pre>';
+  $html .= '<pre>groups uid is grader of ' . print_r($gids, TRUE) . '</pre>';
+  $html .= '<pre>groups members ' . print_r($users_in_groups, TRUE) . '</pre>';
+  $html .= '<pre>submissions ' . print_r($submissions, TRUE) . '</pre>';
+
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et12() {
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et12.js'
+  );
+  $html = <<<EOT
+<div id="t12">
+    <button id="test">Test</button>
+      <p id="loading">Loading...</p>
+</div>
+EOT;
+  return $html;
+}
+
+/**
+ * Test function.
+ */
+function cyco_et13() {
+  drupal_add_library('system', 'ui.dialog');
+  drupal_add_js(
+      drupal_get_path('module', 'cybercourse_exercise_test')
+        . '/js/cyco_et13.js'
+  );
+  $html = <<<EOT
+<div id="t13">
+    <input id="subNid" type="text">
+    <button id="test">Test</button>
+      <p id="loading">Loading...</p>
+    <div id="solution"></div>
+</div>
+EOT;
+  return $html;
+}
+

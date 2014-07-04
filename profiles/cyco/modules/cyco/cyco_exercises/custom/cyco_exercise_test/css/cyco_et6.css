@@ -1,0 +1,60 @@
+
+#rubric-select-ui {}
+
+#rubric-select-ui-widget-container {
+  width: 42em;
+  border: 1px solid;
+  padding: 1em;
+  display: table;
+}
+
+#rubric-select-ui-row1,
+#rubric-select-ui-row2 {
+  display: table-row;
+}
+
+#term-tree-container {
+  display: table-cell;
+  width: 20em;
+  max-height: 30em;
+  overflow: scroll;
+}
+
+#filtered-terms-container {
+  display: table-cell;
+  width: 20em;
+  padding-left: 1em;
+  max-height: 30em;
+  overflow: scroll;
+  cursor: pointer;
+}
+
+#filtered-terms-container ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+/* Borders separated out to prevent double inner borders. */
+#filtered-terms-container ul li {
+  border-top: 1px dotted #888;
+  border-left: 1px dotted #888;
+  border-right: 1px dotted #888;
+  padding: 0.2em;
+}
+
+#filtered-terms-container ul:last-child {
+  border-bottom: 1px dotted #888;
+}
+
+.term-tree-ui-mt-cell {
+  display: table-cell;
+}
+
+#rubric-select-buttons-container {
+  display: table-cell;
+  text-align: right;
+}
+
+.rubric-select-selected-item {
+  background-color: #cbe8f6;
+}

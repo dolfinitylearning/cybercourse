@@ -1,0 +1,6 @@
+name = CyberCourse exercise test
+description = Test the CyCo exercise system
+package = CyberCourse
+core = 7.x
+version = 7.1
+dependencies[] = cybercourse_exercise

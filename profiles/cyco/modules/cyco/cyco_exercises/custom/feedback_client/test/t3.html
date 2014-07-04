@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>Handlebars template test.</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../lib/handlebars-v1.3.0.js"></script>
+
+    <script id="rubricItemTemplate" type="text/template">
+      <div class="cybercourse-rubric-item-container">
+        <div class="cybercourse-rubric-item-title">
+          {{title}}
+        </div>
+{{#each commentsSet }}
+        {{> commentsGroup}}
+        {{/each}}
+        {{#notes}}
+          <div class="cybercourse-rubric-item-notes"></div>
+        {{/notes}}
+        </div>
+          
+      </div>
+    </script>
+    
+    <!-- Partial for set of good/needs work/poor comments. -->
+    <script id="rubricItemCommentsTemplate" type="text/template">
+      <div class="cybercourse-rubric-item-comment-set {{set}}-comments">
+        {{#each comments}}
+          <p class="cybercourse-rubric-item-comment {{set}}-comment">{{comment}}</p>
+        {{/each}}
+        <p class="cybercourse-rubric-item-new-comment-container {{set}}-comment">
+          <input type="checkbox" 
+            class="cybercourse-rubric-item-new-comment-remember"
+            title="Remember this comment">
+          <input type="text" class="cybercourse-rubric-item-new-comment"
+            title="New comment">
+        </p>
+      </div>
+    </script>
+    
+    <script>
+      var data = {
+        title: "Is silly",
+        commentsSet: {
+          set: "Good",
+          comments: [
+            { comment: "Very silly" },
+            { comment: "Silly indeed" },
+            { comment: "Oh, so silly!" }
+          ]
+        },
+        commentsSet: {
+          set: "Needs work",
+          comments: [
+            { comment: "Somewhat silly" },
+            { comment: "Could be sillier" }
+          ]
+        },
+        commentsSet: {
+          set: "Poor",
+          comments: [
+            { comment: "Serious" },
+            { comment: "Not silly" }
+          ]
+        },
+        notes:
+          "There are no notes. Nope. None."
+      };
+      
+      $(document).ready(function(){
+        Handlebars.registerPartial("commentsGroup", $("#rubricItemCommentsTemplate").html());
+        var template = Handlebars.compile($("#rubricItemTemplate").html());
+        var result = template(data);
+        $("#t3").html( result );
+      });
+      
+    </script>
+  </head>
+  <body>
+    <h1>DOGS</h1>
+    <div id="t3"></div>
+
+  </body>
+</html>

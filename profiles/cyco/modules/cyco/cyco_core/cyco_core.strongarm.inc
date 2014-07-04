@@ -360,7 +360,8 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'menu_options_page';
   $strongarm->value = array(
-    0 => 'main-menu',
+    0 => 'menu-footer',
+    1 => 'main-menu',
   );
   $export['menu_options_page'] = $strongarm;
 

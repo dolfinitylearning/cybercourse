@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the CyberCourse groups feature.
- */
-
-include_once 'cyco_groups.features.inc';

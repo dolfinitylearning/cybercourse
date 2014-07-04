@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>T1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" 
+          href="../js_lib/jquery-layout/layout-default.css">
+    <link rel="stylesheet" 
+          href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script type="text/javascript" src="../js_lib/jquery-layout/jquery.js"></script>
+    <script type="text/javascript" src="../js_lib/jquery-layout/jquery-ui.js"></script>
+    <script type="text/javascript" src="../js_lib/jquery-layout/jquery-layout.js"></script>
+  </head>
+  <body>
+    <div id="rubric-pane" class="ui-layout-center">
+      <div class="pane-title-container">
+        <h2 class="pane-title"><span 
+            class='button generate-feedback-button' id="generate-feedback">Generate feedback</span>Rubric
+        </h2>
+      </div>
+      <div class="pane-content"></div>
+    </div>
+
+    <div id="submission-list-pane" class="ui-layout-north">
+      <div class="pane-title-container">
+        <h2 class="pane-title">Submission list<span 
+              class='button suggestions-button' 
+              id="suggestions-button">People's suggestions</span></h2>
+      </div>
+      <div class="pane-content">
+        List of student work waiting for grading.
+      </div>
+    </div>
+    
+    <div class="ui-layout-west"  id="outer-west">
+      <div id="exercise-pane" class="ui-layout-north">
+        <div class="pane-title-container">
+          <h2 class="pane-title">Exercise</h2>
+        </div>
+        <div class="pane-content"></div>
+      </div>      
+      <div id="submission-pane" class="ui-layout-center">
+        <div class="pane-title-container">
+          <h2 class="pane-title">Submission</h2>
+        </div>
+        <div class="pane-content">
+        </div>
+      </div>
+    </div>
+    
+    <div class="ui-layout-east">
+      <div id="feedback-pane" class="ui-layout-north">
+        <div class="pane-title-container">
+          <h2 class="pane-title">Feedback</h2>
+        </div>
+        <div class="pane-content">
+          <textarea name="feedbackEditor"></textarea>
+          <p>
+            <span id="send-feedback-button" class="button">Send to Cai</span>
+          </p>
+        </div>
+      </div>
+      <div id="solution-pane" class="ui-layout-center">
+        <div class="pane-title-container">
+          <h2 class="pane-title">Solution</h2>
+        </div>
+        <div class="pane-content">
+          <h3>Correct solution</h3> 
+          <p>Blah blah.</p>
+        </div>
+      </div>
+      
+    </div>
+    <!--    <div class="ui-layout-north">
+      North
+    </div>
+    <div class="ui-layout-west" id="outer-west">
+      <div class="ui-layout-center">
+        Center
+      </div>
+      <div class="ui-layout-south">
+        South
+      </div>
+    </div>
+    <div class="ui-layout-center">
+      Center
+    </div>
+    <div class="ui-layout-east">
+      East
+    </div>-->
+    <script>
+      $(document).ready(function() {
+        $("body").layout();
+        $("#outer-west").layout();
+      });
+    </script>
+  </body>
+</html>

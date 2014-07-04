@@ -1,0 +1,28 @@
+/*#output {
+  display: table;
+  min-width: 55em;
+}*/
+
+.rubric-dialog {
+  min-width: 32em;
+}
+
+#term-tree {
+  display: table-cell;
+  min-width: 15em;
+}
+
+#filtered-terms-container {
+  display: table-cell;
+  min-width: 15em;
+}
+
+#filtered-terms-container ul {
+  list-style-type: none;
+  border: thin solid #888;
+}
+
+#filtered-terms-container ul li {
+  border: thin solid #888;
+  padding: 0.1em;
+}

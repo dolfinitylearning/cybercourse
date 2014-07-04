@@ -90,7 +90,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -42,
+    'weight' => -44,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords
@@ -110,7 +110,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -48,
+    'weight' => -49,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_comments:comments
@@ -130,7 +130,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -43,
+    'weight' => -45,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_courses-and-keywords:courses-and-keywords
@@ -150,7 +150,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -49,
+    'weight' => -50,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_create-a-new-blueprint:node/add/blueprint-page
@@ -323,7 +323,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -41,
+    'weight' => -43,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_list-users:admin/people
@@ -448,7 +448,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -39,
+    'weight' => -41,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_users:admin/people
@@ -468,7 +468,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -40,
+    'weight' => -42,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_workflow-tagged:workflow-tagged
@@ -491,6 +491,161 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -50,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_list-tagged-content:workflow-tagged',
+  );
+  // Exported menu link: menu-cp-graders_blueprints-and-keywords:blueprints-and-keywords
+  $menu_links['menu-cp-graders_blueprints-and-keywords:blueprints-and-keywords'] = array(
+    'menu_name' => 'menu-cp-graders',
+    'link_path' => 'blueprints-and-keywords',
+    'router_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-graders_blueprints-and-keywords:blueprints-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -49,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-graders_courses-and-keywords:courses-and-keywords
+  $menu_links['menu-cp-graders_courses-and-keywords:courses-and-keywords'] = array(
+    'menu_name' => 'menu-cp-graders',
+    'link_path' => 'courses-and-keywords',
+    'router_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-graders_courses-and-keywords:courses-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -50,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-instructors_add-user:admin/people/create
+  $menu_links['menu-cp-instructors_add-user:admin/people/create'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'admin/people/create',
+    'router_path' => 'admin/people/create',
+    'link_title' => 'Add user',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_add-user:admin/people/create',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 1,
+    'customized' => 0,
+    'parent_identifier' => 'menu-cp-instructors_users:admin/people',
+  );
+  // Exported menu link: menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords
+  $menu_links['menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'blueprints-and-keywords',
+    'router_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_blueprints-and-keywords:blueprints-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -49,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-instructors_courses-and-keywords:courses-and-keywords
+  $menu_links['menu-cp-instructors_courses-and-keywords:courses-and-keywords'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'courses-and-keywords',
+    'router_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_courses-and-keywords:courses-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -50,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-instructors_list-users:admin/people
+  $menu_links['menu-cp-instructors_list-users:admin/people'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'admin/people',
+    'router_path' => 'admin/people',
+    'link_title' => 'List users',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_list-users:admin/people',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 0,
+    'customized' => 0,
+    'parent_identifier' => 'menu-cp-instructors_users:admin/people',
+  );
+  // Exported menu link: menu-cp-instructors_users:admin/people
+  $menu_links['menu-cp-instructors_users:admin/people'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'admin/people',
+    'router_path' => 'admin/people',
+    'link_title' => 'Users',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_users:admin/people',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 1,
+    'expanded' => 0,
+    'weight' => -45,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords
+  $menu_links['menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'blueprints-and-keywords',
+    'router_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 1,
+    'customized' => 0,
+  );
+  // Exported menu link: menu-cp-reviewers_courses-and-keywords:courses-and-keywords
+  $menu_links['menu-cp-reviewers_courses-and-keywords:courses-and-keywords'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'courses-and-keywords',
+    'router_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_courses-and-keywords:courses-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 0,
+    'customized' => 0,
   );
   // Translatables
   // Included for use with string extractors like potx.

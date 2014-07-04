@@ -39,13 +39,35 @@ function cyco_core_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_attachments'
-  $field_bases['field_attachments'] = array(
+  // Exported field_base: 'field_about'
+  $field_bases['field_about'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
+    'field_name' => 'field_about',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'foreign keys' => array(),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'swim',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'swim_field',
+  );
+
+  // Exported field_base: 'field_attachments'
+  $field_bases['field_attachments'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
     'field_name' => 'field_attachments',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(
       'fid' => array(
         'columns' => array(
@@ -111,6 +133,9 @@ function cyco_core_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_body',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
@@ -120,6 +145,38 @@ function cyco_core_field_default_field_bases() {
     'type' => 'swim_with_summary_field',
   );
 
+  // Exported field_base: 'field_first_name'
+  $field_bases['field_first_name'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_first_name',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_images'
   $field_bases['field_images'] = array(
     'active' => 1,
@@ -127,6 +184,9 @@ function cyco_core_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_images',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(
       'fid' => array(
         'columns' => array(
@@ -182,6 +242,38 @@ function cyco_core_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
+  );
+
+  // Exported field_base: 'field_last_name'
+  $field_bases['field_last_name'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_last_name',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
   );
 
   // Exported field_base: 'field_short_title'

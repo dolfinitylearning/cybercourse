@@ -253,15 +253,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'administer fieldgroups'.
-  $permissions['administer fieldgroups'] = array(
-    'name' => 'administer fieldgroups',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'field_group',
-  );
-
   // Exported permission: 'administer filters'.
   $permissions['administer filters'] = array(
     'name' => 'administer filters',
@@ -1091,6 +1082,13 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'shortcut',
+  );
+
+  // Exported permission: 'use PHP for label patterns'.
+  $permissions['use PHP for label patterns'] = array(
+    'name' => 'use PHP for label patterns',
+    'roles' => array(),
+    'module' => 'auto_entitylabel',
   );
 
   // Exported permission: 'use advanced search'.

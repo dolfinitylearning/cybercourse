@@ -964,14 +964,120 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_about'
+  $field_instances['user-user-field_about'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'About you.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'swim',
+        'settings' => array(),
+        'type' => 'swim_default_formatter',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_about',
+    'label' => 'About',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 1,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'swim',
+      'settings' => array(),
+      'type' => 'swim_widget',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_first_name'
+  $field_instances['user-user-field_first_name'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'What is your first name (e.g., Willow)?<br>
+<br>
+You can leave it blank, although your instructor might require it.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_first_name',
+    'label' => 'First name',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 1,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_last_name'
+  $field_instances['user-user-field_last_name'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'What is your last name (e.g., Rosenberg)?<br>
+<br>
+You can leave it blank, although your instructor might require it.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_last_name',
+    'label' => 'Last name',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 1,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
+  t('About');
+  t('About you.');
   t('Attachments');
   t('Blueprint keywords');
   t('Body');
   t('Comment');
   t('Files attached to this page.');
   t('Files for this page.');
+  t('First name');
   t('Images');
   t('Images for this page.');
   t('Images for your content.');
@@ -979,10 +1085,17 @@ function cyco_core_field_default_field_instances() {
   t('Keywords');
   t('Keywords describing this page.');
   t('Keywords relevant to course design. Shown in the blueprint only.');
+  t('Last name');
   t('Page content.');
   t('Short title');
   t('Tasks for this page.');
   t('Title used in tree menus. If blank, the full title will be used.');
+  t('What is your first name (e.g., Willow)?<br>
+<br>
+You can leave it blank, although your instructor might require it.');
+  t('What is your last name (e.g., Rosenberg)?<br>
+<br>
+You can leave it blank, although your instructor might require it.');
   t('What work needs to be done on this page?');
   t('Workflow tags');
 

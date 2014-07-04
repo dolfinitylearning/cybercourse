@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <title>Mustache template test.</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../lib/jquery-layout/jquery.js"></script>
+    <script src="../lib/mustache.js/mustache.js"></script>
+    <script>
+      $(document).ready(function(){
+        t1();
+        t2();
+        t3();
+      });
+      
+      function t1() {
+        var template = $("#personTpl").html();
+        var data = {
+          firstName: 'Oscar',
+          lastName: 'Dog',
+          blogURL: "http://google.com"
+        };
+        var result = Mustache.render(template, data);
+        $("#t1").html(result);
+      }
+      
+      function t2() {
+        var data = {dogs: [
+            {name:"Oscar"}, 
+            {name:"Renata"}
+          ]};
+        var template = $("#dogs2").html();
+        var result = Mustache.render(template, data);
+        $("#t2").html(result);
+      }
+
+      function t3() {
+        var data = {dogs: [
+            {
+              name:"Oscar",
+              favorites: [
+                { favorite: "Food" },
+                { favorite: "Walking" },
+                { favorite: "Barking" }
+               ]
+            }, 
+            {
+              name:"Renata",
+              favorites: [
+                { favorite: "Food" },
+                { favorite: "Balls" },
+                { favorite: "Wriggling" }
+              ]
+            },
+            {
+              name:"Max",
+              favorites: []
+            }
+          ]};
+        var template = $("#dogs3").html();
+        var result = Mustache.render(template, data);
+        $("#t3").html(result);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>DOGS</h1>
+    
+    <h2>Test 1</h2>
+    <div id="t1"></div>
+    <script id="personTpl" type="text/template">
+    <h3>{{firstName}} {{lastName}}</h3>
+    <p>Blog URL: <a href="{{blogURL}}">{{blogURL}}</a></p>
+    </script>
+
+    <h2>Test 2</h2>
+    <div id="t2"></div>    
+    <script id="dogs2" type="text/template">
+    <h3>Dogs</h3>
+    {{#dogs}}
+      <p>{{name}}</p>
+    {{/dogs}}
+    </script>  
+    
+    <h2>Test 3</h2>
+    <div id="t3"></div>    
+    <script id="dogs3" type="text/template">
+    <h3>Dogs</h3>
+    {{#dogs}}
+      <h4>{{name}}</h4>
+      {{#favorites.length}}
+        <p>Favorites</p>
+        <ul>
+      {{#favorites}}
+          <li>{{favorite}}</li>
+      {{/favorites}}
+        </ul>
+      {{/favorites.length}}
+    {{/dogs}}
+    </script>  
+
+  </body>
+</html>

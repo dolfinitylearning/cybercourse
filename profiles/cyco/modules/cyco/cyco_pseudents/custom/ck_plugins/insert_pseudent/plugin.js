@@ -1,7 +1,6 @@
 /**
  * CK plugin to insert a pseudent into a SWIM editor's content.
  */
-
 (function ($) {
   CKEDITOR.plugins.add('insert_pseudent', {
     requires: 'widget',
@@ -107,7 +106,7 @@
         this.document.appendStyleSheet( Drupal.settings.pseudents.poseStylesheetEdit );
       });
 
-      editor.ui.addButton( 'Pseudent', {
+      editor.ui.addButton( 'insert_pseudent', {
           label: 'Insert a pseudent',
           command: 'insert_pseudent',
           state: CKEDITOR.TRISTATE_ENABLED,

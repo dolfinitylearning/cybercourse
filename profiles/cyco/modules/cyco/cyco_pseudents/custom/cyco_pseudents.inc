@@ -517,3 +517,28 @@ function cyco_pseudents_node_view($node, $view_mode, $langcode) {
     }
   }
 }
+
+/**
+ * Implements hook_ckeditor_plugin().
+ * @return array Definitions.
+ */
+function cyco_pseudents_ckeditor_plugin() {
+  $definition = 
+    array(
+      'pseudents' => array(
+        // Plugin name.
+        'name' => 'Pseudents',
+        // Plugin description.
+        'desc' => t('Add a pseudent.'),
+        // The full path to the CKEditor plugin directory, trailing slash included.
+        'path' => drupal_get_path('module', 'cyco_pseudents') 
+                  . '/custom/ck_plugins/insert_pseudent/',
+        // Plugin buttons definition (optional).
+//        'buttons' => array(
+//           'button_name' => array('label' => 'Button label', 'icon' => '/path/to/icon/image'),
+//           'button_name' => array('label' => 'Button label', 'icon' => '/path/to/icon/image'),
+//        )
+         )
+    );
+  return $definition;
+}
