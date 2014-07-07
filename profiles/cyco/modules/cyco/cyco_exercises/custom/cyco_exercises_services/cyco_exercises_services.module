@@ -1,0 +1,1343 @@
+<?php
+
+//Greeting to use when the grader did not give one.
+define( 'CYCO_EXER_GENERIC_GREETING', 'Your feedback:' );
+
+
+/**
+* Implements hook_init().
+*/
+function cyco_exercises_services_init() {
+  
+}
+
+/**
+* Implements hook_services_resources().
+*/
+function cyco_exercises_services_resources() {
+  $api = array(
+    
+    /** Rubric item **/
+    'rubric_item' => _cyco_exercises_def_rubric_item_services(),
+    
+    /** Exercise **/
+    'exercise' => _cyco_exercises_def_exercise_services(),
+    
+    /** Rubic item categories **/
+    'rubric_item_categories' => _cyco_exercises_def_category_services(),
+    
+    /** Exercise submission. **/
+    'submission' => _cyco_exercises_def_sub_meta_services(),
+    
+    /** Feedback system. **/
+    'feedback' => _cyco_exercises_def_feedback_services(),
+      
+  );
+  return $api;
+}
+
+
+function _cyco_exercises_def_rubric_item_services() {
+  
+  $retrieve = array(
+    'help' => 'Retrieves a rubric item',
+    'callback' => '_exri_retrieve',
+    'access callback' => '_exri_access',
+    'access arguments' => array('view'),
+    'access arguments append' => TRUE,
+    'args' => array(
+      array(
+        'name' => 'id',
+        'type' => 'int',
+        'description' => 'The id of the rubric item to get',
+        'source' => array('path' => '0'),
+        'optional' => FALSE,
+      ),
+    ),
+  );
+  $create = array(
+    'help' => 'Creates a rubric item',
+    'callback' => '_exri_create',
+    'access callback' => '_exri_access',
+    'access arguments' => array('create'),
+    'access arguments append' => FALSE,
+    'args' => array(
+      array(
+        'name' => 'data',
+        'type' => 'struct',
+        'description' => 'The rubric item object',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+    ),
+  );
+  $update = array(
+    'help' => 'Updates a rubric item',
+    'callback' => '_exri_update',
+    'access callback' => '_exri_access',
+    'access arguments' => array('update'),
+    'access arguments append' => TRUE,
+    'args' => array(
+      array(
+        'name' => 'id',
+        'type' => 'int',
+        'description' => 'The id of the rubric item to update',
+        'source' => array('path' => '0'),
+        'optional' => FALSE,
+      ),
+      array(
+        'name' => 'data',
+        'type' => 'struct',
+        'description' => 'The rubric item data object',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+    ),
+  );
+  $delete = array(
+    'help' => 'Deletes a rubric item',
+    'callback' => '_exri_delete',
+    'access callback' => '_exri_access',
+    'access arguments' => array('delete'),
+    'access arguments append' => TRUE,
+    'args' => array(
+      array(
+        'name' => 'nid',
+        'type' => 'int',
+        'description' => 'The id of the rubric item to delete',
+        'source' => array('path' => '0'),
+        'optional' => FALSE,
+      ),
+    ),
+  );
+  $index = array(
+    'help' => 'Retrieves a listing of rubric items',
+    'callback' => '_exri_index',
+    'access callback' => '_exri_access',
+    'access arguments' => array('access content'),
+    'access arguments append' => FALSE,
+    'args' => array(
+      array(
+        'name' => 'page',
+        'type' => 'int',
+        'description' => '',
+        'source' => array(
+          'param' => 'page',
+        ),
+        'optional' => TRUE,
+        'default value' => 0,
+      ),
+      array(
+        'name' => 'parameters',
+        'type' => 'array',
+        'description' => '',
+        'source' => 'param',
+        'optional' => TRUE,
+        'default value' => array(),
+      ),
+    ),
+  );
+  $actions = array(
+    //For rubric select interface on exercise forms.
+    'getTitlesCategories' => array(
+      'help' => 'Get all rubric item titles and their categories',
+      'callback' => '_exri_titles_cats',
+      'access callback' => '_exri_access',
+      'access arguments' => array('access content'),
+      'access arguments append' => TRUE,
+    ),
+    //Check that a title is OK.
+    'chkTtl' => array(
+      'help' => 'Check that a title doesn\'t conflict with an existing one',
+      'callback' => '_exri_check_title',
+      'access callback' => '_exri_access',
+      'access arguments' => array('access content'),
+      'access arguments append' => TRUE,
+       'args' => array(
+         array(
+          'name' => 'data',
+          'type' => 'struct',
+          'description' => 'The nid and title',
+          'source' => 'data',
+          'optional' => FALSE,
+        ),
+//         array(
+//           'name' => 'nid',
+//           'type' => 'int',
+//           'description' => 'A node id',
+//           'source' => array('path' => '0'),
+//           'optional' => FALSE,
+//         ),
+//         array(
+//           'name' => 'title',
+//           'type' => 'struct',
+//           'description' => 'A title for the rubtic item',
+//           'source' => 'data',  //array('data' => 'title'),
+//           'optional' => FALSE,
+//         ),
+       ),
+
+    ),
+  );
+  $api = array(
+   'operations' => array(
+     'retrieve' => $retrieve,
+     'create' => $create,
+     'update' => $update,
+     'delete' => $delete,
+     'index' => $index,
+    ),
+    'actions' => $actions,
+  );
+  return $api;
+}
+
+
+function _cyco_exercises_def_exercise_services() {
+  $api = array(
+      'operations' => array(
+       'retrieve' => array(
+         'help' => 'Retrieves an exercise',
+         'callback' => '_exex_retrieve',
+         'access callback' => '_exex_access',
+         'access arguments' => array('view'),
+         'access arguments append' => TRUE,
+         'args' => array(
+           array(
+             'name' => 'id',
+             'type' => 'int',
+             'description' => 'The id of the exercise to get',
+             'source' => array('path' => '0'),
+             'optional' => FALSE,
+           ),
+         ),
+       ),
+     ),
+    ); // End exercise
+  return $api;
+}
+
+
+function _cyco_exercises_def_category_services() {
+  $api = array(
+      'actions' => array(
+        'getTree' => array(
+          'help'   => t('Returns a full list of taxonomy terms.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_tree',
+        ),
+      ),
+    ); //End rubric_item_categories
+  return $api;
+}
+
+/**
+ * Define API for client asking server for metadata about one student's
+ * submissions for one exercise.
+ * @return array Definition.
+ */
+function _cyco_exercises_def_sub_meta_services() {
+  $api = array(
+      'actions' => array(
+        'getSubmissionMetaStudentExer' => array(
+          'help' => 
+            t('Returns a list of one student\'s submissions for one exercise .'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_sub_meta_student_exer',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'The student\'s uid and exercise nid',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End getSubmissionMetaStudentExer
+      ),
+    ); //End rubric_item_categories
+  return $api;
+}
+
+/********************************************
+* Rubric items
+*********************************************/
+
+/**
+ * Check user access to rubric items. Called during Ajax.
+ * @global stdCls $user Current user.
+ * @param string $operation What to do, e.g., view, edit, delete.
+ * @param array $args Arguments passed in.
+ * @return boolean True if access allowed, else false.
+ */
+function _exri_access($operation, $args) {
+  return TRUE;
+  global $user;
+  $access = FALSE;
+  $nid = $args[0];
+  $node = node_load($nid);
+  $access = node_access($operation, $node);
+  return $access;
+  switch ($operation) {
+    case 'view':
+      //View access check depends on content_access module.
+      $access = user_access('view any rubric_item content');
+      $access = $access 
+          || ( $node->uid == $user->uid && user_access('view own rubric item') );
+      break;
+    case 'update':
+      $access = user_access('edit any rubric item');
+      $access = $access 
+          || ( $node->uid == $user->uid && user_access('edit own rubric item') );
+      break;
+    case 'delete':
+      $note = noteresource_get_note($args[0]);
+      $access = user_access('delete any rubric item');
+      $access = $access 
+          || $note->uid == $user->uid && user_access('delete own rubric item');
+      break;
+  }
+  return $access;
+}
+
+/**
+ * Retrieve a rubric item.
+ * @param int $nid Node id.
+ * @return \stdClass Item.
+ */
+function _exri_retrieve( $nid ){
+  //Load the node.
+  $node = node_load($nid);
+  if ( ! $node || $node->type != 'rubric_item') {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Cannot load node: ' . $nid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $rubric_item = new stdClass();
+  $rubric_item->nid = $nid;
+  //Put title in result.
+  $rubric_item->title = $node->title;
+  //Put notes in result, if there are any.
+  $rubric_item->notes = '';
+  if ( isset( $node->field_body[LANGUAGE_NONE][0]['pure_rest'] ) ) {
+    $rubric_item->notes = $node->field_body[LANGUAGE_NONE][0]['pure_rest'];
+  }
+  //Put the categories (a vocab) into the results.
+  $rubric_item->termsChecked = array();
+  if ( isset( $node->field_categories[LANGUAGE_NONE][0]['tid'] ) ) {
+    foreach ( $node->field_categories[LANGUAGE_NONE] as $key => $value ) {
+      $tid = $value['tid'];
+      $rubric_item->termsChecked[] = $tid;
+    }
+  }
+  //Put the good phrases into the results.
+  $rubric_item->phrasesGood = array();
+  if ( isset( $node->field_feedback_good[LANGUAGE_NONE][0]['value'] ) ) {
+    foreach ( $node->field_feedback_good[LANGUAGE_NONE] as $key => $value ) {
+      $tid = $value['value'];
+      $rubric_item->phrasesGood[] = $tid;
+    }
+  }
+  //Put the needs_work phrases into the results.
+  $rubric_item->phrasesNeedsWork = array();
+  if ( isset( $node->field_feedback_needs_work[LANGUAGE_NONE][0]['value'] ) ) {
+    foreach ( $node->field_feedback_needs_work[LANGUAGE_NONE] as $key => $value ) {
+      $tid = $value['value'];
+      $rubric_item->phrasesNeedsWork[] = $tid;
+    }
+  }  
+  //Put the poor phrases into the results.
+  $rubric_item->phrasesPoor = array();
+  if ( isset( $node->field_feedback_poor[LANGUAGE_NONE][0]['value'] ) ) {
+    foreach ( $node->field_feedback_poor[LANGUAGE_NONE] as $key => $value ) {
+      $tid = $value['value'];
+      $rubric_item->phrasesPoor[] = $tid;
+    }
+  }
+  return $rubric_item;
+}
+
+/**
+ * Create a new rubric item.
+ * @param array $data Data from client about the rubric item.
+ */
+function _exri_create($data){
+  global $user;
+  $node = new stdClass();
+  $node->title = $data['title'];
+  $node->type = 'rubric_item';
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->uid = $user->uid;
+  $node->status = 1; 
+  $node->promote = 0;
+  $node->comment = 0; // 0 = comments disabled, 1 = read only, 2 = read/write
+  if ( $data['notes'] ) {
+    $node->field_body[LANGUAGE_NONE][0]['pure_rest'] = $data['notes'];
+  }
+  else {
+    $node->field_body = array();
+  }
+  $node->field_categories = 
+       _cyco_exer_move_arr_into_node( $data['termsChecked'], 'tid');
+  $node->field_feedback_good = 
+      _cyco_exer_move_arr_into_node($data['phrasesGood'], 'value');
+  $node->field_feedback_needs_work = 
+      _cyco_exer_move_arr_into_node($data['phrasesNeedsWork'], 'value');
+  $node->field_feedback_poor = 
+      _cyco_exer_move_arr_into_node($data['phrasesPoor'], 'value');
+
+  $node = node_submit($node); // Prepare node for saving
+  node_save($node);  
+  $result = new stdClass();
+  $result->operation = 'create';
+  $result->nid = $node->nid;
+  $result->status = 'OK';
+  return $result;
+
+}
+
+function _exri_update($nid, $data){
+  //Load the node, check it is there.
+  $node = node_load( $nid );
+  $node->title = $data['title'];
+  if ( $data['notes'] ) {
+    $node->field_body[LANGUAGE_NONE][0]['pure_rest'] = $data['notes'];
+  }
+  else {
+    $node->field_body = array();
+  }
+  $node->field_categories = 
+       _cyco_exer_move_arr_into_node( $data['termsChecked'], 'tid');
+  $node->field_feedback_good = 
+      _cyco_exer_move_arr_into_node($data['phrasesGood'], 'value');
+  $node->field_feedback_needs_work = 
+      _cyco_exer_move_arr_into_node($data['phrasesNeedsWork'], 'value');
+  $node->field_feedback_poor = 
+      _cyco_exer_move_arr_into_node($data['phrasesPoor'], 'value');
+//  $node->field_feedback_good[LANGUAGE_NONE][0]['value'];
+//  $node->field_feedback_needs_work[LANGUAGE_NONE][0]['value'];
+//  $node->field_feedback_poor[LANGUAGE_NONE][0]['value']; 
+  node_save($node);
+  $result = new stdClass();
+  $result->operation = 'update';
+  $result->nid = $nid;
+  $result->status = 'OK';
+  return $result;
+}
+
+/**
+ * Restructure data from flat array into structure used in multivalued
+ * Drupal fields.
+ * @param type $source Data to restructure.
+ * @param type $inner_key Key to use to store data in field elements. 
+ * @return array Data structured as values on a node's field.
+ */
+function _cyco_exer_move_arr_into_node( $source, $inner_key ) {
+  $result = array();
+  if ( sizeof($source) > 0 ) {
+    for ( $i = 0; $i < sizeof($source); $i++) {
+      $result[LANGUAGE_NONE][$i][$inner_key] = $source[$i];
+    }
+  }
+  return $result;
+}
+
+function _exri_delete(){}
+
+function _exri_index(){}
+
+/**
+ * Return all rubric item titles and their categories.
+ */
+function _exri_titles_cats() {
+  //Get all the nids of the published rubric items.
+  $query = new EntityFieldQuery;
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'rubric_item')
+    ->propertyCondition('status', 1)
+    ->propertyOrderBy('title');
+  $query_result = $query->execute();
+  //Create the pseudent HTML.
+  $nids = array();
+  foreach ( $query_result['node'] as $nid => $value ) {  
+    $nids[] = $nid;
+  }
+  $nodes = node_load_multiple($nids);
+  $result = array();
+  foreach ( $nodes as $node ) {
+    $nid = intval( $node->nid );
+    $title = $node->title;
+    $categories = array();
+    if ( isset($node->field_categories[LANGUAGE_NONE]) ) {
+      foreach ( $node->field_categories[LANGUAGE_NONE] as $key => $tid ) {
+        $categories[] = intval($tid['tid']);
+      }
+    }
+    $result[] = array(
+      'nid' => $nid,
+      'title' => $title,
+      'categories' => $categories,
+    );
+  }
+  return $result;
+}
+
+/********************************************
+* Rubric item categories
+*********************************************/
+
+
+function _exric_access() {
+  return TRUE;
+}
+
+function _exric_retrieve( $tid ){
+  $thing = new stdClass();
+  $thing->heads = 7;
+  return $thing;
+//  return json_encode($thing);
+  
+  $node = node_load($nid);
+  if ( ! $node || $node->type != 'rubric_item') {
+    cybercourse_base_handle_services_error('Not a rubric item');
+    return;
+  }
+  $rubric_item = new stdClass();
+  $rubric_item->type = $node->type;
+  $rubric_item->title = $node->title;
+  $rubric_item->body = $node->body[LANGUAGE_NONE][0]['value'];
+  return  $rubric_item;
+}
+
+/**
+ * Return terms from the rubric item categories vocab.
+ */
+function _exric_index() {
+  $rubric_item_tree = new stdClass();
+  $rubric_item_tree->type = 'evil';
+  return $rubric_item_tree;  
+}
+
+/**
+ * Check user access to exercises. Called during Ajax.
+ * @global stdCls $user Current user.
+ * @param string $operation What to do, e.g., view, edit, delete.
+ * @param array $args Arguments passed in.
+ * @return boolean True if access allowed, else false.
+ */
+function _exex_access($operation, $args) {
+  global $user;
+  $access = FALSE;
+  $nid = $args[0];
+  $node = node_load($nid);
+  switch ($operation) {
+    case 'view':
+      //View access check depends on content_access module.
+      $access = user_access('view any exercise');
+      $access = $access 
+          || ( $node->uid == $user->uid && user_access('view own exercise') );
+      break;
+    case 'update':
+      $access = user_access('edit any exercise');
+      $access = $access 
+          || ( $node->uid == $user->uid && user_access('edit own exercise') );
+      break;
+    case 'delete':
+      $note = noteresource_get_note($args[0]);
+      $access = user_access('delete any exercise');
+      $access = $access 
+          || $note->uid == $user->uid && user_access('delete own exercise');
+      break;
+  }
+  return $access;
+}
+
+function _exex_retrieve(){}
+
+function _exex_create(){}
+
+function _exex_update(){}
+
+function _exex_delete(){}
+
+function _exex_index(){}
+
+/**
+ * Get the rubric item vocabulary.
+ * @return \stdClass The vocab.
+ */
+function _cycoex_get_tree() {
+  //Get the vid of the Feedback items categoes vocab.
+  $vocab = taxonomy_vocabulary_machine_name_load('rubric_item_categories');
+  if ( $vocab === FALSE ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Cannot find vocab rubric_item_categories.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $terms = taxonomy_get_tree($vocab->vid);
+  $tree = array();
+  foreach ( $terms as $term ) {
+    $term_data = new stdClass();
+    $term_data->tid = intval($term->tid);
+    $term_data->title = $term->name;
+    $term_data->parent_tid = intval($term->parents[0]);
+    $tree[] = $term_data;
+  }
+  return $tree;
+}
+
+function _cycoex_attach_2_parent( $tree, $child, $parent_id ) {
+  
+}
+
+/**
+ * Check whether a title is in use for a rubric item.
+ * @param integer $nid_to_check Node id. 0 for new node.
+ * @param string $title_to_check Title to check.
+ * @return \stdClass Result send to client.
+ */
+function _exri_check_title( $data ) {
+  if ( !isset($data['nid']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' nid missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  if ( !isset($data['title']) || strlen($data['title']) == 0 ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Title missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $nid_to_check = $data['nid'];
+  $title_to_check = $data['title'];
+  $title_to_check = trim($title_to_check);
+  if ( ! is_numeric($nid_to_check) || $nid_to_check < -1 ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Invalid nid: ' . $nid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  //Find a rubric with that title.
+  $query = new EntityFieldQuery;
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'rubric_item')
+    ->propertyCondition('status', 1)
+    ->propertyCondition('title', $title_to_check);
+  $query_result = $query->execute();
+  //Move data into an array.
+  $result_nids = array();
+  foreach ( $query_result['node'] as $result_nid => $value ) {  
+    $result_nids[] = $result_nid;
+  }
+  $warn_user = TRUE;
+  if ( sizeof($result_nids) == 0 ) {
+    //Unique title.
+    $warn_user = FALSE;
+  }
+  else if ( sizeof($result_nids) == 1 ) {
+    if ( $result_nids[0] == $nid_to_check ) {
+      //Title hasn't changed for the item.
+      $warn_user = FALSE;
+    }
+    else {
+      $warn_user = TRUE;
+    }
+  } 
+  else {
+    $warn_user = TRUE;
+  }
+  //Does the user need a warning about the title?
+  $result = new stdClass();
+  $result->warn = $warn_user;
+  return $result;
+}
+
+/**
+ * Get metadata about one student's submissions for one exercise.
+ * Uid in request must match logged in user, or the logged in user
+ * must have special priveleges.
+ * Dates are ISO8601.
+ * @return \stdClass
+ */
+function _cycoex_get_sub_meta_student_exer( $data ) {
+  //Get params.
+  if ( !isset($data['student']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' student uid missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  if ( !isset($data['exercise']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' exercise nid missing missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $student_uid = $data['student'];
+  $exercise_nid = $data['exercise'];
+  //Check user has permission.
+  $permission = FALSE;
+  global $user;
+  if ( $student_uid == $user->uid ) {
+    $permission = TRUE;
+  }
+  else if ( cybercourse_base_current_user_has_role( 
+            array('administrator', 'instructor', 'grader') ) 
+          ) {
+    $permission = TRUE;
+  }
+  if ( ! $permission ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Cannot load submissions. Exercise: ' . $exercise_nid 
+        . ' User: ' . $student_uid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  //Run the view.
+  $view = views_get_view('submission_metadata_for_student_exercise');
+  $view->set_arguments(array( $student_uid, $exercise_nid, ));
+  $view->execute();
+  if ( ! $view->executed ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Cannot run submission metadata view. Exercise:' . $exercise_nid 
+        . ' user ' . $student_uid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $view_results = $view->result;
+  $submissions = array();
+  foreach( $view_results as $view_result ) {
+    $submisson = array();
+    $submisson['nid'] = $view_result->nid;
+    $submisson['version'] = $view_result->field_field_version[0]['raw']['value'];
+    $submisson['whenCreated'] = cybercourse_base_timestamp_to_iso6801(
+        $view_result->node_created
+    );
+    $submisson['whenSubmitted'] = 
+        isset( $view_result->field_field_when_submitted[0] )
+        ? $view_result->field_field_when_submitted[0]['raw']['value']
+        : '';
+    $submisson['whenFeedbackGiven'] = 
+        isset( $view_result->field_field_when_feedback_given[0] )
+        ? $view_result->field_field_when_feedback_given[0]['raw']['value']
+        : '';
+    $submisson['complete'] = 
+        $view_result->field_field_complete[0]['raw']['value'];
+    $submissions[] = $submisson;
+  }
+  return $submissions;
+}
+
+function _cyco_exercises_def_feedback_services() {
+  $api = array(
+      'actions' => array(
+        'getGraderSubmissionsNeedingFeedback' => array(
+          'help' => t('Returns a list of submissions needing feedback from the current user.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_grader_sub_need_feedback',
+        ),
+        'getSubmissionRendered' => array(
+          'help' => 
+            t('Returns a submission, rendered, ready for display.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_sub_rendered',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Submission id.',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End getSubmissionRendered
+        'getExerciseRendered' => array(
+          'help' => 
+            t('Returns an exercise and its model solution, ready for display.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_exercise_rendered',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Exercise id.',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End getExerciseRendered
+        'getRubricItems' => array(
+          'help' => 
+            t('Returns rubric items in list.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_get_rubric_items',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Rubric ids.',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End getRubricItems
+        'makeFeedbackMessage' => array(
+          'help' => 
+            t('Returns a feedback message from grading data.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_make_feedback_message',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Feedback data.',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End makeFeedbackMessage
+        'saveFeedback' => array(
+          'help' => 
+            t('Saves feedback.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cycoex_save_feedback',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Feedback data.',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End saveFeedback
+      ),
+    ); //End rubric_item_categories
+  return $api;
+}
+
+/**
+ * Get the submissions ready for the current user to grade.
+ * @return array Submission data.
+ */
+function _cycoex_get_grader_sub_need_feedback() {
+  $submissions = cyco_exercises_get_submissions_to_grade();
+  return $submissions;
+}
+
+/**
+ * Get rendered body of submission, plus file attachment data.
+ * @param array $data Parameters passed from client.
+ * @return array Da goods.
+ */
+function _cycoex_get_sub_rendered( $data ) {
+  //Get a submission, return it rendered.
+  //Get params.
+  if ( !isset($data['sub_nid']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' sub_nid missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $sub_nid = $data['sub_nid'];
+  $submission = node_load($sub_nid);
+  if ( ! $submission ){
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' could not load submission for nid=' . $sub_nid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $solution = $submission->field_solution[LANGUAGE_NONE][0]['pure_rest'];
+  $solution_rendered = swim_rest2html($solution);
+  //Are there attachments?
+  if ( isset( $submission->field_attachments[LANGUAGE_NONE][0] ) ) {
+    $attached_files = _cyco_exercises_package_attachment_data(
+        $submission->field_attachments
+    );
+  }
+  $result = array(
+    'status' => 'ok',
+    'rendered' => $solution_rendered,
+  );
+  if ( isset( $attached_files ) ) {
+    $result['attachments'] = $attached_files;
+  }
+  return $result;
+}
+
+/**
+ * Get rendered body of exercise, plus file attachment data.
+ * Same for the model solution.
+ * @param array $data Parameters passed from client.
+ * @return array Da goods.
+ */
+function _cycoex_get_exercise_rendered( $data ) {
+  //Get a submission, return it rendered.
+  //Get params.
+  if ( !isset($data['exer_nid']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' exer_nid missing.';
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $exer_nid = $data['exer_nid'];
+  $exercise = node_load($exer_nid);
+  if ( ! $exercise ){
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' could not load exercise for nid=' . $exer_nid;
+    cybercourse_base_handle_services_error( $message );
+    return;
+  }
+  $body = $exercise->field_body[LANGUAGE_NONE][0]['pure_rest'];
+  $body_rendered = swim_rest2html($body);
+  //Render the notes.
+  $notes_rendered = '';
+  if ( isset( $exercise->field_notes[LANGUAGE_NONE][0] ) ) {
+    $notes_rendered = swim_rest2html( 
+        $exercise->field_notes[LANGUAGE_NONE][0]['pure_rest'] 
+    );
+  }
+  //Are there attachments?
+  if ( isset( $exercise->field_attachments[LANGUAGE_NONE][0] ) ) {
+    $attached_files = _cyco_exercises_package_attachment_data(
+        $exercise->field_attachments
+    );
+  }
+  //Are there hidden attachments?
+  if ( isset( $exercise->field_hidden_attachments[LANGUAGE_NONE][0] ) ) {
+    $hidden_attached_files = _cyco_exercises_package_attachment_data(
+        $exercise->field_hidden_attachments
+    );
+  }
+  //Pass rubrics.
+  if ( isset( $exercise->field_rubric_items[LANGUAGE_NONE][0] ) ) {
+    $rubric_items = array();
+    foreach ( $exercise->field_rubric_items[LANGUAGE_NONE] as $index => $item ) {
+      $rubric_items[] = $item['target_id'];
+    }
+  }
+  //Get the model solution, if there is one.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'model_exercise_solution')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_exercise', 'target_id', $exer_nid);
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    $model = array();
+    $keys = array_keys($result['node']); //Just use the first one.
+    $model['model_nid'] = $keys[0];
+    $model_node = node_load( $model['model_nid'] );
+    if ( isset( $model_node->field_exercise[LANGUAGE_NONE][0] ) ) {
+      $model['exercise_nid'] = $model_node->field_exercise[LANGUAGE_NONE][0]['target_id'];
+    }
+    if ( isset( $model_node->field_body[LANGUAGE_NONE][0]['pure_rest'] ) ) {
+      $model['rendered'] = swim_rest2html( $model_node->field_body[LANGUAGE_NONE][0]['pure_rest'] );
+    }
+    if ( isset( $model_node->field_notes[LANGUAGE_NONE][0] ) ) {
+      $model['notes'] = swim_rest2html( $model_node->field_notes[LANGUAGE_NONE][0]['pure_rest'] );
+    }
+    if ( isset( $model_node->field_attachments[LANGUAGE_NONE][0] ) ) {
+      $model['attachments'] = _cyco_exercises_package_attachment_data(
+        $model_node->field_attachments
+      );
+    }
+  }
+  //Package output for the client.
+  $result = array(
+    'status' => 'ok',
+    'rendered' => $body_rendered,
+  );
+  if ( isset( $notes_rendered ) ) {
+    $result['notes'] = $notes_rendered;
+  }
+  if ( isset( $attached_files ) ) {
+    $result['attachments'] = $attached_files;
+  }
+  if ( isset( $hidden_attached_files ) ) {
+    $result['hidden_attachments'] = $hidden_attached_files;
+  }
+  if ( isset( $rubric_items ) ) {
+    $result['rubric_items'] = $rubric_items;
+  }
+  if ( isset( $model ) ) {
+    $result['model'] = $model;
+  }
+  return $result;
+}
+
+/**
+ * Extract data about file attachments from a field, and package it for 
+ * return to the client.
+ * @param array $field Field data.
+ * @return array Data about attachments.
+ */
+function _cyco_exercises_package_attachment_data( $field ) {
+  $attached_files = array();
+  foreach( $field[LANGUAGE_NONE] as $attachment ) {
+    $filename = $attachment['filename'];
+    $url = file_create_url( $attachment['uri'] );
+    $attached_files[] = array(
+      'filename' => $filename,
+      'url' => $url,
+    );
+  }
+  return $attached_files;
+}
+
+/**
+ * Get rubric items whose ids are in passed array.
+ * @param array $rubric_item_nids Ids.
+ * @return array Da goods.
+ */
+function _cycoex_get_rubric_items( $rubric_item_nids ) {
+  //Get params.
+//  if ( !isset($rubric_item_nids['sub_nid']) ) {
+//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+//        . ' sub_nid missing.';
+//    cybercourse_base_handle_services_error( $message );
+//    return;
+//  }
+  $rubric_items_jsony = array();
+  foreach( $rubric_item_nids as $rubric_item_nid ) {
+    $rubric_item_node = node_load($rubric_item_nid);
+    if ( ! $rubric_item_node ){
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' could not load rubric item for nid=' . $rubric_item_nid;
+      cybercourse_base_handle_services_error( $message );
+      return;
+    }
+    $rubric_item_jsony = array();
+    $rubric_item_jsony['nid'] = $rubric_item_nid;
+    $rubric_item_jsony['title'] = $rubric_item_node->title;
+    if ( isset( $rubric_item_node->field_notes[LANGUAGE_NONE][0] ) ) {
+      $rubric_item_jsony = $rubric_item_node->field_notes[LANGUAGE_NONE][0]['pure_rest'];
+    }
+    if ( isset( $rubric_item_node->field_feedback_good[LANGUAGE_NONE][0] ) ) {
+      $rubric_item_jsony['good'] = array();
+      foreach( $rubric_item_node->field_feedback_good[LANGUAGE_NONE] as $index => $comment) {
+        $rubric_item_jsony['good'][] = $comment['value'];
+      }
+    }
+    if ( isset( $rubric_item_node->field_feedback_needs_work[LANGUAGE_NONE][0] ) ) {
+      $rubric_item_jsony['needs_work'] = array();
+      foreach( $rubric_item_node->field_feedback_needs_work[LANGUAGE_NONE] as $index => $comment) {
+        $rubric_item_jsony['needs_work'][] = $comment['value'];
+      }
+    }
+    if ( isset( $rubric_item_node->field_feedback_poor[LANGUAGE_NONE][0] ) ) {
+      $rubric_item_jsony['poor'] = array();
+      foreach( $rubric_item_node->field_feedback_poor[LANGUAGE_NONE] as $index => $comment) {
+        $rubric_item_jsony['poor'][] = $comment['value'];
+      }
+    }
+    $rubric_items_jsony[] = $rubric_item_jsony;
+  } //End for each rubric item nid.
+  return $rubric_items_jsony;
+}
+
+
+/**
+ * Make a feedback message from the data in the passed array.
+ * @param array $feedback_data Feedback data for a submission.
+ * @return array Feedback message.
+ */
+function _cycoex_make_feedback_message( $feedback_data ) {
+  //Get params.
+  $student_uid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'student_uid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $exercise_nid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'exercise_nid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $model_solution_nid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'model_solution_nid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  //Get the selected comments.
+  $comments = array();
+  if ( isset( $feedback_data['rubric_ratings'] ) ) {
+    foreach( $feedback_data['rubric_ratings'] as $rating ) {
+      $comments[] = t($rating['comment']);
+    }
+  }
+  //Load the grader's feedback phrases.
+  global $user;
+  $grader_uid = $user->uid;
+  $users = entity_load('user', array($grader_uid) );
+  $grader_all_data = $users[ $grader_uid ];
+  //Compute the greeting.
+  $greeting = _cyco_exer_choose_fragment( 
+      $grader_all_data, 
+      'field_greetings', 
+      CYCO_EXER_GENERIC_GREETING);
+  //Compute the overall feedback message.
+  $overall = '';
+  //Check whether there are usable feedback score cutoffs.
+  if ( 
+         isset( $grader_all_data->field_good_cutoff[LANGUAGE_NONE][0]['value'] )
+      && isset( $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value'] ) 
+      && $grader_all_data->field_good_cutoff[LANGUAGE_NONE][0]['value']
+      && $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value']
+     ){
+    $good_cutoff = $grader_all_data->field_good_cutoff[LANGUAGE_NONE][0]['value'];
+    $needs_work_cutoff 
+        = $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value'];
+    if (     is_numeric( $good_cutoff ) 
+          && is_numeric( $needs_work_cutoff )
+          && $good_cutoff < 90 && $good_cutoff > 10
+          && $needs_work_cutoff < 90 && $needs_work_cutoff > 10
+          && $good_cutoff > $needs_work_cutoff
+       ) {
+      $score = _cyco_exer_compute_feedback_score( 
+          $feedback_data['rubric_ratings'] );
+      if ( !is_null($score) ) {
+        if ( $score >= $good_cutoff ) {
+          $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_good');
+        }
+        else if ( $score >= $needs_work_cutoff ) {
+          $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_needs_work');
+        }
+        else {
+          $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_poor');
+        }
+      }
+    }
+  }
+  //Choose a signature.
+  $signature = _cyco_exer_choose_fragment( 
+    $grader_all_data, 
+    'field_signature'
+  );
+  //Theme the feedback message.
+  $message = theme('cyco_feedback_message', array(
+    'greeting' => $greeting,
+    'overall' => $overall,
+    'comments' => $comments,
+    'signature' => $signature,
+  ));
+  //Data for token_replace.
+  $data = array(
+    'context' => 'creating_feedback_message',
+    'student_uid' => $student_uid,
+    'exercise_nid' => $exercise_nid,
+    'model_solution_nid' => $model_solution_nid,
+  );
+  $message = token_replace($message, $data);
+  return $message;
+}
+
+/**
+ * Check whether a parameter passed to service is OK.
+ * @param array $feedback_data All the parameters.
+ * @param string $parameter_name Name of the parameter.
+ * @param boolean $check_valid_id Whether the parameter is expected to be
+ *   a Drupal id.
+ * @param string $file_name Name of the file to report if there is a problem.
+ * @param string $line_number Line number to report if there is a problem.
+ * @param string $function_name Name of the function to report if 
+ *   there is a problem
+ * @return FALSE if bad, parameter value if good.
+ */
+function _cycoex_check_feedback_parameter( 
+    $feedback_data, $parameter_name, $check_valid_id, 
+    $file_name, $line_number, $function_name
+  ) {
+  if ( ! isset( $feedback_data[ $parameter_name ] ) ) {
+    $message = $file_name . ' (line ' . $line_number . ') ' . $function_name 
+        . ' ' . $parameter_name . ' missing.';
+    cybercourse_base_handle_services_error( $message );
+    return FALSE;
+  }
+  $param = $feedback_data[ $parameter_name ];
+  if ( $check_valid_id ) {
+    if ( is_nan( $param ) ) {
+      $message = $file_name . ' (line ' . $line_number . ') ' . $function_name 
+          . ' ' . $parameter_name . ' is not numeric: ' . $param;
+      cybercourse_base_handle_services_error( $message );
+      return FALSE;
+    }
+    if ( $param < 1 ) {
+      $message = $file_name . ' (line ' . $line_number . ') ' . $function_name 
+          . ' ' . $parameter_name . ' is less than one: ' . $param;
+      cybercourse_base_handle_services_error( $message );
+      return FALSE;
+    }
+  }
+  return $param;
+}
+
+/**
+ * Compute one fragment of a feedback messsage
+ * @param array $grader_all_data. Grader's data.
+ * @param string $field_name Name of the field to use.
+ * @param string $default Default value.
+ * @return string Text to use.
+ */
+function _cyco_exer_choose_fragment( $grader_all_data, $field_name, $default = '' ) {
+  $result = $default;
+  if ( isset( $grader_all_data->{$field_name}[LANGUAGE_NONE][0] ) ){
+    $item_count = sizeof( $grader_all_data->{$field_name}[LANGUAGE_NONE] );
+    if ( $item_count == 1 ) {
+      //Only one value - use it.
+      $result = t($grader_all_data->{$field_name}[LANGUAGE_NONE][0]['value']);
+    }
+    else {
+      //More than one - choose randomly.
+      $index = mt_rand( 0, ($item_count - 1) );
+      $result = t($grader_all_data->{$field_name}[LANGUAGE_NONE][$index]['value']);
+    }
+  }
+  return $result;
+}
+
+/**
+ * Compute a score for a submission's ratings.
+ * @param array $rubric_ratings Ratings for a submission.
+ * @return numeric Score as a %, or null if cannot compute it.
+ */
+function _cyco_exer_compute_feedback_score( $rubric_ratings ) {
+  $num_comments = sizeof($rubric_ratings);
+  if ( $num_comments == 0 ) {
+    return null;
+  }
+  $num_good = 0;
+  $num_needs_work = 0;
+  foreach( $rubric_ratings as $rubric_rating ) {
+    if ( $rubric_rating['comment_rating'] == 'good') {
+      $num_good++;
+    }
+    else if ( $rubric_rating['comment_rating'] == 'needs_work') {
+      $num_needs_work++;
+    }
+  }
+  $score = ( $num_good * 2 + $num_needs_work ) / $num_comments * 100;
+  return $score;
+}
+
+/**
+ * Implement hook_theme().
+ */
+function cyco_exercises_services_theme() {
+  $result = array(
+    'cyco_feedback_message' => array(
+      'template' => 'templates/cyco-feedback-message',
+      //Default variable values
+      'variables' => array(
+        'greeting' => '',
+        'overall' => '',
+        'comments' => array(),
+        'signature' => '',
+      ),
+    ),
+  );
+  return $result;
+}
+
+/**
+ * Make a feedback message from the data in the passed array.
+ * @param array $feedback_data Feedback data for a submission.
+ * @return array Data on success/failure..
+ */
+function _cycoex_save_feedback( $feedback_data ) {
+  //Get params.
+  $submission_nid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'submission_nid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $student_uid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'student_uid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $exercise_nid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'exercise_nid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $model_solution_nid = _cycoex_check_feedback_parameter(
+      $feedback_data, 'model_solution_nid', TRUE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $rubric_ratings = _cycoex_check_feedback_parameter(
+      $feedback_data, 'rubric_ratings', FALSE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  $message = _cycoex_check_feedback_parameter(
+      $feedback_data, 'message', FALSE,
+      __FILE__, __LINE__, __FUNCTION__
+  );
+  //Data for token_replace.
+  $data = array(
+    'context' => 'creating_feedback_message',
+    'student_uid' => $student_uid,
+    'exercise_nid' => $exercise_nid,
+    'model_solution_nid' => $model_solution_nid,
+  );  
+  $message = token_replace($message, $data);
+  $message = t( $message );
+  $complete = _cycoex_check_feedback_parameter(
+      $feedback_data, 'complete', FALSE,
+      __FILE__, __LINE__, __FUNCTION__
+  );  
+  //Remove existing rubric item rating nodes for this submission.
+  $query = new EntityFieldQuery;
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'exer_submssn_rubric_item_rating')
+    ->fieldCondition('field_submission', 'target_id', $submission_nid);
+  $query_result = $query->execute();
+  //Create the pseudent HTML.
+  $rating_nids = array();
+  foreach ( $query_result['node'] as $nid => $value ) {  
+    $rating_nids[] = $nid;
+  }
+  if ( sizeof($rating_nids) > 0 ) {
+    node_delete_multiple( $rating_nids );
+  }
+  //Fill in fields in exercise_submission node.
+  $submission_node = node_load( $submission_nid );
+  //Record current date/time as the feedback date/time.
+  $now = cybercourse_base_format_time();
+  $submission_node->field_when_feedback_given[LANGUAGE_NONE][0] = $now;
+  //Feedback source is the current user.
+  global $user;
+  $grader_uid = $user->uid;
+  $submission_node->field_feedback_source[LANGUAGE_NONE][0]['target_id']
+      = $grader_uid;
+  $submission_node->field_feedback[LANGUAGE_NONE][0]['pure_rest']
+      = $message;
+  $submission_node->field_complete[LANGUAGE_NONE][0]['value']
+      = $complete ? 1 : 0;
+  node_save( $submission_node );
+  //Add new rubric item rating nodes.
+  foreach ($rubric_ratings as $key => $rubric_rating) { 
+    $rubric_item_nid = $rubric_rating['rubric_item_nid'];
+    $comment = $rubric_rating['comment'];
+    $comment_rating = $rubric_rating['comment_rating'];
+    $node = new stdClass();
+    $node->title = 'Submission: ' . $submission_nid . ' Item: ' . $rubric_item_nid;
+    $node->type = 'exer_submssn_rubric_item_rating';
+    node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+    $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
+    //Record is owned by the grader.
+    $node->uid = $grader_uid;
+    $node->status = 1; //(1 or 0): published or not
+    $node->promote = 0; //(1 or 0): promoted to front page
+    $node->comment = 0;
+    $node->field_submission[$node->language][]['target_id'] = $submission_nid;
+    $node->field_rubric_item[$node->language][]['target_id'] = $rubric_item_nid;
+    $node->field_feedback_comment[$node->language][]['value'] = $comment;
+    $node->field_rating_on_rubric_item[$node->language][]['value'] 
+        = $comment_rating;
+    $node = node_submit($node); // Prepare node for saving
+    node_save($node);
+  }
+  return 'OK';
+}

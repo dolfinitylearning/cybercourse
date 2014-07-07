@@ -204,7 +204,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
     }
     $link = l( 
       'Give feedback', 
-      drupal_get_path('module', 'cyco_exercise') 
+      drupal_get_path('module', 'cyco_exercises') 
         . '/feedback_client/index.html', 
       array( 'attributes' => 
         array( 'class' => 
@@ -213,7 +213,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
       ) 
     );
     drupal_add_js(
-        $base_path . drupal_get_path('module', 'cyco_exercise')
+        $base_path . drupal_get_path('module', 'cyco_exercises')
           . '/js/cyco_exercise_start_grading_ui.js'
     );
   }

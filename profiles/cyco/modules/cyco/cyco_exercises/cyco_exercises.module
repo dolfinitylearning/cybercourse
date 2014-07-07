@@ -5,4 +5,4 @@
  */
 
 include_once 'cyco_exercises.features.inc';
-include_once realpath(dirname(__FILE__)) . '/custom/cyco_exercise.inc';
+require_once realpath(dirname(__FILE__)) . '/custom/cyco_exercises.inc';

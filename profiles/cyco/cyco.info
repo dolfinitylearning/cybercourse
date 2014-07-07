@@ -110,8 +110,8 @@ dependencies[] = cyco_add_pages
 dependencies[] = cyco_book_blocks
 dependencies[] = cyco_toc
 dependencies[] = cyco_collapse_summary
-dependencies[] = cyco_exercise
-dependencies[] = cyco_exercise_services
+dependencies[] = cyco_exercises
+dependencies[] = cyco_exercises_services
 
 ;**************** Themes *******************
 

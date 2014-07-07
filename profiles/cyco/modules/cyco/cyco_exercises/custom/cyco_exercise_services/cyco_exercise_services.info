@@ -1,6 +1,0 @@
-name = CyberCourse exercise services
-description = Defines REST services for the CyberCourse exercise system
-package = CyberCourse
-core = 7.x
-version = 7.1
-dependencies[] = cyco_exercise

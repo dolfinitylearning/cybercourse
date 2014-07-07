@@ -2085,6 +2085,39 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'og_membership-og_membership_type_default-og_membership_request'
+  $field_instances['og_membership-og_membership_type_default-og_membership_request'] = array(
+    'bundle' => 'og_membership_type_default',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the text a user may send to the group administrators.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'og_membership',
+    'field_name' => 'og_membership_request',
+    'label' => 'Request message',
+    'required' => FALSE,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'user-user-og_user_node'
   $field_instances['user-user-og_user_node'] = array(
     'bundle' => 'user',
@@ -2185,6 +2218,7 @@ function cyco_exercises_field_default_field_instances() {
   t('Notes for instructors and graders.');
   t('Rating on rubric item');
   t('Rating on this rubric item: good, needs work, or poor.');
+  t('Request message');
   t('Rubric item');
   t('Rubric item this rating is for.');
   t('Rubric items');
@@ -2192,6 +2226,7 @@ function cyco_exercises_field_default_field_instances() {
   t('Solution to the exercise.');
   t('Submission');
   t('The main text of the exercise.');
+  t('This is the text a user may send to the group administrators.');
   t('Version');
   t('When feedback given');
   t('When submitted');
