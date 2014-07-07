@@ -200,10 +200,9 @@ function swim_libraries_info() {
     'download url' => 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.2/ckeditor_4.3.2_standard.zip',
     'version arguments' => array(
       'file' => 'ckeditor.js',
-      // version:"4.3"
+      // version:"4.4"
       'pattern' => '/version\:\"(\d+\.+\d+)\"/',
-//      // version:"4.3"
-//      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
+//      // version:"4.4"
       'lines' => 10,
     ),
     'files' => array(

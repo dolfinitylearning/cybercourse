@@ -76,13 +76,16 @@ function cyco_pseudents_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_notes',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'swim',
     'settings' => array(),
     'translatable' => 0,
-    'type' => 'swim_with_summary_field',
+    'type' => 'swim_field',
   );
 
   // Exported field_base: 'field_pseudent_categories'

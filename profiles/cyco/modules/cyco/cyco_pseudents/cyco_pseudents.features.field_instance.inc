@@ -184,7 +184,7 @@ function cyco_pseudents_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'node',
@@ -198,7 +198,7 @@ function cyco_pseudents_field_default_field_instances() {
       'active' => 0,
       'module' => 'swim',
       'settings' => array(),
-      'type' => 'swim_with_summary_widget',
+      'type' => 'swim_widget',
       'weight' => 5,
     ),
   );

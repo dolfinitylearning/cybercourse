@@ -14,7 +14,7 @@ Drupal.behaviors.collapseSummary = {
       if ( $(this).parent().find(".collapse-summary-indicator").length == 0 ) {
         //Remember the summary content widget.
         var summaryWidget = nameSpaceRef.findCKSummaryWidget();
-        //Computer text to show.
+        //Compute text to show.
         var indicatorText 
             = nameSpaceRef.computeStatusMessage( summaryWidget );
         var indicatorHtml = "<span class='collapse-summary-indicator'>" 
@@ -38,6 +38,13 @@ Drupal.behaviors.collapseSummary = {
         //Remember arrow thing.
         var arrowThing = $label.find(".arrow-thing");
         whatToCollapse.hide();
+        
+        //Find the summary container.
+        var summContainer = $("#edit-field-body .swim-summary-wrapper");
+        //The body.
+        var bodyContainer = $(summContainer).next();
+        $(bodyContainer).find("label").after( summContainer );
+        
         //Flag to show whether collapsed.
         var collapsed = true;
         $label.click(function(event){

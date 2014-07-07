@@ -93,7 +93,6 @@ features[menu_links][] = menu-cp-graders_exercises:exercises
 features[menu_links][] = menu-cp-graders_rubric-items:rubric-items
 features[menu_links][] = menu-cp-instructors_exercises:exercises
 features[menu_links][] = menu-cp-instructors_rubric-items:rubric-items
-features[menu_links][] = menu-tools_exercises:exercises-public
 features[node][] = class
 features[node][] = class_post
 features[node][] = exercise

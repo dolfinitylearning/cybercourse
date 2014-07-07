@@ -194,26 +194,6 @@ function cyco_exercises_menu_default_menu_links() {
     'weight' => -46,
     'customized' => 1,
   );
-  // Exported menu link: menu-tools_exercises:exercises-public
-  $menu_links['menu-tools_exercises:exercises-public'] = array(
-    'menu_name' => 'menu-tools',
-    'link_path' => 'exercises-public',
-    'router_path' => 'exercises-public',
-    'link_title' => 'Exercises',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Exercises used in the course',
-      ),
-      'identifier' => 'menu-tools_exercises:exercises-public',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 0,
-    'customized' => 0,
-  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add new exercise');
