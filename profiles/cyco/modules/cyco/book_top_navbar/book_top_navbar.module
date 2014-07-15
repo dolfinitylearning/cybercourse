@@ -58,7 +58,7 @@ function book_top_navbar_node_view($node, $view_mode, $langcode) {
         $n = $node->book;
         //Turn off the ToC if configured that way.
         if ( ! variable_get('book_top_navbar_show_toc', BOOK_TOP_NAVBAR_DEFAULT_SHOW_TOC) ) {
-          $n['has_children'] = FALSE;
+//          $n['has_children'] = FALSE;
         }
         //Add the nav bar.
         $node->content['book_navigation_top'] = array(

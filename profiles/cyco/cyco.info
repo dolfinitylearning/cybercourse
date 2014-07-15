@@ -76,6 +76,9 @@ dependencies[] = clone
 dependencies[] = diff
 dependencies[] = views_bulk_operations
 
+;Views stuff
+dependencies[] = views_distinct
+
 ;User stuff
 dependencies[] = logintoboggan
 dependencies[] = timezone_detect
@@ -109,7 +112,7 @@ dependencies[] = book_top_navbar
 dependencies[] = cyco_add_pages
 dependencies[] = cyco_book_blocks
 dependencies[] = cyco_toc
-dependencies[] = cyco_collapse_summary
+dependencies[] = cyco_node_edit_tweaks
 dependencies[] = cyco_exercises
 dependencies[] = cyco_exercises_services
 

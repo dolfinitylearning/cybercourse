@@ -28,16 +28,6 @@ function cyco_define_blocks() {
   $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'seven';
   $blocks = array(
-//    array(
-//      'module' => 'system',
-//      'delta' => 'main',
-//      'theme' => $default_theme,
-//      'status' => 1,
-//      'weight' => 0,
-//      'region' => 'content',
-//      'pages' => '',
-//      'cache' => -1,
-//    ),
     array(
       'module' => 'search',
       'delta' => 'form',

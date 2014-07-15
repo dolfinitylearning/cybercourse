@@ -62,8 +62,8 @@ function _cyco_render_control_panel() {
     '#markup' => $message,
   );
   //Show user's groups.
-  if ( module_exists( 'cyco_groups' ) ) {
-    $groups = cyco_groups_render_basic_list();
+  if ( module_exists( 'og' ) ) {
+    $groups = cyco_core_groups_render_basic_list();
     $result['all_content']['groups_title'] =
           _cyco_control_panel_show_title( 'Your groups' );
     $result['all_content']['groups'] = array(
@@ -172,7 +172,7 @@ function theme_cyco_control_panel_section_title( $variables ) {
  * @return array Renderable element.
  */
 function _cyco_control_panel_show_waiting_submissions() {
-  $num_submissions = _cyco_exercise_get_number_submissions_to_grade();
+  $num_submissions = cyco_exercises_get_number_submissions_to_grade();
   $result = array(
     '#type' => 'markup',
     '#markup' => theme(
@@ -192,6 +192,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
   global $base_path;
   $num_submissions = $variables['num_submissions'];
   $message = '';
+  $link = '';
   if ( $num_submissions == 0 ) {
     $message = t('You have no submissions to grade.');
   }
@@ -205,7 +206,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
     $link = l( 
       'Give feedback', 
       drupal_get_path('module', 'cyco_exercises') 
-        . '/feedback_client/index.html', 
+        . '/custom/feedback_client/index.html', 
       array( 'attributes' => 
         array( 'class' => 
           array ( 'cyco-control-panel-grade-link' ) 
@@ -214,7 +215,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
     );
     drupal_add_js(
         $base_path . drupal_get_path('module', 'cyco_exercises')
-          . '/js/cyco_exercise_start_grading_ui.js'
+          . '/custom/js/cyco_exercises_start_grading_ui.js'
     );
   }
   $html =  '<p class="cyco-control-panel-submissions-waiting">'

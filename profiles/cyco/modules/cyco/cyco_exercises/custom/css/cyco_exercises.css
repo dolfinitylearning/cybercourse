@@ -18,6 +18,11 @@ Styles for exercises.
   margin-bottom: 1em;
 }
 
+.cyco-inserted-exercise-too-bad {
+  margin-top: 1em;
+  font-size: 90%;
+}
+
 /* 
   Styles for exercise submission links.
 */

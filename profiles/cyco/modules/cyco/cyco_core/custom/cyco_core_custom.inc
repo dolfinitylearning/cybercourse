@@ -4,9 +4,11 @@
  * Load custom code chunks.
  */
 
-include_once realpath(dirname(__FILE__)) . '/cyco_core_utilities.inc';
-include_once realpath(dirname(__FILE__)) . '/cyco_core_error_handler.inc';
-include_once realpath(dirname(__FILE__)) . '/cyco_core_control_panel.inc';
+require_once realpath(dirname(__FILE__)) . '/cyco_core_utilities.inc';
+require_once realpath(dirname(__FILE__)) . '/cyco_core_error_handler.inc';
+require_once realpath(dirname(__FILE__)) . '/cyco_core_control_panel.inc';
+require_once realpath(dirname(__FILE__)) . '/cyco_core_control_panel.inc';
+require_once realpath(dirname(__FILE__)) . '/cyco_core_groups.inc';
 
 /**
  * URL of the CyCo wiki home page.
@@ -44,6 +46,13 @@ function cyco_core_menu_alter(&$items) {
   $items['user']['title callback'] = '_cyco_core_user_menu_item_title';
 }
 
+/**
+ * Implements hook_form_alter().
+ */
+function cyco_core_form_alter(&$form, $form_state, $form_id) {
+  _cyco_core_utilities_form_alter($form, $form_state, $form_id);
+  
+}
 
 function _cyco_core_user_menu_item_title() {
   global $user;
@@ -102,7 +111,26 @@ function cyco_core_flush_tree_menu_caches() {
  */
 function cyco_core_theme() {
   $theme_defs = array();
+  $theme_defs['cyco_reminder'] = array(
+      'variables' => array(
+        'reminder' => '',
+        'hide_at_start' => FALSE,
+      ),
+  );
   //Let other files add their stuff.
   _cyco_control_panel_theme( $theme_defs );
   return $theme_defs;
+}
+
+/**
+ * Theme a reminder message.
+ */
+function theme_cyco_reminder( $variables ){
+  $reminder = $variables['reminder'];
+  $result = '<p class="cyco_reminder" ';
+  if ( $variables['hide_at_start'] ) {
+    $result .= ' style="display:none" ';
+  }
+  $result .= '>' . t( $reminder ) . '</p>';
+  return $result;
 }

@@ -281,10 +281,6 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
         $plugins['path'][$key] .= '/';
       }
     }
-    //Create extraPlugins string.
-//    $extra_plugins = implode(',', $plugins['name'] );
-//    $js = 'Drupal.swimCkConfig.extraPlugins="' . $extra_plugins . '";';
-//    drupal_add_js($js, 'inline');
     //Send settings to JS.
     $settings['extraPlugins'] = $plugins;
     $settings['can_peek'] = user_access('peek content') ? 'yes' : 'no';
@@ -441,7 +437,7 @@ function swim_field_formatter_view(
     $langcode, $items, $display
   ) {
   //MathJax
-  $stuff = drupal_add_js('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+  $stuff = drupal_add_js('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
   $element = array();
   switch ($display['type']) {
     case 'swim_default_formatter':
@@ -564,13 +560,15 @@ function swim_rest2html( $rest ) {
  * Prepare some ReST for editing in CK.
  */
 function swim_rest2ckhtml( $content ) {
+  //Remove \rs. They are evil.
+  $content = str_replace("\r", '', $content);
   //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
   //Doesn't insert HTML tags directly, since they would be messed up
   //by the other translation code below. Instead, inserts temp markers that
   //are replaced by HTML after other translation is done.
   //Make sure there is a \n at the end.
   $last_char = substr($content, strlen( $content ) - 1, 1);
-  if ( $last_char != "\n") {
+  if ( $last_char != "\n" ) {
     $content .= "\n";
   }
   list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
@@ -582,8 +580,9 @@ function swim_rest2ckhtml( $content ) {
   $content = htmlspecialchars( $content );  
   $content = str_replace("\n", "<br>", $content);
 //  $content = str_replace("\n", "<br/>\n", $content);
-  //Replace spaces with &nbsp;. Otherwise, CK collapses multiple spaces.
-  //$content = str_replace(' ', '&nbsp;', $content);
+  //Replace two spaces with &nbsp; and a space.
+  //Otherwise, CK collapses multiple spaces.
+  $content = str_replace('  ', '&nbsp; ', $content);
   //Replace math temp markers with HTML tags used by MathJax.
   $content = _swim_betwixt2ckhtml_mathjx( $content, $math_replacements );
   //Replace image temp markers with HTML tags.
@@ -817,11 +816,11 @@ function _swim_ckhtml2rest( $content ) {
 
 /**
  * Remove <br>s from $content.
- * Replae with \n.
+ * Replace with nothing. CK sends us \ns after each <br>
  * @param type $content Content to remove <br>s from.
  */
 function _swim_remove_brs( $content ) {
-  $result = preg_replace('/\<\s*br\s*\/?\s*\>/i', "\n", $content);
+  $result = preg_replace('/\<\s*br\s*\/?\s*\>/i', '', $content);
   return $result;
 }
 
@@ -902,14 +901,14 @@ function _swim_img_2_path( $content ) {
 function _swim_rest2betwixt_images( $content ) {
   $image_paths = array();
   $path_counter = 0;
-  $pattern = '/\.\.\s*(image|figure)(\:\:\s+)(\S*?)\s*\r?\n/im';
+  $pattern = '/\.\.\s*(image|figure)(\:\:\s*)(\S*)/i';
   $content = preg_replace_callback(
       $pattern, 
       function ($matches) use (&$image_paths, &$path_counter) {
         //Got one.
         $image_paths[ $path_counter ] = $matches[3];
         $tag = '[imagepath' . $path_counter . ']';
-        $result = '.. ' . $matches[1] . $matches[2] . $tag . "\n";
+        $result = '.. ' . $matches[1] . $matches[2] . $tag;
         $path_counter ++;
         return $result;
       },

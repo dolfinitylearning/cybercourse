@@ -791,4 +791,136 @@ array(
       ),
       'node_export_drupal_version' => '7',
     ),
+  (object) array(
+      'vid' => '138',
+      'uid' => '1',
+      'title' => 'Terms of use',
+      'log' => '',
+      'status' => '1',
+      'comment' => '1',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '28eabdaf-6e1c-47db-97a0-edf082524df1',
+      'nid' => '63',
+      'type' => 'page',
+      'language' => 'und',
+      'created' => '1405422037',
+      'changed' => '1405422112',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => '82eb6779-42bf-438c-9f81-898cf0fd2fa5',
+      'revision_timestamp' => '1405422112',
+      'revision_uid' => '1',
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'field_attachments' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "Terms of use go here. E.g.:\r\n\r\nDon't rely on anything on this site, including this sentence.",
+            'summary' => '',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_keywords' => array(),
+      'field_workflow_tags' => array(
+        'und' => array(
+          array(
+            'tid' => '1',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1405422037',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'b:0;',
+      'path' => array(
+        'pid' => '78',
+        'source' => 'node/63',
+        'alias' => 'terms-use-0',
+        'language' => 'und',
+      ),
+      'menu' => array(
+        'link_title' => 'Terms of use',
+        'mlid' => 0,
+        'plid' => '0',
+        'menu_name' => 'menu-footer',
+        'weight' => '0',
+        'options' => array(),
+        'module' => 'menu',
+        'expanded' => '0',
+        'hidden' => '0',
+        'has_children' => '0',
+        'customized' => 0,
+        'parent_depth_limit' => 8,
+        'description' => 'Conditions you accept by using this site.',
+        'enabled' => 1,
+      ),
+      'node_export_drupal_version' => '7',
+    ),
 )

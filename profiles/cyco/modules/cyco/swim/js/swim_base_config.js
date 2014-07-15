@@ -3,6 +3,7 @@
  * Base config file for SWIM's CKEditor instances. 
  * Plugins are added dynamically, as needed.
  */
+"use strict";
 Drupal.swimCkConfig = {
   autoParagraph: false,
   fillEmptyBlocks: false,
@@ -17,8 +18,6 @@ Drupal.swimCkConfig = {
   //What the Enter key does.
   enterMode : 2 , //CKEDITOR.ENTER_BR
   shiftEnterMode : 2, //CKEDITOR.ENTER_BR
-  //Let images be inserted.
-  allowedContent : true,
   //Toolbar config
   toolbarGroups : [
     { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
@@ -28,9 +27,19 @@ Drupal.swimCkConfig = {
     { name: 'about' }
   ],
   removePlugins : "scayt,elementspath,list,liststyle,tabletools,contextmenu,about,"
-    + "blockquote,indentlist,indentblock," //sourcearea,"
-    + "colorbutton,colordialog,flash,font,indent,forms.horizontalrule",
+    + "blockquote,indentlist,indentblock,sourcearea,pastefromword,pastetext,"
+    + "colorbutton,colordialog,flash,font,indent,forms.horizontalrule,"
+    + "basicstyles",
   removeButtons : "Bold,Italic,Underline,Strike,Superscript,Subscript,"
     + "ShowBlocks,Save,NewPage,DocProps,Preview,Print,Templates,"
-    + "About" //,Source"
+    + "About,Source",
+    //@todo Figure out how to get pseudent rules into pseudents only.
+    //Removing them from here makes the button vanish.
+  allowedContent:
+    'br;'
+    + 'img[!src];'
+    + 'div(!pseudent)[!data-pseudent-id];'
+    + 'div(!pseudent-image-container);'
+    + 'div(!pseudent-content);'
+    + 'div(!pseudent-image-caption);'
 };

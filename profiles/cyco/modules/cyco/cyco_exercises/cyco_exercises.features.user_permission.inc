@@ -10,6 +10,13 @@
 function cyco_exercises_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: 'administer exercises settings'.
+  $permissions['administer exercises settings'] = array(
+    'name' => 'administer exercises settings',
+    'roles' => array(),
+    'module' => 'cyco_exercises',
+  );
+
   // Exported permission: 'administer group'.
   $permissions['administer group'] = array(
     'name' => 'administer group',
@@ -71,9 +78,39 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'create field_exercise_solved'.
+  $permissions['create field_exercise_solved'] = array(
+    'name' => 'create field_exercise_solved',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'create field_exercises'.
+  $permissions['create field_exercises'] = array(
+    'name' => 'create field_exercises',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'create field_hidden_attachments'.
   $permissions['create field_hidden_attachments'] = array(
     'name' => 'create field_hidden_attachments',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'create field_notes'.
+  $permissions['create field_notes'] = array(
+    'name' => 'create field_notes',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
@@ -145,6 +182,7 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'delete any exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
       'instructor' => 'instructor',
     ),
     'module' => 'node',
@@ -217,6 +255,7 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'delete own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
       'instructor' => 'instructor',
       'student' => 'student',
     ),
@@ -296,6 +335,7 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'edit any exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
       'instructor' => 'instructor',
     ),
     'module' => 'node',
@@ -331,9 +371,39 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit field_exercise_solved'.
+  $permissions['edit field_exercise_solved'] = array(
+    'name' => 'edit field_exercise_solved',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'edit field_exercises'.
+  $permissions['edit field_exercises'] = array(
+    'name' => 'edit field_exercises',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit field_hidden_attachments'.
   $permissions['edit field_hidden_attachments'] = array(
     'name' => 'edit field_hidden_attachments',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'edit field_notes'.
+  $permissions['edit field_notes'] = array(
+    'name' => 'edit field_notes',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
@@ -388,6 +458,7 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'edit own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
       'instructor' => 'instructor',
       'student' => 'student',
     ),
@@ -405,9 +476,39 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit own field_exercise_solved'.
+  $permissions['edit own field_exercise_solved'] = array(
+    'name' => 'edit own field_exercise_solved',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'edit own field_exercises'.
+  $permissions['edit own field_exercises'] = array(
+    'name' => 'edit own field_exercises',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit own field_hidden_attachments'.
   $permissions['edit own field_hidden_attachments'] = array(
     'name' => 'edit own field_hidden_attachments',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'edit own field_notes'.
+  $permissions['edit own field_notes'] = array(
+    'name' => 'edit own field_notes',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
@@ -501,9 +602,45 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'search_config',
   );
 
+  // Exported permission: 'view field_exercise_solved'.
+  $permissions['view field_exercise_solved'] = array(
+    'name' => 'view field_exercise_solved',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view field_exercises'.
+  $permissions['view field_exercises'] = array(
+    'name' => 'view field_exercises',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'view field_hidden_attachments'.
   $permissions['view field_hidden_attachments'] = array(
     'name' => 'view field_hidden_attachments',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view field_notes'.
+  $permissions['view field_notes'] = array(
+    'name' => 'view field_notes',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
@@ -527,6 +664,26 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
+  // Exported permission: 'view own field_exercise_solved'.
+  $permissions['view own field_exercise_solved'] = array(
+    'name' => 'view own field_exercise_solved',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view own field_exercises'.
+  $permissions['view own field_exercises'] = array(
+    'name' => 'view own field_exercises',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'view own field_hidden_attachments'.
   $permissions['view own field_hidden_attachments'] = array(
     'name' => 'view own field_hidden_attachments',
@@ -536,6 +693,16 @@ function cyco_exercises_user_default_permissions() {
       'grader' => 'grader',
       'instructor' => 'instructor',
       'reviewer' => 'reviewer',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view own field_notes'.
+  $permissions['view own field_notes'] = array(
+    'name' => 'view own field_notes',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'field_permissions',
   );

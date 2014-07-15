@@ -39,11 +39,11 @@ function cyco_core_client_error() {
 }
 
 /**
- * Implements hook_form_alter().
+ * Called from hook_form_alter() in cyco_core_custom.
  * 
  * Add display of available tokens.
  */
-function cyco_core_form_alter(&$form, $form_state, $form_id) {
+function _cyco_core_utilities_form_alter(&$form, $form_state, $form_id) {
   //$form_id ends in _node_form.
   $pos = strpos( $form_id, '_node_form');
   if ( $pos === FALSE ) {
@@ -183,9 +183,12 @@ function cyco_core_tokens_alter( &$replacements, $context) {
 /**
  * Implements hook_form_alter().
  * 
+ * Change order of fields, to put picture in the right place.
+ * 
  * Check stuff in the user profile form.
  */
 function cyco_core_form_user_profile_form_alter( &$form, $form_state ) {
+  $form['field_first_name']['#weight'] = $form['field_last_name']['#weight'];
   $form['#validate'][] = '_cyco_core_user_profile_form_validate';
 }
 
@@ -213,6 +216,7 @@ function _cyco_core_user_profile_form_validate( $form, &$form_state ) {
 /**
  * Check whether the current user has a role, or one of a set of roles.
  * @global stdClass $user Current user.
+ * @param int or stdClass $user User id or object.
  * @param string or array $roles Role(s) to check for.
  * @return boolean True if the user has at least one of the roles.
  */
@@ -276,24 +280,26 @@ function cyco_core_timestamp_to_iso6801( $timestamp ) {
 
 /**
  * Format date/time as needed by Date/Time field.
- * @param date $when Date/time to format. Defaults to now.
+ * @param timestamp $when Timestamp to format. Defaults to now.
  * @return array Formatted date/time.
  */
 function cyco_core_format_time( $when = NULL ) {
   //This is clunky.
   if ( is_null( $when ) ) {
-    $when = date_now('UTC');
+    $when = time();
+//    $when = date_now('UTC');
   }
   //Make an array with the rep used by the date api for form field 
   //in $form_state.
   $temp = array();
   //Date is almost OK. Replace space between date and time with a T.
-  $temp['value'] = str_replace(' ', 'T', $when->date);
+  $temp['value'] = date('Y-m-d\TH:i:s', $when);
+      //str_replace(' ', 'T', $when->date);
   $temp['value2'] = $temp['value'];
   $temp['show_todate'] = 0;
-  $temp['timezone'] = $when->timezone;
+  $temp['timezone'] = drupal_get_user_timezone();
   //Compute timezone offset.
-  $phpNow = new DateTime( $temp['value'], new DateTimeZone($when->timezone) );
+  $phpNow = new DateTime( $temp['value'], new DateTimeZone($temp['timezone']) );
   $offset = $phpNow->getOffset();
   $temp['offset'] = $offset;
   $temp['offset2'] = $offset;

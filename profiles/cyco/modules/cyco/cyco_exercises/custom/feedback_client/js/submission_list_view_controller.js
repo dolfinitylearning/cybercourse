@@ -73,10 +73,9 @@ app.submissionListItemClicked = function( submissionNid ) {
     //Show all the data in the UI.
     app.initSubmissionPane( submissionNid );
     app.initExercisePane( exerciseNid );
-    var modelSolutionNid = app.allExercises[ exerciseNid ].modelSolutionNid;
-    app.currentState.modelSolutionNid = modelSolutionNid;
-    app.initModelSolutionPane( modelSolutionNid );
-//    app.initFeedbackPane( submissionNid ),
+    var modelSolutions = app.allExercises[ exerciseNid ].modelSolutions;
+    app.currentState.modelSolutions = modelSolutions;
+    app.initModelSolutionPane( modelSolutions );
     //Load rubric items that haven't been loaded yet.
     var missingRubricItems = app.findMissingItems(
         app.allExercises[ exerciseNid ].rubricItems

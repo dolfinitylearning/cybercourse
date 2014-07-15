@@ -3,7 +3,6 @@
  * Base config file for SWIM's CKEditor instances. 
  * Plugins are added dynamically, as needed.
  */
-console.log('thin');
 CKEDITOR.editorConfig = {
 //  autoParagraph: false,
 //  fillEmptyBlocks: false,

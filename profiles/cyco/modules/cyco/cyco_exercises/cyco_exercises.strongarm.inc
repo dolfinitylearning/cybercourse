@@ -105,7 +105,7 @@ function cyco_exercises_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_class';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
   $export['comment_class'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -432,7 +432,7 @@ function cyco_exercises_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '6',
+          'weight' => '7',
         ),
       ),
       'display' => array(),
@@ -477,7 +477,7 @@ function cyco_exercises_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '4',
+          'weight' => '5',
         ),
       ),
       'display' => array(),
@@ -522,7 +522,7 @@ function cyco_exercises_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '7',
+          'weight' => '10',
         ),
       ),
       'display' => array(),
@@ -645,14 +645,39 @@ function cyco_exercises_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__rubric_item';
   $strongarm->value = array(
-    'view_modes' => array(),
+    'view_modes' => array(
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_index' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => FALSE,
+      ),
+      'print' => array(
+        'custom_settings' => FALSE,
+      ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
+    ),
     'extra_fields' => array(
       'form' => array(
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '6',
+          'weight' => '8',
         ),
       ),
       'display' => array(),
@@ -794,7 +819,6 @@ function cyco_exercises_strongarm() {
   $strongarm->name = 'node_options_exercise_submission';
   $strongarm->value = array(
     0 => 'status',
-    1 => 'revision',
   );
   $export['node_options_exercise_submission'] = $strongarm;
 
@@ -832,7 +856,7 @@ function cyco_exercises_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_preview_class';
-  $strongarm->value = '1';
+  $strongarm->value = '0';
   $export['node_preview_class'] = $strongarm;
 
   $strongarm = new stdClass();

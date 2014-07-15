@@ -12,8 +12,8 @@ function cyco_core_views_default_views() {
 
   $view = new view();
   $view->name = 'basic_pages';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'List of basic pages (admin).';
+  $view->tag = 'cyco, admin';
   $view->base_table = 'node';
   $view->human_name = 'Basic pages';
   $view->core = 7;
@@ -247,134 +247,6 @@ function cyco_core_views_default_views() {
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['blueprints_and_keywords'] = $view;
-
-  $view = new view();
-  $view->name = 'comments';
-  $view->description = 'Shows all of the comments, filterable, sortable.';
-  $view->tag = 'default';
-  $view->base_table = 'comment';
-  $view->human_name = 'Comments';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Comments';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'role';
-  $handler->display->display_options['access']['role'] = array(
-    4 => '4',
-    8 => '8',
-  );
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
-  $handler->display->display_options['style_plugin'] = 'default';
-  $handler->display->display_options['row_plugin'] = 'fields';
-  $handler->display->display_options['row_options']['inline'] = array(
-    'name' => 'name',
-    'created' => 'created',
-  );
-  $handler->display->display_options['row_options']['hide_empty'] = TRUE;
-  /* Relationship: Comment: Content */
-  $handler->display->display_options['relationships']['nid']['id'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['table'] = 'comment';
-  $handler->display->display_options['relationships']['nid']['field'] = 'nid';
-  $handler->display->display_options['relationships']['nid']['required'] = TRUE;
-  /* Relationship: Comment: Author */
-  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'comment';
-  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['required'] = TRUE;
-  /* Field: Comment: Title */
-  $handler->display->display_options['fields']['subject']['id'] = 'subject';
-  $handler->display->display_options['fields']['subject']['table'] = 'comment';
-  $handler->display->display_options['fields']['subject']['field'] = 'subject';
-  $handler->display->display_options['fields']['subject']['label'] = '';
-  $handler->display->display_options['fields']['subject']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['subject']['alter']['ellipsis'] = FALSE;
-  /* Field: Comment: Author */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'comment';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['label'] = '';
-  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
-  /* Field: Comment: Post date */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'comment';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = '';
-  $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Field: Comment: Comment */
-  $handler->display->display_options['fields']['comment_body']['id'] = 'comment_body';
-  $handler->display->display_options['fields']['comment_body']['table'] = 'field_data_comment_body';
-  $handler->display->display_options['fields']['comment_body']['field'] = 'comment_body';
-  $handler->display->display_options['fields']['comment_body']['label'] = '';
-  $handler->display->display_options['fields']['comment_body']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['comment_body']['type'] = 'text_trimmed';
-  $handler->display->display_options['fields']['comment_body']['settings'] = array(
-    'trim_length' => '200',
-  );
-  /* Sort criterion: Comment: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'comment';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Filter criterion: Comment: Approved */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'comment';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status_node']['id'] = 'status_node';
-  $handler->display->display_options['filters']['status_node']['table'] = 'node';
-  $handler->display->display_options['filters']['status_node']['field'] = 'status';
-  $handler->display->display_options['filters']['status_node']['relationship'] = 'nid';
-  $handler->display->display_options['filters']['status_node']['value'] = 1;
-  $handler->display->display_options['filters']['status_node']['group'] = 1;
-  $handler->display->display_options['filters']['status_node']['expose']['operator'] = FALSE;
-  /* Filter criterion: Comment: Approved */
-  $handler->display->display_options['filters']['status_1']['id'] = 'status_1';
-  $handler->display->display_options['filters']['status_1']['table'] = 'comment';
-  $handler->display->display_options['filters']['status_1']['field'] = 'status';
-  $handler->display->display_options['filters']['status_1']['value'] = '1';
-  /* Filter criterion: Comment: Author */
-  $handler->display->display_options['filters']['name']['id'] = 'name';
-  $handler->display->display_options['filters']['name']['table'] = 'comment';
-  $handler->display->display_options['filters']['name']['field'] = 'name';
-  $handler->display->display_options['filters']['name']['operator'] = 'starts';
-  $handler->display->display_options['filters']['name']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['name']['expose']['operator_id'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['label'] = 'Author';
-  $handler->display->display_options['filters']['name']['expose']['description'] = 'The user who made the comment.';
-  $handler->display->display_options['filters']['name']['expose']['operator'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['identifier'] = 'name';
-  $handler->display->display_options['filters']['name']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    7 => 0,
-    6 => 0,
-    8 => 0,
-    4 => 0,
-    3 => 0,
-  );
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'comments';
-  $handler->display->display_options['menu']['type'] = 'normal';
-  $handler->display->display_options['menu']['title'] = 'Comments';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-control-panel-1';
-  $handler->display->display_options['menu']['context'] = 0;
-  $handler->display->display_options['menu']['context_only_inline'] = 0;
-  $export['comments'] = $view;
 
   $view = new view();
   $view->name = 'courses_and_keywords';

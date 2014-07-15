@@ -90,7 +90,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -44,
+    'weight' => -45,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords
@@ -111,26 +111,6 @@ function cyco_core_menu_default_menu_links() {
     'has_children' => 1,
     'expanded' => 1,
     'weight' => -49,
-    'customized' => 1,
-  );
-  // Exported menu link: menu-cp-authors_comments:comments
-  $menu_links['menu-cp-authors_comments:comments'] = array(
-    'menu_name' => 'menu-cp-authors',
-    'link_path' => 'comments',
-    'router_path' => 'comments',
-    'link_title' => 'Comments',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Work with comments users have made.',
-      ),
-      'identifier' => 'menu-cp-authors_comments:comments',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 1,
-    'expanded' => 1,
-    'weight' => -45,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_courses-and-keywords:courses-and-keywords
@@ -264,27 +244,6 @@ function cyco_core_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords',
   );
-  // Exported menu link: menu-cp-authors_list-comments:comments
-  $menu_links['menu-cp-authors_list-comments:comments'] = array(
-    'menu_name' => 'menu-cp-authors',
-    'link_path' => 'comments',
-    'router_path' => 'comments',
-    'link_title' => 'List comments',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'List all of the comments.',
-      ),
-      'identifier' => 'menu-cp-authors_list-comments:comments',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => -50,
-    'customized' => 1,
-    'parent_identifier' => 'menu-cp-authors_comments:comments',
-  );
   // Exported menu link: menu-cp-authors_list-course-pages-and-keywords:courses-and-keywords
   $menu_links['menu-cp-authors_list-course-pages-and-keywords:courses-and-keywords'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -323,7 +282,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -43,
+    'weight' => -44,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_list-users:admin/people
@@ -368,48 +327,6 @@ function cyco_core_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords',
   );
-  // Exported menu link: menu-cp-authors_manage-comments:admin/content/comment
-  $menu_links['menu-cp-authors_manage-comments:admin/content/comment'] = array(
-    'menu_name' => 'menu-cp-authors',
-    'link_path' => 'admin/content/comment',
-    'router_path' => 'admin/content/comment',
-    'link_title' => 'Manage comments',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'View, approve, delete...',
-      ),
-      'identifier' => 'menu-cp-authors_manage-comments:admin/content/comment',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => -49,
-    'customized' => 1,
-    'parent_identifier' => 'menu-cp-authors_comments:comments',
-  );
-  // Exported menu link: menu-cp-authors_manage-course-keywords:admin/structure/taxonomy/keywords
-  $menu_links['menu-cp-authors_manage-course-keywords:admin/structure/taxonomy/keywords'] = array(
-    'menu_name' => 'menu-cp-authors',
-    'link_path' => 'admin/structure/taxonomy/keywords',
-    'router_path' => 'admin/structure/taxonomy/%',
-    'link_title' => 'Manage course keywords',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Add, delete, and edit course keywords',
-      ),
-      'identifier' => 'menu-cp-authors_manage-course-keywords:admin/structure/taxonomy/keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => 6,
-    'customized' => 1,
-    'parent_identifier' => 'menu-cp-authors_courses-and-keywords:courses-and-keywords',
-  );
   // Exported menu link: menu-cp-authors_manage-workflow-tags:admin/structure/taxonomy/workflow_tags
   $menu_links['menu-cp-authors_manage-workflow-tags:admin/structure/taxonomy/workflow_tags'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -448,7 +365,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -41,
+    'weight' => -40,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_users:admin/people
@@ -468,7 +385,7 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 1,
     'expanded' => 1,
-    'weight' => -42,
+    'weight' => -41,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_workflow-tagged:workflow-tagged
@@ -613,40 +530,6 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -45,
     'customized' => 1,
   );
-  // Exported menu link: menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords
-  $menu_links['menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords'] = array(
-    'menu_name' => 'menu-cp-reviewers',
-    'link_path' => 'blueprints-and-keywords',
-    'router_path' => 'blueprints-and-keywords',
-    'link_title' => 'Blueprints and keywords',
-    'options' => array(
-      'identifier' => 'menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 1,
-    'customized' => 0,
-  );
-  // Exported menu link: menu-cp-reviewers_courses-and-keywords:courses-and-keywords
-  $menu_links['menu-cp-reviewers_courses-and-keywords:courses-and-keywords'] = array(
-    'menu_name' => 'menu-cp-reviewers',
-    'link_path' => 'courses-and-keywords',
-    'router_path' => 'courses-and-keywords',
-    'link_title' => 'Courses and keywords',
-    'options' => array(
-      'identifier' => 'menu-cp-reviewers_courses-and-keywords:courses-and-keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 0,
-    'customized' => 0,
-  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add basic page');
@@ -654,20 +537,16 @@ function cyco_core_menu_default_menu_links() {
   t('All content');
   t('Basic pages');
   t('Blueprints and keywords');
-  t('Comments');
   t('Courses and keywords');
   t('Create a new blueprint');
   t('Create a new course');
   t('Custom tokens');
   t('List basic pages');
   t('List blueprint pages and keywords');
-  t('List comments');
   t('List course pages and keywords');
   t('List tagged content');
   t('List users');
   t('Manage blueprint keywords');
-  t('Manage comments');
-  t('Manage course keywords');
   t('Manage workflow tags');
   t('Other');
   t('Users');

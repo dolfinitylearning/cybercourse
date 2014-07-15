@@ -14,7 +14,7 @@ function cyco_exercises_menu_default_menu_links() {
   $menu_links['menu-cp-authors_add-new-exercise:node/add/exercise'] = array(
     'menu_name' => 'menu-cp-authors',
     'link_path' => 'node/add/exercise',
-    'router_path' => 'node/add/exercise',
+    'router_path' => 'node/add',
     'link_title' => 'Add new exercise',
     'options' => array(
       'attributes' => array(
@@ -35,7 +35,7 @@ function cyco_exercises_menu_default_menu_links() {
   $menu_links['menu-cp-authors_add-new-rubric-item:node/add/rubric-item'] = array(
     'menu_name' => 'menu-cp-authors',
     'link_path' => 'node/add/rubric-item',
-    'router_path' => 'node/add/rubric-item',
+    'router_path' => 'node/add',
     'link_title' => 'Add new rubric item',
     'options' => array(
       'attributes' => array(
@@ -48,7 +48,7 @@ function cyco_exercises_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 1,
-    'weight' => -47,
+    'weight' => -46,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
   );
@@ -110,7 +110,7 @@ function cyco_exercises_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 1,
-    'weight' => -48,
+    'weight' => -47,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
   );

@@ -1,0 +1,28 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 9, 2014, 12:53:38 PM
+    Author     : mathieso
+*/
+
+p.cyco_reminder {
+  font-weight: bold;
+  color: red;
+}
+
+.view-classes-public table {
+  border: 1px #DDD solid;
+  border-radius: 6px;
+}
+
+.view-classes-public .classes-public-view-class-title {
+  font-size: 120%;
+}
+
+.view-classes-public .classes-public-view-body {
+  margin-left: 2em;
+}
+

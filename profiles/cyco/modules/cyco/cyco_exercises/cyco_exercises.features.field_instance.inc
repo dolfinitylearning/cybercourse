@@ -318,6 +318,87 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-class-field_images'
+  $field_instances['node-class-field_images'] = array(
+    'bundle' => 'class',
+    'deleted' => 0,
+    'description' => 'Images for your content.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_images',
+    'label' => 'Images',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => 'course/images-bucket',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 1,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
+        'insert' => 1,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'icon_link' => 0,
+          'image' => 0,
+          'image_large' => 0,
+          'image_medium' => 0,
+          'image_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 4,
+    ),
+  );
+
   // Exported field_instance: 'node-class-group_access'
   $field_instances['node-class-group_access'] = array(
     'bundle' => 'class',
@@ -345,7 +426,7 @@ function cyco_exercises_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'group_access',
     'label' => 'Group visibility',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -360,10 +441,11 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 5,
+      'weight' => 6,
     ),
     'widget_type' => 'options_select',
   );
@@ -426,57 +508,6 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-og_roles_permissions'
-  $field_instances['node-class-og_roles_permissions'] = array(
-    'bundle' => 'class',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 3,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'og_roles_permissions',
-    'label' => 'Group roles and permissions',
-    'required' => TRUE,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'view modes' => array(
-      'full' => array(
-        'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'list_default',
-      ),
-      'teaser' => array(
-        'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'list_default',
-      ),
-    ),
-    'widget' => array(
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 4,
-    ),
-  );
-
   // Exported field_instance: 'node-class_post-field_attachments'
   $field_instances['node-class_post-field_attachments'] = array(
     'bundle' => 'class_post',
@@ -503,7 +534,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
-      'file_directory' => 'class',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -515,9 +546,10 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -526,7 +558,7 @@ function cyco_exercises_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -549,7 +581,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -593,10 +625,92 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-class_post-field_images'
+  $field_instances['node-class_post-field_images'] = array(
+    'bundle' => 'class_post',
+    'deleted' => 0,
+    'description' => 'Images for your content.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_images',
+    'label' => 'Images',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => 'course/images-bucket',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 1,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
+        'insert' => 1,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'icon_link' => 0,
+          'image' => 0,
+          'image_large' => 0,
+          'image_medium' => 0,
+          'image_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 3,
+    ),
+  );
+
   // Exported field_instance: 'node-class_post-og_group_ref'
   $field_instances['node-class_post-og_group_ref'] = array(
     'bundle' => 'class_post',
     'default_value' => NULL,
+    'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -617,17 +731,29 @@ function cyco_exercises_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
     'label' => 'Groups audience',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
+            'widget_type' => 'options_select',
           ),
           'default' => array(
             'widget_type' => 'options_select',
           ),
           'status' => TRUE,
+        ),
+        'prepopulate' => array(
+          'action' => 'none',
+          'action_on_edit' => 0,
+          'fallback' => 'none',
+          'providers' => array(
+            'og_context' => 1,
+            'url' => 1,
+          ),
+          'skip_perm' => 0,
+          'status' => 1,
         ),
       ),
       'user_register_form' => FALSE,
@@ -645,10 +771,53 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
       'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-course_page-field_exercises'
+  $field_instances['node-course_page-field_exercises'] = array(
+    'bundle' => 'course_page',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => 0,
+    'description' => 'Exercises this page includes.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 7,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_exercises',
+    'label' => 'Exercises',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 8,
     ),
   );
 
@@ -663,7 +832,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -678,7 +847,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
-      'file_directory' => '',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -690,9 +859,10 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -701,7 +871,7 @@ function cyco_exercises_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -724,7 +894,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 5,
+      'weight' => 8,
     ),
   );
 
@@ -764,7 +934,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 1,
+      'weight' => 3,
     ),
   );
 
@@ -779,7 +949,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -794,7 +964,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
-      'file_directory' => '',
+      'file_directory' => 'course/hidden-attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -807,6 +977,7 @@ function cyco_exercises_field_default_field_instances() {
           'filefield_sources' => array(
             'attach' => 0,
             'clipboard' => 0,
+            'imce' => 0,
             'reference' => 0,
             'remote' => 0,
             'upload' => 'upload',
@@ -840,7 +1011,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 6,
+      'weight' => 9,
     ),
   );
 
@@ -854,7 +1025,7 @@ function cyco_exercises_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -870,7 +1041,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -885,9 +1056,10 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -896,7 +1068,7 @@ function cyco_exercises_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -920,7 +1092,44 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 4,
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'node-exercise-field_keywords'
+  $field_instances['node-exercise-field_keywords'] = array(
+    'bundle' => 'exercise',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_keywords',
+    'label' => 'Keywords',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 1,
     ),
   );
 
@@ -936,7 +1145,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -957,7 +1166,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 3,
+      'weight' => 6,
     ),
   );
 
@@ -975,7 +1184,7 @@ function cyco_exercises_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 1,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -987,6 +1196,43 @@ function cyco_exercises_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_rubric_items',
     'label' => 'Rubric items',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-exercise-field_workflow_tags'
+  $field_instances['node-exercise-field_workflow_tags'] = array(
+    'bundle' => 'exercise',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Work this exercise needs.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_workflow_tags',
+    'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -1039,6 +1285,7 @@ function cyco_exercises_field_default_field_instances() {
           'filefield_sources' => array(
             'attach' => 0,
             'clipboard' => 0,
+            'imce' => 0,
             'reference' => 0,
             'remote' => 0,
             'upload' => 'upload',
@@ -1277,14 +1524,14 @@ function cyco_exercises_field_default_field_instances() {
     'bundle' => 'exercise_submission',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Solution to the exercise.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'swim',
+        'module' => 'text',
         'settings' => array(),
-        'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'type' => 'text_default',
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1295,16 +1542,19 @@ function cyco_exercises_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_solution',
-    'label' => 'Solution',
+    'label' => 'Your solution',
     'required' => 0,
     'settings' => array(
+      'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'swim',
-      'settings' => array(),
-      'type' => 'swim_widget',
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
       'weight' => 3,
     ),
   );
@@ -1627,13 +1877,13 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'node',
@@ -1642,7 +1892,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
-      'file_directory' => '',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '10mb',
       'user_register_form' => FALSE,
@@ -1654,9 +1904,10 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -1665,7 +1916,7 @@ function cyco_exercises_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -1688,7 +1939,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -1713,7 +1964,7 @@ function cyco_exercises_field_default_field_instances() {
           'trim_length' => 600,
         ),
         'type' => 'swim_summary_or_trimmed_formatter',
-        'weight' => 0,
+        'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
@@ -1732,15 +1983,16 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-model_exercise_solution-field_exercise'
-  $field_instances['node-model_exercise_solution-field_exercise'] = array(
+  // Exported field_instance: 'node-model_exercise_solution-field_exercise_solved'
+  $field_instances['node-model_exercise_solution-field_exercise_solved'] = array(
     'bundle' => 'model_exercise_solution',
     'default_value' => NULL,
+    'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Which exercise is this a solution for?',
+    'description' => 'Which exercise is this for?',
     'display' => array(
       'default' => array(
-        'label' => 'inline',
+        'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
           'link' => 1,
@@ -1749,7 +2001,7 @@ function cyco_exercises_field_default_field_instances() {
         'weight' => 0,
       ),
       'teaser' => array(
-        'label' => 'inline',
+        'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
           'link' => 1,
@@ -1759,10 +2011,23 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_exercise',
+    'field_name' => 'field_exercise_solved',
     'label' => 'Exercise',
     'required' => 1,
     'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'action' => 'hide',
+          'action_on_edit' => 1,
+          'fallback' => 'none',
+          'providers' => array(
+            'og_context' => FALSE,
+            'url' => 1,
+          ),
+          'skip_perm' => 0,
+          'status' => 1,
+        ),
+      ),
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1784,13 +2049,13 @@ function cyco_exercises_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
@@ -1800,7 +2065,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '1Mb',
       'max_resolution' => '',
@@ -1815,9 +2080,10 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -1826,7 +2092,7 @@ function cyco_exercises_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -1850,7 +2116,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 5,
+      'weight' => 3,
     ),
   );
 
@@ -1866,13 +2132,13 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 4,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 2,
       ),
     ),
     'entity_type' => 'node',
@@ -1887,7 +2153,84 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 4,
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-rubric_item-field_attachments'
+  $field_instances['node-rubric_item-field_attachments'] = array(
+    'bundle' => 'rubric_item',
+    'deleted' => 0,
+    'description' => 'Attachment(s) illustrating the rubric item.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_attachments',
+    'label' => 'Attachments',
+    'required' => 0,
+    'settings' => array(
+      'description_field' => 1,
+      'file_directory' => 'course/attachments-bucket',
+      'file_extensions' => '',
+      'max_filesize' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'file',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 1,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
+        'insert' => 0,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'icon_link' => 0,
+          'image' => 0,
+          'image_large' => 0,
+          'image_medium' => 0,
+          'image_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'file_generic',
+      'weight' => 7,
     ),
   );
 
@@ -1928,8 +2271,8 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-rubric_item-field_feeback_good'
-  $field_instances['node-rubric_item-field_feeback_good'] = array(
+  // Exported field_instance: 'node-rubric_item-field_feedback_good'
+  $field_instances['node-rubric_item-field_feedback_good'] = array(
     'bundle' => 'rubric_item',
     'default_value' => NULL,
     'deleted' => 0,
@@ -1950,8 +2293,8 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_feeback_good',
-    'label' => 'Feeback (good)',
+    'field_name' => 'field_feedback_good',
+    'label' => 'Feedback (good)',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -2048,6 +2391,91 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-rubric_item-field_images'
+  $field_instances['node-rubric_item-field_images'] = array(
+    'bundle' => 'rubric_item',
+    'deleted' => 0,
+    'description' => 'Images for your content.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_images',
+    'label' => 'Images',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => 'course/images-bucket',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 'clipboard',
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 1,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
+        'insert' => 1,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'icon_link' => 0,
+          'image' => 0,
+          'image_large' => 0,
+          'image_medium' => 0,
+          'image_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'node-rubric_item-field_notes'
   $field_instances['node-rubric_item-field_notes'] = array(
     'bundle' => 'rubric_item',
@@ -2118,6 +2546,264 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_good_cutoff'
+  $field_instances['user-user-field_good_cutoff'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 80,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Lowest rating for "good" messages, as percentage. Tokens substituted.<br><br>The score is computed as [number of "good"s x 2 + number of "needs work"s] / [number of rubric items x 2].<br><br>See the CyberCourse wiki for more information.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 12,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_good_cutoff',
+    'label' => '"Good" cutoff',
+    'required' => 0,
+    'settings' => array(
+      'max' => 90,
+      'min' => 10,
+      'prefix' => '',
+      'suffix' => '%',
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_greetings'
+  $field_instances['user-user-field_greetings'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Opening line, or salutation. You can add [feedback:student_first_name] and [feedback:student_last_name]; they\'ll be replaced by the appropriate values. Enter as many greetings as you like. E.g., "Hi [feedback:student_first_name]:" and "Yo, [feedback:student_first_name]!". (See the Token section below for a full list.)',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_greetings',
+    'label' => 'Greetings',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_needs_work_cutoff'
+  $field_instances['user-user-field_needs_work_cutoff'] = array(
+    'bundle' => 'user',
+    'default_value' => array(
+      0 => array(
+        'value' => 40,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Lowest rating for "needs work" messages, as percentage. Score computed as [number of "good"s x 2 + number of "needs work"s] / [number of rubric items x 2]. ',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 13,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_needs_work_cutoff',
+    'label' => '"Needs work" cutoff',
+    'required' => 0,
+    'settings' => array(
+      'max' => 90,
+      'min' => 10,
+      'prefix' => '',
+      'suffix' => '%',
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 11,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_overall_good'
+  $field_instances['user-user-field_overall_good'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Phrases that tell a student s/he did well on an exercise. Enter as many as you like. E.g. "Good job, [feedback:student_first_name]!", "[feedback:student_first_name], I like it!", "Nice work.". (See the Token section below for a full list of tokens.)',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_overall_good',
+    'label' => 'Overall: good',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_overall_needs_work'
+  $field_instances['user-user-field_overall_needs_work'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Phrases that tell a student his/her submission needs work. Enter as many as you like. E.g., "Not too bad, [feedback:student_first_name], but there are some issues.", "There are things you should fix, [feedback:student_first_name].", "It\'s OK, but needs fixing." (See the Token section below for a full list of tokens.)',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 7,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_overall_needs_work',
+    'label' => 'Overall: needs work',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_overall_poor'
+  $field_instances['user-user-field_overall_poor'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Phrases that tell a student s/he did poorly on an exercise. Enter as many as you like. E.g., "You can do better, [feedback:student_first_name].", "[feedback:student_first_name], you need to improve.", "Not that good. Come in for some help." (See the Token section below for a full list of tokens.)',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_overall_poor',
+    'label' => 'Overall: poor',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 9,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_signature'
+  $field_instances['user-user-field_signature'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Endings to feedback messages. Enter as many as you like. E.g., "Ann", "Your helper, Ann", "Best wishes, Ann".  (See the Token section below for a full list of tokens.)',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 11,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_signature',
+    'label' => 'Signature',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 12,
+    ),
+  );
+
   // Exported field_instance: 'user-user-og_user_node'
   $field_instances['user-user-og_user_node'] = array(
     'bundle' => 'user',
@@ -2167,12 +2853,15 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 5,
+      'weight' => 13,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('"Good" cutoff');
+  t('"Needs work" cutoff');
+  t('Attachment(s) illustrating the rubric item.');
   t('Attachments');
   t('Body');
   t('Categories');
@@ -2185,10 +2874,13 @@ function cyco_exercises_field_default_field_instances() {
   t('Courses');
   t('Courses this class has access to.');
   t('Determine if this is an OG group.');
+  t('Endings to feedback messages. Enter as many as you like. E.g., "Ann", "Your helper, Ann", "Best wishes, Ann".  (See the Token section below for a full list of tokens.)');
   t('Exercise');
   t('Exercise this is a submission for.');
-  t('Feeback (good)');
+  t('Exercises');
+  t('Exercises this page includes.');
   t('Feedback');
+  t('Feedback (good)');
   t('Feedback (needs work)');
   t('Feedback (poor)');
   t('Feedback comment');
@@ -2202,28 +2894,38 @@ function cyco_exercises_field_default_field_instances() {
   t('Files attached to your solution.');
   t('Files for this exercise. Students can download these files. ');
   t('Files that are not shown to regular users.');
+  t('Greetings');
   t('Group');
   t('Group membership');
-  t('Group roles and permissions');
   t('Group visibility');
   t('Groups audience');
   t('Has the student completed this exercise?');
   t('Hidden attachments');
   t('Image source, copyright...');
   t('Images');
+  t('Images for your content.');
   t('Images for your solution.');
+  t('Keywords');
   t('Lets you insert images in your submission. ');
+  t('Lowest rating for "good" messages, as percentage. Tokens substituted.<br><br>The score is computed as [number of "good"s x 2 + number of "needs work"s] / [number of rubric items x 2].<br><br>See the CyberCourse wiki for more information.');
+  t('Lowest rating for "needs work" messages, as percentage. Score computed as [number of "good"s x 2 + number of "needs work"s] / [number of rubric items x 2]. ');
   t('Notes');
   t('Notes about this solution.');
   t('Notes for instructors and graders.');
+  t('Opening line, or salutation. You can add [feedback:student_first_name] and [feedback:student_last_name]; they\'ll be replaced by the appropriate values. Enter as many greetings as you like. E.g., "Hi [feedback:student_first_name]:" and "Yo, [feedback:student_first_name]!". (See the Token section below for a full list.)');
+  t('Overall: good');
+  t('Overall: needs work');
+  t('Overall: poor');
+  t('Phrases that tell a student his/her submission needs work. Enter as many as you like. E.g., "Not too bad, [feedback:student_first_name], but there are some issues.", "There are things you should fix, [feedback:student_first_name].", "It\'s OK, but needs fixing." (See the Token section below for a full list of tokens.)');
+  t('Phrases that tell a student s/he did poorly on an exercise. Enter as many as you like. E.g., "You can do better, [feedback:student_first_name].", "[feedback:student_first_name], you need to improve.", "Not that good. Come in for some help." (See the Token section below for a full list of tokens.)');
+  t('Phrases that tell a student s/he did well on an exercise. Enter as many as you like. E.g. "Good job, [feedback:student_first_name]!", "[feedback:student_first_name], I like it!", "Nice work.". (See the Token section below for a full list of tokens.)');
   t('Rating on rubric item');
   t('Rating on this rubric item: good, needs work, or poor.');
   t('Request message');
   t('Rubric item');
   t('Rubric item this rating is for.');
   t('Rubric items');
-  t('Solution');
-  t('Solution to the exercise.');
+  t('Signature');
   t('Submission');
   t('The main text of the exercise.');
   t('This is the text a user may send to the group administrators.');
@@ -2232,10 +2934,13 @@ function cyco_exercises_field_default_field_instances() {
   t('When submitted');
   t('When was the feedback recorded?');
   t('When was the solution submitted for feedback?');
-  t('Which exercise is this a solution for?');
+  t('Which exercise is this for?');
   t('Which submission is this rating for?');
   t('Which version is this? First submission is version 1. If resubmitted, that is version 2. Etc.');
   t('Who gave the feedback?');
+  t('Work this exercise needs.');
+  t('Workflow tags');
+  t('Your solution');
 
   return $field_instances;
 }

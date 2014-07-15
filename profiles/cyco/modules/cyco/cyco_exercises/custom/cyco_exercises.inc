@@ -11,22 +11,93 @@ define( 'GENERIC_LAST_NAME', 'Rosenberg' );
 function cyco_exercises_menu() {
   $items = array();
   //A page that just closes the window it is in.
-  $items['cybercourse-exercises-close-popup'] = array(
+  $items['cyco-exercises-close-popup'] = array(
     'title' => 'Done',
     'page callback' => '_cyco_exercises_close_popup',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
-  $items['admin/config/cybercourse/exercise'] = array(
+  $items['admin/config/cyco/exercise'] = array(
     'title' => 'Exercises settings',
     'description' => 'Configuration of the Cybercourse exercises module.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('cyco_exercises_settings_form'),
     'access arguments' => array('admininster site configuration'),
-    'file' => 'cyco_exercises.admin.inc',
+    'file' => 'custom/cyco_exercises.admin.inc',
     'file path' => drupal_get_path('module', 'cyco_exercises'),
     );
   return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter
+ */
+function cyco_exercises_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  $r=7;
+  switch($root_path){
+    case 'exercises':
+      //Link to add exercise.
+      $item = menu_get_item('node/add/exercise');
+      $item['title'] = t('Add exercise');
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+      //Link to add rubric item.
+      $item = menu_get_item('node/add/rubric-item');
+      $item['title'] = t('Add rubric item');
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+      break;
+    case 'node/%':
+      $path = $router_item['href'];
+      list( $ignore, $nid ) = explode('/', $path);
+      $node = node_load($nid);
+      switch( $node->type ) {
+        case 'rubric_item':
+          //Link to add rubric item.
+          $item = menu_get_item('node/add/rubric-item');
+          $item['title'] = t('Add rubric item');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          //Link to list rubric items.
+          $item = menu_get_item('rubric-items');
+          $item['title'] = t('List rubric items');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          break;
+        case 'exercise':
+          //List exercises.
+          $item = menu_get_item('exercises');
+          $item['title'] = t('List exercises');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          //Link to add exercise.
+          $item = menu_get_item('node/add/exercise');
+          $item['title'] = t('Add exercise');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          //Link to add rubric item.
+          $item = menu_get_item('node/add/rubric-item');
+          $item['title'] = t('Add rubric item');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          break;
+      }
+      break;
+  }
 }
 
 function cyco_exercises_permission() {
@@ -44,7 +115,7 @@ function cyco_exercises_permission() {
 function _cyco_exercises_close_popup() {
   global $base_url;
   $path = $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-      . '/js/close_popup.js';
+      . '/custom/js/close_popup.js';
   drupal_add_js($path);
   return '<h1>Done</h1>'; //Need to return something here.
 }
@@ -115,7 +186,6 @@ function cyco_exercises_swim_betwixt2html_alter(&$content) {
  * Generates the HTML for the exercise.
  */
 function _cyco_exercises_make_replacements($matches) {
-  global $base_url;
   $exercise_nid = $matches[1];
   $exercise_node = node_load($exercise_nid);
   //Make sure that this is the right type of node.
@@ -127,15 +197,45 @@ function _cyco_exercises_make_replacements($matches) {
   }
   else {
     //Make the submission links.
-    $labeled_links = _cyco_exercises_make_submit_links($exercise_node);
+    global $user;
+    $labeled_links = '';
+    $too_bad_so_sad_message = '';
+    if ( ! cyco_core_user_has_role($user, 'student') ) {
+      $too_bad_so_sad_message = t('(If you were logged in as a student, '
+          . 'you could submit an exercise solution, and get some feedback.)'
+      );
+    }
+    else {
+//      $labeled_links = _cyco_exercises_make_submit_links($exercise_node);
+      //If there is no submission, there is only a link to create a new one.
+      //If there is an existing submission:
+      //  If there is no feedback yet, there is only an edit link.
+      //  If there is feedback, there is a Review link, and a new version link.
+      global $base_url;
+      //Create submission links for this exercise.
+      drupal_add_js(
+          $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+          . '/custom/js/cyco_exercises_submission_links.js'
+      );
+      //Send current user uid to client.
+      drupal_add_js(
+          array('cyco_exercises' => 
+            array(
+              'uid' => $user->uid,
+            ),
+          ),
+          'setting'
+      );
+    }
     $body_content = swim_rest2html(
-        $exercise_node->field_body[LANGUAGE_NONE][0]['pure_rest']
+        $exercise_node->field_body[LANGUAGE_NONE][0]['value']
     );
     $result = theme('cyco_embedded_exercise', array(
       'exercise_nid' => $exercise_nid,
       'title' => $exercise_node->title,
       'body' => $body_content,
       'labeled_links' => $labeled_links,
+      'too_bad_so_sad_message' => $too_bad_so_sad_message,
     ));
     return $result;
   }
@@ -146,29 +246,28 @@ function _cyco_exercises_make_replacements($matches) {
  * @param type $exercise_node The nid of the exercise.
  * @return array Labelled link data.
  */
-function _cyco_exercises_make_submit_links( $exercise_node ) {
-  //If there is no submission, there is only a link to create a new one.
-  //If there is an existing submission:
-  //  If there is no feedback yet, there is only an edit link.
-  //  If there is feedback, there is a Review link, and a new version link.
-  global $user;
-  global $base_url;
-  //Create submission links for this exercise.
-  drupal_add_js(
-      $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-      . '/js/cyco_exercises_submission_links.js'
-  );
-  //Send current user uid to client.
-  drupal_add_js(
-      array('cyco_exercises' => 
-        array(
-          'uid' => $user->uid,
-        ),
-      ),
-      'setting'
-  );
-  return;
-}
+//function _cyco_exercises_make_submit_links( $exercise_node ) {
+//  //If there is no submission, there is only a link to create a new one.
+//  //If there is an existing submission:
+//  //  If there is no feedback yet, there is only an edit link.
+//  //  If there is feedback, there is a Review link, and a new version link.
+//  global $base_url;
+//  //Create submission links for this exercise.
+//  drupal_add_js(
+//      $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+//      . '/custom/js/cyco_exercises_submission_links.js'
+//  );
+//  //Send current user uid to client.
+//  drupal_add_js(
+//      array('cyco_exercises' => 
+//        array(
+//          'uid' => $user->uid,
+//        ),
+//      ),
+//      'setting'
+//  );
+//  return;
+//}
 
 /**
  * Implement hook_theme().
@@ -186,12 +285,20 @@ function cyco_exercises_theme() {
         'title' => '(no title)',
         'body' => '(MT)',
         'labeled_links' => array(),
+        'too_bad_so_sad_message' => '',
       ),
     ),
     'cyco_feedback_phrases' => array(
       'template' => 'custom/templates/cyco-feedback-phrase-preview',
       'variables' => array(
         'phrases_groups' => array(),
+      )
+    ),
+    'cyco_exercises_model_solutions' => array(
+      'template' => 'custom/templates/cyco-exercises-model-solutions',
+      'variables' => array(
+        'exer_nid' => NULL,
+        'models' => array(),
       )
     )
   );
@@ -203,12 +310,29 @@ function cyco_exercises_theme() {
  * destination.
  */
 function cyco_exercises_custom_theme() {
-//  if (( isset($_GET['destination']) 
-//      && $_GET['destination'] == 'cybercourse-exercises-close-popup' ) ||
-//      current_path() == 'cybercourse-exercises-close-popup'
-//  ) {
   if (_cyco_exercises_is_submission_page_in_popup() ) {
     return _cyco_exercises_get_submission_theme();
+  }
+}
+
+/**
+ * Remind user to set timezone.
+ */
+function cyco_exercises_page_alter(&$page) {
+  global $user;
+  if ( $user->uid > 0 ) {
+    if ( ! _cyco_exercises_is_submission_page_in_popup() ) {
+      global $user;
+      if (!$user->timezone) {
+        drupal_set_message(
+            t('Please set your <a href="@user-edit">account time zone setting</a>.', 
+                array(
+                  '@user-edit' => url("user/$user->uid/edit")
+                )
+            )
+        );
+      }
+    }
   }
 }
 
@@ -220,7 +344,7 @@ function _cyco_exercises_is_submission_page_in_popup() {
   $is_submission_popup = FALSE;
   //Is the page in a popup?
   if ((    isset($_GET['destination']) 
-        && $_GET['destination'] == 'cybercourse-exercises-close-popup' ) ) {
+        && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
     //Is this a submission add form?
     $current_path = current_path();
     if ( $current_path == 'node/add/exercise-submission' ) {
@@ -330,8 +454,7 @@ function cyco_exercises_node_view($node, $view_mode, $langcode) {
  * Implements hook_form_alter().
  * 
  * Hide the rubric items field, and add the replacement UI.
- * @param type $form
- * @param type $form_state
+ * Add info on model solutions.
  */
 function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   $form['#submit'][] = '_cyco_exercises_form_submit';
@@ -382,6 +505,37 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
     '#markup' => $ui_html,
     '#weight' => $form['field_rubric_items']['#weight'],
   );
+  //Model solutions.
+  //When creating an exercise, there is no nid.
+  if ( isset( $form['#entity']->nid ) ) {
+    $exer_nid = $form['#entity']->nid;
+    $models_efq = new EntityFieldQuery;
+    $models_efq
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'model_exercise_solution')
+      ->propertyCondition('status', 1)
+      ->fieldCondition('field_exercise_solved', 'target_id', $exer_nid)
+      ->propertyOrderBy('title');
+    $query_result = $models_efq->execute();
+    //Create the HTML.
+    $models = array();
+    foreach ( $query_result['node'] as $nid => $ignore ) {
+      $node = node_load( $nid );
+      $models[$nid] = $node->title;
+    }
+    $models_html = theme(
+        'cyco_exercises_model_solutions', 
+        array(
+          'exer_nid' => $exer_nid,
+          'models' => $models,
+        ) 
+    );
+    $form['models'] = array(
+      '#type' => 'markup',
+      '#markup' => $models_html,
+      '#weight' => $form['field_rubric_items']['#weight'],
+    );  
+  }
 }
 
 function _cyco_exercises_form_submit($form, &$form_state) {
@@ -392,6 +546,32 @@ function _cyco_exercises_form_submit($form, &$form_state) {
   $form_state['values']['field_rubric_items'][LANGUAGE_NONE] = array();
   foreach ($linked_items as $key => $nid) {
     $form_state['values']['field_rubric_items'][LANGUAGE_NONE][$key]['target_id'] = $nid;
+  }
+}
+
+
+function cyco_exercises_form_course_page_node_form_alter(&$form, $form_state) {
+  $form['#submit'][] = '_cyco_exercises_store_exercise_refs';
+}
+
+/**
+ * Store references to exercises in the course page.
+ */
+function _cyco_exercises_store_exercise_refs($form, &$form_state) {
+  $matches = array();
+  $body_content = 
+      $form_state['values']['field_body'][LANGUAGE_NONE][0]['value'];
+  preg_match_all(
+      '/\.\.\s+exercise\:\:\s+(\d+)/i', 
+      $body_content,
+      $matches
+  );
+  if ( sizeof( $matches ) > 0 ) {
+    $form_state['values']['field_exercises'][LANGUAGE_NONE] = array();
+    foreach( $matches[1] as $index => $exercise_nid ) {
+      $form_state['values']['field_exercises'][LANGUAGE_NONE][$index]
+          = array('target_id' => $exercise_nid);
+    }
   }
 }
 
@@ -460,7 +640,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   global $base_url;
   drupal_add_js(
       $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-      . '/js/cyco_exercises_prep_submission_form.js'
+      . '/custom/js/cyco_exercises_prep_submission_form.js'
   );
   //Send settings to SWIM JS. Size the editor.
   $settings = array(
@@ -478,7 +658,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     if ( ! isset( $_GET['field_exercise'] ) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' exercise id not passed for add';
-      cybercourse_base_handle_error( $message );
+      cyco_core_current_user_has_role( $message );
       return;
      }
     $exercise_id = $_GET['field_exercise'];
@@ -492,7 +672,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
         //Bad version.
         $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
             . ' bad version: ' . $version;
-        cybercourse_base_handle_error( $message );
+        cyco_core_current_user_has_role( $message );
         return;
       }
     }
@@ -507,7 +687,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     //Bad operation.
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' unknown operation: ' + $op;
-    cybercourse_base_handle_error( $message );
+    cyco_core_current_user_has_role( $message );
     return;
   }
   //Hide the exercise field.
@@ -582,15 +762,31 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   $submit_button_weight = $form['actions']['submit']['#weight'];
   $form['submit_solution'] = array(
     '#type' => 'checkbox',
-    '#title' => 'Submitted for feedback',
+    '#title' => 'Submit for feedback',
     '#default_value' => $has_been_submitted,
     '#weight' => $submit_button_weight,
   );
   $form['actions']['submit']['#weight']++;
+  //Add feedback reminder element for JS to use.
+  $reminder = theme(
+        'cyco_reminder', 
+        array(
+          'reminder' => t('Check Submit when your solution is ready. '
+              . 'Graders only see submitted solutions.'),
+          'hide_at_start' => TRUE,
+        )
+    );
+  $form['reminder'] = array(
+    '#type' => 'markup',
+    '#markup' => $reminder,
+    '#weight' => $submit_button_weight + 1,
+  );
+  $form['actions']['submit']['#weight']++;
+  
   
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
-  drupal_set_title( 'Solution for exercise: ' . $exercise_node->title );
+  drupal_set_title( $exercise_node->title );
   //Add submission processor.
   $form['#submit'][] = '_cyco_exercises_submission_form_submission';
   
@@ -616,14 +812,14 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
   $submit_checked = ($form_state['values']['submit_solution'] == 1);
   if ( $submit_checked ) {
     //Is there already a submission date?
-    if ( isset($form_state['values']['field_when_submitted'][LANGUAGE_NONE][0]['value'] ) ) {
-      //Yes, nothing to change.
-    }
-    else {
+//    if ( isset($form_state['values']['field_when_submitted'][LANGUAGE_NONE][0]['value'] ) ) {
+//      //Yes, nothing to change.
+//    }
+//    else {
       //Record current date/time as the submission date/time.
-      $now = cybercourse_base_format_time();
+      $now = cyco_core_format_time();
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = $now;
-    }
+//    }
   }
   else {
     //Submit not checked.
@@ -671,7 +867,7 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
     $gids[] = $record->gid;
   }
   //Get the names of those groups.
-  $groups = cybercourse_groups_get_group_names($gids);
+  $groups = cyco_core_groups_get_group_names($gids);
   //Get all the members of those groups.
   $query = db_select('og_membership', 'ogm');
   $query
@@ -701,6 +897,7 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
 select 
   submission_node.nid as submission_nid,
   submission_node.uid as submitter_uid,
+  users.name as username,
   lastname_table.field_last_name_value as last_name,
   firstname_table.field_first_name_value as first_name,
   when_submitted_table.field_when_submitted_value as when_submitted,
@@ -708,11 +905,14 @@ select
   exercise_node.nid as exercise_nid,
   exercise_node.title as exercise_title
 from {node} as submission_node
+/* Grad submitter's username. */
+inner join {users} on
+  users.uid = submission_node.uid
 /* Grab the submitter's last name. */
-inner join {field_data_field_last_name} as lastname_table on 
+left join {field_data_field_last_name} as lastname_table on 
   lastname_table.entity_id = submission_node.uid
 /* Grab the submitter's first name. */
-inner join {field_data_field_first_name} as firstname_table on 
+left join {field_data_field_first_name} as firstname_table on 
   firstname_table.entity_id = submission_node.uid
 /* Grab the exericse title. */
 inner join {field_data_field_exercise} as exercise_ref_table on 
@@ -736,6 +936,20 @@ order by submission_node.created;
   $submissions = array();
   if ( $records ) {
     while ( $row = $records->fetchAssoc() ) {
+      $display_name = '';
+      if ( isset( $first_name ) ) {
+        $display_name = $row['first_name'];
+      }
+      if ( isset( $last_name ) ) {
+        $display_name .= $row['last_name'];
+      }
+      if ( $display_name == '' ) {
+        $display_name = $row['username'];
+      }
+      else {
+        $display_name .= ' (' . $row['username'] . ')';
+      }
+      $row['display_name'] = $display_name;
       $submissions[] = $row;
     }
   }
@@ -758,7 +972,7 @@ order by submission_node.created;
  * @param int $uid Grader UID, defaults to current user.
  * @return int Number of submissions waiting.
  */
-function _cyco_exercises_get_number_submissions_to_grade($uid = NULL) {
+function cyco_exercises_get_number_submissions_to_grade($uid = NULL) {
   $submissions_data = cyco_exercises_get_submissions_to_grade($uid);
   $submissions = $submissions_data['submissions'];
   return sizeof($submissions);
@@ -773,7 +987,7 @@ function cyco_exercises_form_user_profile_form_alter( &$form, $form_state ) {
   //Get the uid of the user who is the subject of this form.
   $subject_uid = $form['#entity']->uid;
   $subject = user_load($subject_uid);
-  if (cybercourse_base_user_has_role( $subject, 'grader' ) ) {
+  if (cyco_core_user_has_role( $subject, 'grader' ) ) {
 //    $form['#validate'][] = '_cyco_exercises_user_profile_form_validate';
     $form['#submit'][] = '_cyco_exercises_user_profile_form_submit';
     //Insert the token display.
@@ -797,7 +1011,7 @@ function cyco_exercises_form_user_profile_form_alter( &$form, $form_state ) {
   }
   else {
     //Not a grader. Hide all thoe fields.
-    field_group_hide_field_groups( $form, array('group_feedback_phrases'));
+    //field_group_hide_field_groups( $form, array('group_feedback_phrases'));
   }
 }
 
@@ -947,7 +1161,7 @@ function cyco_exercises_tokens($type, $tokens, array $data = array(),
             $student_uid = $data['student_uid'];
             $users = entity_load('user', array( $student_uid ) );
             $student_all_data = $users[ $student_uid ];
-            if ( cybercourse_base_user_has_role( $student_all_data, 'student' ) ) {
+            if ( cyco_core_user_has_role( $student_all_data, 'student' ) ) {
               if ( isset( $student_all_data->field_first_name[LANGUAGE_NONE][0] ) ) {
                 $first_name = $student_all_data->field_first_name[LANGUAGE_NONE][0]['value'];
               }
@@ -960,7 +1174,7 @@ function cyco_exercises_tokens($type, $tokens, array $data = array(),
           //Replace with the student's last name if the current user
           //has the student role, else use a generic name. 
           $last_name = 'Rosenberg'; //Default name.
-          if ( cybercourse_base_current_user_has_role( 'student' ) ) {
+          if ( cyco_core_current_user_has_role( 'student' ) ) {
             global $user;
             $users = entity_load('user', array($user->uid) );
             $user_all_data = $users[ $user->uid ];

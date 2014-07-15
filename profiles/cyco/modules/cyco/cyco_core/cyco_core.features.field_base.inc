@@ -49,13 +49,24 @@ function cyco_core_field_default_field_bases() {
     'field_permissions' => array(
       'type' => 0,
     ),
-    'foreign keys' => array(),
-    'indexes' => array(),
+    'foreign keys' => array(
+      'format' => array(
+        'columns' => array(
+          'format' => 'format',
+        ),
+        'table' => 'filter_format',
+      ),
+    ),
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
     'locked' => 0,
-    'module' => 'swim',
+    'module' => 'text',
     'settings' => array(),
     'translatable' => 0,
-    'type' => 'swim_field',
+    'type' => 'text_long',
   );
 
   // Exported field_base: 'field_attachments'
@@ -217,6 +228,9 @@ function cyco_core_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_keywords',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(
       'tid' => array(
         'columns' => array(

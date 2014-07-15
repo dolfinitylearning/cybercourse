@@ -135,7 +135,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -145,7 +145,14 @@ function cyco_core_field_default_field_instances() {
       'module' => 'file',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
@@ -283,7 +290,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -296,7 +303,14 @@ function cyco_core_field_default_field_instances() {
       'module' => 'image',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
@@ -433,7 +447,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -443,14 +457,21 @@ function cyco_core_field_default_field_instances() {
       'module' => 'file',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -543,7 +564,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -556,14 +577,21 @@ function cyco_core_field_default_field_instances() {
       'module' => 'image',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 'remote',
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -731,7 +759,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
-      'file_directory' => '',
+      'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
       'user_register_form' => FALSE,
@@ -741,7 +769,14 @@ function cyco_core_field_default_field_instances() {
       'module' => 'file',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
@@ -841,7 +876,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
-      'file_directory' => '',
+      'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
@@ -854,7 +889,14 @@ function cyco_core_field_default_field_instances() {
       'module' => 'image',
       'settings' => array(
         'filefield_sources' => array(
-          'filefield_sources' => array(),
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
           'source_attach' => array(
             'absolute' => 0,
             'attach_mode' => 'move',
@@ -969,14 +1011,14 @@ function cyco_core_field_default_field_instances() {
     'bundle' => 'user',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'About you.',
+    'description' => 'About you. What are you into? What do you want out of life?',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'swim',
+        'module' => 'text',
         'settings' => array(),
-        'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'type' => 'text_default',
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'user',
@@ -984,14 +1026,17 @@ function cyco_core_field_default_field_instances() {
     'label' => 'About',
     'required' => 0,
     'settings' => array(
+      'text_processing' => 0,
       'user_register_form' => 1,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'swim',
-      'settings' => array(),
-      'type' => 'swim_widget',
-      'weight' => 4,
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 3,
     ),
   );
 
@@ -1070,7 +1115,7 @@ You can leave it blank, although your instructor might require it.',
   // Translatables
   // Included for use with string extractors like potx.
   t('About');
-  t('About you.');
+  t('About you. What are you into? What do you want out of life?');
   t('Attachments');
   t('Blueprint keywords');
   t('Body');

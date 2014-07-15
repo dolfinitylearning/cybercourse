@@ -113,11 +113,8 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['empty'] = TRUE;
-  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are the exercises that have been defined.</p>
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are the exercises.</p>
 
-<p><a href="node/add/exercise" class="button">Add new exercise</a></p>
-
-<p><a href="node/add/rubric-item" class="button">Add new rubric item</a></p>
 ';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_rubric_items_target_id']['id'] = 'field_rubric_items_target_id';
@@ -130,31 +127,58 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  /* Field: Content: Body */
+  $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
+  $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
+  $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
+  $handler->display->display_options['fields']['field_body']['label'] = '';
+  $handler->display->display_options['fields']['field_body']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
+  $handler->display->display_options['fields']['field_body']['settings'] = array(
+    'trim_length' => '600',
+  );
+  /* Field: Content: Keywords */
+  $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
+  /* Field: Content: Workflow tags */
+  $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['field'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_workflow_tags']['delta_offset'] = '0';
+  /* Field: Content: Published */
+  $handler->display->display_options['fields']['status']['id'] = 'status';
+  $handler->display->display_options['fields']['status']['table'] = 'node';
+  $handler->display->display_options['fields']['status']['field'] = 'status';
+  $handler->display->display_options['fields']['status']['label'] = '';
+  $handler->display->display_options['fields']['status']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['status']['type'] = 'published-notpublished';
+  $handler->display->display_options['fields']['status']['not'] = 0;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['text'] = '<p class="exercise-view-exercise-title"><a href="/node/[nid]?destination=admin/structure/views/nojs/preview/exercises/default">[title]</a> ([nid])</p>
 
-<p class="exercise-view-exercise-body">[body]</p>
+<div class="exercise-view-body">[field_body]</div>
 
-<p class="exercise-view-exercise-edit"><a href="/node/[nid]/edit?destination=admin/structure/views/nojs/preview/exercises/default">Edit exercise</a></p>
-';
+<p class="exercise-view-terms">Workflow tags: [field_workflow_tags] &nbsp;&nbsp;&nbsp;Keywords: [field_keywords]</p>
+
+<p class="exercise-view-status">Status: [status]</p>
+
+<p class="exercise-view-rubric-label">Rubrics:</p>';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Field: Content: Edit link */
-  $handler->display->display_options['fields']['edit_node_1']['id'] = 'edit_node_1';
-  $handler->display->display_options['fields']['edit_node_1']['table'] = 'views_entity_node';
-  $handler->display->display_options['fields']['edit_node_1']['field'] = 'edit_node';
-  $handler->display->display_options['fields']['edit_node_1']['label'] = '';
-  $handler->display->display_options['fields']['edit_node_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['edit_node_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['edit_node_1']['text'] = 'Edit';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
   $handler->display->display_options['fields']['title_1']['table'] = 'node';
@@ -166,13 +190,6 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
@@ -180,51 +197,6 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'exercise' => 'exercise',
   );
-  /* Filter criterion: Content: Title */
-  $handler->display->display_options['filters']['title']['id'] = 'title';
-  $handler->display->display_options['filters']['title']['table'] = 'node';
-  $handler->display->display_options['filters']['title']['field'] = 'title';
-  $handler->display->display_options['filters']['title']['operator'] = 'contains';
-  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Filter by exercise title';
-  $handler->display->display_options['filters']['title']['expose']['description'] = 'Only show exercises whose title contains text you enter. Leave blank for all exercises.';
-  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-  );
-  /* Filter criterion: Content: Categories (field_categories) */
-  $handler->display->display_options['filters']['field_categories_tid']['id'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['table'] = 'field_data_field_categories';
-  $handler->display->display_options['filters']['field_categories_tid']['field'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['relationship'] = 'field_rubric_item_target_id';
-  $handler->display->display_options['filters']['field_categories_tid']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['operator_id'] = 'field_categories_tid_op';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['label'] = 'Filter by rubric item categories ';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['description'] = 'Only show exercises with rubric items in the selected categories.';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['operator'] = 'field_categories_tid_op';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['identifier'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['multiple'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-  );
-  $handler->display->display_options['filters']['field_categories_tid']['reduce_duplicates'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_categories_tid']['vocabulary'] = 'rubric_item_categories';
-  $handler->display->display_options['filters']['field_categories_tid']['hierarchy'] = 1;
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
@@ -371,50 +343,6 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'rubric_item' => 'rubric_item',
   );
-  /* Filter criterion: Content: Title */
-  $handler->display->display_options['filters']['title']['id'] = 'title';
-  $handler->display->display_options['filters']['title']['table'] = 'node';
-  $handler->display->display_options['filters']['title']['field'] = 'title';
-  $handler->display->display_options['filters']['title']['operator'] = 'contains';
-  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Filter by title';
-  $handler->display->display_options['filters']['title']['expose']['description'] = 'Only show rubric items whose title contains text you enter. Leave blank for all exercises.';
-  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-  );
-  /* Filter criterion: Content: Categories (field_categories) */
-  $handler->display->display_options['filters']['field_categories_tid']['id'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['table'] = 'field_data_field_categories';
-  $handler->display->display_options['filters']['field_categories_tid']['field'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['operator_id'] = 'field_categories_tid_op';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['label'] = 'Filter by rubric item categories';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['description'] = 'Only show rubric items in the selected categories.';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['operator'] = 'field_categories_tid_op';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['identifier'] = 'field_categories_tid';
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['remember'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['multiple'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    6 => 0,
-    5 => 0,
-    4 => 0,
-    3 => 0,
-  );
-  $handler->display->display_options['filters']['field_categories_tid']['reduce_duplicates'] = TRUE;
-  $handler->display->display_options['filters']['field_categories_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_categories_tid']['vocabulary'] = 'rubric_item_categories';
-  $handler->display->display_options['filters']['field_categories_tid']['hierarchy'] = 1;
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
@@ -427,6 +355,134 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['rubric_items'] = $view;
+
+  $view = new view();
+  $view->name = 'submission_metadata_for_student_exercise';
+  $view->description = 'Return metadata about submissions for a student/exercise combination.';
+  $view->tag = 'Services';
+  $view->base_table = 'node';
+  $view->human_name = 'Submission metadata for student/exercise';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Relationship: Content: Author */
+  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['table'] = 'node';
+  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['required'] = TRUE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_exercise_target_id']['id'] = 'field_exercise_target_id';
+  $handler->display->display_options['relationships']['field_exercise_target_id']['table'] = 'field_data_field_exercise';
+  $handler->display->display_options['relationships']['field_exercise_target_id']['field'] = 'field_exercise_target_id';
+  $handler->display->display_options['relationships']['field_exercise_target_id']['required'] = TRUE;
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = 'submission_nid';
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  /* Field: Content: Version */
+  $handler->display->display_options['fields']['field_version']['id'] = 'field_version';
+  $handler->display->display_options['fields']['field_version']['table'] = 'field_data_field_version';
+  $handler->display->display_options['fields']['field_version']['field'] = 'field_version';
+  $handler->display->display_options['fields']['field_version']['label'] = 'version';
+  $handler->display->display_options['fields']['field_version']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_version']['type'] = 'number_unformatted';
+  $handler->display->display_options['fields']['field_version']['settings'] = array(
+    'skip_safe' => 0,
+    'skip_empty_values' => 0,
+  );
+  /* Field: Content: Post date */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'node';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['label'] = 'when created';
+  $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['created']['date_format'] = 'custom';
+  $handler->display->display_options['fields']['created']['custom_date_format'] = 'c';
+  $handler->display->display_options['fields']['created']['second_date_format'] = 'long';
+  /* Field: Content: When submitted */
+  $handler->display->display_options['fields']['field_when_submitted']['id'] = 'field_when_submitted';
+  $handler->display->display_options['fields']['field_when_submitted']['table'] = 'field_data_field_when_submitted';
+  $handler->display->display_options['fields']['field_when_submitted']['field'] = 'field_when_submitted';
+  $handler->display->display_options['fields']['field_when_submitted']['label'] = 'when_submitted';
+  $handler->display->display_options['fields']['field_when_submitted']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_when_submitted']['type'] = 'services';
+  $handler->display->display_options['fields']['field_when_submitted']['settings'] = array(
+    'skip_safe' => 0,
+    'skip_empty_values' => 0,
+  );
+  /* Field: Content: When feedback given */
+  $handler->display->display_options['fields']['field_when_feedback_given']['id'] = 'field_when_feedback_given';
+  $handler->display->display_options['fields']['field_when_feedback_given']['table'] = 'field_data_field_when_feedback_given';
+  $handler->display->display_options['fields']['field_when_feedback_given']['field'] = 'field_when_feedback_given';
+  $handler->display->display_options['fields']['field_when_feedback_given']['label'] = 'when_feedback_given';
+  $handler->display->display_options['fields']['field_when_feedback_given']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_when_feedback_given']['settings'] = array(
+    'skip_safe' => 0,
+    'skip_empty_values' => 0,
+  );
+  /* Field: Content: Complete */
+  $handler->display->display_options['fields']['field_complete']['id'] = 'field_complete';
+  $handler->display->display_options['fields']['field_complete']['table'] = 'field_data_field_complete';
+  $handler->display->display_options['fields']['field_complete']['field'] = 'field_complete';
+  $handler->display->display_options['fields']['field_complete']['label'] = 'complete';
+  $handler->display->display_options['fields']['field_complete']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_complete']['type'] = 'list_key';
+  $handler->display->display_options['fields']['field_complete']['settings'] = array(
+    'skip_safe' => 0,
+    'skip_empty_values' => 0,
+  );
+  /* Sort criterion: Content: Post date */
+  $handler->display->display_options['sorts']['created']['id'] = 'created';
+  $handler->display->display_options['sorts']['created']['table'] = 'node';
+  $handler->display->display_options['sorts']['created']['field'] = 'created';
+  /* Contextual filter: User: Uid */
+  $handler->display->display_options['arguments']['uid']['id'] = 'uid';
+  $handler->display->display_options['arguments']['uid']['table'] = 'users';
+  $handler->display->display_options['arguments']['uid']['field'] = 'uid';
+  $handler->display->display_options['arguments']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['arguments']['uid']['default_action'] = 'access denied';
+  $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['relationship'] = 'field_exercise_target_id';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'access denied';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = '1';
+  $handler->display->display_options['filters']['status']['group'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'exercise_submission' => 'exercise_submission',
+  );
+  $export['submission_metadata_for_student_exercise'] = $view;
 
   return $export;
 }

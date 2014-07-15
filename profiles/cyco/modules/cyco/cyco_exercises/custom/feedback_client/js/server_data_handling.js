@@ -79,8 +79,7 @@ app.createSubmissionFromServerRecord = function( submissionRecord ) {
   if ( ! app.allStudents[ submissionRecord.submitter_uid ] ) {
     var student = new app.Student();
     student.studentUid = submissionRecord.submitter_uid;
-    student.name = 
-        submissionRecord.first_name + " " + submissionRecord.last_name;
+    student.name = submissionRecord.display_name;
     app.allStudents[submissionRecord.submitter_uid] = student;
   }
   //Add exercise object if not present.
@@ -201,9 +200,9 @@ app.loadExerciseFromServer = function( exerciseNid ) {
       //Load any missing rubric definitions from the server.
       app.loadRubricItemsFromServer( app.allExercises[ exerciseNid ].rubricItems );
       //Is there a model solution?
-      if ( result.model ) {
+      if ( result.models ) {
         //Extract it from the server data.
-        app.loadModelSolutionFromExercise( exerciseNid, result.model );
+        app.loadModelSolutionsFromExercise( exerciseNid, result.models );
       }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -222,22 +221,25 @@ app.loadExerciseFromServer = function( exerciseNid ) {
  * @param {int} exerciseNid Exercise this is a model for.
  * @param {Array} dataFromServer Model solution data from server.
  */
-app.loadModelSolutionFromExercise = function( exerciseNid, dataFromServer ) {
-  var model = new app.ModelSolution();
-  model.modelSolutionNid = dataFromServer.model_nid;
-  model.exerciseNid = exerciseNid;
-  //Add ref to model in exercise object.
-  app.allExercises[ exerciseNid ].modelSolutionNid = model.modelSolutionNid;
-  if ( dataFromServer.rendered ) {
-    model.renderedSolution = dataFromServer.rendered;
-  }
-  if ( dataFromServer.notes ) {
-    model.notes = dataFromServer.notes;
-  }
-  if ( dataFromServer.attachments ) {
-    model.renderedSolution += app.makeLinksForAttachments(dataFromServer.attachments);
-  }
-  app.allModelSolutions[ model.modelSolutionNid ] = model;
+app.loadModelSolutionsFromExercise = function( exerciseNid, dataFromServer ) {
+  dataFromServer.forEach(function (record) {
+    var model = new app.ModelSolution();
+    model.modelSolutionNid = record.model_nid;
+    model.exerciseNid = exerciseNid;
+    //Add ref to model in exercise object.
+    app.allExercises[ exerciseNid ].modelSolutions.push( model.modelSolutionNid );
+    model.renderedSolution = '(MT)';
+    if ( record.rendered ) {
+      model.renderedSolution = record.rendered;
+    }
+    if ( record.notes ) {
+      model.notes = record.notes;
+    }
+    if ( record.attachments ) {
+      model.renderedSolution += app.makeLinksForAttachments(record.attachments);
+    }
+    app.allModelSolutions[ model.modelSolutionNid ] = model;
+  });
 };
 
 /**

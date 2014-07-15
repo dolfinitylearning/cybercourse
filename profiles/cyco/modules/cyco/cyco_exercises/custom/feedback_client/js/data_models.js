@@ -61,8 +61,8 @@ app.Exercise = function() {
   this.renderedExercise = null;
   //Array of nids of rubric items used to assess this exercise.
   this.rubricItems = new Array();
-  //Model solution.
-  this.modelSolutionNid = null;
+  //Array of nids for model solution.
+  this.modelSolutions = new Array();
   //Notes for authors, instructors, and graders.
   this.notes = null;
 };

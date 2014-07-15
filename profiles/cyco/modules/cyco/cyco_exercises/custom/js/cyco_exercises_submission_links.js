@@ -1,6 +1,7 @@
 /* 
  * Create submission links for an inserted exercise. 
  */
+"use strict";
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   /**
@@ -53,7 +54,7 @@
       //Find the inserted exercises.
       $("div[data-nid].cyco-inserted-exercise").each( function(index, element) {
         //Get uid of current user.
-        var studentUid = Drupal.settings.cybercourse_exercise.uid;
+        var studentUid = Drupal.settings.cyco_exercises.uid;
         //Get exercise nid of this exercise.
         var exerciseNid = $(element).attr("data-nid");
         //Append a throbber.
@@ -62,7 +63,8 @@
         uiNamespace.throbbbers[exerciseNid] = throbber;
         throbber.show();
         $.when(
-          uiNamespace.getCsrfToken()
+          cycoCoreServices.getCsrfToken()
+          //uiNamespace.getCsrfToken()
         )
         .then(function() {
           //Grab vocab terms and rubric items from server.
@@ -74,12 +76,20 @@
             uiNamespace.prepareUi( studentUid, exerciseNid );
             throbber.hide();
           })
-          .fail(function() {
-            alert("The voles died.");
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            Drupal.behaviors.cycoErrorHandler.reportError(
+              "fetchSubmissionMetaData request failed in "
+                + "cyco_exercises_submission_links. " 
+                + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+            );
           });
         })
-        .fail(function() {
-          alert("The gerbils died.");
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "getCsrfToken request failed in "
+              + "cyco_exercises_submission_links. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
         });
       });
     },
@@ -87,7 +97,7 @@
       var throbber = uiNamespace.throbbbers[exerciseNid];
       throbber.show();
       //Get uid of current user.
-      var studentUid = Drupal.settings.cybercourse_exercise.uid;
+      var studentUid = Drupal.settings.cyco_exercises.uid;
       //Load submission data for the exercise.
       $.when( 
         uiNamespace.fetchSubmissionMetaData( studentUid, exerciseNid )
@@ -97,8 +107,12 @@
         uiNamespace.prepareUi( studentUid, exerciseNid );
         throbber.hide();
       })
-      .fail(function() {
-        alert("The submission interface refresh failed.");
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        Drupal.behaviors.cycoErrorHandler.reportError(
+          "The submission interface refresh failed in "
+            + "cyco_exercises_submission_links. " 
+            + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+        );
       });
     },
     /**
@@ -122,25 +136,29 @@
      * Get a CSRF token.
      * @returns {unresolved} Promise.
      */
-    getCsrfToken: function(){
-      //Connect and get user details.
-      var webServiceUrl = Drupal.settings.basePath + "services/session/token";
-      var promise = $.ajax({ 
-          type: "GET",
-          url: webServiceUrl,
-          dataType: "text"
-      })
-        .done(function(token){
-          uiNamespace.token = token;
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.log('Token request failed! ' + textStatus + errorThrown); 
-        })
-        .always(function() {
-//          $("#activity").hide();
-        }); 
-      return promise;
-    },
+//    getCsrfToken: function(){
+//      //Connect and get user details.
+//      var webServiceUrl = Drupal.settings.basePath + "services/session/token";
+//      var promise = $.ajax({ 
+//          type: "GET",
+//          url: webServiceUrl,
+//          dataType: "text"
+//      })
+//        .done(function(token){
+//          uiNamespace.token = token;
+//        })
+//        .fail(function(jqXHR, textStatus, errorThrown) {
+//          Drupal.behaviors.cycoErrorHandler.reportError(
+//            "getCsrfToken request failed in "
+//              + "cyco_exercises_submission_links. " 
+//              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+//          );
+//        })
+//        .always(function() {
+////          $("#activity").hide();
+//        }); 
+//      return promise;
+//    },
     /**
      * Ask the server for metadata about this user's submissions 
      * for this exercise.
@@ -161,14 +179,18 @@
         url: webServiceUrl,
         data: dataToSend,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", uiNamespace.token);
+          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
           uiNamespace.submissionData[ exerciseNid ] = result;
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('fetchSubmissionMetaData request failed! ' + errorThrown);
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Boo! fetchSubmissionMetaData request failed in "
+              + "cyco_exercises_submission_links. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
         });
       return promise;
     },
@@ -200,7 +222,7 @@
         windowObjectReference = window.open(
                 $(this).attr("href"),
                 "Exercise: " + exerciseNid,
-                "resizable,scrollbars,height=600,width=600"
+                "resizable,scrollbars,height=640,width=700"
                 );
         return false; //Cancel standard action.
       });
@@ -337,7 +359,7 @@
       //Add exercise id.
       url += '&field_exercise=' + exerciseNid;
       //Add destination after submission that will close the window.
-      url += '&destination=cybercourse-exercise-close-popup';
+      url += '&destination=cyco-exercises-close-popup';
       //Add extras.
       url += urlExtras;
       link = Drupal.theme("submissionLink", url, linkText, titleText);

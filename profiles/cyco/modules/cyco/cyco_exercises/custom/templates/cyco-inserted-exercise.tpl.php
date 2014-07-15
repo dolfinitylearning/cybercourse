@@ -13,6 +13,7 @@
  *    'version_label' => Which version. Usually MT.
  *    'status_message' => Whether submitted, has feedback, etc. Often MT.
  *    'link' => Rendered link.
+ * - $too_bad_so_sad_message: Message telling user s/he can't do stuff.
  */
 ?>
 <div class="cyco-inserted-exercise" data-nid="<?php print $exercise_nid; ?>">
@@ -22,7 +23,16 @@
   <div class="cyco-inserted-exercise-content">
     <?php print $body; ?>
   </div>
+  <?php
+  if ( $too_bad_so_sad_message ) {
+    ?>
+    <div class="cyco-inserted-exercise-too-bad">
+      <?php print $too_bad_so_sad_message; ?>
+    </div>
+  <?php }
+  else { ?>
   <div class="cyco-inserted-exercise-links-container">
-    <?php //This is complete by JavaScript. The class name cannot change. ?>
+    <?php //This is completed by JavaScript. The class name cannot change. ?>
   </div>
+  <?php } ?>
 </div>

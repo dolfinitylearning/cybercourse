@@ -25,7 +25,7 @@
             +     '<div class="pseudent-image-caption">' 
             +     '</div>'
             +   '</div>'
-            +   '<div class="pseudent-content">Content...</div>'
+            +   '<div class="pseudent-content">What do I say?</div>'
             + '</div>',
         init: function() {
           //Set up widget data.
@@ -85,12 +85,15 @@
           }
         },
         allowedContent:
-                'div(!pseudent); '
-              + 'div(!pseudent-image-container); '
-              + 'div(!pseudent-image); '
+                'br;'
+              + 'img[!src];'
+              + 'div(!pseudent)[!data-pseudent-id];'
+              + 'div(!pseudent-image-container);'
+              + 'div(!pseudent-image);'
               + 'div(!pseudent-image-caption); '
-              + 'div(!pseudent-content); ',
-        requiredContent: 'div(pseudent)',
+              + 'div(!pseudent-content);',
+        requiredContent: 
+              'div(pseudent)',
         upcast: function(element) {
           return element.name == 'div' && element.hasClass('pseudent');
         }

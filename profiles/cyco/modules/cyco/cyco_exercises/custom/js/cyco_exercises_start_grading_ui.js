@@ -1,14 +1,15 @@
 /* 
 Open the grading UI in a new window.
 */
+"use strict";
 (function ($) {
   Drupal.behaviors.openGradingUi = {
     attach: function() {
       //Open links in a popup window.
-      $(".cybercourse-control-panel-grade-link").click(function(event) {
+      $(".cyco-control-panel-grade-link").click(function(event) {
         event.preventDefault();
         event.stopPropagation();
-        windowObjectReference = window.open(
+        window.windowObjectReference = window.open(
                 $(this).attr("href"),
                 "Grading UI",
                 "resizable,scrollbars,height=700,width=950"

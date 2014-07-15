@@ -4,7 +4,7 @@
 * Show the user an error message. Send the message to the server for 
 * processing. The user can click a button to clear the message.
 */
-
+"use strict";
 (function ($) {
   var nameSpaceyThing; //Convenience reference.
   Drupal.behaviors.cycoErrorHandler = {

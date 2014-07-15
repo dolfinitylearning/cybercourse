@@ -1,0 +1,62 @@
+<?php
+/**
+ * @file
+ * Collapse the summary field and the file attachment field.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function cyco_node_edit_tweaks_form_alter( &$form, &$form_state, $form_id ) {
+  //Only add to node edit forms.
+  if (strpos($form_id, 'node') !== FALSE) {
+    $settings = array(
+      'enabled' => TRUE,
+    );
+    drupal_add_js(
+        array('cycoNodeEditTweaks' => $settings),
+        'setting'
+    );
+    if ( isset( $form['field_attachments'] ) ) {
+      //Create the fieldset
+      $form['attachments_fieldset'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('Attach files'),
+          '#collapsible' => TRUE,
+          '#collapsed' => TRUE,
+      );
+      if ( isset( $form['field_attachments']['#weight'] ) ) {
+        $form['attachments_fieldset']['#weight'] = $form['field_attachments']['#weight'];
+      }
+      //Move the field into the fieldset
+      $form['attachments_fieldset']['field_attachments'] = $form['field_attachments'];
+      //Unset the original field
+      unset($form['field_attachments']);
+      //Are there hidden attachments?
+      if ( isset( $form['field_hidden_attachments'] ) ) {
+        $form['attachments_fieldset']['field_hidden_attachments'] 
+            = $form['field_hidden_attachments'];
+        unset( $form['field_hidden_attachments'] );
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_help().
+ */
+function cyco_node_edit_tweaks_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#collapse_summary':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t(
+          'Usability tweaks for node edit forms. For the body field, '
+        , 'the summary is always collapsed, with '
+        . 'an indicator showing whether there is content in the summary. '
+        . 'The attachments field is collapsed as well.'
+      ) . '</p>';
+      return $output;
+  }
+}

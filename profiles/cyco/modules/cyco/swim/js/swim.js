@@ -1,50 +1,23 @@
+"use strict";
 (function ($) {
   //Convenience scoping variable.
   var nameSpaceyThing;
   Drupal.behaviors.swim = {
     done: false,
     attach: function() {
+      //Set convenience reference.
+      nameSpaceyThing = this;
       if ( this.done ) {
         return;
       }
+      $(window).load(this.start);
+    },
+    start: function() {
       this.done = true;
       //Get CSRF token, if needed.
       if ( ! swimServices.csrfToken ) {
         swimServices.getCsrfToken();
       }
-      //Set convenience reference.
-      nameSpaceyThing = this;
-      CKEDITOR.on("instanceLoaded", function(evnt) {
-        var editor = evnt.editor;
-       
-//ev.editor.dataProcessor.writer.setRules( 'p',
-//{
-//indent : false,
-//breakBeforeOpen : false,
-//breakAfterOpen : false,
-//breakBeforeClose : false,
-//breakAfterClose : true
-//});
-//alert('poot');
-editor.dataProcessor.writer.selfClosingEnd = '>';
-editor.dataProcessor.writer.setRules( 'br',
-{
-indent : false,
-breakBeforeOpen : false,
-breakAfterOpen : false,
-breakBeforeClose : false,
-breakAfterClose : false
-});
-editor.dataProcessor.writer.setRules( 'div',
-{
-indent : false,
-breakBeforeOpen : false,
-breakAfterOpen : false,
-breakBeforeClose : false,
-breakAfterClose : false
-});
-        
-      });
       //Setup code to run after CKEDITOR instances have been created.
       CKEDITOR.on("instanceReady", function(evnt) {
         var editor = evnt.editor;
@@ -55,9 +28,36 @@ breakAfterClose : false
           Drupal.ckeditorActiveId = evnt.editor.name;
 //          $(editor.element.$).trigger('focus');
         });
-//        editor.on('blur',function(evnt) {
-//          $(editor.element.$).trigger('blur');
-//        });
+        editor.on('paste',function(evnt) {
+          var content = evnt.data.dataValue;
+          if ( $(content).find("div.pseudent").length > 0 ) {
+            alert("Pasting pseudents doesn't work at the moment. You can "
+                    + "copy what the student says, create a new student, "
+                    + "and paste that.");
+            evnt.data.dataValue = "";
+            return;
+            if ( $(content).hasClass("cke_widget_wrapper") ) {
+              //This is a widget wrapper.
+              if ( $(content).find("div.pseudent").length > 0 ) {
+                //This is a pseudent widget.
+                var newHtml = nameSpaceyThing.createPseudentElement( content );
+                $(content).html(newHtml);
+              }
+            }
+            else {
+              //html isn't a widget wrapper, but might contain some.
+              var widgetDivs = $(content).find("div.cke_widget_wrapper");
+              $(widgetDivs).each( function( index, widgetDiv ) {
+                if ( widgetDiv.find("div.pseudent").length > 0 ) {
+                  //This is a pseudent widget.
+                  var newHtml = nameSpaceyThing.createPseudentElement( widgetDiv );
+                  $(widgetDiv).html(newHtml);
+                }
+              });
+            }
+            evnt.data.dataValue = $(content).html();
+          };
+        });
         editor.document.appendStyleSheet( Drupal.settings.swim.editing_stylesheet );
         //Size the editor.
         nameSpaceyThing.sizeEditor( editor );
@@ -68,6 +68,9 @@ breakAfterClose : false
         //Flag the editor as initialized.
         $( "#" + editor.id ).attr("data-swim-init", "yes");
       });
+      
+      
+      
       //Check that the config exists.
       if ( ! Drupal.swimCkConfig ) {
         console.log("Missing config");
@@ -122,10 +125,10 @@ breakAfterClose : false
       var fontHeight 
           = parseInt(editor.document.getBody().getComputedStyle('font-size'));
       var lineHeight = fontHeight * 1.5;
-      var toolbarHeight = 45;
-      var resizeWidgetHeight = 28; //The status bar.
-      editor.resize( '100%', 
-          lines * lineHeight + toolbarHeight + resizeWidgetHeight);
+//      var toolbarHeight = 45;
+//      var resizeWidgetHeight = 28; //The status bar.
+      var height = lines * lineHeight;// + toolbarHeight + resizeWidgetHeight;
+      editor.resize( '100%', height, true );
     },
     swimSetup: function (editor) {    
       this.setupBeforeUnload(editor);
@@ -385,6 +388,28 @@ breakAfterClose : false
           }
         }
       }
+    },
+    createPseudentElement: function( outerDiv ) {
+      var newTag;
+      $(outerDiv).find("div.pseudent").each(function(i, pseudentDiv){
+        //There is only one.
+        var $div = $(pseudentDiv);
+        var pseudentNid = $div.attr("data-pseudent-id");
+        var pseudentCategory = $div.attr("data-pseudent-category");
+        var caption = $div.find("div.pseudent-image-caption").html();
+        var imgSrc = $div.find("img").attr("src");
+        var content = $div.find("div.pseudent-content").text();
+        newTag =
+"<div class='pseudent' data-pseudent-id='" + pseudentNid + "' "
++        " data-pseudent-category='" + pseudentCategory + "'>"
++   "<div class='pseudent-image-container'>"
++     "<img class='pseudent-image' src='" + imgSrc + "'>"
++     "<div class='pseudent-image-caption'>" + caption + "</div>"
++   "</div>"
++   "<div class='pseudent-content'>" + content + "</div>"
++ "</div>";
+      });
+      return newTag;
     }
   };
   //Selector that will find content in the document fetched to act as a template.

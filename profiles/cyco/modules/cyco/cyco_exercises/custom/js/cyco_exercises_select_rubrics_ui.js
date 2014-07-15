@@ -1,3 +1,4 @@
+"use strict";
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   Drupal.behaviors.cycoSelectRubricUi = {
@@ -17,7 +18,7 @@
       $(".rubric-select-current-item-container").hide();
       uiNamespace.showAjaxThrobber();
       $.when(
-        uiNamespace.getCsrfToken()
+        cycoCoreServices.getCsrfToken()
       )
       .then(function() {
         //Grab vocab terms and rubric items from server.
@@ -47,27 +48,27 @@
      * Get a CSRF token.
      * @returns {unresolved} Promise.
      */
-    getCsrfToken: function(){
-//      console.log("Getting token");
-      //Connect and get user details.
-      var webServiceUrl = Drupal.settings.basePath + "services/session/token";
-//      $("#activity").show();
-      var promise = $.ajax({ 
-          type: "GET",
-          url: webServiceUrl,
-          dataType: "text"
-      })
-        .done(function(token){
-          uiNamespace.token = token;
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.log('Token request failed! ' + textStatus + errorThrown); 
-        })
-        .always(function() {
-//          $("#activity").hide();
-        }); 
-      return promise;
-    },
+//    getCsrfToken: function(){
+////      console.log("Getting token");
+//      //Connect and get user details.
+//      var webServiceUrl = Drupal.settings.basePath + "services/session/token";
+////      $("#activity").show();
+//      var promise = $.ajax({ 
+//          type: "GET",
+//          url: webServiceUrl,
+//          dataType: "text"
+//      })
+//        .done(function(token){
+//          uiNamespace.token = token;
+//        })
+//        .fail(function(jqXHR, textStatus, errorThrown) {
+//          console.log('Token request failed! ' + textStatus + errorThrown); 
+//        })
+//        .always(function() {
+////          $("#activity").hide();
+//        }); 
+//      return promise;
+//    },
     /**
      * Fetch the vocab terms (for the vocab rubric items use) from the server.
      */
@@ -78,7 +79,7 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json", url: webServiceUrl,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", uiNamespace.token);
+          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -101,7 +102,7 @@
         dataType: "json", 
         url: webServiceUrl,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", uiNamespace.token);
+          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -421,7 +422,7 @@
       $("#filtered-terms li").each(function(index, element){
         elementNid = $(element).attr("data-nid");
         if ( elementNid == itemNid ) {
-          element.text( itemTitle );
+          $(element).text( itemTitle );
           foundIt = true;
         }
       });
@@ -505,13 +506,15 @@
           //There are categories for the current item.
           itemMatched = allChecked;
           itemCategories = rubricItem.categories;
-          //Loop over categories of current item, and see if one is checked.
-          for ( var i = 0; i < itemCategories.length; i++ ) {
-            itemCategory = itemCategories[i];
-            if ( terms.indexOf( itemCategory ) != -1 || allChecked ) {
-              //Found it. Add this item to the filtered list.
-              itemMatched = true;
-              break;
+          if ( itemCategories ) { //Might be no categories.
+            //Loop over categories of current item, and see if one is checked.
+            for ( var i = 0; i < itemCategories.length; i++ ) {
+              itemCategory = itemCategories[i];
+              if ( terms.indexOf( itemCategory ) != -1 || allChecked ) {
+                //Found it. Add this item to the filtered list.
+                itemMatched = true;
+                break;
+              }
             }
           }
           if ( itemMatched ) {

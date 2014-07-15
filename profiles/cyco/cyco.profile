@@ -312,20 +312,25 @@ function _cyco_make_book( $content_type, $root_title, $children_titles ) {
  * @param string $pages Pages with special visibility.
  * @param int $visibility 1 if show in $pages, 0 if not.
  * @param int $weight Block weight in region.
+ * @param string $title The title of the block. Optional.
  * 
  */
 function _cyco_activate_block($module, $block, $region, $theme, 
-    $pages, $visibility, $weight) {
+    $pages, $visibility, $weight, $title=FALSE) {
 //  drupal_set_message("Activating block $module:$block\n");
-  db_merge('block')
-    ->key(array('theme' => $theme, 'delta' => $block, 'module' => $module))
-    ->fields(array(
+  $fields = array(
       'region' => ($region == BLOCK_REGION_NONE ? '' : $region),
       'pages' => trim($pages),
       'status' => (int) ($region != BLOCK_REGION_NONE),
       'visibility' => $visibility,
       'weight' => $weight,
-  ))
+  );
+  if ( $title !== FALSE ) {
+    $fields['title'] = $title;
+  }
+  db_merge('block')
+    ->key(array('theme' => $theme, 'delta' => $block, 'module' => $module))
+    ->fields( $fields )
   ->execute();
 }
 
@@ -333,6 +338,10 @@ function _cyco_activate_block($module, $block, $region, $theme,
  * Place blocks in regions.
  */
 function _cyco_place_blocks() {
+  _cyco_activate_block('system', 'user-menu', 'sidebar_first',
+      'cybercourse', '', 0, -1, '<none>');
+  _cyco_activate_block('menu', 'menu-footer', 'footer',
+      'cybercourse', '', 0, 0, '<none>');
   $course_node 
       = _cyco_node_load_by_title('Your course', 'course_page');
   //Cache the menu tree for this block.
@@ -348,14 +357,54 @@ function _cyco_place_blocks() {
       'cybercourse', '', 0, 1);
   _cyco_activate_block('menu', 'menu-tools', 'sidebar_first',
       'cybercourse', '', 0, 2);
-  _cyco_activate_block('system', 'user-menu', 'sidebar_first',
-      'cybercourse', '', 0, 3);
   _cyco_activate_block('user', 'login', 'sidebar_first',
       'cybercourse', '', 0, 4);
   _cyco_activate_block('search', 'form', 'sidebar_first',
       'cybercourse', '', 0, 5);
   _cyco_activate_block('menu', 'menu-footer', 'footer',
       'cybercourse', '', 0, 1);
+}
+
+/**
+ * Set up block visibility rules.
+ */
+function _cyco_set_block_visibility() {
+  //Roles.
+  $role_names = array(
+    'administrator',
+    'author',
+    'instructor',
+    'reviewer',
+    'grader',
+  );
+  $blueprint_node 
+      = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
+  $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
+  _cyco_restrict_block2roles( 
+      $blueprint_block_id, 'cyco_book_blocks', $role_names
+  );
+}
+
+/**
+ * Set block visibility for roles.
+ * @param string $block_id Id of block.
+ * @param string $module Module name.
+ * @param array $role_names Names of roles.
+ */
+function _cyco_restrict_block2roles( $block_id, $module, $role_names ) {
+  $roles = user_roles();
+  foreach( $role_names as $role_name ) {
+    $rid = array_search($role_name, $roles);
+    if ( $rid !== FALSE ) {
+      db_insert('block_role')
+        ->fields(array(
+          'module' => $module,
+          'delta' => $block_id,
+          'rid' => $rid,
+        ))
+        ->execute();
+    }
+  }
 }
 
 /**
@@ -410,6 +459,8 @@ function _cyco_add_menu_item($node_title, $node_type, $menu, $weight) {
  * Add classes to blocks.
  */
 function _cyco_add_classes2blocks() {
+  //Footer menu block.
+  _cyco_add_classes2block('menu', 'menu-footer', 'well well-sm');
   //Tools menu block.
   _cyco_add_classes2block('menu', 'menu-tools', 'well well-sm');
   //User menu block.
@@ -453,6 +504,19 @@ function _cyco_disable_modules() {
 
 function _cyco_theme_stuff() {
   theme_disable(array('bartik'));
+  theme_enable(array('seven', 'cybercourse_submission'));
+  //Settings for CyberCourse  theme.
+  $var_name = 'theme_cybercourse_settings';
+  $settings = variable_get($var_name, array());
+  $settings['bootstrap_bootswatch'] = 'cerulean';
+  variable_set($var_name, $settings);
+  //Settings for CyberCourse submission theme.
+  $var_name = 'theme_cybercourse_submission_settings';
+  $settings = variable_get($var_name, array());
+  $settings['bootstrap_breadcrumb'] = 0;
+  $settings['bootstrap_breadcrumb_home'] = 0;
+  variable_set($var_name, $settings);
+
 }
 
 

@@ -9,3 +9,24 @@
   color: #666;
   line-height: 1.2em;
 }
+
+.view-class-nodes-for-class .view-header {
+  font-size: 150%;
+  margin-top: 2em;
+}
+
+.view-class-nodes-for-class .views-field-title {
+  font-size: 120%;
+  margin-top: 2em;
+}
+
+.view-class-nodes-for-class .views-field-changed {
+  margin-left: 2em;
+  margin-top: 0.5em;
+}
+
+.view-class-nodes-for-class .views-field-field-body {
+  margin-left: 2em;
+  margin-top: 0.5em;
+}
+

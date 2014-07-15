@@ -37,7 +37,7 @@
     <button class="rubric-select-current-item-unlink" type="button"
             title="Unlink this item from the exercise">Unlink</button>
     <button class="rubric-select-current-item-edit" type="button"
-            title="View/edit this rubric item">Edit</button>
+            title="View/edit this rubric item">View/Edit</button>
   </div>
 
 <?php
@@ -74,7 +74,7 @@
         <button id='rubric-select-link' type='button'
             title="Link the exercise to this item">Link</button>
         <button id='rubric-select-edit' type='button'
-            title="View/edit the selected rubric item">Edit</button>
+            title="View/edit the selected rubric item">View/Edit</button>
         <button id='rubric-select-create' type='button' 
             title="Create a new rubric item">New</button>
         <button id='rubric-select-cancel' type='button'

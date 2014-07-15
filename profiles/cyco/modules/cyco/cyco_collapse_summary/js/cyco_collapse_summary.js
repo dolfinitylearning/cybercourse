@@ -1,4 +1,5 @@
 (function ($) {
+  "use strict";
 
 /**
  * Collapse the summary area. Change collapsing link text to show whether there
@@ -8,6 +9,9 @@ var nameSpaceRef; //Convenience.
 Drupal.behaviors.collapseSummary = {
   attach: function (context, settings) {
     nameSpaceRef = this;
+    $(window).load(this.start);
+  },
+  start: function() {
     $(".swim-summary-wrapper").each(function() {
       //Sometimes this runs more than once, so do this only if the
       //summary is MT.

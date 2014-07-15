@@ -1,4 +1,5 @@
 (function($) {
+  "use strict";
   var uiNamespace; //Convenient ref to a namespacey thing.
   Drupal.behaviors.cycoCreateRubricUi = {
     //**** Data describing a rubric item.
@@ -213,11 +214,22 @@
           $("#rubric-create-ui").dialog("close");
         })
         .fail(function() {
-          alert("Save failed.");
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Save failed in saveItem in "
+              + "cyco_exercises_create_rubric_ui.js. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
+        })
+        .always(function(){
+          uiNamespace.hideSaveThrobber();
         });
       })//End then().
       .fail(function() {
-        alert("Fetch item data failed.");
+        Drupal.behaviors.cycoErrorHandler.reportError(
+          "Fetch item data failed in saveItem in "
+            + "cyco_exercises_create_rubric_ui. " 
+            + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+        );
       });
     },
     /*
@@ -247,7 +259,14 @@
           uiNamespace.displayUi();
         })
         .fail(function() {
-          alert("Fetch item data failed.");
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Fetch item data failed in showCreateItemUi in "
+              + "cyco_exercises_create_rubric_ui. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
+        })
+        .always(function() {
+          uiNamespace.hideSaveThrobber();
         });
       }
     },
@@ -314,7 +333,11 @@
           uiNamespace.item = result;
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('getJSON request failed! ' + errorThrown);
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Fetch item data failed in fetchItemData in "
+              + "cyco_exercises_create_rubric_ui. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
         });
       return promise;
     },
@@ -396,7 +419,11 @@
           uiNamespace.warnDuplicateTitle = result.warn;
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('getJSON request failed! ' + errorThrown);
+          Drupal.behaviors.cycoErrorHandler.reportError(
+            "Fail in checkTitle in "
+              + "cyco_exercises_create_rubric_ui. " 
+              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+          );
         });
       return promise;
     },
@@ -478,7 +505,11 @@
         }
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajax save item failed! ' + errorThrown);
+        Drupal.behaviors.cycoErrorHandler.reportError(
+          "Fail in sendItemToServer in "
+            + "cyco_exercises_create_rubric_ui. " 
+            + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
+        );
       });
       return promise;
     },

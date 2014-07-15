@@ -4,29 +4,47 @@
 
 var app = app || {};
 
-app.initModelSolutionPane = function( modelSolutionNid ) {
+/**
+ * Set up the model solution pane.
+ * @param {array} modelSolutions Array of model solution nids (indexes into
+ * the model solutions array). 
+ */
+app.initModelSolutionPane = function( modelSolutions ) {
   var $paneContents = $("#model-solution-pane .pane-content");
   $paneContents.html("");
-  if ( ! modelSolutionNid ) {
-    //There is no model solution.
-    $paneContents.html("<p class='cybercourse-grading-no-model'>No model solution given.</p>");
+  if ( ! modelSolutions || modelSolutions.length === 0 ) {
+    //There are no model solution.s
+    $paneContents.html("<p class='cybercourse-grading-no-model'>No model solutions given.</p>");
   }
   else {
-    var modelSolution = app.allModelSolutions[ modelSolutionNid ];
-    if ( modelSolution.renderedSolution ) {
-      $paneContents.html( modelSolution.renderedSolution );
-    }
-    if ( modelSolution.notes ) {
-      $("#exercise-pane ")
-        .append(
-              "<div class='cybercourse-grading-notes-container'>"
-            +   "<p class='cybercourse-grading-notes-title'>Notes</p>"
-            +   "<p class='cybercourse-grading-notes'>" + modelSolution.notes + "</p>"
-            + "</div>"
+    var numModels = modelSolutions.length;
+    var message = ( numModels === 0 )
+      ? "There is one model solution."
+      : "There are " + numModels + " model solutions.";
+    var messageWrapped = 
+        "<p class='cybercourse-grading-num-models'>" + message + "</p>";
+    $paneContents.append( messageWrapped );
+    var modelCounter = 0;
+    modelSolutions.forEach(function(modelSolutionNid){
+      var modelSolution = app.allModelSolutions[ modelSolutionNid ];
+      modelCounter ++;
+      if ( numModels > 1 ) {
+        $paneContents.append(
+            "<p class='cybercourse-grading-model-number'>Model" 
+            + modelCounter + "</p>"
         );
-    }
-    
-  }
+      }
+      if ( modelSolution.renderedSolution ) {
+        $paneContents.append( modelSolution.renderedSolution );
+      }
+      if ( modelSolution.notes ) {
+        $paneContents.append(
+                "<div class='cybercourse-grading-notes-container'>"
+              +   "<p class='cybercourse-grading-notes-title'>Notes</p>"
+              +   "<p class='cybercourse-grading-notes'>" + modelSolution.notes + "</p>"
+              + "</div>"
+          );
+      }
+    }); //End foreach.
+  } //End there are model solutions.
 };
-
-
