@@ -13,12 +13,12 @@
 ?>
 <div id="cyco-exercises-model-solutions-container" class="form-item form-group">
   <label>Model solutions</label>
-  <p>Here are the model solutions for this exercise.</p>
   <?php 
   if ( sizeof( $models ) == 0 ) { ?>
     <p>(There are no model solutions.)</p>
   <?php }
   else {
+    print '<p>Here are the model solutions for this exercise.</p>';
     foreach( $models as $nid => $title ) { ?>
       <p class="cyco-exercises-model-solutions-link">
         <?php 

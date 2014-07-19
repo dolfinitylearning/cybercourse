@@ -42,7 +42,7 @@ app.getSubmissionsFromServer = function() {
     //Move data into the data model.
     var submissionRecords = result.submissions;
     $.each( submissionRecords, function( index, submissionRecord ){
-      app.createSubmissionFromServerRecord( submissionRecord );
+      app.createSubmissionFromServerRecord( index, submissionRecord );
     });
     var groupRecords = result.groups;
     $.each( groupRecords, function( gid, title ){
@@ -67,9 +67,16 @@ app.getSubmissionsFromServer = function() {
   return promise;
 };
 
-app.createSubmissionFromServerRecord = function( submissionRecord ) {
+/**
+ * Store data about submission into local data structure.
+ * @param {type} recordOrder Order in which the record was delivered from the 
+ * server. Use the same order when displaying the data.
+ * @param {type} submissionRecord Submission record.
+ */
+app.createSubmissionFromServerRecord = function( recordOrder, submissionRecord ) {
   //Create submission object.
   var submission = new app.Submission();
+  submission.recordOrder = recordOrder;
   submission.submissionNid = submissionRecord.submission_nid;
   submission.exerciseNid = submissionRecord.exercise_nid;
   submission.studentUid = submissionRecord.submitter_uid;
@@ -280,37 +287,37 @@ app.loadRubricItemsFromServer = function( rubricItemIds ) {
     }
   })
   .done(function(result){
-//    if ( result.status != "ok" ) {
-//      var message = result.message;
-//      Drupal.behaviors.cybercourseErrorHandler.reportError(
-//        "Fail in app.getRubricItems. ids: " + rubricItemIds.join(",")  
-//        + " message: " + message
-//      );
-//      return false;
-//    }
     for( var itemId in result ) {
       var serverData = result[ itemId ];
       var rubricItem = new app.RubricItem();
       rubricItem.nid = serverData.nid;
       rubricItem.title = serverData.title;
+
       if ( serverData.good ) {
         rubricItem.good = Array();
         for( var needsWorkId in serverData.good ) {
           rubricItem.good.push( serverData.good[ needsWorkId ] );
         }
       }
+      //Create a blank new comment object.
+      rubricItem.goodNewComments.push( new app.NewRubricComment() );
+      
       if ( serverData.needs_work ) {
         rubricItem.needsWork = Array();
         for( var needsWorkId in serverData.needs_work ) {
           rubricItem.needsWork.push( serverData.needs_work[ needsWorkId ] );
         }
       }
+      rubricItem.needsWorkNewComments.push( new app.NewRubricComment() );
+
       if ( serverData.poor ) {
         rubricItem.poor = Array();
         for( var poorId in serverData.poor ) {
           rubricItem.poor.push( serverData.poor[ poorId ] );
         }
       }
+      rubricItem.poorNewComments.push( new app.NewRubricComment() );
+
       if ( serverData.notes ) {
         rubricItem.notes = serverData.notes;
       }

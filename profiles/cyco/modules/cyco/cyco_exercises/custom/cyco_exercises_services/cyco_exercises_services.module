@@ -1193,7 +1193,7 @@ function _cyco_exer_choose_fragment( $grader_all_data, $field_name, $default = '
     }
     else {
       //More than one - choose randomly.
-      $index = mt_rand( 0, ($item_count - 1) );
+      $index = rand( 0, ($item_count - 1) );
       $result = t($grader_all_data->{$field_name}[LANGUAGE_NONE][$index]['value']);
     }
   }

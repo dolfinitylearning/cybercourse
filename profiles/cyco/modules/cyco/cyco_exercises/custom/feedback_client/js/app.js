@@ -6,7 +6,8 @@ var app = app || {};
  */
 app.currentState = {
   submissionNid: null,
-  exerciseNid: null
+  exerciseNid: null,
+  studentUid: null
 };
 
 /**

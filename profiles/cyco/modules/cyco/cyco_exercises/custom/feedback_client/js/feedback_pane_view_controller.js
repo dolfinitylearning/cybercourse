@@ -8,17 +8,55 @@ var app = app || {};
 app.feedbackPane = {};
 
 /**
- * Initialize the feedback pane after Make Message button in rubric
- * pane clicked.
+ * Initialize the feedback pane, using state data from submission with
+ * id of submissionNid.
  */
-app.feedbackPane.initFeedbackPane = function( complete ) {
+app.feedbackPane.initFeedbackPane = function( submissionNid ) {
+  //Show existing feedback if it exists.
+  if ( app.submissionsToGrade[ submissionNid ].feedback ) {
+    app.feedbackPane.showFeedback( app.submissionsToGrade[ submissionNid ].feedback )
+  }
+  else {
+    app.feedbackPane.mtFeedbackArea();
+  }
   //Set completed indicator.
-  app.feedbackPane.setCompleteMessage( complete );  
+  app.feedbackPane.setCompleteMessage( 
+      app.submissionsToGrade[ submissionNid ].complete
+  );
+  //Set feedback sent indicator.
+  app.feedbackPane.setFeedbackSentMessage( 
+      app.submissionsToGrade[ submissionNid ].feedbackSent
+  );
   //Set up send event.
   $("#send-feedback-button").click( app.feedbackPane.sendFeedback );
   //Show the UI.
-  $("#feedback-pane .pane-content").show();
+//  $("#feedback-pane .pane-content").show();
+  if ( ! $("#feedback-pane .pane-content").is(':visible') ) {
+    $("#feedback-pane .pane-content").fadeIn('fast');
+  }};
+
+/**
+ * Show feedback.
+ * @param {string} feedback
+ */
+app.feedbackPane.showFeedback = function( feedback ) {
+  $("#cyco-feedback-editor").val( feedback );
+
 };
+
+/**
+ * Clear the feedback area of any text.
+ */
+app.feedbackPane.mtFeedbackArea = function() {
+  $("#cyco-feedback-editor").val( "" );
+};
+
+/**
+ * Function other controllers can call.
+ */
+app.feedbackPane.hideFeedbackArea = function() {
+  $("#feedback-pane .pane-content").hide();  
+}
 
 /**
  * Send the current feedback.
@@ -65,6 +103,10 @@ app.feedbackPane.saveFeedbackToServer = function() {
     }
   })
   .done(function(message){
+    //Update the data model.
+    app.submissionsToGrade[ app.currentState.submissionNid ].feedbackSent = true;
+    //Update the feedback sent message.
+    app.setFeedbackSentMessage( true );
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
     Drupal.behaviors.cybercourseErrorHandler.reportError(
@@ -90,6 +132,21 @@ app.feedbackPane.setCompleteMessage = function( complete ) {
       .text( "Not complete" )
       .removeClass( "cyco-exer-complete" )
       .addClass( "cyco-exer-not-complete" );
+  }
+};
+
+app.feedbackPane.setFeedbackSentMessage = function( sent ) {
+  if ( sent ) {
+    $("#feedback-pane #feedback-sent")
+      .text( "Feedback sent" )
+      .removeClass( "cyco-exer-feedback-not-sent" )
+      .addClass( "cyco-exer-feedback-sent" );
+  }
+  else {
+    $("#feedback-pane #feedback-sent")
+      .text( "Feedback not sent" )
+      .removeClass( "cyco-exer-feedback-sent" )
+      .addClass( "cyco-exer-feedback-not-sent" );
   }
 };
 

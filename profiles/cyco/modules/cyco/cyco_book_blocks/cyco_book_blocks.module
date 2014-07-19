@@ -120,7 +120,7 @@ function cyco_book_blocks_block_view($delta = '') {
   }
   $root_node = node_load( $root_nid );
   $block = array();
-  $block['subject'] = $root_node->title;
+  $block['subject'] = '';
   $block['content'] = _cbb_create_block_content( $root_nid );
   return $block;
 }
@@ -287,6 +287,13 @@ function cyco_book_blocks_theme() {
         'state' => NULL,
         'classes' => NULL,
         'has_children' => NULL,
+      )
+    ),
+      
+    'cbb_block_title' => array(
+      'variables' => array(
+        'link_text' => NULL,
+        'path' => NULL,
       ),
     ),
   );
@@ -342,13 +349,17 @@ function theme_cbb_book_tree($variables) {
   //Block title has already been t'd in _cbb_get_book_tree.
   $block_title = $variables['root_title'];
   $root_nid = $variables['root_nid'];
-  $root_url = base_path() . 'node/' . $root_nid;
+  $root_url = 'node/' . $root_nid;
   $tree = $variables['tree'];
   $trail = $variables['trail'];
   $include_unpublished = $variables['include_unpublished'];
   $menu_output = cbb_recursive_link_creator($trail, $include_unpublished, $tree);
   if (!empty($menu_output)) {
-    $output = '<ul class="cyco-book-tree-menu menu-top">';
+    $output = theme('cbb_block_title', array(
+      'link_text' => t($block_title), 
+      'path' => $root_url,
+    ));
+    $output .= '<ul class="cyco-book-tree-menu menu-top">';
     $output .= $menu_output;
     $output .= '</ul>';
     return $output;
@@ -519,6 +530,17 @@ function theme_cbb_links($variables) {
   );
   $output .= $link;
   return $output;
+}
+
+/**
+ * Render a block title.
+ */
+function theme_cbb_block_title($variables) {
+  // create values from the parameter array
+  $link_text    = $variables["link_text"];
+  $path         = $variables["path"];
+  $result = '<h2 class="block-title">' . l( $link_text, $path ) . '</h2>';
+  return $result;
 }
 
 /**

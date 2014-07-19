@@ -18,7 +18,7 @@ app.initModelSolutionPane = function( modelSolutions ) {
   }
   else {
     var numModels = modelSolutions.length;
-    var message = ( numModels === 0 )
+    var message = ( numModels === 1 )
       ? "There is one model solution."
       : "There are " + numModels + " model solutions.";
     var messageWrapped = 

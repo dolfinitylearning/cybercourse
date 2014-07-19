@@ -738,3 +738,21 @@ function _cyco_pseudents_get_line( $content, $start_pos ) {
   return array( $line, strlen( $line ), $eol_pos, $indentation, $is_blank, $EOS );
 }
 
+/**
+ * Implements hook_menu_local_tasks_alter
+ */
+function cyco_pseudents_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  switch($root_path){
+    case 'pseudent-poses':
+      if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
+        //Link to add exercise.
+        $item = menu_get_item('node/add/pseudent-pose');
+        $item['title'] = t('Add pseudent pose');
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $item,
+        );
+      }
+      break;
+  }
+}

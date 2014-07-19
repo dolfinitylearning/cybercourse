@@ -23,6 +23,9 @@ Drupal.behaviors.cycoNodeEditTweaks = {
       if ( $(this).parent().find(".collapse-summary-indicator").length == 0 ) {
         //Remember the summary content widget.
         var summaryWidget = nameSpaceRef.findCKSummaryWidget();
+        if ( ! summaryWidget ) {
+          return;
+        }
         //Compute text to show.
         var indicatorText 
             = nameSpaceRef.computeStatusMessage( summaryWidget );

@@ -10,11 +10,20 @@ app.submissionListPane = {};
 app.initSubmissionList = function() {
   //Prep data for the template.
   var dataForTemplate = { submissionMeta: new Array() };
+  //Compute order in which to show the records.
+  var orderedSubmissionKeys = new Array();
   for ( var key in app.submissionsToGrade) {
-    var submission = app.submissionsToGrade[ key ];
+    orderedSubmissionKeys[ app.submissionsToGrade[ key ].recordOrder ]
+      = key;
+  }
+  for ( key in orderedSubmissionKeys) {
+//  for ( key in app.submissionsToGrade) {
+    var submission = app.submissionsToGrade[ orderedSubmissionKeys[ key ] ];
     var templateRecord = new Object();
     templateRecord.submissionNid = submission.submissionNid;
-    templateRecord.timeAgo = submission.whenSubmitted;
+    templateRecord.timeAgo = app.capitaliseFirstLetter( 
+        $.timeago(submission.whenSubmitted) 
+    );
     templateRecord.exerciseName 
         = app.allExercises[ submission.exerciseNid ].title;
     templateRecord.studentName 
@@ -33,7 +42,7 @@ app.initSubmissionList = function() {
   //Show all.
   $("#submission-list-pane .pane-content").html( html );
   //Convert times into time ago format.
-  $(".cybercourse_timeago").timeago();
+//  $(".cybercourse_timeago").timeago();
 
   //Set up event.
   $("#submission-list-pane table tr").click(function(event){
@@ -76,6 +85,7 @@ app.submissionListItemClicked = function( submissionNid ) {
     var modelSolutions = app.allExercises[ exerciseNid ].modelSolutions;
     app.currentState.modelSolutions = modelSolutions;
     app.initModelSolutionPane( modelSolutions );
+    app.feedbackPane.initFeedbackPane( submissionNid );
     //Load rubric items that haven't been loaded yet.
     var missingRubricItems = app.findMissingItems(
         app.allExercises[ exerciseNid ].rubricItems
@@ -84,7 +94,7 @@ app.submissionListItemClicked = function( submissionNid ) {
       app.loadRubricItemsFromServer( missingRubricItems )
     )
     .then(function(){
-      app.initRubricPane( exerciseNid ),
+      app.rubricPane.initRubricPane(),
       app.hidePrepForSubmissionGradingWait( submissionNid );
     });
   });

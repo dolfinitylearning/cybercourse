@@ -78,18 +78,26 @@
         {{#each comments}}
           <p class="cybercourse-rubric-item-comment">{{comment}}</p>
         {{/each}}
-        {{> newCommentContainer }}
+        {{#each newComments}}
+          {{> newCommentContainer }}
+        {{/each}}
+        {{> newCommentContainer }}  
       </div>
     </script>
     
     <!-- Partial for new comment container. -->
     <script id="newCommentContainerTemplate" type="text/template">
-      <p class="cybercourse-rubric-item-new-comment-container">
-        <input type="checkbox" 
-          class="cybercourse-rubric-item-new-comment-remember"
-          title="Remember this comment">
+      <p class="cybercourse-rubric-item-new-comment-container"
+         data-new-comment-index="{{commentIndex}}">
+          <span class="cybercourse-rubric-item-new-comment-remember 
+              {{#if saveFlag}}
+                cyco-save-on"
+              {{else}}
+                cyco-save-off"
+              {{/if}}
+          title="Remember this comment?">&nbsp;</span>
         <textarea class="cybercourse-rubric-item-new-comment-text"
-          title="Custom comment"></textarea>
+          title="Custom comment">{{comment}}</textarea>
       </p>
     </script>
     
@@ -146,7 +154,8 @@
           <textarea id="cyco-feedback-editor"></textarea>
           <p id="send-feedback-button-container">
             <span id="send-feedback-button" class="button"
-                  title="Send the feedback to the student">Save</span>
+                  title="Send the feedback to the student">Send</span>
+            <span id="feedback-sent">Feedback not sent</span>
             <span id="exercise-complete">Not complete</span>
           </p>
         </div>

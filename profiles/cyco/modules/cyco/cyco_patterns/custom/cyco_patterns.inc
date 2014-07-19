@@ -136,3 +136,22 @@ function cyco_patterns_node_view($node, $view_mode, $langcode) {
     }
   }
 }
+
+/**
+ * Implements hook_menu_local_tasks_alter
+ */
+function cyco_patterns_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  switch($root_path){
+    case 'patterns':
+      if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
+        //Link to add pattern.
+        $item = menu_get_item('node/add/pattern');
+        $item['title'] = t('Add pattern');
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $item,
+        );
+      }
+      break;
+  }
+}

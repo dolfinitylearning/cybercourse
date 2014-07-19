@@ -47,3 +47,13 @@ app.setupAttachmentLinks = function() {
     return false; //Cancel standard action.
   });
 }
+
+/**
+ * Capitalize the first letter of a string.
+ * From http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript.
+ * @param {string} string String to capitalize.
+ * @returns {string} Result.
+ */
+app.capitaliseFirstLetter = function ( thing ) {
+    return thing.charAt(0).toUpperCase() + thing.slice(1);
+}

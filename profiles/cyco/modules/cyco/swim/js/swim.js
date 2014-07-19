@@ -111,7 +111,14 @@
     sizeEditor: function(editor) {
       //Size the editor, based on data in swim.settings.
       var lines;
-      if ( editor.name.search('summary') == -1 ) {
+      //Only mess with fields that have 'edit-' in their name.
+      //They are likely to be real Drupal fields.
+      //Others may be from field field sources clipboard paste,
+      //or other evil places.
+      if ( editor.name.search('edit-') === -1 ) {
+        return;
+      }
+      if ( editor.name.search('summary') === -1 ) {
         //Not a summary editor, so use regular height.
         lines = Drupal.settings.swim.editor_height
             ? Drupal.settings.swim.editor_height

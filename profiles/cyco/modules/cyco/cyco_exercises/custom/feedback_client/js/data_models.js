@@ -16,12 +16,20 @@ var app = app || {};
 app.RubricItem = function() {
   this.rubricItemNid = null;
   this.title = null;
-  //Array of "good" comments. Order matters.
+  //Array of "good" comments from the server. Simple strings.
+  //Order matters - matches server order.
   this.good = new Array();
+  //Array of new comments created by the user. 
+  //See NewRubricComment below.
+  this.goodNewComments = Array();
   //Array of "needs work" comments. 
   this.needsWork = new Array();
+  //Array of new comments created by the user. 
+  this.needsWorkNewComments = Array();
   //Array of "poor" comments. 
   this.poor = new Array();
+  //See NewRubricComment below.
+  this.poorNewComments = Array();
   this.notes = null;
 };
 
@@ -31,6 +39,15 @@ app.RubricItem = function() {
  * @type Array
  */
 app.allRubricItems = new Array();
+
+/**
+ * Constructor for new comment objects, created by the user.
+ */
+app.NewRubricComment = function() {
+  this.comment = null;
+//  this.commentRating = null;
+  this.saveFlag = null;
+}
 
 /**
  * Constructor.
@@ -88,9 +105,21 @@ app.Submission = function() {
   this.feedback = null;
   //Exercise complete?
   this.complete = null;
+  //Feedback sent?
+  this.feedbackSent = null;
   //Rubric item selections.
   this.rubricItemSelections = new Array();
-}
+};
+
+/**
+ * Constructor for grader's decision on a rubric item for a submission.
+ * Instances go in submission.rubricItemSelections.
+ */
+app.RubricItemSelection = function() {
+  this.rubricItemNid = null;
+  this.comment = null;
+  this.commentRating = null;
+};
 
 /**
  * Submissions to grade. Submission nid is index. 
@@ -104,7 +133,7 @@ app.Student = function() {
   this.name = null;
   //Group(s) the student is in. Array of group ids.
   this.groups = new Array();
-}
+};
 
 /**
  * Contains all student data fetched during grading. Used as cache.

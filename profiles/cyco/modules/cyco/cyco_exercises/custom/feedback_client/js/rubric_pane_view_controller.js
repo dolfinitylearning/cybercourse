@@ -13,29 +13,17 @@ app.rubricPane.newCommentTimeoutDelay = 1000;
  * Initialize the rubric pane for a given exercise.
  * @param {int} exerciseNid The exercise.
  */
-app.initRubricPane = function( exerciseNid ) {
+app.rubricPane.initRubricPane = function(  ) {
+  var exerciseNid = app.currentState.exerciseNid;
   var submissionNid = app.currentState.submissionNid;
   //Get the exercise's rubric list.
   var rubricNids = app.allExercises[ exerciseNid ].rubricItems;
-  //Get the current selections, if they exist.
-  //This would happen when grader is looking back at a graded submission.
-  var currentRubricSelections = app.submissionsToGrade[ submissionNid ].rubricItemSelections;
-//  var currentRubricSelections = null;
-//  if ( app.submissionsToGrade[ submissionNid ].rubricItemSelections ) {
-//    currentRubricSelections 
-//      = app.submissionsToGrade[ submissionNid ].rubricItemSelections;
-//  }
   //Clear existing content.
   $("#rubric-pane .pane-content").children().remove();
   //Render each rubric item.
-  for( var key in rubricNids ) {
-    var rubricNid = rubricNids[ key ];
-    var currentRubricSelection = null;
-    if ( currentRubricSelections[ rubricNid ] ) {
-      currentRubricSelection = currentRubricSelections[ rubricNid ];
-    }
-    app.renderRubricItem( rubricNid, currentRubricSelection );
-  }
+  rubricNids.forEach( function( rubricNid ) {
+    app.rubricPane.renderRubricItem( rubricNid );
+  });
   //Give each new comment container a timer index, used to track 
   //individual event timers for each container. The timers update
   //the chosen comment from the textarea a user is typing in.
@@ -50,6 +38,7 @@ app.initRubricPane = function( exerciseNid ) {
   //When the user types into a new comment field:
   //  1. Add a new new comment field, if needed.
   //  2. Make what the user typed the current comment, after a short delay.
+  //  3. Update the data model.
   $("#rubric-pane .pane-content")
     .on("keypress", ".cybercourse-rubric-item-new-comment-container textarea",
       function( event ){
@@ -88,6 +77,18 @@ app.initRubricPane = function( exerciseNid ) {
         .find(".cybercourse-rubric-item-chosen-text")
         .text( newCommentText );
     app.rubricPane.toggleRubricItemDisplayState( rubricItemContainer );
+    //Update data model.
+    var rubricItemNid = 
+        $(event.target)
+        .closest('div.cybercourse-rubric-item-container')
+        .attr("data-rubric-item-nid");
+    var rubricItemRating = 
+        $(event.target)
+        .closest("div.cybercourse-rubric-item-comment-set")
+        .attr("data-comment-set")
+    app.rubricPane.updateRubricItemSelectionDataModel( 
+        rubricItemNid, newCommentText, rubricItemRating
+    );
   });
   //When the user clicks to collapse button...
   $(".display-state").click(function(event) {
@@ -128,6 +129,8 @@ app.initRubricPane = function( exerciseNid ) {
     $(".cyco-exercise-complete").prop("checked", newState);
     //Change the complete indicator in feedback pane.
     app.feedbackPane.setCompleteMessage( newState );
+    //Update data model.
+    app.submissionsToGrade[ app.currentState.submissionNid ].complete = newState;
   });
   //When user clicks a generate feedback button...
   $(".generate-feedback-button").click(function() {
@@ -138,6 +141,45 @@ app.initRubricPane = function( exerciseNid ) {
       var complete = $(".cyco-exercise-complete").prop("checked");
       app.feedbackPane.initFeedbackPane( complete );
     });
+  });
+  //Get the current selections, if they exist.
+  //This would happen when grader is looking back at a graded submission.
+  var currentRubricSelections = app.submissionsToGrade[ submissionNid ].rubricItemSelections;
+  //If there are already item selections in the data model, reflect 
+  //them in the GUI.
+  rubricNids.forEach( function( rubricNid ){
+    if ( currentRubricSelections[ rubricNid ] ) {
+      var currentRubricComment = currentRubricSelections[ rubricNid ].comment;
+      //Find the comment and click on it.
+      //Search the predefined elements first.
+      var rubricItemContainer 
+          = $("div.cybercourse-rubric-item-container[data-rubric-item-nid="
+            + rubricNid + "]");
+      var commentElements = $(rubricItemContainer).find("p.cybercourse-rubric-item-comment");
+      var targetCommentElement = null;
+      $.each( commentElements, function( index, element ) {
+        if ( $(element).html() ==  currentRubricComment ) {
+          targetCommentElement = element;
+        }
+      });
+     //Found something yet?
+      if ( targetCommentElement === null) {
+        //Could be that one of the new comments was the Chosen One.
+        var newCommentElements = $(rubricItemContainer)
+                .find("textarea.cybercourse-rubric-item-new-comment-text");
+        $.each( newCommentElements, function( index, element ) {
+          if ( $(element).val() == currentRubricComment ) {
+            targetCommentElement 
+                = $(element).closest(".cybercourse-rubric-item-new-comment-container");
+          }
+        });
+      }
+      //Found the Chosen One?
+      if ( targetCommentElement !== null) {
+        //Click it.
+        $(targetCommentElement).click();
+      }
+    }
   });
   //Show everything - hidden when UI loads.
   $("#rubric-pane div").show();
@@ -165,11 +207,29 @@ app.rubricPane.choosePopulatedTextarea = function(textarea) {
 };
 
 /**
+ * Store rubric item selection data into the data model for the current
+ * submission.
+ * @param {int} rubricItemNid
+ * @param {string} comment
+ * @param {string} commentRating
+ */
+app.rubricPane.updateRubricItemSelectionDataModel = function( 
+        rubricItemNid, comment, commentRating
+    ){
+  var rubricItemSelection = new app.RubricItemSelection();
+  rubricItemSelection.rubricItemNid = rubricItemNid;
+  rubricItemSelection.comment = comment;
+  rubricItemSelection.commentRating = commentRating;
+  app.submissionsToGrade[ app.currentState.submissionNid ]
+          .rubricItemSelections[ rubricItemNid ] = rubricItemSelection;
+};
+
+/**
  * Render a rubric item.
  * @param {int} rubricNid Rubric to render.
- * @param {type} currentSelections Current selections, if any.
+ *    Null if none.
  */
-app.renderRubricItem = function( rubricNid, currentSelections ) {
+app.rubricPane.renderRubricItem = function( rubricNid ) {
   var rubricItem = app.allRubricItems[ rubricNid ];
   //Convert data format into that used by the tempate.
   var templateData = { 
@@ -178,13 +238,25 @@ app.renderRubricItem = function( rubricNid, currentSelections ) {
   };
   templateData.commentsGroups = new Array();
   //Good comments.
-  var commentsGroup = app.formatCommentsGroup( "Good", rubricItem.good );
+  var commentsGroup = app.rubricPane.formatCommentsGroup( 
+      "Good", 
+      rubricItem.good,
+      rubricItem.goodNewComments
+  );
   templateData.commentsGroups.push( commentsGroup );
   //Needs work comments.
-  commentsGroup = app.formatCommentsGroup( "Needs work", rubricItem.needsWork );
+  commentsGroup = app.rubricPane.formatCommentsGroup( 
+      "Needs work", 
+      rubricItem.needsWork,
+      rubricItem.needsWorkNewComments
+  );
   templateData.commentsGroups.push( commentsGroup );
   //Poor comments.
-  commentsGroup = app.formatCommentsGroup( "Poor", rubricItem.poor );
+  commentsGroup = app.rubricPane.formatCommentsGroup( 
+      "Poor", 
+      rubricItem.poor,
+      rubricItem.poorNewComments
+  );
   templateData.commentsGroups.push( commentsGroup );
   //Render the template.
   var result = app.compiledTemplates.rubricItemTemplate( templateData );
@@ -195,9 +267,10 @@ app.renderRubricItem = function( rubricNid, currentSelections ) {
  * Format data from good/needs work/poor comments into template format.
  * @param {string} groupName The name of the group, e.g., good.
  * @param {Array} commentsList Comments in the group.
+ * @param {Array} newCommentsList New comments (entered by user).
  * @returns {object} Data in template format.
  */
-app.formatCommentsGroup = function( groupName, commentsList ) {
+app.rubricPane.formatCommentsGroup = function( groupName, commentsList, newCommentsList ) {
   //Compute an id for an HTML 5 data- property.
   var groupDataId = groupName.toLowerCase();
   groupDataId = groupDataId.replace( " ", "_" );
@@ -206,10 +279,21 @@ app.formatCommentsGroup = function( groupName, commentsList ) {
     setId: groupDataId
   };
   commentsGroup.comments = new Array();
-  for( var index in commentsList ) {
-    var comment = commentsList[ index ];
-    commentsGroup.comments.push( { "comment": comment } );
-  }
+  commentsList.forEach( function( comment ) {
+    commentsGroup.comments.push( {
+      "comment": comment, 
+    } );
+  });
+  var index = 0;
+  newCommentsList.forEach( function( object ){
+    commentsGroup.newComments = new Array();
+    commentsGroup.newComments.push( {
+      "comment": object.comment,
+      "saveFlag": object.saveFlag,
+      "commentIndex": index 
+    });
+    index++;
+  });
   return commentsGroup;
 };
 
@@ -328,8 +412,10 @@ app.rubricPane.createFeedbackMessage = function() {
     }
   })
   .done(function(message){
-    $("#cyco-feedback-editor").val( message );
-    $("#feedback-pane .pane-content").fadeIn('fast');
+    //Tell feedback pane to show it.
+    app.feedbackPane.showFeedback( message );
+    //Update the data model.
+    app.submissionsToGrade[ app.currentState.submissionNid ].feedback = message;
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
     Drupal.behaviors.cybercourseErrorHandler.reportError(
