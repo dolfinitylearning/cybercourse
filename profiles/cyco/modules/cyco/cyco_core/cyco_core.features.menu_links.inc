@@ -31,6 +31,27 @@ function cyco_core_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_basic-pages:basic-pages',
   );
+  // Exported menu link: menu-cp-authors_add-class:node/add/class
+  $menu_links['menu-cp-authors_add-class:node/add/class'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'node/add/class',
+    'router_path' => 'node/add/class',
+    'link_title' => 'Add class',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new class.',
+      ),
+      'identifier' => 'menu-cp-authors_add-class:node/add/class',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 3,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_classes:classes',
+  );
   // Exported menu link: menu-cp-authors_add-user:admin/people/create
   $menu_links['menu-cp-authors_add-user:admin/people/create'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -111,6 +132,26 @@ function cyco_core_menu_default_menu_links() {
     'has_children' => 1,
     'expanded' => 1,
     'weight' => -49,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-authors_classes:classes
+  $menu_links['menu-cp-authors_classes:classes'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'classes',
+    'router_path' => 'classes',
+    'link_title' => 'Classes',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Classes are groups of students taking a course, with an instructor.',
+      ),
+      'identifier' => 'menu-cp-authors_classes:classes',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 1,
+    'expanded' => 1,
+    'weight' => -43,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-authors_courses-and-keywords:courses-and-keywords
@@ -244,6 +285,27 @@ function cyco_core_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords',
   );
+  // Exported menu link: menu-cp-authors_list-classes:classes
+  $menu_links['menu-cp-authors_list-classes:classes'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'classes',
+    'router_path' => 'classes',
+    'link_title' => 'List classes',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See a list of all the classes.',
+      ),
+      'identifier' => 'menu-cp-authors_list-classes:classes',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 0,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_classes:classes',
+  );
   // Exported menu link: menu-cp-authors_list-course-pages-and-keywords:courses-and-keywords
   $menu_links['menu-cp-authors_list-course-pages-and-keywords:courses-and-keywords'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -326,6 +388,27 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -48,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords',
+  );
+  // Exported menu link: menu-cp-authors_manage-keywords:admin/structure/taxonomy/keywords
+  $menu_links['menu-cp-authors_manage-keywords:admin/structure/taxonomy/keywords'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/structure/taxonomy/keywords',
+    'router_path' => 'admin/structure/taxonomy/%',
+    'link_title' => 'Manage keywords',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit keywords',
+      ),
+      'identifier' => 'menu-cp-authors_manage-keywords:admin/structure/taxonomy/keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 6,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_courses-and-keywords:courses-and-keywords',
   );
   // Exported menu link: menu-cp-authors_manage-workflow-tags:admin/structure/taxonomy/workflow_tags
   $menu_links['menu-cp-authors_manage-workflow-tags:admin/structure/taxonomy/workflow_tags'] = array(
@@ -417,12 +500,15 @@ function cyco_core_menu_default_menu_links() {
     'link_title' => 'Blueprints and keywords',
     'options' => array(
       'identifier' => 'menu-cp-graders_blueprints-and-keywords:blueprints-and-keywords',
+      'attributes' => array(
+        'title' => 'A list of all the blueprints pages and their keywords.',
+      ),
     ),
     'module' => 'menu',
     'hidden' => 0,
     'external' => 0,
     'has_children' => 0,
-    'expanded' => 0,
+    'expanded' => 1,
     'weight' => -49,
     'customized' => 1,
   );
@@ -434,12 +520,15 @@ function cyco_core_menu_default_menu_links() {
     'link_title' => 'Courses and keywords',
     'options' => array(
       'identifier' => 'menu-cp-graders_courses-and-keywords:courses-and-keywords',
+      'attributes' => array(
+        'title' => 'A list of all the course pages and their keywords.',
+      ),
     ),
     'module' => 'menu',
     'hidden' => 0,
     'external' => 0,
     'has_children' => 0,
-    'expanded' => 0,
+    'expanded' => 1,
     'weight' => -50,
     'customized' => 1,
   );
@@ -530,23 +619,81 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -45,
     'customized' => 1,
   );
+  // Exported menu link: menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords
+  $menu_links['menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'blueprints-and-keywords',
+    'router_path' => 'blueprints-and-keywords',
+    'link_title' => 'Blueprints and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_blueprints-and-keywords:blueprints-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 1,
+    'customized' => 0,
+  );
+  // Exported menu link: menu-cp-reviewers_courses-and-keywords:courses-and-keywords
+  $menu_links['menu-cp-reviewers_courses-and-keywords:courses-and-keywords'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'courses-and-keywords',
+    'router_path' => 'courses-and-keywords',
+    'link_title' => 'Courses and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_courses-and-keywords:courses-and-keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 0,
+    'customized' => 0,
+  );
+  // Exported menu link: menu-tools_classes:classes-public
+  $menu_links['menu-tools_classes:classes-public'] = array(
+    'menu_name' => 'menu-tools',
+    'link_path' => 'classes-public',
+    'router_path' => 'classes-public',
+    'link_title' => 'Classes',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Class available',
+      ),
+      'identifier' => 'menu-tools_classes:classes-public',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 10,
+    'customized' => 0,
+  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add basic page');
+  t('Add class');
   t('Add user');
   t('All content');
   t('Basic pages');
   t('Blueprints and keywords');
+  t('Classes');
   t('Courses and keywords');
   t('Create a new blueprint');
   t('Create a new course');
   t('Custom tokens');
   t('List basic pages');
   t('List blueprint pages and keywords');
+  t('List classes');
   t('List course pages and keywords');
   t('List tagged content');
   t('List users');
   t('Manage blueprint keywords');
+  t('Manage keywords');
   t('Manage workflow tags');
   t('Other');
   t('Users');

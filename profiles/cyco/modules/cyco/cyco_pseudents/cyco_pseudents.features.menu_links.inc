@@ -93,6 +93,40 @@ function cyco_pseudents_menu_default_menu_links() {
     'weight' => -47,
     'customized' => 1,
   );
+  // Exported menu link: menu-cp-instructors_pseudent-poses:pseudent-poses
+  $menu_links['menu-cp-instructors_pseudent-poses:pseudent-poses'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'pseudent-poses',
+    'router_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_pseudent-poses:pseudent-poses',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 2,
+    'customized' => 0,
+  );
+  // Exported menu link: menu-cp-reviewers_pseudent-poses:pseudent-poses
+  $menu_links['menu-cp-reviewers_pseudent-poses:pseudent-poses'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'pseudent-poses',
+    'router_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_pseudent-poses:pseudent-poses',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 2,
+    'customized' => 0,
+  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add pseudent pose');

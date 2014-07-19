@@ -91,7 +91,6 @@ function cyco_patterns_user_default_permissions() {
       'grader' => 'grader',
       'instructor' => 'instructor',
       'reviewer' => 'reviewer',
-      'student' => 'student',
     ),
     'module' => 'search_config',
   );

@@ -253,6 +253,13 @@ function cyco_core_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
+  // Exported permission: 'administer fieldgroups'.
+  $permissions['administer fieldgroups'] = array(
+    'name' => 'administer fieldgroups',
+    'roles' => array(),
+    'module' => 'field_group',
+  );
+
   // Exported permission: 'administer filters'.
   $permissions['administer filters'] = array(
     'name' => 'administer filters',
@@ -269,6 +276,15 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'image',
+  );
+
+  // Exported permission: 'administer imce'.
+  $permissions['administer imce'] = array(
+    'name' => 'administer imce',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'imce',
   );
 
   // Exported permission: 'administer menu'.
@@ -931,6 +947,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'post comments',
     'roles' => array(
       'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
       'author' => 'author',
     ),
     'module' => 'comment',
@@ -1028,7 +1045,6 @@ function cyco_core_user_default_permissions() {
       'grader' => 'grader',
       'instructor' => 'instructor',
       'reviewer' => 'reviewer',
-      'student' => 'student',
     ),
     'module' => 'search_config',
   );
@@ -1044,7 +1060,6 @@ function cyco_core_user_default_permissions() {
       'grader' => 'grader',
       'instructor' => 'instructor',
       'reviewer' => 'reviewer',
-      'student' => 'student',
     ),
     'module' => 'search_config',
   );

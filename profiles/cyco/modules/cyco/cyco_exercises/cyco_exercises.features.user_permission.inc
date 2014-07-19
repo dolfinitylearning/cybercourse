@@ -61,8 +61,8 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'create exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
       'instructor' => 'instructor',
-      'student' => 'student',
     ),
     'module' => 'node',
   );
@@ -255,9 +255,9 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'delete own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
       'author' => 'author',
       'instructor' => 'instructor',
-      'student' => 'student',
     ),
     'module' => 'node',
   );
@@ -458,9 +458,9 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'edit own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
       'author' => 'author',
       'instructor' => 'instructor',
-      'student' => 'student',
     ),
     'module' => 'node',
   );
@@ -570,7 +570,9 @@ function cyco_exercises_user_default_permissions() {
   // Exported permission: 'search exercise content'.
   $permissions['search exercise content'] = array(
     'name' => 'search exercise content',
-    'roles' => array(),
+    'roles' => array(
+      'authenticated user' => 'authenticated user',
+    ),
     'module' => 'search_config',
   );
 

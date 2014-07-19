@@ -10,6 +10,27 @@
 function cyco_exercises_menu_default_menu_links() {
   $menu_links = array();
 
+  // Exported menu link: menu-cp-authors_add-model-solution:node/add/model-exercise-solution
+  $menu_links['menu-cp-authors_add-model-solution:node/add/model-exercise-solution'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'node/add/model-exercise-solution',
+    'router_path' => 'node/add/model-exercise-solution',
+    'link_title' => 'Add model solution',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new model exercise solution.',
+      ),
+      'identifier' => 'menu-cp-authors_add-model-solution:node/add/model-exercise-solution',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -43,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
+  );
   // Exported menu link: menu-cp-authors_add-new-exercise:node/add/exercise
   $menu_links['menu-cp-authors_add-new-exercise:node/add/exercise'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -93,6 +114,27 @@ function cyco_exercises_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
   );
+  // Exported menu link: menu-cp-authors_list-model-solutions:list-model-solutions
+  $menu_links['menu-cp-authors_list-model-solutions:list-model-solutions'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'list-model-solutions',
+    'router_path' => 'list-model-solutions',
+    'link_title' => 'List model solutions',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Model solutions to exercises.',
+      ),
+      'identifier' => 'menu-cp-authors_list-model-solutions:list-model-solutions',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -44,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
+  );
   // Exported menu link: menu-cp-authors_list-rubric-items:rubric-items
   $menu_links['menu-cp-authors_list-rubric-items:rubric-items'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -111,6 +153,48 @@ function cyco_exercises_menu_default_menu_links() {
     'has_children' => 0,
     'expanded' => 1,
     'weight' => -47,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
+  );
+  // Exported menu link: menu-cp-authors_manage-exercise-keywords:admin/structure/taxonomy/keywords
+  $menu_links['menu-cp-authors_manage-exercise-keywords:admin/structure/taxonomy/keywords'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/structure/taxonomy/keywords',
+    'router_path' => 'admin/structure/taxonomy/%',
+    'link_title' => 'Manage exercise keywords',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit keywords',
+      ),
+      'identifier' => 'menu-cp-authors_manage-exercise-keywords:admin/structure/taxonomy/keywords',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -48,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
+  );
+  // Exported menu link: menu-cp-authors_manage-rubric-item-categories:admin/structure/taxonomy/rubric_item_categories
+  $menu_links['menu-cp-authors_manage-rubric-item-categories:admin/structure/taxonomy/rubric_item_categories'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
+    'router_path' => 'admin/structure/taxonomy/%',
+    'link_title' => 'Manage rubric item categories',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Group rubric items into categories to make them easier to work with. Manage the categories here.',
+      ),
+      'identifier' => 'menu-cp-authors_manage-rubric-item-categories:admin/structure/taxonomy/rubric_item_categories',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -45,
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_exercises-and-rubics:exercises',
   );
@@ -196,12 +280,16 @@ function cyco_exercises_menu_default_menu_links() {
   );
   // Translatables
   // Included for use with string extractors like potx.
+  t('Add model solution');
   t('Add new exercise');
   t('Add new rubric item');
   t('Exercises');
   t('Exercises and rubics');
   t('List exercises');
+  t('List model solutions');
   t('List rubric items');
+  t('Manage exercise keywords');
+  t('Manage rubric item categories');
   t('Rubric items');
 
 

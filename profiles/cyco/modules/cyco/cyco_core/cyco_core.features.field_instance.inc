@@ -774,7 +774,7 @@ function cyco_core_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(

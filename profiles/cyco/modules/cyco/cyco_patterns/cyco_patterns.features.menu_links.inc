@@ -72,6 +72,60 @@ function cyco_patterns_menu_default_menu_links() {
     'weight' => -46,
     'customized' => 1,
   );
+  // Exported menu link: menu-cp-graders_patterns:patterns
+  $menu_links['menu-cp-graders_patterns:patterns'] = array(
+    'menu_name' => 'menu-cp-graders',
+    'link_path' => 'patterns',
+    'router_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'A list of all the patterns.',
+      ),
+      'identifier' => 'menu-cp-graders_patterns:patterns',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 3,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-instructors_patterns:patterns
+  $menu_links['menu-cp-instructors_patterns:patterns'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'patterns',
+    'router_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_patterns:patterns',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 3,
+    'customized' => 0,
+  );
+  // Exported menu link: menu-cp-reviewers_patterns:patterns
+  $menu_links['menu-cp-reviewers_patterns:patterns'] = array(
+    'menu_name' => 'menu-cp-reviewers',
+    'link_path' => 'patterns',
+    'router_path' => 'patterns',
+    'link_title' => 'Patterns',
+    'options' => array(
+      'identifier' => 'menu-cp-reviewers_patterns:patterns',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 3,
+    'customized' => 0,
+  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add a pattern');

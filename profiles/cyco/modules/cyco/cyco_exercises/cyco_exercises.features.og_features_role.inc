@@ -10,6 +10,14 @@
 function cyco_exercises_og_features_default_roles() {
   $roles = array();
 
+  // Exported OG Role: 'node:class:grader'.
+  $roles['node:class:grader'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'class',
+    'name' => 'grader',
+  );
+
   // Exported OG Role: 'node:class:instructor'.
   $roles['node:class:instructor'] = array(
     'gid' => 0,

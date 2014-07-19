@@ -359,7 +359,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -546,7 +546,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -666,7 +666,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -859,7 +859,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -977,9 +977,9 @@ function cyco_exercises_field_default_field_instances() {
           'filefield_sources' => array(
             'attach' => 0,
             'clipboard' => 0,
-            'imce' => 0,
+            'imce' => 'imce',
             'reference' => 0,
-            'remote' => 0,
+            'remote' => 'remote',
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -1056,7 +1056,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -1904,7 +1904,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -2080,7 +2080,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -2195,7 +2195,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',
@@ -2436,7 +2436,7 @@ function cyco_exercises_field_default_field_instances() {
         'filefield_sources' => array(
           'filefield_sources' => array(
             'attach' => 0,
-            'clipboard' => 'clipboard',
+            'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
             'remote' => 'remote',

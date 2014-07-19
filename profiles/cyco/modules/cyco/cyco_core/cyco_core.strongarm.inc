@@ -56,7 +56,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_course_page';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
   $export['comment_course_page'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -140,7 +140,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_preview_course_page';
-  $strongarm->value = '1';
+  $strongarm->value = '0';
   $export['comment_preview_course_page'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -274,7 +274,7 @@ function cyco_core_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '8',
+          'weight' => '9',
         ),
       ),
       'display' => array(),
@@ -360,8 +360,15 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'menu_options_page';
   $strongarm->value = array(
-    0 => 'menu-footer',
-    1 => 'main-menu',
+    0 => 'menu-cp-authors',
+    1 => 'menu-cp-graders',
+    2 => 'menu-cp-instructors',
+    3 => 'menu-cp-reviewers',
+    4 => 'menu-cp-students',
+    5 => 'menu-footer',
+    6 => 'main-menu',
+    7 => 'menu-tools',
+    8 => 'user-menu',
   );
   $export['menu_options_page'] = $strongarm;
 
@@ -434,7 +441,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_preview_page';
-  $strongarm->value = '1';
+  $strongarm->value = '0';
   $export['node_preview_page'] = $strongarm;
 
   $strongarm = new stdClass();
