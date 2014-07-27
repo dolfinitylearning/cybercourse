@@ -138,6 +138,41 @@ app.rubricPane.initRubricPane = function(  ) {
           .removeClass("cyco-save-on")
           .addClass("cyco-save-off");
       }
+      //Update the data model.
+      var rubricItemNid = pin
+              .closest("[data-rubric-item-nid]")
+              .attr("data-rubric-item-nid");
+      var rubricItemRating = 
+          pin
+          .closest("div.cybercourse-rubric-item-comment-set")
+          .attr("data-comment-set");
+      var newCommentIndex = 
+          pin
+          .closest("[data-new-comment-index]")
+          .attr("data-new-comment-index");
+      var pinOn = pin.hasClass("cyco-save-on");
+      if ( rubricItemRating == "good" ) {
+        app.allRubricItems[ rubricItemNid ]
+          .goodNewComments[ newCommentIndex ].saveFlag
+          = pinOn;
+      }
+      else if ( rubricItemRating == "needs_work" ) {
+        app.allRubricItems[ rubricItemNid ]
+          .needsWorkNewComments[ newCommentIndex ].saveFlag
+          = pinOn;
+      }
+      else if ( rubricItemRating == "poor" ) {
+        app.allRubricItems[ rubricItemNid ]
+          .poorNewComments[ newCommentIndex ].saveFlag
+          = pinOn;
+      }
+      else {
+        Drupal.behaviors.cybercourseErrorHandler.reportError(
+          "Fail in app.rubricPane.click on pin! Bad rubricItemRating: "  
+            + rubricItemRating
+        );
+        return;
+      }
     }
   );
   //When the user clicks the Complete checkbox...
@@ -173,7 +208,7 @@ app.rubricPane.initRubricPane = function(  ) {
       var rubricItemContainer 
           = $("div.cybercourse-rubric-item-container[data-rubric-item-nid="
             + rubricNid + "]");
-      var commentElements = $(rubricItemContainer).find("p.cybercourse-rubric-item-comment");
+      var commentElements = $(rubricItemContainer).find(".cybercourse-rubric-item-comment");
       var targetCommentElement = null;
       $.each( commentElements, function( index, element ) {
         if ( $(element).html() ==  currentRubricComment ) {
@@ -306,8 +341,8 @@ app.rubricPane.formatCommentsGroup = function(
     } );
   });
   var index = 0;
+  commentsGroup.newComments = new Array();
   newCommentsList.forEach( function( object ){
-    commentsGroup.newComments = new Array();
     commentsGroup.newComments.push( {
       "comment": object.comment,
       "saveFlag": object.saveFlag,
@@ -333,7 +368,7 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
       .find(".cybercourse-rubric-item-chosen-text").text( newCommentText );
   //Highlight the container as the Chosen One.
   app.rubricPane.showChosen( newCommentContainer );
-  //Update data model.
+  //Update rubric item data model.
   var $textarea = $($(newCommentContainer).find("textarea"));
   var rubricItemNid = 
       $textarea
@@ -343,6 +378,31 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
       $textarea
       .closest("div.cybercourse-rubric-item-comment-set")
       .attr("data-comment-set")
+  //Which of the new items is it?
+  var newItemIndex = 
+      $textarea
+      .closest("[data-new-comment-index]")
+      .attr("data-new-comment-index");
+  if ( rubricItemRating == "good" ) {
+    app.allRubricItems[ rubricItemNid ].goodNewComments[ newItemIndex ].comment 
+        = newCommentText;
+  }
+  else if ( rubricItemRating == "needs_work" ) {
+    app.allRubricItems[ rubricItemNid ].needsWorkNewComments[ newItemIndex ].comment 
+        = newCommentText;
+  }
+  else if ( rubricItemRating == "poor" ) {
+    app.allRubricItems[ rubricItemNid ].poorNewComments[ newItemIndex ].comment 
+        = newCommentText;
+  }
+  else {
+    Drupal.behaviors.cybercourseErrorHandler.reportError(
+      "Fail in app.rubricPane.setChosenFromNewComment. Bad rubricItemRating: "  
+        + rubricItemRating
+    );
+    return;
+  }
+  //Update submission rubric item selection.
   app.rubricPane.updateRubricItemSelectionDataModel( 
       rubricItemNid, newCommentText, rubricItemRating
   );
@@ -382,10 +442,40 @@ app.rubricPane.addNewCommentField = function( widget ) {
      ) {
     //Not added a new comment container yet.
     //Create the new HTML.
-    var html = app.compiledTemplates.newCommentTemplate( {} );
+    //Compute the new comment index of the new comment.
+    //Added to the HTML as an attr, so later code can
+    //tell which new comment is being messed with.
+    var rubricItemNid = $(widget)
+            .closest("[data-rubric-item-nid]")
+            .attr("data-rubric-item-nid");
+    var rubricItemRating = 
+        $(widget)
+        .closest("div.cybercourse-rubric-item-comment-set")
+        .attr("data-comment-set");
+    var newCommentIndex;
+    if ( rubricItemRating == "good" ) {
+      newCommentIndex = app.allRubricItems[ rubricItemNid ].goodNewComments.length;
+    }
+    else if ( rubricItemRating == "needs_work" ) {
+      newCommentIndex = app.allRubricItems[ rubricItemNid ].needsWorkNewComments.length;
+    }
+    else if ( rubricItemRating == "poor" ) {
+      newCommentIndex = app.allRubricItems[ rubricItemNid ].poorNewComments.length;
+    }
+    else {
+      Drupal.behaviors.cybercourseErrorHandler.reportError(
+        "Fail in app.rubricPane.addNewCommentField! Bad rubricItemRating: "  
+          + rubricItemRating
+      );
+      return;
+    }
+    var html = app.compiledTemplates.newCommentTemplate( {
+      "comment": "",
+      "saveFlag": false,
+      "commentIndex": newCommentIndex 
+    } );
     //Need to trim, or $() will fail.
     var $html = $( html.trim() );
-//    var $html = $($("#newCommentContainerTemplate").html());
     //Add a timeout element for it.
     var newIndex = app.rubricPane.newCommentTimers.length;
     app.rubricPane.newCommentTimers[ newIndex ] = "";
@@ -395,6 +485,24 @@ app.rubricPane.addNewCommentField = function( widget ) {
     //Add flag to show processing done.
     $( widget ).parents(".cybercourse-rubric-item-new-comment-container")
         .attr("new-done", "yes");
+    //Update the rubic item data model.
+    var newCommentData = new app.NewRubricComment();
+    newCommentData.saveFlag = false;
+    if ( rubricItemRating == "good" ) {
+      app.allRubricItems[ rubricItemNid ].goodNewComments.push( newCommentData );
+    }
+    else if ( rubricItemRating == "needs_work" ) {
+      app.allRubricItems[ rubricItemNid ].needsWorkNewComments.push( newCommentData );
+    }
+    else if ( rubricItemRating == "poor" ) {
+      app.allRubricItems[ rubricItemNid ].poorNewComments.push( newCommentData );
+    }
+    else {
+      Drupal.behaviors.cybercourseErrorHandler.reportError(
+        "Fail in app.rubricPane.addNewCommentField. Bad rubricItemRating: "  
+          + rubricItemRating
+      );
+    }
   }
 };
 
