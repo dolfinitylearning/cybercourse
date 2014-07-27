@@ -45,7 +45,6 @@ app.allRubricItems = new Array();
  */
 app.NewRubricComment = function() {
   this.comment = null;
-//  this.commentRating = null;
   this.saveFlag = null;
 }
 

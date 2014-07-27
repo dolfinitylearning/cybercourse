@@ -261,14 +261,13 @@ body {
 }
 
 .cybercourse-rubric-item-new-comment-text {
-  width: 90%;
+  width: 100%;
   height: 4em;
   border: 1px solid #888;
 }
 
 .cybercourse-rubric-item-new-comment-remember {
-  vertical-align: top;
-  float: right;
+  margin-left: 4px;
 }
 
 .cybercourse-rubric-item-chosen-indicator {
@@ -344,15 +343,25 @@ body {
   height: 20px;
   background-image: url(../images/pin.png);
   background-repeat: no-repeat;
+  margin-left: 5px;
 }
 .cyco-save-off {
-  border: 1px #999 dotted;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);        
+  border: 1px #DDD solid;
+  box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.4), 3px 3px 1px rgba(0, 0, 0, 0.2);        
   background-position: center center;
 }
 .cyco-save-on {
-  border: 1px #444 dotted;
+  border: 1px #444 solid;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
   background-position: bottom left;
 }
 
+.cyco-table-row {
+  display: table-row;
+  width: 100%;
+}
+
+.cyco-table-cell {
+  display: table-cell;
+  vertical-align: top;
+}

@@ -45,7 +45,9 @@ app.rubricPane.initRubricPane = function(  ) {
       //Add a new comment field if needed.
       app.rubricPane.addNewCommentField( event.target );
       //Reset timer.
-      var timerIndex = $(event.target).parent().attr("data-timer-index");
+      var timerIndex = $(event.target)
+              .closest("[data-timer-index]")
+              .attr("data-timer-index");
       window.clearTimeout( app.rubricPane.newCommentTimers[ timerIndex ] );
       app.rubricPane.newCommentTimers[ timerIndex ] 
           = window.setTimeout(
@@ -72,7 +74,7 @@ app.rubricPane.initRubricPane = function(  ) {
     //Show that this is the Chosen One.
     app.rubricPane.showChosen( event.target );
     var rubricItemContainer = $( event.target )
-        .parents(".cybercourse-rubric-item-container");
+        .closest(".cybercourse-rubric-item-container");
     rubricItemContainer
         .find(".cybercourse-rubric-item-chosen-text")
         .text( newCommentText );
@@ -93,7 +95,7 @@ app.rubricPane.initRubricPane = function(  ) {
   //When the user clicks to collapse button...
   $(".display-state").click(function(event) {
     var rubricItemContainer 
-        = $( event.target ).parents(".cybercourse-rubric-item-container").first();
+        = $( event.target ).closest(".cybercourse-rubric-item-container").first();
     app.rubricPane.toggleRubricItemDisplayState( rubricItemContainer );
   });
   //When the user clicks a new comment container...
@@ -114,7 +116,7 @@ app.rubricPane.initRubricPane = function(  ) {
               //There is something in the container's text widget. Chose it.
               var rubricItemContainer 
                   = $( event.target )
-                      .parents(".cybercourse-rubric-item-container").first();
+                      .closest(".cybercourse-rubric-item-container").first();
               $(rubricItemContainer)
                 .find(".cybercourse-rubric-item-chosen-text").text( newCommentText );
               app.rubricPane.showChosen( event.target );
@@ -122,6 +124,22 @@ app.rubricPane.initRubricPane = function(  ) {
           }
         }
     );
+  //User clicks pin...
+  $(".pane-content").on("click", ".cyco-rubric-item-new-comment-remember", 
+    function(event) {
+      var pin = $(event.target);
+      if ( pin.hasClass("cyco-save-off") ) {
+        pin
+          .removeClass("cyco-save-off")
+          .addClass("cyco-save-on");
+      }
+      else {
+        pin
+          .removeClass("cyco-save-on")
+          .addClass("cyco-save-off");
+      }
+    }
+  );
   //When the user clicks the Complete checkbox...
   $(".cyco-exercise-complete").change(function(event){
     //Set both checkboxes to the same value.
@@ -198,10 +216,12 @@ app.rubricPane.choosePopulatedTextarea = function(textarea) {
       //There is something in the container's text widget. Choose it.
       var rubricItemContainer 
           = $( textarea )
-              .parents(".cybercourse-rubric-item-container").first();
+              .closest(".cybercourse-rubric-item-container").first();
       $(rubricItemContainer)
         .find(".cybercourse-rubric-item-chosen-text").text( newCommentText );
-      app.rubricPane.showChosen( $(textarea).parent() );
+      app.rubricPane.showChosen( 
+          $(textarea).closest(".cybercourse-rubric-item-new-comment-container")
+      );
     }
   }
 };
@@ -270,7 +290,8 @@ app.rubricPane.renderRubricItem = function( rubricNid ) {
  * @param {Array} newCommentsList New comments (entered by user).
  * @returns {object} Data in template format.
  */
-app.rubricPane.formatCommentsGroup = function( groupName, commentsList, newCommentsList ) {
+app.rubricPane.formatCommentsGroup = function( 
+        groupName, commentsList, newCommentsList ) {
   //Compute an id for an HTML 5 data- property.
   var groupDataId = groupName.toLowerCase();
   groupDataId = groupDataId.replace( " ", "_" );
@@ -307,11 +328,24 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
   var newCommentText 
       = $(newCommentContainer).find("textarea").val();
   var rubricItemContainer 
-      = $(newCommentContainer).parents( ".cybercourse-rubric-item-container" );
+      = $(newCommentContainer).closest( ".cybercourse-rubric-item-container" );
   $(rubricItemContainer)
       .find(".cybercourse-rubric-item-chosen-text").text( newCommentText );
   //Highlight the container as the Chosen One.
   app.rubricPane.showChosen( newCommentContainer );
+  //Update data model.
+  var $textarea = $($(newCommentContainer).find("textarea"));
+  var rubricItemNid = 
+      $textarea
+      .closest('div.cybercourse-rubric-item-container')
+      .attr("data-rubric-item-nid");
+  var rubricItemRating = 
+      $textarea
+      .closest("div.cybercourse-rubric-item-comment-set")
+      .attr("data-comment-set")
+  app.rubricPane.updateRubricItemSelectionDataModel( 
+      rubricItemNid, newCommentText, rubricItemRating
+  );
 };
 
 /**
@@ -376,12 +410,12 @@ app.rubricPane.showChosen = function( chosenOne ) {
   }
   //Remove indicator from comments.
   $chosenOne
-      .parents(".cybercourse-rubric-item-container")
+      .closest(".cybercourse-rubric-item-container")
       .find(".cybercourse-rubric-item-chosen-indicator")
       .removeClass("cybercourse-rubric-item-chosen-indicator");
   //Same for new comment containers.
   $chosenOne
-      .parents(".cybercourse-rubric-item-container")
+      .closest(".cybercourse-rubric-item-container")
       .find(".cybercourse-rubric-item-new-comment-container")
       .removeClass("cybercourse-rubric-item-chosen-indicator");
   //Add the class to the Chosen One.
@@ -448,7 +482,7 @@ app.rubricPane.packageRubicRatings = function() {
     }
     var chosenCommentRating 
         = $chosenCommentDom
-            .parents(".cybercourse-rubric-item-comment-set")
+            .closest(".cybercourse-rubric-item-comment-set")
             .attr("data-comment-set");
     var rubric_item = {};
     rubric_item.rubric_item_nid = $(rubricItemDom).attr("data-rubric-item-nid");

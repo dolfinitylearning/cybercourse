@@ -72,33 +72,38 @@
     <!-- Partial for set of good/needs work/poor comments. -->
     <script id="rubricItemCommentsTemplate" type="text/template">
       <div class="cybercourse-rubric-item-comment-set" data-comment-set="{{setId}}">
-        <p class="cybercourse-rubric-item-comment-title">
+        <div class="cybercourse-rubric-item-comment-title">
           {{set}}
-        </p>
+        </div>
         {{#each comments}}
-          <p class="cybercourse-rubric-item-comment">{{comment}}</p>
+          <div class="cybercourse-rubric-item-comment">{{comment}}</div>
         {{/each}}
         {{#each newComments}}
           {{> newCommentContainer }}
         {{/each}}
-        {{> newCommentContainer }}  
       </div>
     </script>
     
     <!-- Partial for new comment container. -->
     <script id="newCommentContainerTemplate" type="text/template">
-      <p class="cybercourse-rubric-item-new-comment-container"
-         data-new-comment-index="{{commentIndex}}">
-          <span class="cybercourse-rubric-item-new-comment-remember 
-              {{#if saveFlag}}
-                cyco-save-on"
-              {{else}}
-                cyco-save-off"
-              {{/if}}
-          title="Remember this comment?">&nbsp;</span>
-        <textarea class="cybercourse-rubric-item-new-comment-text"
-          title="Custom comment">{{comment}}</textarea>
-      </p>
+      <div class="cybercourse-rubric-item-new-comment-container"
+            data-new-comment-index="{{commentIndex}}">
+        <div class="cyco-table-row">
+          <div class="cyco-table-cell" style="width:100%">
+            <textarea class="cybercourse-rubric-item-new-comment-text"
+              title="Custom comment">{{comment}}</textarea>
+          </div>
+          <div class="cyco-table-cell">
+            <div class="cyco-rubric-item-new-comment-remember 
+                {{#if saveFlag}}
+                  cyco-save-on"
+                {{else}}
+                  cyco-save-off"
+                {{/if}}
+            title="Remember this comment?">&nbsp;</div>
+          </div>
+        </div>
+      </div>
     </script>
     
     <!-- Wait throbber -->
