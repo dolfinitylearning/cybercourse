@@ -21,7 +21,10 @@ app.getCsrfToken = function(){
     app.csrfToken = token;
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    console.log('Token request failed! ' + textStatus + errorThrown); 
+    Drupal.behaviors.cycoErrorHandler.reportError(
+      "Fail in app.getCsrfToken."  
+        + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
+    );
   });
  return promise;
 };
@@ -62,7 +65,10 @@ app.getSubmissionsFromServer = function() {
     });
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    alert('test fetch request failed! ' + errorThrown);
+    Drupal.behaviors.cycoErrorHandler.reportError(
+      "Fail in app.getSubmissionsFromServer."  
+        + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
+    );
   });
   return promise;
 };
@@ -124,7 +130,7 @@ app.loadSubmissionFromServer = function( submissionNid ) {
     .done(function(result){
       if ( result.status != "ok" ) {
         var message = result.message;
-        Drupal.behaviors.cybercourseErrorHandler.reportError(
+        Drupal.behaviors.cycoErrorHandler.reportError(
           "Fail in app.loadSubmissionFromServer. subNid: "  
             + submissionNid + " message: " + message
         );
@@ -140,7 +146,7 @@ app.loadSubmissionFromServer = function( submissionNid ) {
       //return renderedSubmission;
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-      Drupal.behaviors.cybercourseErrorHandler.reportError(
+      Drupal.behaviors.cycoErrorHandler.reportError(
         "Fail in app.loadSubmissionFromServer. subNid: "  
           + submissionNid
           + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
@@ -176,7 +182,7 @@ app.loadExerciseFromServer = function( exerciseNid ) {
     .done(function(result){
       if ( result.status != "ok" ) {
         var message = result.message;
-        Drupal.behaviors.cybercourseErrorHandler.reportError(
+        Drupal.behaviors.cycoErrorHandler.reportError(
           "Fail in app.loadExerciseFromServer. exerNid: "  
             + exerciseNid + " message: " + message
         );
@@ -213,7 +219,7 @@ app.loadExerciseFromServer = function( exerciseNid ) {
       }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-      Drupal.behaviors.cybercourseErrorHandler.reportError(
+      Drupal.behaviors.cycoErrorHandler.reportError(
         "Fail in app.loadExerciseFromServer. exerNid: "  
           + exerciseNid
           + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
@@ -326,10 +332,166 @@ app.loadRubricItemsFromServer = function( rubricItemIds ) {
     }
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    Drupal.behaviors.cybercourseErrorHandler.reportError(
+    Drupal.behaviors.cycoErrorHandler.reportError(
       "Fail in app.getRubricItems. ids: " + rubricItemIds.join(",")  
         + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
     );
   });
   return promise;
+};
+
+/**
+ * Save new rubric item comments to the server.
+ */
+app.saveNewRubricItemComments = function() {
+  var newComments = app.packageNewCommentData();
+  //Any new comments to save?
+  if ( newComments === null ) {
+    return;
+  }
+  var webServiceUrl = app.basePath + "exercise/rubric_item/saveNewItemComments";
+  var dataToSend = JSON.stringify( newComments );
+  var promise = $.ajax({
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    data: dataToSend,
+    url: webServiceUrl,
+    beforeSend: function (request) {
+      request.setRequestHeader("X-CSRF-Token", app.csrfToken);
+    }
+  })
+  .done(function(message){
+    //Update the rubric items' models.
+    app.updateRubricItemDataModels( newComments );
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    Drupal.behaviors.cycoErrorHandler.reportError(
+      "Fail in app.feedbackPane.saveFeedback."  
+        + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
+    );
+  })
+  .always(function() {
+    app.feedbackPane.hideSendingThrobber();
+  });  
+
+};
+
+/**
+ * Create the data structure to send to the server, with new comments.
+ * @returns {stdClass} Data to send to server, null for none.
+ */
+app.packageNewCommentData = function() {
+  var newComments = new Array();
+  //Loop through each rubric item.
+  app.allRubricItems.forEach(function ( rubricItem ) {
+    //Grad new comments this rubric item.
+    var newCommentsOneRubric = new Array();
+    //There should always be a blank item. Hence the 1.
+    var newCommentOneRating;
+    if ( rubricItem.goodNewComments.length > 1 ) {
+      newCommentOneRating = app.getNewComments( 
+        rubricItem.goodNewComments, "good"
+      );
+      newCommentsOneRubric = newCommentsOneRubric.concat( newCommentOneRating );
+    }
+    if ( rubricItem.needsWorkNewComments.length > 1 ) {
+      newCommentOneRating = app.getNewComments( 
+        rubricItem.needsWorkNewComments, "needs_work"
+      );
+      newCommentsOneRubric = newCommentsOneRubric.concat( newCommentOneRating );
+    }
+    if ( rubricItem.poorNewComments.length > 1 ) {
+      newCommentOneRating = app.getNewComments( 
+        rubricItem.poorNewComments, "poor"
+      );
+      newCommentsOneRubric = newCommentsOneRubric.concat( newCommentOneRating );
+    }
+    //Any new comments for this rubric?
+    if ( newCommentsOneRubric.length > 0 ) {
+      newComments[ rubricItem.nid ] = newCommentsOneRubric;
+    }
+  });
+  if ( newComments.length === 0 ) {
+    return null;
+  }
+  //Make sparse array into an object, with no MT spaces.
+  var newCommentsObj = new Object();
+  newComments.forEach( function(elem, index){
+    if ( elem ) {
+      newCommentsObj[index] = elem;
+    }
+  });
+  return newCommentsObj;
+};
+
+/**
+ * Return new comments for one comment array (good, needsWork, bad) for one 
+ * rubric item.
+ * @param {Array} newComments Comments.
+ * @param {string} rating Rating
+ * @returns {Array} New comments.
+ */
+app.getNewComments = function( newComments, rating ) {
+  var result = new Array();
+  newComments.forEach(function( newComment ){
+    if ( newComment.saveFlag && newComment.comment ) {
+      var record = {
+        "comment": newComment.comment,
+        "rating": rating
+      };
+      result.push( record );
+    }
+  });
+  return result;
+};
+
+/**
+ * Update the rubric items' models.
+ * @param {Object} newComments Data on new comments.
+ * Structure:
+ * Object {16: Array[1], 19: Array[1]}
+ *   16: Array[1]
+ *     0: Object
+ *       comment: "Poor comment smell"
+ *       rating: "poor"
+ *   19: Array[1]
+ *     0: Object
+ *       comment: "Good comment sleek"
+ *       rating: "good"
+ */
+app.updateRubricItemDataModels = function( newComments ) {
+  //Erase all the new comments data. It has been repackaged in newComments.
+  app.allRubricItems.forEach(function( rubricItem ){
+    rubricItem.goodNewComments = new Array();
+    rubricItem.goodNewComments.push( new app.NewRubricComment() ); //Blank comment.
+    rubricItem.needsWorkNewComments = new Array();
+    rubricItem.needsWorkNewComments.push( new app.NewRubricComment() ); //Blank comment.
+    rubricItem.poorNewComments = new Array();
+    rubricItem.poorNewComments.push( new app.NewRubricComment() ); //Blank comment.
+  });
+  //Add the new comments.
+  $.each(newComments,function(rubricItemNid, itemNewComments){
+    //itemNewComments is all new comments for one rubric item.
+    $.each(itemNewComments, function(index, commentData){
+      var comment = commentData.comment;
+      var rating = commentData.rating;
+      if ( rating === "good" ) {
+        app.allRubricItems[ rubricItemNid ].good.push( comment );
+      }
+      else if ( rating === "needs_work" ) {
+        app.allRubricItems[ rubricItemNid ].needsWork.push( comment );
+      }
+      else if ( rating === "poor" ) {
+        app.allRubricItems[ rubricItemNid ].poor.push( comment );
+      }
+      else {
+        Drupal.behaviors.cycoErrorHandler.reportError(
+          "Fail in app.updateRubricItemDataModels. Bad rating: "  
+            + rating
+        );
+        return;
+      }
+    });
+  });
 };

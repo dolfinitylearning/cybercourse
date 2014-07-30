@@ -80,12 +80,12 @@ app.submissionListItemClicked = function( submissionNid ) {
   )
   .then(function(){
     //Show all the data in the UI.
-    app.initSubmissionPane( submissionNid );
-    app.initExercisePane( exerciseNid );
+    app.resetSubmissionPane( submissionNid );
+    app.resetExercisePane( exerciseNid );
     var modelSolutions = app.allExercises[ exerciseNid ].modelSolutions;
     app.currentState.modelSolutions = modelSolutions;
-    app.initModelSolutionPane( modelSolutions );
-    app.feedbackPane.initFeedbackPane( submissionNid );
+    app.resetModelSolutionPane( modelSolutions );
+    app.feedbackPane.resetFeedbackPaneForSubmission();
     //Load rubric items that haven't been loaded yet.
     var missingRubricItems = app.findMissingItems(
         app.allExercises[ exerciseNid ].rubricItems
@@ -94,7 +94,7 @@ app.submissionListItemClicked = function( submissionNid ) {
       app.loadRubricItemsFromServer( missingRubricItems )
     )
     .then(function(){
-      app.rubricPane.initRubricPane(),
+      app.rubricPane.resetRubricPaneForSubmission(),
       app.hidePrepForSubmissionGradingWait( submissionNid );
     });
   });

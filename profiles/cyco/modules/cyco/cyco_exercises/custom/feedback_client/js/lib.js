@@ -46,7 +46,7 @@ app.setupAttachmentLinks = function() {
     windowObjectReference.document.title = "DOG";
     return false; //Cancel standard action.
   });
-}
+};
 
 /**
  * Capitalize the first letter of a string.
@@ -56,4 +56,19 @@ app.setupAttachmentLinks = function() {
  */
 app.capitaliseFirstLetter = function ( thing ) {
     return thing.charAt(0).toUpperCase() + thing.slice(1);
-}
+};
+
+/**
+ * Count the number of nonMT elements in an array.
+ * From "Speaking JavaScript," p. 279.
+ * @param {Array} arr The array
+ * @returns {Number} Number of nonempty elements.
+ */
+app.countElements = function(arr) {
+  var elemCount = 0;
+  arr.forEach(function () {
+    elemCount++;
+  });
+  return elemCount;
+};
+

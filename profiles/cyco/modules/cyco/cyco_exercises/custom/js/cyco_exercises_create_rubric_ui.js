@@ -213,7 +213,7 @@
           //Hide the create/edit item UI.
           $("#rubric-create-ui").dialog("close");
         })
-        .fail(function() {
+        .fail(function(jqXHR, textStatus, errorThrown) {
           Drupal.behaviors.cycoErrorHandler.reportError(
             "Save failed in saveItem in "
               + "cyco_exercises_create_rubric_ui.js. " 
@@ -224,7 +224,7 @@
           uiNamespace.hideSaveThrobber();
         });
       })//End then().
-      .fail(function() {
+      .fail(function(jqXHR, textStatus, errorThrown) {
         Drupal.behaviors.cycoErrorHandler.reportError(
           "Fetch item data failed in saveItem in "
             + "cyco_exercises_create_rubric_ui. " 
@@ -258,7 +258,7 @@
           //Show the UI.
           uiNamespace.displayUi();
         })
-        .fail(function() {
+        .fail(function(jqXHR, textStatus, errorThrown) {
           Drupal.behaviors.cycoErrorHandler.reportError(
             "Fetch item data failed in showCreateItemUi in "
               + "cyco_exercises_create_rubric_ui. " 

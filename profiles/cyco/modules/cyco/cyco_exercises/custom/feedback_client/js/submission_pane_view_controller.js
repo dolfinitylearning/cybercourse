@@ -4,7 +4,7 @@
 
 var app = app || {};
 
-app.initSubmissionPane = function( submissionNid ) {
+app.resetSubmissionPane = function( submissionNid ) {
   $("#submission-pane .pane-content").html( 
       app.submissionsToGrade[submissionNid].renderedSolution
   );

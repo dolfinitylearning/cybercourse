@@ -9,17 +9,49 @@ app.rubricPane = {};
 //Timeout for updating current comment from new comment text area. Milliseconds.
 app.rubricPane.newCommentTimeoutDelay = 1000;
 
+//Flag for whether click events are simulated during
+//reset. If so, don't want to animate screen changes. 
+app.rubricPane.simClickDuringReset = true;
+
 /**
- * Initialize the rubric pane for a given exercise.
- * @param {int} exerciseNid The exercise.
+ * Initialize the rubric pane. Call this only once.
  */
-app.rubricPane.initRubricPane = function(  ) {
+app.rubricPane.initRubricPane = function() {
+  //When the user clicks the Complete checkbox...
+  $(".cyco-exercise-complete").change(function(event){
+    //Set both checkboxes to the same value.
+    var newState = $(this).prop("checked");
+    $(".cyco-exercise-complete").prop("checked", newState);
+    //Change the complete indicator in feedback pane.
+    app.feedbackPane.updateStatusComplete( newState );
+    //Update data model.
+    app.submissionsToGrade[ app.currentState.submissionNid ].complete = newState;
+    //Set dirty flag.
+    if ( ! app.rubricPane.simClickDuringReset ) {
+      app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
+    }
+  });
+  //When user clicks a generate feedback button...
+  $(".generate-feedback-button").click(function() {
+    $.when(
+      app.rubricPane.createFeedbackMessage()
+    )
+    .then(function() {
+      app.feedbackPane.resetFeedbackPaneForSubmission();
+    });
+  });
+};
+
+/**
+ * Resert the rubric pane for the current submission.
+ */
+app.rubricPane.resetRubricPaneForSubmission = function() {
   var exerciseNid = app.currentState.exerciseNid;
   var submissionNid = app.currentState.submissionNid;
   //Get the exercise's rubric list.
   var rubricNids = app.allExercises[ exerciseNid ].rubricItems;
   //Clear existing content.
-  $("#rubric-pane .pane-content").children().remove();
+  $("#rubric-pane .pane-content").children().off().remove();
   //Render each rubric item.
   rubricNids.forEach( function( rubricNid ) {
     app.rubricPane.renderRubricItem( rubricNid );
@@ -35,26 +67,19 @@ app.rubricPane.initRubricPane = function(  ) {
   });
   app.rubricPane.newCommentTimers = new Array( numNewCommentContainers );
   //Set up events.
-  //When the user types into a new comment field:
-  //  1. Add a new new comment field, if needed.
-  //  2. Make what the user typed the current comment, after a short delay.
-  //  3. Update the data model.
+  //Keypress in new comment.
   $("#rubric-pane .pane-content")
     .on("keypress", ".cybercourse-rubric-item-new-comment-container textarea",
       function( event ){
-      //Add a new comment field if needed.
-      app.rubricPane.addNewCommentField( event.target );
-      //Reset timer.
-      var timerIndex = $(event.target)
-              .closest("[data-timer-index]")
-              .attr("data-timer-index");
-      window.clearTimeout( app.rubricPane.newCommentTimers[ timerIndex ] );
-      app.rubricPane.newCommentTimers[ timerIndex ] 
-          = window.setTimeout(
-            app.rubricPane.setChosenFromNewComment,
-            app.rubricPane.newCommentTimeoutDelay,
-            timerIndex );
+        app.rubricPane.newCommentContentChange( event );
     }
+  );
+  //Paste into new comment.
+  $("#rubric-pane .pane-content")
+    .on("paste", ".cybercourse-rubric-item-new-comment-container textarea",
+      function( event ){
+        app.rubricPane.newCommentContentChange( event );
+      }
   );
   /**
    * If click new comment textarea, make it the Chosen One if there is
@@ -70,6 +95,13 @@ app.rubricPane.initRubricPane = function(  ) {
   //When user clicks a comment, show it as the Chosen One, collapse
   //rubric item display.
   $(".pane-content").on("click", ".cybercourse-rubric-item-comment", function(event) {
+    //If this is a real user-generated event...
+    if ( ! app.rubricPane.simClickDuringReset ) {
+      //Ignore event if feedback already sent.
+      if ( app.submissionsToGrade[ app.currentState.submissionNid ].feedbackSent ) {
+        return;
+      }
+    }
     var newCommentText = $( event.target ).text();
     //Show that this is the Chosen One.
     app.rubricPane.showChosen( event.target );
@@ -91,9 +123,15 @@ app.rubricPane.initRubricPane = function(  ) {
     app.rubricPane.updateRubricItemSelectionDataModel( 
         rubricItemNid, newCommentText, rubricItemRating
     );
+    //Show number of ungraded rubric items.
+    app.rubricPane.updateUngradedRubricCount();
+    //Set dirty flag.
+    if ( ! app.rubricPane.simClickDuringReset ) {
+      app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
+    }
   });
   //When the user clicks to collapse button...
-  $(".display-state").click(function(event) {
+  $(".display-state").on("click", function(event) {
     var rubricItemContainer 
         = $( event.target ).closest(".cybercourse-rubric-item-container").first();
     app.rubricPane.toggleRubricItemDisplayState( rubricItemContainer );
@@ -167,7 +205,7 @@ app.rubricPane.initRubricPane = function(  ) {
           = pinOn;
       }
       else {
-        Drupal.behaviors.cybercourseErrorHandler.reportError(
+        Drupal.behaviors.cycoErrorHandler.reportError(
           "Fail in app.rubricPane.click on pin! Bad rubricItemRating: "  
             + rubricItemRating
         );
@@ -175,31 +213,12 @@ app.rubricPane.initRubricPane = function(  ) {
       }
     }
   );
-  //When the user clicks the Complete checkbox...
-  $(".cyco-exercise-complete").change(function(event){
-    //Set both checkboxes to the same value.
-    var newState = $(this).prop("checked");
-    $(".cyco-exercise-complete").prop("checked", newState);
-    //Change the complete indicator in feedback pane.
-    app.feedbackPane.setCompleteMessage( newState );
-    //Update data model.
-    app.submissionsToGrade[ app.currentState.submissionNid ].complete = newState;
-  });
-  //When user clicks a generate feedback button...
-  $(".generate-feedback-button").click(function() {
-    $.when(
-      app.rubricPane.createFeedbackMessage()
-    )
-    .then(function() {
-      var complete = $(".cyco-exercise-complete").prop("checked");
-      app.feedbackPane.initFeedbackPane( complete );
-    });
-  });
   //Get the current selections, if they exist.
   //This would happen when grader is looking back at a graded submission.
   var currentRubricSelections = app.submissionsToGrade[ submissionNid ].rubricItemSelections;
   //If there are already item selections in the data model, reflect 
   //them in the GUI.
+  app.rubricPane.simClickDuringReset = true;
   rubricNids.forEach( function( rubricNid ){
     if ( currentRubricSelections[ rubricNid ] ) {
       var currentRubricComment = currentRubricSelections[ rubricNid ].comment;
@@ -234,8 +253,47 @@ app.rubricPane.initRubricPane = function(  ) {
       }
     }
   });
+  //Show number of ungraded rubric items.
+  app.rubricPane.updateUngradedRubricCount();
+  //Set the disabled state of widgets if f/b already send.
+  app.rubricPane.updateWidgetsDisabled();
+  //Events from the user now, so allow animations.
+  app.rubricPane.simClickDuringReset = false;
   //Show everything - hidden when UI loads.
-  $("#rubric-pane div").show();
+  $("#rubric-pane > div").show();
+};
+
+/**
+ * Update the disabled state of the widgets.
+ */
+app.rubricPane.updateWidgetsDisabled = function() {
+  var feedbackSent 
+    = app.submissionsToGrade[ app.currentState.submissionNid ].feedbackSent;
+  $("#rubric-pane *").prop("disabled", feedbackSent);
+};
+
+
+/**
+ * A textarea for a new comment has changed. Keypress or paste.
+ * When the user types into a new comment field:
+ *  1. Add a new new comment field, if needed.
+ *  2. Make what the user typed the current comment, after a short delay.
+ *  3. Update the data model.
+ * @param {Event} event What happened.
+ */
+app.rubricPane.newCommentContentChange = function(event) {
+  //Add a new comment field if needed.
+  app.rubricPane.addNewCommentField( event.target );
+  //Reset timer.
+  var timerIndex = $(event.target)
+          .closest("[data-timer-index]")
+          .attr("data-timer-index");
+  window.clearTimeout( app.rubricPane.newCommentTimers[ timerIndex ] );
+  app.rubricPane.newCommentTimers[ timerIndex ] 
+      = window.setTimeout(
+        app.rubricPane.setChosenFromNewComment,
+        app.rubricPane.newCommentTimeoutDelay,
+        timerIndex );
 };
 
 /**
@@ -337,7 +395,7 @@ app.rubricPane.formatCommentsGroup = function(
   commentsGroup.comments = new Array();
   commentsList.forEach( function( comment ) {
     commentsGroup.comments.push( {
-      "comment": comment, 
+      "comment": comment
     } );
   });
   var index = 0;
@@ -396,7 +454,7 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
         = newCommentText;
   }
   else {
-    Drupal.behaviors.cybercourseErrorHandler.reportError(
+    Drupal.behaviors.cycoErrorHandler.reportError(
       "Fail in app.rubricPane.setChosenFromNewComment. Bad rubricItemRating: "  
         + rubricItemRating
     );
@@ -406,6 +464,12 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
   app.rubricPane.updateRubricItemSelectionDataModel( 
       rubricItemNid, newCommentText, rubricItemRating
   );
+  //Show number of ungraded rubric items.
+  app.rubricPane.updateUngradedRubricCount();
+  //Set dirty flag.
+  if ( ! app.rubricPane.simClickDuringReset ) {
+    app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
+  }
 };
 
 /**
@@ -413,16 +477,20 @@ app.rubricPane.setChosenFromNewComment = function( timerIndex ) {
  * @param {DOM element} rubricItemContainer The container to alter.
  */
 app.rubricPane.toggleRubricItemDisplayState = function( rubricItemContainer ) {
+  var animationSpeed = app.rubricPane.simClickDuringReset ? 10: "fast";
+    //0 makes show() do nothing.
   if ( $( rubricItemContainer )
          .find(".cybercourse-rubric-item-details :visible").length > 0 ) {
     //Visible - hide it.
-    $( rubricItemContainer ).find(".cybercourse-rubric-item-details").hide("fast");
+    $( rubricItemContainer )
+            .find(".cybercourse-rubric-item-details").hide(animationSpeed);
     //Change the arrow.
     $( rubricItemContainer ).find(".display-state").text("▾");
   }
   else {
     //Hidden - show it.
-    $( rubricItemContainer ).find(".cybercourse-rubric-item-details").show("fast");
+    $( rubricItemContainer ).
+            find(".cybercourse-rubric-item-details").show(animationSpeed);
     //Change the arrow.
     $( rubricItemContainer ).find(".display-state").text("▴");
   }
@@ -463,7 +531,7 @@ app.rubricPane.addNewCommentField = function( widget ) {
       newCommentIndex = app.allRubricItems[ rubricItemNid ].poorNewComments.length;
     }
     else {
-      Drupal.behaviors.cybercourseErrorHandler.reportError(
+      Drupal.behaviors.cycoErrorHandler.reportError(
         "Fail in app.rubricPane.addNewCommentField! Bad rubricItemRating: "  
           + rubricItemRating
       );
@@ -498,7 +566,7 @@ app.rubricPane.addNewCommentField = function( widget ) {
       app.allRubricItems[ rubricItemNid ].poorNewComments.push( newCommentData );
     }
     else {
-      Drupal.behaviors.cybercourseErrorHandler.reportError(
+      Drupal.behaviors.cycoErrorHandler.reportError(
         "Fail in app.rubricPane.addNewCommentField. Bad rubricItemRating: "  
           + rubricItemRating
       );
@@ -535,6 +603,8 @@ app.rubricPane.showChosen = function( chosenOne ) {
  */
 app.rubricPane.createFeedbackMessage = function() {
   app.feedbackPane.showGeneratingThrobber();
+  //Remind user to remember new comments.
+  app.rubricPane.rememberNewCommentsReminder();
   var webServiceUrl = app.basePath + "exercise/feedback/makeFeedbackMessage";
   var dataToSend = {};
   dataToSend.submission_nid = app.currentState.submissionNid;
@@ -558,9 +628,13 @@ app.rubricPane.createFeedbackMessage = function() {
     app.feedbackPane.showFeedback( message );
     //Update the data model.
     app.submissionsToGrade[ app.currentState.submissionNid ].feedback = message;
+    //Set dirty flag.
+    if ( ! app.rubricPane.simClickDuringReset ) {
+      app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
+    }
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    Drupal.behaviors.cybercourseErrorHandler.reportError(
+    Drupal.behaviors.cycoErrorHandler.reportError(
       "Fail in app.rubricPane.createFeedbackMessage."  
         + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
     );
@@ -596,7 +670,78 @@ app.rubricPane.packageRubicRatings = function() {
     rubric_item.rubric_item_nid = $(rubricItemDom).attr("data-rubric-item-nid");
     rubric_item.comment = chosenCommentHtml;
     rubric_item.comment_rating = chosenCommentRating;
-    result.push( rubric_item );
+    if ( rubric_item.comment 
+         && rubric_item.comment.trim() != "(Nothing chosen)" ) {
+      //The string is set in index.html, in a Mustache template. 
+      //Should make it a variable somehow. 
+      result.push( rubric_item );
+    }
   });
   return result;
+};
+
+/**
+ * Show the number of rubrics ungraded.
+ */
+app.rubricPane.updateUngradedRubricCount = function() {
+  //Get number rubrics for this exercise.
+  var totalRubrics = app.countElements( 
+    app.allExercises[ app.currentState.exerciseNid ].rubricItems
+  );
+  //Get number rubrics graded.
+  var gradedRubrics = app.countElements( 
+    app.submissionsToGrade[ app.currentState.submissionNid ].rubricItemSelections
+  );  
+  //Update message.
+  var ungraded = totalRubrics - gradedRubrics;
+  if ( ungraded == 0 ) {
+    $("#ungraded-rubric-count")
+      .text("All rubrics graded")
+      .addClass("cyco-all-graded")
+      .removeClass("cyco-ungraded");
+  }
+  else {
+    $("#ungraded-rubric-count")
+      .text("Rubrics ungraded: " + ungraded )
+      .addClass("cyco-ungraded")
+      .removeClass("cyco-all-graded");
+  }
+  //Update status in feedback pane.
+  app.feedbackPane.updateStatusUngradedRubrics( ungraded );
+};
+
+/**
+ * Remind the user to click the pin for new comments that
+ * s/he wants to save with their rubrics.
+ */
+app.rubricPane.rememberNewCommentsReminder = function() {
+  //Find all the reminder elements.
+  var allReminders = $(".cyco-remember-reminder");
+  //Keep the reminders for new comments that have a textarea with content.
+  var remindersWithText = new Array();
+  $(allReminders).each( function(index, reminderElement ){
+    var textarea = $(reminderElement)
+      .closest(".cybercourse-rubric-item-new-comment-container")
+      .find("textarea");
+    if ( $(textarea).val().trim() ) {
+      remindersWithText.push( reminderElement );
+    }
+  });
+  //Keep the reminders where the comment is not already pinned.
+  var remindersWithTextNotPinned = new Array();
+  remindersWithText.forEach( function( reminderElement ){
+    var pin = $(reminderElement)
+      .closest(".cybercourse-rubric-item-new-comment-container")
+      .find(".cyco-rubric-item-new-comment-remember");
+    if ( $(pin).hasClass("cyco-save-off") ) {
+      remindersWithTextNotPinned.push( reminderElement );
+    }
+  });
+  //Start flashing.
+  remindersWithTextNotPinned.forEach( function( reminderElement ){
+    $( reminderElement ).fadeIn("slow", 
+      function() {
+        $( reminderElement ).fadeOut("slow");
+    });
+  });
 };

@@ -9,7 +9,7 @@ var app = app || {};
  * @param {array} modelSolutions Array of model solution nids (indexes into
  * the model solutions array). 
  */
-app.initModelSolutionPane = function( modelSolutions ) {
+app.resetModelSolutionPane = function( modelSolutions ) {
   var $paneContents = $("#model-solution-pane .pane-content");
   $paneContents.html("");
   if ( ! modelSolutions || modelSolutions.length === 0 ) {

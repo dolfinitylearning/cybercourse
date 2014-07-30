@@ -4,7 +4,7 @@
 
 var app = app || {};
 
-app.initExercisePane = function( exerciseNid ) {
+app.resetExercisePane = function( exerciseNid ) {
   var exercise = app.allExercises[ exerciseNid ];
   var $paneContents = $("#exercise-pane .pane-content");
   $paneContents.html("");

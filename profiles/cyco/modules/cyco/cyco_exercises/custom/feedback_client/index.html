@@ -53,7 +53,7 @@
       <div class="cybercourse-rubric-item-container" data-rubric-item-nid="{{rubricItemNid}}">
         <div class="cybercourse-rubric-item-title">
           {{title}}
-          <span class="button display-state">▴</span>
+          <span class="cyco-feedback-button display-state">▴</span>
         </div>
         <div class="cybercourse-rubric-item-chosen-text">
           (Nothing chosen)
@@ -101,6 +101,7 @@
                   cyco-save-off"
                 {{/if}}
             title="Remember this comment?">&nbsp;</div>
+            <div class="cyco-remember-reminder">?</div>
           </div>
         </div>
       </div>
@@ -155,14 +156,35 @@
 
       <div id="feedback-pane" class="ui-layout-south">
         <header>Feedback</header>
-        <div class="pane-content">
-          <textarea id="cyco-feedback-editor"></textarea>
-          <p id="send-feedback-button-container">
-            <span id="send-feedback-button" class="button"
-                  title="Send the feedback to the student">Send</span>
-            <span id="feedback-sent">Feedback not sent</span>
-            <span id="exercise-complete">Not complete</span>
-          </p>
+        <div class="pane-content" style="height:96%">
+          <div id="cyco-feedback-everything-container" class="cyco-table">
+            <div class="cyco-table-row">
+              <div id="cyco-feedback-textarea-container" class="cyco-table-cell">
+                <textarea id="cyco-feedback-editor"></textarea>
+              </div>
+            </div>
+            <div id="send-feedback-button-container" class="cyco-table-row">
+              <div class="cyco-table-cell">
+                <button id="send-feedback-button" class="cyco-feedback-button"
+                      title="Send the feedback to the student">Send</button>
+              </div>
+            </div>
+            <div id="feedback-status-container" class="cyco-table-row">
+              <div class="cyco-table" style="width: 100%">
+                <div class="cyco-table-row">
+                  <div id="status-ungraded-subrics" 
+                       class="cyco-feedback-status-indicator cyco-table-cell" 
+                       title="Ungraded rubrics for this submission"></div>
+                  <div id="status-exercise-complete" 
+                       class="cyco-feedback-status-indicator cyco-table-cell"
+                       title="Is the submission complete?">Not complete</div>
+                  <div id="status-feedback-sent" 
+                       class="cyco-feedback-status-indicator cyco-table-cell"
+                       title="Has feedback been sent?">Feedback not sent</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -173,11 +195,12 @@
       
       <div id="rubric-pane">
         <header>Rubric</header>
+        <div id="ungraded-rubric-count"></div>
         <div class="cyco-rubric-top-controls-container">
-          <span class="button generate-feedback-button above"
+          <button class="cyco-feedback-button generate-feedback-button above"
                 title="Create feedback message">
             Create feedback
-          </span>
+          </button>
           <span class="cyco-exercise-complete-container">
             <label title="Mark exercise as complete">
             <input type="checkbox" class="cyco-exercise-complete">
@@ -186,10 +209,10 @@
         </div>
         <div class="pane-content"></div>
         <div class="cyco-rubric-top-controls-container">
-          <span class="button generate-feedback-button above"
+          <button class="cyco-feedback-button generate-feedback-button above"
                 title="Create feedback message">
             Create feedback
-          </span>
+          </button>
           <span class="cyco-exercise-complete-container">
             <label title="Mark exercise as complete">
             <input type="checkbox" class="cyco-exercise-complete">

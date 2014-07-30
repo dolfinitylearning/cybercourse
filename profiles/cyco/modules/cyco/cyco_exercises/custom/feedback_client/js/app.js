@@ -40,14 +40,14 @@ app.start = function() {
       $("#global-wait-message").hide();
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-      Drupal.behaviors.cybercourseErrorHandler.reportError(
+      Drupal.behaviors.cycoErrorHandler.reportError(
         "Fail in call to app.getSubmissionsFromServer in app.start. " 
           + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
       );
     });
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    Drupal.behaviors.cybercourseErrorHandler.reportError(
+    Drupal.behaviors.cycoErrorHandler.reportError(
       "Fail in call to app.getCsrfToken in app.start. " 
         + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
     );
@@ -68,6 +68,16 @@ app.initUi = function() {
   app.setupAttachmentLinks();
   //Fix pane headers in place.
   app.fixHeaders();
+  //Init panes
+  app.feedbackPane.initFeedbackPane();
+  app.rubricPane.initRubricPane();
+  //Set up dirty data check on window unload.
+  window.onbeforeunload = function() {
+    if ( app.dirtyData() ) {
+      var message = "There is unsaved data.";
+      return message;
+    }
+  }
   //Hide everything in the rubric and feedback panes
   $("#rubric-pane div").hide();
   $("#feedback-pane .pane-content").hide();
@@ -162,3 +172,16 @@ app.compileTemplates = function() {
       = Handlebars.compile($("#throbberTemplate").html());
 };
 
+/**
+ * Check whether there is unsaved data.
+ * @returns {Boolean} True if there is unsaved data.
+ */
+app.dirtyData = function() {
+  var dirtyCount = 0;
+  app.submissionsToGrade.forEach(function( submission ) {
+    if ( submission.dirty ) {
+      dirtyCount++;
+    }
+  });
+  return ( dirtyCount > 0 );
+};

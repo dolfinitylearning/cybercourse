@@ -161,22 +161,24 @@ function _cyco_exercises_def_rubric_item_services() {
           'source' => 'data',
           'optional' => FALSE,
         ),
-//         array(
-//           'name' => 'nid',
-//           'type' => 'int',
-//           'description' => 'A node id',
-//           'source' => array('path' => '0'),
-//           'optional' => FALSE,
-//         ),
-//         array(
-//           'name' => 'title',
-//           'type' => 'struct',
-//           'description' => 'A title for the rubtic item',
-//           'source' => 'data',  //array('data' => 'title'),
-//           'optional' => FALSE,
-//         ),
        ),
-
+    ),
+    //Save new rubric item comments from the grading interface.
+    'saveNewItemComments' => array(
+      'help' => 'Save new rubric item comments from the grading interface',
+      'callback' => '_exri_save_new_item_comments',
+      'access callback' => '_exri_access',
+      'access arguments' => array('access content'),
+      'access arguments append' => TRUE,
+       'args' => array(
+         array(
+          'name' => 'data',
+          'type' => 'struct',
+          'description' => 'The comments to save',
+          'source' => 'data',
+          'optional' => FALSE,
+        ),
+       ),
     ),
   );
   $api = array(
@@ -416,9 +418,6 @@ function _exri_update($nid, $data){
       _cyco_exer_move_arr_into_node($data['phrasesNeedsWork'], 'value');
   $node->field_feedback_poor = 
       _cyco_exer_move_arr_into_node($data['phrasesPoor'], 'value');
-//  $node->field_feedback_good[LANGUAGE_NONE][0]['value'];
-//  $node->field_feedback_needs_work[LANGUAGE_NONE][0]['value'];
-//  $node->field_feedback_poor[LANGUAGE_NONE][0]['value']; 
   node_save($node);
   $result = new stdClass();
   $result->operation = 'update';
@@ -484,6 +483,105 @@ function _exri_titles_cats() {
   }
   return $result;
 }
+
+/**
+ * Store new rubric item comments.
+ * @param array $data New comments. 
+ * Example, for rubric items 16 and 19:
+ * $data[16] = array(
+ *   [0] = array(
+ *       comment: "Stinky"
+ *       rating: "poor"
+ *   )
+ *   [1] = array(
+ *       comment: "No smell"
+ *       rating: "needs_work"
+ *   )
+ * )
+ * $data[19] = array(
+ *   [0] = array(
+ *       comment: "Rough"
+ *       rating: "poor"
+ *   )
+ *   [1] = array(
+ *       comment: "Silky!"
+ *       rating: "good"
+ *   )
+ * )
+ * @return type
+ */
+function _exri_save_new_item_comments( $data ) {
+  if ( ! $data ) {
+    return;
+  }
+  if ( ! is_array( $data ) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' $data not array: ' . print_r($data, TRUE);
+    cyco_core_handle_services_error( $message );
+    return;
+  }
+  //Iterate across each rubric item.
+  foreach ($data as $rubric_item_nid => $new_comment_array) {
+    //Flag for any changes to save.
+    $changes_to_save = FALSE;
+    $rubric_item = node_load($rubric_item_nid);
+    if ( ! $rubric_item ) {
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' Node not found. nid: ' . $rubric_item_nid;
+      cyco_core_handle_services_error( $message );
+      return;
+    }
+    //Iterate across new comments for one rubric item.
+    foreach ($new_comment_array as $new_comment_record) {
+      $new_comment = $new_comment_record['comment'];
+      $new_comment_rating = $new_comment_record['rating'];
+      $new_comment = trim($new_comment);
+      if ( ! $new_comment ) {
+        //Skip MT comments.
+        continue;
+      }
+      //Work out which field to process. 
+      //Should refactor this while thing sometime.
+      $field_name = '';
+      if ( $new_comment_rating == 'good' ) {
+        $field_name = 'field_feedback_good';
+      }
+      else if ( $new_comment_rating == 'needs_work' ) {
+        $field_name = 'field_feedback_needs_work';
+      }
+      else if ( $new_comment_rating == 'poor' ) {
+        $field_name = 'field_feedback_poor';
+      }
+      else {
+        $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+            . ' Bad rating: ' . $new_comment_rating;
+        cyco_core_handle_services_error( $message );
+        return;
+      }
+      //Check that the comment isn't already in the list.
+      $found = FALSE;
+      $search = $rubric_item->{$field_name}[ $rubric_item->language ];
+      foreach( $search as $comment ) {
+        if ( strtolower( trim( $comment['value'] ) ) == $new_comment ) {
+          $found = TRUE;
+          break;
+        }
+      }
+      if ( ! $found ) {
+        //Add the comment.
+        $rubric_item->{$field_name}[ $rubric_item->language ][]
+            = array( 'value' => check_plain( $new_comment ) );
+        $changes_to_save = TRUE;
+      }
+      
+    } //End loop across new comments for one rubric item.
+    if ( $changes_to_save ) {
+      node_save( $rubric_item );
+    }
+  } //End loop across rubric items.
+}
+
+
 
 /********************************************
 * Rubric item categories
@@ -1064,10 +1162,6 @@ function _cycoex_make_feedback_message( $feedback_data ) {
       $feedback_data, 'exercise_nid', TRUE,
       __FILE__, __LINE__, __FUNCTION__
   );
-//  $model_solution_nid = _cycoex_check_feedback_parameter(
-//      $feedback_data, 'model_solution_nid', TRUE,
-//      __FILE__, __LINE__, __FUNCTION__
-//  );
   //Get the selected comments.
   $comments = array();
   if ( isset( $feedback_data['rubric_ratings'] ) ) {

@@ -21,15 +21,15 @@ app.RubricItem = function() {
   this.good = new Array();
   //Array of new comments created by the user. 
   //See NewRubricComment below.
-  this.goodNewComments = Array();
+  this.goodNewComments = new Array();
   //Array of "needs work" comments. 
   this.needsWork = new Array();
   //Array of new comments created by the user. 
-  this.needsWorkNewComments = Array();
+  this.needsWorkNewComments = new Array();
   //Array of "poor" comments. 
   this.poor = new Array();
   //See NewRubricComment below.
-  this.poorNewComments = Array();
+  this.poorNewComments = new Array();
   this.notes = null;
 };
 
@@ -45,7 +45,7 @@ app.allRubricItems = new Array();
  */
 app.NewRubricComment = function() {
   this.comment = null;
-  this.saveFlag = null;
+  this.saveFlag = false;
 }
 
 /**
@@ -108,6 +108,8 @@ app.Submission = function() {
   this.feedbackSent = null;
   //Rubric item selections.
   this.rubricItemSelections = new Array();
+  //Dirty (unsaved) flag.
+  this.dirty = false;
 };
 
 /**

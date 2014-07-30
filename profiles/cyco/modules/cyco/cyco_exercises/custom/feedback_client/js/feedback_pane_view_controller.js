@@ -8,10 +8,19 @@ var app = app || {};
 app.feedbackPane = {};
 
 /**
- * Initialize the feedback pane, using state data from submission with
+ * Initialize the pane. Just do this once.
+ */
+app.feedbackPane.initFeedbackPane = function() {
+  //Set up send event.
+  $("#send-feedback-button").click( app.feedbackPane.sendFeedback );
+};
+
+/**
+ * Reset the feedback pane, using state data from submission with
  * id of submissionNid.
  */
-app.feedbackPane.initFeedbackPane = function( submissionNid ) {
+app.feedbackPane.resetFeedbackPaneForSubmission = function() {
+  var submissionNid = app.currentState.submissionNid;
   //Show existing feedback if it exists.
   if ( app.submissionsToGrade[ submissionNid ].feedback ) {
     app.feedbackPane.showFeedback( app.submissionsToGrade[ submissionNid ].feedback )
@@ -20,17 +29,16 @@ app.feedbackPane.initFeedbackPane = function( submissionNid ) {
     app.feedbackPane.mtFeedbackArea();
   }
   //Set completed indicator.
-  app.feedbackPane.setCompleteMessage( 
+  app.feedbackPane.updateStatusComplete( 
       app.submissionsToGrade[ submissionNid ].complete
   );
   //Set feedback sent indicator.
-  app.feedbackPane.setFeedbackSentMessage( 
+  app.feedbackPane.updateStatusFeedbackSent( 
       app.submissionsToGrade[ submissionNid ].feedbackSent
   );
-  //Set up send event.
-  $("#send-feedback-button").click( app.feedbackPane.sendFeedback );
+  //Set the disabled state of widgets if f/b already sent.
+  app.feedbackPane.updateWidgetsDisabled();
   //Show the UI.
-//  $("#feedback-pane .pane-content").show();
   if ( ! $("#feedback-pane .pane-content").is(':visible') ) {
     $("#feedback-pane .pane-content").fadeIn('fast');
   }};
@@ -67,20 +75,25 @@ app.feedbackPane.sendFeedback = function() {
     return;
   }
   //Send feedback data to server.
+  app.feedbackPane.showSendingThrobber();
   $.when(
     app.feedbackPane.saveFeedbackToServer()
   )
   .then(function(){
+    //Reset the rubric pane, to show new comments added by the user.
+    app.rubricPane.resetRubricPaneForSubmission();
     //Show UI ready for next submission.
     app.submissionListPane.resetUi( app.currentState.submissionNid );
+  })
+  .always(function() {
+    app.feedbackPane.hideSendingThrobber();
   });
 };
 
 /**
- * Save feedback to the server.
+ * Save feedback to the server, and new rubric item comments.
  */
 app.feedbackPane.saveFeedbackToServer = function() {
-  app.feedbackPane.showSendingThrobber();
   //Prepare feedback data for server.
   var dataToSend = {};
   var webServiceUrl = app.basePath + "exercise/feedback/saveFeedback";
@@ -105,46 +118,49 @@ app.feedbackPane.saveFeedbackToServer = function() {
   .done(function(message){
     //Update the data model.
     app.submissionsToGrade[ app.currentState.submissionNid ].feedbackSent = true;
+    //Record that the submission data is not dirty.
+    app.submissionsToGrade[ app.currentState.submissionNid ].dirty = false;
     //Update the feedback sent message.
-    app.setFeedbackSentMessage( true );
+    app.feedbackPane.updateStatusFeedbackSent( true );
+    //Set the disabled state of the Send button.
+    app.feedbackPane.updateWidgetsDisabled();
+    //Send data on new rubric item comments, if there are any.
+    app.saveNewRubricItemComments();
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    Drupal.behaviors.cybercourseErrorHandler.reportError(
+    Drupal.behaviors.cycoErrorHandler.reportError(
       "Fail in app.feedbackPane.saveFeedback."  
         + " textStatus: " + textStatus + ", errorThrown: " + errorThrown
     );
-  })
-  .always(function() {
-    app.feedbackPane.hideSendingThrobber();
   });
   return promise;
 };
 
-app.feedbackPane.setCompleteMessage = function( complete ) {
+app.feedbackPane.updateStatusComplete = function( complete ) {
   if ( complete ) {
-    $("#feedback-pane #exercise-complete")
+    $("#feedback-pane #status-exercise-complete")
       .text( "Complete" )
       .removeClass( "cyco-exer-not-complete" )
       .addClass( "cyco-exer-complete" );
   }
   else {
-    $("#feedback-pane #exercise-complete")
+    $("#feedback-pane #status-exercise-complete")
       .text( "Not complete" )
       .removeClass( "cyco-exer-complete" )
       .addClass( "cyco-exer-not-complete" );
   }
 };
 
-app.feedbackPane.setFeedbackSentMessage = function( sent ) {
+app.feedbackPane.updateStatusFeedbackSent = function( sent ) {
   if ( sent ) {
-    $("#feedback-pane #feedback-sent")
-      .text( "Feedback sent" )
+    $("#feedback-pane #status-feedback-sent")
+      .text( "Fb sent" )
       .removeClass( "cyco-exer-feedback-not-sent" )
       .addClass( "cyco-exer-feedback-sent" );
   }
   else {
-    $("#feedback-pane #feedback-sent")
-      .text( "Feedback not sent" )
+    $("#feedback-pane #status-feedback-sent")
+      .text( "Fb not sent" )
       .removeClass( "cyco-exer-feedback-sent" )
       .addClass( "cyco-exer-feedback-not-sent" );
   }
@@ -206,4 +222,30 @@ app.feedbackPane.makeSendingThrobber = function() {
     id: "cyco-exer-feedback-send-throbber"
   });
   $("#send-feedback-button").after( html );
+};
+
+/**
+ * Update status indicator: ungraded rubrics.
+ */
+app.feedbackPane.updateStatusUngradedRubrics = function( numRubrics ) {
+  $("#status-ungraded-subrics").text("Ungraded: " + numRubrics);
+  if ( numRubrics === 0 ) {
+    $("#status-ungraded-subrics")
+      .addClass("cyco-status-all-graded")
+      .removeClass("cyco-status-ungraded");
+  }
+  else {
+    $("#status-ungraded-subrics")
+      .addClass("cyco-status-ungraded")
+      .removeClass("cyco-status-all-graded");
+  }
+};
+
+/**
+ * Update the disabled state of the widgets.
+ */
+app.feedbackPane.updateWidgetsDisabled = function() {
+  var feedbackSent 
+    = app.submissionsToGrade[ app.currentState.submissionNid ].feedbackSent;
+  $("#feedback-pane *").prop("disabled", feedbackSent);
 };

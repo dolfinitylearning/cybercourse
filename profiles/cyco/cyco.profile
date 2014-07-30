@@ -32,6 +32,8 @@ function _cyco_finalize_install() {
   _cyco_clean_urls();
   //Give user 1 the administrator role.
   _cyco_make_user_1_admin_author();
+  //Define services.
+  _cyco_define_services();
   //Add some taxonomy terms.
   _cyco_add_workflow_terms();
   //Add starting content. Basic pages, course pages, blueprint pages.
@@ -66,9 +68,6 @@ function _cyco_finalize_install() {
   cache_clear_all();
 }
 
-
-
-
 /**
  * Give user 1 the administrator role.
  */
@@ -82,6 +81,15 @@ function _cyco_make_user_1_admin_author() {
   if ( $author_role ) {
     user_multiple_role_edit(array(1), 'add_role', $author_role->rid);
   }
+}
+
+/**
+ * Define services, using an export.
+ */
+function _cyco_define_services() {
+  $path = drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
+      . 'services.export'; 
+  require_once $path;
 }
 
 
