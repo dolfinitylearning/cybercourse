@@ -17,7 +17,6 @@ app.initSubmissionList = function() {
       = key;
   }
   for ( key in orderedSubmissionKeys) {
-//  for ( key in app.submissionsToGrade) {
     var submission = app.submissionsToGrade[ orderedSubmissionKeys[ key ] ];
     var templateRecord = new Object();
     templateRecord.submissionNid = submission.submissionNid;
@@ -26,6 +25,10 @@ app.initSubmissionList = function() {
     );
     templateRecord.exerciseName 
         = app.allExercises[ submission.exerciseNid ].title;
+    var version = submission.version;
+    if ( version > 1 ) {
+      templateRecord.exerciseName += " (ver " + version + ")";
+    }
     templateRecord.studentName 
         = app.allStudents[ submission.studentUid ].name;
     //Get groups student is in.

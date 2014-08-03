@@ -382,10 +382,25 @@ function cyco_exercises_page_alter(&$page) {
     if ( ! _cyco_exercises_is_submission_page_in_popup() ) {
       global $user;
       if (!$user->timezone) {
+        drupal_add_js(
+            drupal_get_path('module', 'cyco_exercises')
+            . '/custom/js/jstz.min.js'
+        );
+        drupal_add_js(
+            drupal_get_path('module', 'cyco_exercises')
+            . '/custom/js/cyco_exercises_guess_time_zone.js'
+        );
         drupal_set_message(
-            t('Please set your <a href="@user-edit">account time zone setting</a>.', 
+            t('<strong id="set-time-zone">Important!</strong> Please set '
+                  . 'your <a href="@user-edit">account time zone '
+                  . 'setting</a>. <br><br>If you do not, then exercise submission '
+                  . 'and other times may not be accurate.', 
                 array(
-                  '@user-edit' => url("user/$user->uid/edit")
+                  '@user-edit' => 
+                      url(
+                          "user/$user->uid/edit",
+                          array( 'fragment' => 'edit-timezone')
+                      )
                 )
             )
         );
@@ -399,7 +414,8 @@ function cyco_exercises_page_alter(&$page) {
  * Return true if the current page is an exercise submission shown in a popup.
  */
 function _cyco_exercises_is_submission_page_in_popup() {
-  $is_submission_popup = FALSE;
+  static $is_submission_popup = FALSE;
+  if ( ! $is_submission_popup ) {
   //Is the page in a popup?
   if ((    isset($_GET['destination']) 
         && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
@@ -417,7 +433,9 @@ function _cyco_exercises_is_submission_page_in_popup() {
 //      $is_submission_popup = ( $node->type == 'exercise_submission' );
 //    }
   }
+  }
   return $is_submission_popup;
+  
 }
 
 /**
@@ -461,6 +479,7 @@ function cyco_exercises_node_view($node, $view_mode, $langcode) {
       drupal_set_title($node->title . ' (' . $node->nid . ')');
     }
   }
+  
 //  //Data needed to replace some tokens.
 //  $token_data = array('feedback');
 //  //If this is an exercise submission...
@@ -691,7 +710,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   //Get operation from the URL.
   $operation = NULL;
   if ( isset( $_GET['op'] ) ) {
-    $operation = $_GET['op'];
+    $operation = check_plain( $_GET['op'] );
   }
   //If there is no op, this is a normal edit, not through a popup. 
   //Don't need to do any of the other processing here.
@@ -716,6 +735,13 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       return;
      }
     $exercise_id = $_GET['field_exercise'];
+    if ( is_nan($exercise_id) || $exercise_id < 1 ) {
+      //Bad version.
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' bad exercise_id: ' . $exercise_id;
+      cyco_core_handle_error( $message );
+      return;
+    }
     //Save the exercise id in the form.
     $form['field_exercise'][$language]['#default_value'][0] = $exercise_id;
     //Version is 1, unless there is a value in the URL.
@@ -731,7 +757,6 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       }
     }
     $form['field_version'][$language][0]['value']['#default_value'] = $version;
-    
   }
   else if ( $operation == 'edit' ) {
     $exercise_id = $form['field_exercise'][$language]['#default_value'][0];
@@ -760,9 +785,11 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   //Show version number if > 1.
   if ( $version >= 1 ) {
     $form['version_display'] = array(
-      '#type' => '#markup',
+      '#type' => 'markup',
       '#markup' => 'Version ' . $version,
       '#weight' => $form['field_version']['#weight'],
+      '#prefix' => '<div class="cyco-submission-version">',
+      '#suffix' => '</div>',
     );
   }
   //Kill preview if showing.
@@ -973,6 +1000,7 @@ select
   users.name as username,
   lastname_table.field_last_name_value as last_name,
   firstname_table.field_first_name_value as first_name,
+  version_table.field_version_value as submission_version,
   when_submitted_table.field_when_submitted_value as when_submitted,
   when_feedback_table.field_when_feedback_given_value as when_feedback_given,
   exercise_node.nid as exercise_nid,
@@ -992,10 +1020,13 @@ inner join {field_data_field_exercise} as exercise_ref_table on
   exercise_ref_table.entity_id = submission_node.nid
 inner join {node} as exercise_node on 
   exercise_ref_table.field_exercise_target_id = exercise_node.nid
-/* Grab the date submitted for testing. */
+/* Grab the submission version. */
+inner join {field_data_field_version} as version_table on 
+  version_table.entity_id = submission_node.nid
+/* Grab the date submitted for grading. */
 inner join {field_data_field_when_submitted} as when_submitted_table on 
   when_submitted_table.entity_id = submission_node.nid
-/* Grab the feedback date for testing. */
+/* Grab the feedback date. */
 left join {field_data_field_when_feedback_given} as when_feedback_table on 
   when_feedback_table.entity_id = submission_node.nid
 where
@@ -1038,9 +1069,6 @@ order by when_submitted_table.field_when_submitted_value asc;
         time() - $when_submitted
     );
     $submissions[ $index ]['when_submitted'] = $interval . ' ago';
-//    date_default_timezone_set( drupal_get_user_timezone() );
-//    $date_local = date("Y-m-d H:i:s", $time);
-//    $submission['when_submitted'] = $date_local;
   }
   $result = array( 
     'submissions' => $submissions,
@@ -1065,6 +1093,7 @@ function cyco_exercises_get_number_submissions_to_grade($uid = NULL) {
  * Implements hook_form_alter().
  * 
  * Change the user profile form, adjusting grading things.
+ * Call JS time zone guesser.
  */
 function cyco_exercises_form_user_profile_form_alter( &$form, $form_state ) {
   //Get the uid of the user who is the subject of this form.
@@ -1094,7 +1123,7 @@ function cyco_exercises_form_user_profile_form_alter( &$form, $form_state ) {
   }
   else {
     //Not a grader. Hide all thoe fields.
-    //field_group_hide_field_groups( $form, array('group_feedback_phrases'));
+    field_group_hide_field_groups($form, array('group_feedback_phrases'));
   }
 }
 

@@ -5,8 +5,16 @@
 var app = app || {};
 
 app.resetSubmissionPane = function( submissionNid ) {
-  $("#submission-pane .pane-content").html( 
-      app.submissionsToGrade[submissionNid].renderedSolution
-  );
+  var submission = app.submissionsToGrade[submissionNid];
+  var version = submission.version;
+  if ( version > 1 ) {
+    $("#submission-version")
+      .html( "Version " + version )
+      .show();
+  }
+  else {
+    $("#submission-version").hide();
+  }
+  $("#submission-pane .pane-content").html( submission.renderedSolution );
 }
 

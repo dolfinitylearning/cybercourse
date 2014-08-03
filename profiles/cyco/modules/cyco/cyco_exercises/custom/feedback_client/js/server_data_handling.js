@@ -87,6 +87,7 @@ app.createSubmissionFromServerRecord = function( recordOrder, submissionRecord )
   submission.exerciseNid = submissionRecord.exercise_nid;
   submission.studentUid = submissionRecord.submitter_uid;
   submission.whenSubmitted = submissionRecord.when_submitted;
+  submission.version = submissionRecord.submission_version;
   app.submissionsToGrade[ submission.submissionNid ] = submission;
   //Add student object if not present.
   if ( ! app.allStudents[ submissionRecord.submitter_uid ] ) {

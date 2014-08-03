@@ -1,7 +1,6 @@
 /* 
  * Create submission links for an inserted exercise. 
  */
-"use strict";
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   /**
@@ -191,7 +190,7 @@
       $("a[data-target=popup]").click(function(event) {
         event.preventDefault();
         event.stopPropagation();
-        windowObjectReference = window.open(
+        window.windowObjectReference = window.open(
                 $(this).attr("href"),
                 "Exercise: " + exerciseNid,
                 "resizable,scrollbars,height=640,width=700"
@@ -283,7 +282,7 @@
                 //Make a link to create a new version.
                 versionLabel = "";
                 statusMessage = "";
-                var urlExtras = "&version = " + (numSubmissions + 1);
+                var urlExtras = "&version=" + (numSubmissions + 1);
                 link = uiNamespace.makeSubmissionLink(
                     "add", "Create new version", 
                     "Make a new version of the submission", 

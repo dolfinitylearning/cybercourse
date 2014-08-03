@@ -60,3 +60,10 @@ It's misleading.
 .cyco-feedback-phrases-preview-container div {
   margin-top: 1em;
 }
+
+.cyco-submission-version {
+  font-size: 150%;
+  margin-bottom: 1em;
+  font-weight: bold;
+  color: green;
+}

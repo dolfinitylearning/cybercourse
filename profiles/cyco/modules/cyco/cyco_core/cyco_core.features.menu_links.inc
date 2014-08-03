@@ -653,26 +653,6 @@ function cyco_core_menu_default_menu_links() {
     'weight' => 0,
     'customized' => 0,
   );
-  // Exported menu link: menu-tools_classes:classes-public
-  $menu_links['menu-tools_classes:classes-public'] = array(
-    'menu_name' => 'menu-tools',
-    'link_path' => 'classes-public',
-    'router_path' => 'classes-public',
-    'link_title' => 'Classes',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Class available',
-      ),
-      'identifier' => 'menu-tools_classes:classes-public',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 10,
-    'customized' => 0,
-  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add basic page');

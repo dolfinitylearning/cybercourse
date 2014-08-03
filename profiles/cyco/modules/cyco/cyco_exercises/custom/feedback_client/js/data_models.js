@@ -98,6 +98,8 @@ app.Submission = function() {
   this.studentUid = null;
   //HTML for the solution, including links to files.
   this.renderedSolution = null;
+  //Which submisssion version?
+  this.version = null;
   //When it was submitted. An internal, e.g., 3 minutes 38 second
   this.whenSubmitted = null;
   //Feedback message for this submission.

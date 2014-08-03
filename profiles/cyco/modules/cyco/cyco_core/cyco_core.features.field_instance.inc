@@ -30,6 +30,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -63,6 +64,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -96,6 +98,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -135,6 +138,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -213,6 +217,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Blueprint keywords',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -253,6 +258,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -290,6 +296,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -370,6 +377,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Short title',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -410,6 +418,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -447,6 +456,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -527,6 +537,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -564,6 +575,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -646,6 +658,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Keywords',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -682,6 +695,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Short title',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -722,6 +736,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -759,6 +774,7 @@ function cyco_core_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -839,6 +855,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -876,6 +893,7 @@ function cyco_core_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -958,6 +976,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Keywords',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -995,6 +1014,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1026,6 +1046,7 @@ function cyco_core_field_default_field_instances() {
     'label' => 'About',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 1,
     ),
@@ -1062,6 +1083,7 @@ You can leave it blank, although your instructor might require it.',
     'label' => 'First name',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 1,
     ),
@@ -1098,6 +1120,7 @@ You can leave it blank, although your instructor might require it.',
     'label' => 'Last name',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 1,
     ),
