@@ -22,7 +22,7 @@ app.initSubmissionList = function() {
     var templateRecord = new Object();
     templateRecord.submissionNid = submission.submissionNid;
     templateRecord.timeAgo = app.capitaliseFirstLetter( 
-        $.timeago(submission.whenSubmitted) 
+        submission.whenSubmitted
     );
     templateRecord.exerciseName 
         = app.allExercises[ submission.exerciseNid ].title;

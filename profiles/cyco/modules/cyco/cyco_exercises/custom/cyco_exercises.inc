@@ -74,13 +74,17 @@ function cyco_exercises_menu_local_tasks_alter(&$data, $router_item, $root_path)
           );
           break;
         case 'exercise':
-          //List exercises.
-          $item = menu_get_item('exercises');
-          $item['title'] = t('List exercises');
-          $data['actions']['output'][] = array(
-            '#theme' => 'menu_local_action',
-            '#link' => $item,
-          );
+          if ( cyco_core_current_user_has_role( 
+                array('author', 'administrator', 'grader', 'reviewer') 
+              ) ) {
+            //List exercises.
+            $item = menu_get_item('exercises');
+            $item['title'] = t('List exercises');
+            $data['actions']['output'][] = array(
+              '#theme' => 'menu_local_action',
+              '#link' => $item,
+            );
+          }
           if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
             //Link to add exercise.
             $item = menu_get_item('node/add/exercise');
@@ -122,6 +126,57 @@ function _cyco_exercises_close_popup() {
   drupal_add_js($path);
   return '<h1>Done</h1>'; //Need to return something here.
 }
+
+/**
+ * Implements hook_node_access().
+ * 
+ * Students can edit own submission only when it has not been graded.
+ */
+function cyco_exercises_node_access( $node, $op, $account ) {
+  if ( $node == 'exercise_submission' ) {
+    //It's a new exercise submission. Don't regulate it.
+    return NODE_ACCESS_IGNORE;
+  }
+  if ( isset( $node->type ) && $node->type == 'exercise_submission' ) {
+    //Don't restrict authors and admins.
+    if (cyco_core_user_has_role($account, array( 'author', 'administrator') ) ) {
+      return NODE_ACCESS_IGNORE;
+    }
+    //Instructors and graders can only work with submissions from their own groups.
+    if (cyco_core_user_has_role($account, array( 'instructor', 'grader') ) ) {
+      $gids = cyco_core_groups_get_groups_for_user('class');
+      if (sizeof($gids) == 0 ) {
+        return NODE_ACCESS_DENY;
+      }
+      //Get all users in those groups.
+      $all_uids = array();
+      foreach( $gids as $gid ) {
+        $uids = cyco_core_groups_get_group_users($gid);
+        $all_uids = array_merge($all_uids, $uids);
+      }
+      //See if the user is in the list.
+      if ( !in_array($account->uid, $all_uids) ) {
+        return NODE_ACCESS_DENY;
+      }
+      //Is in the list.
+//      return NODE_ACCESS_IGNORE;
+    }
+    if ( cyco_core_user_has_role($account, 'student') ) {
+      //Students can only view or change their own submissions.
+      if ( $account->uid != $node->uid ) {
+        return NODE_ACCESS_DENY;
+      }
+      if ( $op == 'update' || $op == 'delete' ) {
+        //Students can only edit submissions that have no feedback.
+        if ( isset( $node->field_when_feedback_given[ $node->language ][0]['value'] ) ) {
+          return NODE_ACCESS_DENY;
+        }
+      }
+    }
+  }
+  return NODE_ACCESS_IGNORE;
+}
+
 
 /**
  * Implementation of hook_filter_info().
@@ -348,18 +403,19 @@ function _cyco_exercises_is_submission_page_in_popup() {
   //Is the page in a popup?
   if ((    isset($_GET['destination']) 
         && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
-    //Is this a submission add form?
-    $current_path = current_path();
-    if ( $current_path == 'node/add/exercise-submission' ) {
-      //It's an add form.
       $is_submission_popup = TRUE;
-    }
-    else if (preg_match('/node\/(\d+)\/edit/', $current_path, $matches) ) {
-      //Is this an edit form?
-      $nid = $matches[1];
-      $node = node_load($nid);
-      $is_submission_popup = ( $node->type == 'exercise_submission' );
-    }
+//    //Is this a submission add form?
+//    $current_path = current_path();
+//    if ( $current_path == 'node/add/exercise-submission' ) {
+//      //It's an add form.
+//      $is_submission_popup = TRUE;
+//    }
+//    else if (preg_match('/node\/(\d+)\/edit/', $current_path, $matches) ) {
+//      //Is this an edit form?
+//      $nid = $matches[1];
+//      $node = node_load($nid);
+//      $is_submission_popup = ( $node->type == 'exercise_submission' );
+//    }
   }
   return $is_submission_popup;
 }
@@ -647,14 +703,6 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
       . '/custom/js/cyco_exercises_prep_submission_form.js'
   );
-  //Send settings to SWIM JS. Size the editor.
-//  $settings = array(
-//    'heightFraction' => 0.5,
-//  );
-//  drupal_add_js(
-//      array('swim' => $settings),
-//      'setting'
-//  );
   //Flag - has this been submitted?
   $has_been_submitted = FALSE;
   $language = $form['#entity']->language;
@@ -745,7 +793,8 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       $when = $form['field_when_submitted'][$language][0]['#default_value'];
       $form['field_when_submitted_display'] = array(
         '#type' => '#markup',
-        '#markup' => 'Submitted: ' . $when,
+        '#markup' => 'Submitted: ' 
+            . cyco_core_utc_to_user_time_zone( $when['value'] ),
       );
       if ( isset( $form['field_when_submitted']['#weight'] ) ) {
         $form['field_when_submitted_display']['#weight'] = 
@@ -786,11 +835,11 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     '#weight' => $submit_button_weight + 1,
   );
   $form['actions']['submit']['#weight']++;
-  
-  
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
   drupal_set_title( $exercise_node->title );
+  //Add validation processor.
+  $form['#validate'][] = '_cyco_exercises_submission_form_validate';
   //Add submission processor.
   $form['#submit'][] = '_cyco_exercises_submission_form_submission';
   
@@ -802,28 +851,48 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
 }
 
 /**
+ * Validate exercise submission form. Make sure that there is content.
+ * @param type $form You know what it is.
+ * @param type $form_state You know what it is.
+ */
+function _cyco_exercises_submission_form_validate($form, &$form_state) {
+  $content_given = FALSE;
+  $language = $form_state['node']->language;
+  //Check the solution text.
+  if ( isset( $form_state['values']['field_solution'][ $language ][0]['value'] ) ) {
+    $value = $form_state['values']['field_solution'][ $language ][0]['value'];
+    if ( strlen(trim($value)) > 0 ) {
+      $content_given = TRUE;
+    }
+  }
+  if ( ! $content_given ) {
+    //Check the attached files.
+    if ( isset( $form_state['values']['field_attachments'][ $language ][0]['fid'] ) ) {
+      $fid = $form_state['values']['field_attachments'][ $language ][0]['fid'];
+      if ( $fid > 0 ) {
+        $content_given = TRUE;
+      }
+    }
+  }
+  if ( ! $content_given ) {
+    form_set_error( 'field_solution', 
+        t('Sorry, you must give a solution and/or attachment before saving. ')
+    );
+  }
+}
+
+/**
  * Exercise submission form has been submitted.
  * @param type $form
  * @param type $form_state
  */
 function _cyco_exercises_submission_form_submission($form, &$form_state) {
-  //Restore hidden values for saving.
-//  $exercise_nid = $form_state['values']['field_exercise_hidden'];
-//  $version = $form_state['values']['field_version_hidden'];
-//  $form_state['values']['field_exercise'][LANGUAGE_NONE][0]['target_id'] = $exercise_nid;
-//  $form_state['values']['field_version'][LANGUAGE_NONE][0]['value'] = $version;
   //Record whether it has been submitted.
   $submit_checked = ($form_state['values']['submit_solution'] == 1);
   if ( $submit_checked ) {
-    //Is there already a submission date?
-//    if ( isset($form_state['values']['field_when_submitted'][LANGUAGE_NONE][0]['value'] ) ) {
-//      //Yes, nothing to change.
-//    }
-//    else {
       //Record current date/time as the submission date/time.
-      $now = cyco_core_format_time();
+      $now = cyco_core_get_now_utc();
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = $now;
-//    }
   }
   else {
     //Submit not checked.
@@ -959,9 +1028,19 @@ order by when_submitted_table.field_when_submitted_value asc;
   }
   //Only pass group membership info for students with submissions.
   $memberships = array();
-  foreach ( $submissions as $submission ) {
+  
+  foreach ( $submissions as $index => $submission ) {
     $submitter_uid = $submission['submitter_uid'];
     $memberships[ $submitter_uid ] = $groups_users_are_in[ $submitter_uid ];
+    //When-submitted comes out in UTC. Convert to user time zone.
+    $when_submitted = strtotime( $submission['when_submitted'] . ' UTC' );
+    $interval = format_interval(
+        time() - $when_submitted
+    );
+    $submissions[ $index ]['when_submitted'] = $interval . ' ago';
+//    date_default_timezone_set( drupal_get_user_timezone() );
+//    $date_local = date("Y-m-d H:i:s", $time);
+//    $submission['when_submitted'] = $date_local;
   }
   $result = array( 
     'submissions' => $submissions,

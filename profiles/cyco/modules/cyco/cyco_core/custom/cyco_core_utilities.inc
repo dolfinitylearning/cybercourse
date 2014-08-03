@@ -279,31 +279,60 @@ function cyco_core_timestamp_to_iso6801( $timestamp ) {
 }
 
 /**
- * Format date/time as needed by Date/Time field.
- * @param timestamp $when Timestamp to format. Defaults to now.
+ * Convert date/time from UTC to user's time zone.
+ * @param string $utc Date/time in UTC, e.g., 1995-04-27 01:55:55
+ * @return string Date/time in user's time zone.
+ */
+function cyco_core_utc_to_user_time_zone( $utc ) {
+  $utc .= ' +0:00';
+  $dt = new DateTime('@' . strtotime($utc));  // will snap to UTC because of the 
+  $dt->setTimeZone(new DateTimeZone(drupal_get_user_timezone()));
+  $user_tz = $dt->format('Y-m-d H:i:s');
+  return $user_tz;
+}
+
+/** Get now in format for date field.
  * @return array Formatted date/time.
  */
-function cyco_core_format_time( $when = NULL ) {
+function cyco_core_get_now_utc() {
+  $when = strtotime('now');
+  $date = array(
+    'value' => format_date($when, 'custom', 'Y-m-d H:i:s', 'UTC'),
+    'timezone' => 'UTC',  
+    'timezone_db' => 'UTC',
+  );
+  return $date;
+  
+  
   //This is clunky.
-  if ( is_null( $when ) ) {
-    $when = time();
+//  if ( is_null( $when ) ) {
+//    $when = time();
 //    $when = date_now('UTC');
-  }
-  //Make an array with the rep used by the date api for form field 
-  //in $form_state.
-  $temp = array();
-  //Date is almost OK. Replace space between date and time with a T.
-  $temp['value'] = date('Y-m-d\TH:i:s', $when);
-      //str_replace(' ', 'T', $when->date);
-  $temp['value2'] = $temp['value'];
-  $temp['show_todate'] = 0;
-  $temp['timezone'] = drupal_get_user_timezone();
-  //Compute timezone offset.
-  $phpNow = new DateTime( $temp['value'], new DateTimeZone($temp['timezone']) );
-  $offset = $phpNow->getOffset();
-  $temp['offset'] = $offset;
-  $temp['offset2'] = $offset;
-  return $temp;
+//  }
+//  //Make an array with the rep used by the date api for form field 
+//  //in $form_state.
+//  $temp = array();
+//  //Date is almost OK. Replace space between date and time with a T.
+//  $temp['value'] = date('Y-m-d\TH:i:s', $when);
+//  $temp['timezone'] = drupal_get_user_timezone();
+//  $temp['timezone_db'] = 'UTC';
+//  return $temp;
+//  
+//  
+//      //str_replace(' ', 'T', $when->date);
+//  $temp['value2'] = $temp['value'];
+//  
+//  return $temp['value'];
+//  
+//  
+//  $temp['show_todate'] = 0;
+//  $temp['timezone'] = drupal_get_user_timezone();
+//  //Compute timezone offset.
+//  $phpNow = new DateTime( $temp['value'], new DateTimeZone($temp['timezone']) );
+//  $offset = $phpNow->getOffset();
+//  $temp['offset'] = $offset;
+//  $temp['offset2'] = $offset;
+//  return $temp;
 }
 
 /**

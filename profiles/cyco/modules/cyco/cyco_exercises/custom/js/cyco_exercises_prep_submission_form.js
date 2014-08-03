@@ -10,24 +10,29 @@
     userChangedFiles: false,
     initialSolutionText: '',
     solutionWidgetId: "edit-field-solution-und-0-value",
+    //Flag to show whether in the process of saving.
+    saving: false,
     attach: function(context, settings) {
       uiNamespace = Drupal.behaviors.cycoExerPrepSubmissionForm;
       //Grab the solution content for later comparison.
       uiNamespace.initialSolutionText 
           = $("#" + uiNamespace.solutionWidgetId).val();
+//      $(".field-name-field-attachments .file-widget input.form-text")
       //Set up the submission reminder.
       uiNamespace.showHideReminder();
       $("#edit-submit-solution").click(
         uiNamespace.showHideReminder
       );
       window.onbeforeunload = function (event) {
-        //Has the content in the editor changed?
-        var currentContent = $("#" + uiNamespace.solutionWidgetId).val();
-        if ( currentContent != uiNamespace.initialSolutionText
-             || uiNamespace.userChangedFiles ) {
-          //Ask user to confirm.
-          event.returnValue = 
-              "There are unsaved changes. Are you sure you want to close?";
+        if ( ! uiNamespace.saving ) {
+          //Has the content in the editor changed?
+          var currentContent = $("#" + uiNamespace.solutionWidgetId).val();
+          if ( currentContent != uiNamespace.initialSolutionText
+               || uiNamespace.userChangedFiles ) {
+            //Ask user to confirm.
+            event.returnValue = 
+                "There are unsaved changes. Are you sure you want to close?";
+          }
         }
       };
       //When the window closes, tell the opener to refresh the links
@@ -36,10 +41,25 @@
         var exerciseNid = Drupal.settings.cyco_exercises.exerciseNid;
         opener.Drupal.behaviors.cycoExerSubLinks.refreshLinksForExercise( exerciseNid );
       };
+      //Save button clicked - tell code that the user is saving.
+      $("#edit-submit").click(function() {
+        uiNamespace.saving = true;
+      });
+      //User did something to a file.
+      $("button[value=Remove]").click(function() {
+        uiNamespace.fileOpDone();
+      });
+      $("button[value=Upload]").click(function() {
+        uiNamespace.fileOpDone();
+      });
+      $("div.file-widget.form-managed-file .form-type-textfield input")
+        .change(function() {
+        uiNamespace.fileOpDone();
+      });
       //If user clicks "Choose file" in the attach section, record that 
-      //as a change to the submission. 
+      //as a file op that dirties the submission data. 
       $("input.form-control.form-file").click(function(e) {
-        uiNamespace.userChangedFiles = true;
+        uiNamespace.fileOpDone();
       });
       //If user clicks "Save", don't ask whether to abandon changes on unload.
       $("#edit-submit-solution").change(function() {
@@ -62,6 +82,12 @@
       else {
         $(".cyco_reminder").show("fast");
       }
+    },
+    /**
+     * A file operation was performed.
+     */
+    fileOpDone: function() {
+      uiNamespace.saving = true;
     }
   };
 }(jQuery));

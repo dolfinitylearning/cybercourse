@@ -1314,7 +1314,7 @@ function _cyco_exer_compute_feedback_score( $rubric_ratings ) {
       $num_needs_work++;
     }
   }
-  $score = ( $num_good * 2 + $num_needs_work ) / $num_comments * 100;
+  $score = ( $num_good * 2 + $num_needs_work ) / ( $num_comments * 2 ) * 100;
   return $score;
 }
 
@@ -1356,10 +1356,6 @@ function _cycoex_save_feedback( $feedback_data ) {
       $feedback_data, 'exercise_nid', TRUE,
       __FILE__, __LINE__, __FUNCTION__
   );
-//  $model_solution_nid = _cycoex_check_feedback_parameter(
-//      $feedback_data, 'model_solution_nid', TRUE,
-//      __FILE__, __LINE__, __FUNCTION__
-//  );
   $rubric_ratings = _cycoex_check_feedback_parameter(
       $feedback_data, 'rubric_ratings', FALSE,
       __FILE__, __LINE__, __FUNCTION__
@@ -1399,7 +1395,7 @@ function _cycoex_save_feedback( $feedback_data ) {
   //Fill in fields in exercise_submission node.
   $submission_node = node_load( $submission_nid );
   //Record current date/time as the feedback date/time.
-  $now = cyco_core_format_time();
+  $now = cyco_core_get_now_utc();
   $submission_node->field_when_feedback_given[LANGUAGE_NONE][0] = $now;
   //Feedback source is the current user.
   global $user;
@@ -1418,7 +1414,7 @@ function _cycoex_save_feedback( $feedback_data ) {
     $comment_rating = $rubric_rating['comment_rating'];
     $node = new stdClass();
     $node->title = 'Submission: ' . $submission_nid . ' Item: ' . $rubric_item_nid;
-    $node->type = 'exer_submssn_rubric_item_rating';
+    $node->type = 'exercise_submission_rubric_item_';
     node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
     $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
     //Record is owned by the grader.

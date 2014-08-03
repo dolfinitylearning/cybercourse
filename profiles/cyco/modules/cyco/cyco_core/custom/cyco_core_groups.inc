@@ -17,6 +17,24 @@ function cyco_core_groups_render_basic_list() {
 }
 
 /**
+ * Get the groups a user is role in.
+ * @global stdClass $user The current user.
+ * @param string $group_type Type of group, e.g., class.
+ * @param stdClass $user_to_check User to check. Defaults to current user.
+ * @return array Group ids.
+ */
+function cyco_core_groups_get_groups_for_user( 
+    $group_type, $user_to_check = NULL ) {
+  if ( is_null($user_to_check) ) {
+    global $user;
+    $user_to_check = $user;
+  }
+  //Find groups the user is in.
+  $user_group_gids = og_get_groups_by_user($user_to_check, $group_type);
+  return $user_group_gids;
+}
+
+/**
  * Get the groups of a given type that a user has a given role in.
  * @global stdClass $user The current user.
  * @param string $group_type Type of group, e.g., class.

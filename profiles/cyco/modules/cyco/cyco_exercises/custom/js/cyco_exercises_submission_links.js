@@ -16,7 +16,7 @@
         + " class='exercise-work-on-it-link' data-target='popup'>"
         + linkText + "</a>";
     return link;    
-  }
+  };
   /**
    * Theme function for a labeled link.
    * @param {string} versionLabel The version, usually MT.
@@ -30,8 +30,7 @@
     if ( versionLabel ) {
       html += "<div class='cyco-inserted-exercise-link-version'>"
         +       versionLabel
-        +     "</div>"
-
+        +     "</div>";
     }
     if ( statusMessage ) {
       html += "<div class='cyco-inserted-exercise-link-status'>"
@@ -133,37 +132,10 @@
       return throbber;
     },
     /**
-     * Get a CSRF token.
-     * @returns {unresolved} Promise.
-     */
-//    getCsrfToken: function(){
-//      //Connect and get user details.
-//      var webServiceUrl = Drupal.settings.basePath + "services/session/token";
-//      var promise = $.ajax({ 
-//          type: "GET",
-//          url: webServiceUrl,
-//          dataType: "text"
-//      })
-//        .done(function(token){
-//          uiNamespace.token = token;
-//        })
-//        .fail(function(jqXHR, textStatus, errorThrown) {
-//          Drupal.behaviors.cycoErrorHandler.reportError(
-//            "getCsrfToken request failed in "
-//              + "cyco_exercises_submission_links. " 
-//              + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
-//          );
-//        })
-//        .always(function() {
-////          $("#activity").hide();
-//        }); 
-//      return promise;
-//    },
-    /**
      * Ask the server for metadata about this user's submissions 
      * for this exercise.
-     * @param {int} uid Uid of current user.
-     * @param {int} exercise_nid Nid of current exercise.
+     * @param {int} studentUid Uid of current user.
+     * @param {int} exerciseNid Nid of current exercise.
      */
     fetchSubmissionMetaData: function( studentUid, exerciseNid ) {
       var webServiceUrl = Drupal.settings.basePath 
