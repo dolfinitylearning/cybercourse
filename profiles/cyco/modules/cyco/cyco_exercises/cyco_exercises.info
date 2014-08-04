@@ -13,6 +13,10 @@ dependencies[] = services
 dependencies[] = text
 dependencies[] = views
 stylesheets[all][] = custom/css/cyco_exercises.css
+
+files[] = custom/views/cyco_exercises_handler_submission_status.inc
+files[] = custom/views/cyco_exercises_handler_completion_badge.inc
+
 features[ctools][] = field_group:field_group:1
 features[ctools][] = services:services:3
 features[ctools][] = strongarm:strongarm:1

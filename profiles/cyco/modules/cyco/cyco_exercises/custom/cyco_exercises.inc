@@ -214,24 +214,7 @@ function cyco_exercises_swim_betwixt2html_alter(&$content) {
   //[[[, optional whitespace, cycoexercise, optional whitespace, 
   //exercise number, optional whitespace, ]]]
   $content = preg_replace_callback($regex, '_cyco_exercises_make_replacements', $content);
-
-//  return preg_replace_callback('/\[\[\[\s*cycoexercise\s*(\d+)\s*\]\]\]/',
-//      //[[[, optional whitespace, cycoexercise, optional whitespace, 
-//      //exercise number, optional whitespace, ]]]
-//      '_cyco_exercises_make_replacements', $content);
 }
-
-/**
- * Process callback for hook_filter. Finds [[[cycoexercise (node_id)]]]
- * and passes match data onto function that will do the insertion.
- */
-//function cyco_exercises_filter_node_insert_process(
-//    $text, $filter, $format, $langcode, $cache, $cache_id) {
-//  return preg_replace_callback('/\[\[\[\s*cycoexercise\s*(\d+)\s*\]\]\]/',
-//      //[[[, optional whitespace, cycoexercise, optional whitespace, 
-//      //exercise number, optional whitespace, ]]]
-//      '_cyco_exercises_make_replacements', $text);
-//}
 
 /**
  * Tips callback for hook_filter
@@ -264,7 +247,6 @@ function _cyco_exercises_make_replacements($matches) {
       );
     }
     else {
-//      $labeled_links = _cyco_exercises_make_submit_links($exercise_node);
       //If there is no submission, there is only a link to create a new one.
       //If there is an existing submission:
       //  If there is no feedback yet, there is only an edit link.
@@ -304,28 +286,38 @@ function _cyco_exercises_make_replacements($matches) {
  * @param type $exercise_node The nid of the exercise.
  * @return array Labelled link data.
  */
-//function _cyco_exercises_make_submit_links( $exercise_node ) {
-//  //If there is no submission, there is only a link to create a new one.
-//  //If there is an existing submission:
-//  //  If there is no feedback yet, there is only an edit link.
-//  //  If there is feedback, there is a Review link, and a new version link.
-//  global $base_url;
-//  //Create submission links for this exercise.
-//  drupal_add_js(
-//      $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-//      . '/custom/js/cyco_exercises_submission_links.js'
-//  );
-//  //Send current user uid to client.
-//  drupal_add_js(
-//      array('cyco_exercises' => 
-//        array(
-//          'uid' => $user->uid,
-//        ),
-//      ),
-//      'setting'
-//  );
-//  return;
-//}
+function _cyco_exercises_make_submit_links() {
+  //Make the submission links.
+  global $user;
+  $too_bad_so_sad_message = '';
+  if ( ! cyco_core_user_has_role($user, 'student') ) {
+    $too_bad_so_sad_message = t('(If you were logged in as a student, '
+        . 'you could submit an exercise solution, and get some feedback.)'
+    );
+  }
+  else {
+    //If there is no submission, there is only a link to create a new one.
+    //If there is an existing submission:
+    //  If there is no feedback yet, there is only an edit link.
+    //  If there is feedback, there is a Review link, and a new version link.
+    global $base_url;
+    //Create submission links for this exercise.
+    drupal_add_js(
+        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+        . '/custom/js/cyco_exercises_submission_links.js'
+    );
+    //Send current user uid to client.
+    drupal_add_js(
+        array('cyco_exercises' => 
+          array(
+            'uid' => $user->uid,
+          ),
+        ),
+        'setting'
+    );
+  }
+  return $too_bad_so_sad_message;
+}
 
 /**
  * Implement hook_theme().
@@ -478,55 +470,17 @@ function cyco_exercises_node_view($node, $view_mode, $langcode) {
     if (user_access('edit any course_page')) {
       drupal_set_title($node->title . ' (' . $node->nid . ')');
     }
+    global $user;
+    if (    $user->uid == 0
+         || cyco_core_current_user_has_role( 'student' ) ) {
+      $too_bad_so_sad_message = _cyco_exercises_make_submit_links();
+      
+    }
+    
+    
+    
   }
-  
-//  //Data needed to replace some tokens.
-//  $token_data = array('feedback');
-//  //If this is an exercise submission...
-//  if ( $node->type == 'exercise_submission' ) {
-//    //Ready the exercise id for the token parser.
-//    $exercise_nid = null;
-//    if ( isset( $node->field_exercise[LANGUAGE_NONE][0] ) ) {
-//      $exercise_nid = $node->field_exercise[LANGUAGE_NONE][0]['target_id'];
-//      $token_data['exercise_nid'] = $exercise_nid;
-//    }
-//    $replaced_text = token_replace($node->field_body[LANGUAGE_NONE][0]['pure_rest'], $token_data);
-//  }
 }
-
-/**
- * Implements hook_entity_info_alter().
- * 
- * Define a view mode for inserting exercises in regular content.
- */
-//function cyco_exercises_entity_info_alter(&$entity_info) {
-////  $entity_info['node']['view modes']['cyco_exercises_insert'] = array(
-////    'label' => t('Insert Cybercourse exercise'),
-////    'custom settings' => TRUE,
-////  );
-//  $entity_info['node']['view modes']['cyco_exer'] = array(
-//    'label' => t('Insert Cybercourse exercise into node'),
-//    'custom settings' => TRUE,
-//  );  
-//}
-
-//function cyco_exercises_field_attach_form($entity_type, $entity, &$form, &$form_state, $langcode) {
-//  if (isset($form['field_rubric_items'][LANGUAGE_NONE][0]['field_rubric_item']
-//          ['edit_entityconnect__field_rubric_item_all_field_rubric_items-und-0'])) {
-//    $form['field_rubric_items'][LANGUAGE_NONE][0]['field_rubric_item']
-//        ['edit_entityconnect__field_rubric_item_all_field_rubric_items-und-0']
-//        ['#weight'] = 4;
-//    $form['field_rubric_items'][LANGUAGE_NONE][0]['field_rubric_item']
-//        ['edit_entityconnect__field_rubric_item_all_field_rubric_items-und-0']
-//        ['#value'] = 'Edit this item';
-//    $form['field_rubric_items'][LANGUAGE_NONE][0]['field_rubric_item']
-//        ['add_entityconnect__field_rubric_item_all_field_rubric_items-und-0']
-//        ['#weight'] = 8;
-//    $form['field_rubric_items'][LANGUAGE_NONE][0]['field_rubric_item']
-//        ['add_entityconnect__field_rubric_item_all_field_rubric_items-und-0']
-//        ['#value'] = 'Add a new rubric item';
-//  }
-//}
 
 /**
  * Implements hook_form_alter().
@@ -1398,3 +1352,43 @@ function _cyco_test_use_generic_name( $field_to_check ) {
   return $replace_flag;
 }
 
+/**
+ * Implements hook_views_api().
+ */
+function cyco_exercises_views_api_alter(&$vars) {
+  $r=6;
+  if (isset($vars['cyco_exercises'])) {
+    $vars['cyco_exercises']['path'] 
+        = drupal_get_path('module', 'cyco_exercises') . '/custom/views';
+  }
+}
+
+/**
+ * Compute the status of a submission: 
+ *  * Not submitted
+ *  * Submitted, no feedback
+ *  * Complete
+ *  * Not complete
+ * @param stdCkass $node Submission node
+ * @return string Status
+ */
+function cyco_exercises_compute_submission_status( $node ) {
+  $language = $node->language;
+  if ( ! isset( $node->field_when_submitted[ $language ][0] ) ) {
+    $status = t('Not submitted');
+  }
+  else {
+    if ( ! isset( $node->field_when_feedback_given[ $language ][0] ) ) {
+      $status = t('Submitted, no feedback');
+    }
+    else {
+      if ( $node->field_complete[ $language ][0]['value'] == 1 ) {
+        $status = t('Complete');
+      }
+      else {
+        $status = t('Not complete');
+      }
+    }
+  }
+  return $status;
+}

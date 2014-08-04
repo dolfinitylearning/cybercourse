@@ -67,3 +67,7 @@ It's misleading.
   font-weight: bold;
   color: green;
 }
+
+.view-submissions-student-report td {
+  vertical-align: middle;
+}
