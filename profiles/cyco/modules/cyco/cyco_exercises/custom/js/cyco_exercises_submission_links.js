@@ -50,7 +50,7 @@
       //References to throbbers, indexed by exercise nid.
       uiNamespace.throbbbers = new Array();
       //Find the inserted exercises.
-      $("div[data-nid].cyco-inserted-exercise").each( function(index, element) {
+      $("div[data-nid].cyco-submission-links-container").each( function(index, element) {
         //Get uid of current user.
         var studentUid = Drupal.settings.cyco_exercises.uid;
         //Get exercise nid of this exercise.
@@ -174,7 +174,7 @@
       //Compute links to add.
       var linkLabels = uiNamespace.makeLinkLabels( studentUid, exerciseNid );
       //Find where to add them.
-      var $linkLocation = $("div[data-nid=" + exerciseNid + "] .cyco-inserted-exercise-links-container");
+      var $linkLocation = $("div[data-nid=" + exerciseNid + "].cyco-submission-links-container");
       //MT it - this could be a refresh call from a popup.
       $linkLocation.html('');
       $.each(linkLabels, function(index, linkLabel) {

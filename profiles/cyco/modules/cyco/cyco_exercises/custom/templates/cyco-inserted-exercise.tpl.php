@@ -31,7 +31,8 @@
     </div>
   <?php }
   else { ?>
-  <div class="cyco-inserted-exercise-links-container">
+  <div class="cyco-submission-links-container" 
+       data-nid="<?php print $exercise_nid; ?>">
     <?php //This is completed by JavaScript. The class name cannot change. ?>
   </div>
   <?php } ?>

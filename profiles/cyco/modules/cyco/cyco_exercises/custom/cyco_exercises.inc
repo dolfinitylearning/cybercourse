@@ -470,15 +470,6 @@ function cyco_exercises_node_view($node, $view_mode, $langcode) {
     if (user_access('edit any course_page')) {
       drupal_set_title($node->title . ' (' . $node->nid . ')');
     }
-    global $user;
-    if (    $user->uid == 0
-         || cyco_core_current_user_has_role( 'student' ) ) {
-      $too_bad_so_sad_message = _cyco_exercises_make_submit_links();
-      
-    }
-    
-    
-    
   }
 }
 
@@ -1391,4 +1382,26 @@ function cyco_exercises_compute_submission_status( $node ) {
     }
   }
   return $status;
+}
+
+
+function cyco_exercises_preprocess_node(&$variables) {
+  if ( $variables['type'] == 'exercise') {
+    global $user;
+    if (    $user->uid == 0
+         || cyco_core_current_user_has_role( 'student' ) ) {
+      $too_bad_so_sad_message = _cyco_exercises_make_submit_links();
+      if ( $user->uid == 0 ) {
+        $variables['content']['field_body'][0]['#markup'] 
+            .= $too_bad_so_sad_message;
+      }
+      if ( cyco_core_current_user_has_role( 'student' ) ) {
+        $variables['content']['field_body'][0]['#markup'] 
+            .= '<div class="cyco-submission-links-container" '
+               . 'data-nid="' . $variables['nid'] . '"></div>';
+      }
+    }
+    
+  }
+  
 }
