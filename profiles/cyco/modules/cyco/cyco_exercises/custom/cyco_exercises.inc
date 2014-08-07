@@ -1405,3 +1405,62 @@ function cyco_exercises_preprocess_node(&$variables) {
   }
   
 }
+
+/**
+ * Implements hook_swim_markdown2html_TAG_alter
+ * @param stdClass $args Content to translate
+ */
+function cyco_exercises_swim_markdown2html_exercise_alter( &$args ) {
+  $exercise_nid = intval($args->args);
+  $exercise_node = node_load($exercise_nid);
+  //Make sure that this is the right type of node.
+  if ($exercise_node == FALSE || !node_access('view', $exercise_node) || !$exercise_node->status || $exercise_node->type != 'exercise') {
+    $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
+    drupal_set_message($message);
+    watchdog('cyco_exercises', $message);
+    return '<p>' . $message . '</p>';
+  }
+  //Make the submission links.
+  global $user;
+  $labeled_links = '';
+  $too_bad_so_sad_message = '';
+  if ( ! cyco_core_user_has_role($user, 'student') ) {
+    $too_bad_so_sad_message = t('(If you were logged in as a student, '
+        . 'you could submit an exercise solution, and get some feedback.)'
+    );
+  }
+  else {
+    //If there is no submission, there is only a link to create a new one.
+    //If there is an existing submission:
+    //  If there is no feedback yet, there is only an edit link.
+    //  If there is feedback, there is a Review link, and a new version link.
+    global $base_url;
+    //Create submission links for this exercise.
+    drupal_add_js(
+        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+        . '/custom/js/cyco_exercises_submission_links.js'
+    );
+    //Send current user uid to client.
+    drupal_add_js(
+        array('cyco_exercises' => 
+          array(
+            'uid' => $user->uid,
+          ),
+        ),
+        'setting'
+    );
+  }
+  $body_content = swim_markdown2html(
+      $exercise_node->field_body[LANGUAGE_NONE][0]['value']
+  );
+  $result = theme('cyco_embedded_exercise', array(
+    'exercise_nid' => $exercise_nid,
+    'title' => $exercise_node->title,
+    'body' => $body_content,
+    'labeled_links' => $labeled_links,
+    'too_bad_so_sad_message' => $too_bad_so_sad_message,
+  ));  
+  $args->replacement_content = $result;
+  $args->current_line ++;
+}
+

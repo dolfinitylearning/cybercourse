@@ -29,79 +29,79 @@ function cyco_patterns_help($path, $arg) {
  * 
  * See SWIM docs for more.
  */
-function cyco_patterns_swim_betwixt2html_alter(&$content) {
-  $regex = '/\[\[\[\s*cycopattern\:(\d+)\s*\]\]\]/';
-      //[[[, optional whitespace, cycopattern, optional whitespace, 
-      //pattern number, optional whitespace, ]]]
-  $content = preg_replace_callback( $regex,
-      '_cyco_patterns_make_replacements', $content );
-}
+//function cyco_patterns_swim_betwixt2html_alter(&$content) {
+//  $regex = '/\[\[\[\s*cycopattern\:(\d+)\s*\]\]\]/';
+//      //[[[, optional whitespace, cycopattern, optional whitespace, 
+//      //pattern number, optional whitespace, ]]]
+//  $content = preg_replace_callback( $regex,
+//      '_cyco_patterns_make_replacements', $content );
+//}
 
 /**
  * Generates the HTML for the pattern.
  */ 
-function _cyco_patterns_make_replacements($matches) {
-  $pattern_nid = $matches[1];
-  $pattern_node = node_load($pattern_nid);
-  //Make sure that this is the right type of node.
-  if (   $pattern_node == FALSE 
-      || !node_access('view', $pattern_node) 
-      || !$pattern_node->status
-      || $pattern_node->type != 'pattern') {
-    $message = t('Invalid pattern id: @id', array('@id' => $pattern_nid) );
-    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-        . $message;
-    cyco_core_handle_error( $message );
-    return '<p>' . $message . '</p>';
-  }
-  $situation = 
-      isset( 
-        $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
-      ) 
-      ? swim_rest2html(
-          $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
-        )
-      : '';
-  $actions = 
-      isset( 
-        $pattern_node->field_actions[LANGUAGE_NONE][0]['value'] 
-      )
-      ? swim_rest2html( 
-          $pattern_node->field_actions[LANGUAGE_NONE][0]['value']
-        )
-      : '';
-  //Make pattern category links.
-  $pattern_category_links = array();
-  $pattern_category_links_rendered = '';
-  if ( sizeof( $pattern_node->field_pattern_categories ) > 0 ) {
-    $done_first = FALSE;
-    foreach( $pattern_node->field_pattern_categories[LANGUAGE_NONE] as $item) {
-      $tid = $item['tid'];
-      $term = taxonomy_term_load($tid);
-      $term_name = $term->name;
-      $pattern_category_links[] = array('tid' => $tid, 'term' => $term_name);
-      $path_to_term = drupal_lookup_path('alias', 'taxonomy/term/' . $tid);
-      $link_html = l($term_name, $path_to_term );
-      if ( $done_first ) {
-        $pattern_category_links_rendered .= ', ';
-      }
-      $done_first = TRUE;
-      $pattern_category_links_rendered .= $link_html;
-    }
-  }
-  $result = theme('pattern_inserted', 
-      array(
-        'title' => $pattern_node->title,
-        'category_links' => $pattern_category_links,
-        'category_links_rendered' => $pattern_category_links_rendered,
-        'situation' => $situation,
-        'actions' => $actions,
-        'more_link_destination' => '/node/' . $pattern_nid,
-        'pattern_node' => $pattern_node,
-      )
-  );
-  return $result;
-} 
+//function _cyco_patterns_make_replacements($matches) {
+//  $pattern_nid = $matches[1];
+//  $pattern_node = node_load($pattern_nid);
+//  //Make sure that this is the right type of node.
+//  if (   $pattern_node == FALSE 
+//      || !node_access('view', $pattern_node) 
+//      || !$pattern_node->status
+//      || $pattern_node->type != 'pattern') {
+//    $message = t('Invalid pattern id: @id', array('@id' => $pattern_nid) );
+//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+//        . $message;
+//    cyco_core_handle_error( $message );
+//    return '<p>' . $message . '</p>';
+//  }
+//  $situation = 
+//      isset( 
+//        $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
+//      ) 
+//      ? swim_rest2html(
+//          $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
+//        )
+//      : '';
+//  $actions = 
+//      isset( 
+//        $pattern_node->field_actions[LANGUAGE_NONE][0]['value'] 
+//      )
+//      ? swim_rest2html( 
+//          $pattern_node->field_actions[LANGUAGE_NONE][0]['value']
+//        )
+//      : '';
+//  //Make pattern category links.
+//  $pattern_category_links = array();
+//  $pattern_category_links_rendered = '';
+//  if ( sizeof( $pattern_node->field_pattern_categories ) > 0 ) {
+//    $done_first = FALSE;
+//    foreach( $pattern_node->field_pattern_categories[LANGUAGE_NONE] as $item) {
+//      $tid = $item['tid'];
+//      $term = taxonomy_term_load($tid);
+//      $term_name = $term->name;
+//      $pattern_category_links[] = array('tid' => $tid, 'term' => $term_name);
+//      $path_to_term = drupal_lookup_path('alias', 'taxonomy/term/' . $tid);
+//      $link_html = l($term_name, $path_to_term );
+//      if ( $done_first ) {
+//        $pattern_category_links_rendered .= ', ';
+//      }
+//      $done_first = TRUE;
+//      $pattern_category_links_rendered .= $link_html;
+//    }
+//  }
+//  $result = theme('pattern_inserted', 
+//      array(
+//        'title' => $pattern_node->title,
+//        'category_links' => $pattern_category_links,
+//        'category_links_rendered' => $pattern_category_links_rendered,
+//        'situation' => $situation,
+//        'actions' => $actions,
+//        'more_link_destination' => '/node/' . $pattern_nid,
+//        'pattern_node' => $pattern_node,
+//      )
+//  );
+//  return $result;
+//} 
 
 /**
  * Implement hook_theme().
@@ -154,4 +154,72 @@ function cyco_patterns_menu_local_tasks_alter(&$data, $router_item, $root_path) 
       }
       break;
   }
+}
+
+/**
+ * Implements hook_swim_markdown2html_TAG_alter
+ * @param stdClass $args Content to translate
+ */
+function cyco_patterns_swim_markdown2html_pattern_alter( &$args ) {
+  $pattern_nid = intval($args->args);
+  $pattern_node = node_load($pattern_nid);
+  //Make sure that this is the right type of node.
+  if (   $pattern_node == FALSE 
+      || !node_access('view', $pattern_node) 
+      || !$pattern_node->status
+      || $pattern_node->type != 'pattern') {
+    $message = t('Invalid pattern id: @id', array('@id' => $pattern_nid) );
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . $message;
+    cyco_core_handle_error( $message );
+    return '<p>' . $message . '</p>';
+  }
+  $situation = 
+      isset( 
+        $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
+      ) 
+      ? swim_markdown2html(
+          $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
+        )
+      : '';
+  $actions = 
+      isset( 
+        $pattern_node->field_actions[LANGUAGE_NONE][0]['value'] 
+      )
+      ? swim_markdown2html( 
+          $pattern_node->field_actions[LANGUAGE_NONE][0]['value']
+        )
+      : '';
+  //Make pattern category links.
+  $pattern_category_links = array();
+  $pattern_category_links_rendered = '';
+  if ( sizeof( $pattern_node->field_pattern_categories ) > 0 ) {
+    $done_first = FALSE;
+    foreach( $pattern_node->field_pattern_categories[LANGUAGE_NONE] as $item) {
+      $tid = $item['tid'];
+      $term = taxonomy_term_load($tid);
+      $term_name = $term->name;
+      $pattern_category_links[] = array('tid' => $tid, 'term' => $term_name);
+      $path_to_term = drupal_lookup_path('alias', 'taxonomy/term/' . $tid);
+      $link_html = l($term_name, $path_to_term );
+      if ( $done_first ) {
+        $pattern_category_links_rendered .= ', ';
+      }
+      $done_first = TRUE;
+      $pattern_category_links_rendered .= $link_html;
+    }
+  }
+  $result = theme('pattern_inserted', 
+      array(
+        'title' => $pattern_node->title,
+        'category_links' => $pattern_category_links,
+        'category_links_rendered' => $pattern_category_links_rendered,
+        'situation' => $situation,
+        'actions' => $actions,
+        'more_link_destination' => '/node/' . $pattern_nid,
+        'pattern_node' => $pattern_node,
+      )
+  );
+  $args->replacement_content = $result;
+  $args->current_line ++;
 }

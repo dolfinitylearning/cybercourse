@@ -13,10 +13,6 @@
       //Define a widget.
       editor.widgets.add('insert_pseudent', {
         dialog: "insert_pseudent",
-//        //Property holding the selected id.
-//        pseudentId: "",
-//        //Property holding the id that was selected when the widget started.
-//        initialPseudentId: "",
         button: 'Insert a pseudent',
         template:
               '<div class="pseudent">'
@@ -95,7 +91,12 @@
         requiredContent: 
               'div(pseudent)',
         upcast: function(element) {
-          return element.name == 'div' && element.hasClass('pseudent');
+          if ( element.name == 'div' ) {
+            if ( element.hasClass('pseudent') ) {
+              return true;
+            }
+          }
+          return  false;
         }
       });
 

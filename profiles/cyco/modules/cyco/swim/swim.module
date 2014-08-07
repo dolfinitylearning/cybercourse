@@ -7,8 +7,10 @@
 //Default heights for the editor and summary.
 define('SWIM_DEFAULT_HEIGHT', '15');
 define('SWIM_DEFAULT_SUMMARY_HEIGHT', '5');
-//CLass MathJax uses to detect what content it should mess with.
+//Class MathJax uses to detect what content it should mess with.
 define('SWIM_MATH_JAX_CLASS', 'math');
+
+require_once drupal_get_path('module', 'swim') . '/SwimMarkdown.php';
 
 /**
  * Implements hook_help().
@@ -116,7 +118,8 @@ function swim_field_widget_form(
       '#title' => t( $element['#title'] ),
       //Remove grippie.
       '#resizable' => FALSE,
-      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
+      '#default_value' => $value ? swim_markdown2ckhtml( $value ) : '',
+//      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
       '#attributes' => array(
         'class' => array('swim-editor swim-editor-main text-full'),
       ),
@@ -134,7 +137,8 @@ function swim_field_widget_form(
         '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
         //Remove grippie.
         '#resizable' => FALSE,
-        '#default_value' => $summary ? swim_rest2ckhtml( $summary ) : '',
+        '#default_value' => $summary ? swim_markdown2ckhtml( $summary ) : '',
+//        '#default_value' => $summary ? swim_rest2ckhtml( $summary ) : '',
         '#attributes' => array(
           'class' => array('swim-editor swim-editor-summary'),
         ),
@@ -181,7 +185,8 @@ function swim_field_is_empty($item, $field) {
  */
 function _swim_field_widget_value($element, $input = FALSE, $form_state = array()) {
   if ( $input !== FALSE ) {
-    $result = _swim_ckhtml2rest($input);
+    $result = swim_ckhtml2markdown($input);
+//    $result = _swim_ckhtml2rest($input);
     return $result;
   }
 }
@@ -437,7 +442,10 @@ function swim_field_formatter_view(
     $langcode, $items, $display
   ) {
   //MathJax
-  $stuff = drupal_add_js('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+  drupal_add_js('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_mathjax_config.js' );
+  //Styles
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
   $element = array();
   switch ($display['type']) {
     case 'swim_default_formatter':
@@ -447,8 +455,9 @@ function swim_field_formatter_view(
         $tokenized = swim_process_tokens( 
             $obj_type, $object, $field, $item['value']
         );
-        //Convert from ReST to HTML
-        $output = swim_rest2html( $tokenized );
+        //Convert from Markdown to HTML
+        $output = swim_markdown2html( $tokenized );
+//        $output = swim_rest2html( $tokenized );
         if ($display['type'] == 'swim_trimmed_formatter') {
           $output = text_summary($output, NULL, $display['settings']['trim_length']);
         }
@@ -459,11 +468,13 @@ function swim_field_formatter_view(
     case 'swim_summary_or_trimmed_formatter':
       foreach ($items as $delta => $item) {
         if (!empty($item['summary'])) {
-          $output = swim_rest2html( $item['summary'] );
+          $output = swim_markdown2html( $item['summary'] );
+//          $output = swim_rest2html( $item['summary'] );
         }
         else {
           $output = text_summary($item['value']);
-          $output = swim_rest2html( $output );
+          $output = swim_markdown2html( $output );
+//          $output = swim_rest2html( $output );
         }
         $element[$delta] = array('#markup' => $output);
       }
@@ -509,7 +520,7 @@ function swim_process_tokens( $obj_type, $object, $field, $content ) {
   return $content;
 }
 
-/**
+/** OLD_REST
  * Translate pure ReST into HTML.
  * @param string $rest ReST
  * @return string HTML
@@ -556,7 +567,7 @@ function swim_rest2html( $rest ) {
   return $html;
 }
 
-/**
+/** OLD_REST
  * Prepare some ReST for editing in CK.
  */
 function swim_rest2ckhtml( $content ) {
@@ -592,7 +603,7 @@ function swim_rest2ckhtml( $content ) {
   return $content;
 }
 
-/**
+/** OLD_REST
  * Replace ReST math tags with betwixt tags.
  * @param type $content
  * @return string Content with temporary math tag replacements.
@@ -612,7 +623,7 @@ function _swim_rest2betwixt_mathjx( $content ) {
   return array( $content, $replacements );
 }
 
-/**
+/** OLD_REST
  * Replace .. math:: directives with temp tag, used later to 
  * add HTML tags CK uses.
  * @param string $content Da goods, ReSTy.
@@ -682,7 +693,7 @@ function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
   return array($content, $replacements);
 }
 
-/**
+/** OLD_REST
  * Replace :math: roles with temp tag, used later to 
  * add HTML tags CK uses.
  * @param string $content Da goods, ReSTy.
@@ -740,7 +751,7 @@ function _swim_rest2ck_mathjax_add_role_temp_tags($content, $tag) {
   return array($content, $replacements);  
 }
 
-/**
+/** OLD_REST
  * Replace math temp markers with HTML tags used by MathJax.
  * See http://ckeditor.com/ckeditor_4.3_beta/samples/plugins/mathjax/mathjax.html
  * @param string $content Content with markers.
@@ -776,7 +787,7 @@ function _swim_betwixt2ckhtml_mathjx( $content, $replacements ) {
   return $content;
 }
 
-/**
+/** OLD_REST
  * Convert content from CKHTML (HTML from CK field) to pure ReST.
  * Anything the user typed must by HTML encoded, e.g., if the user typed
  * <, then &lt; should be in the content.
@@ -824,7 +835,7 @@ function _swim_remove_brs( $content ) {
   return $result;
 }
 
-/**
+/** OLD_REST
  * Convert HTML inserted by mathjax CK plugin into ReSt math directive.
  * @param type $content Content from CK.
  */
@@ -891,7 +902,7 @@ function _swim_img_2_path( $content ) {
   return $content;
 }
 
-/**
+/** OLD_REST
  * Grab paths in image/figure directives, and replace them
  * with temp tokens.
  * @param string $content Content
@@ -917,7 +928,7 @@ function _swim_rest2betwixt_images( $content ) {
   return array( $content, $image_paths );
 }
 
-/**
+/** OLD_REST
  * Replace image tokens created in _swim_rest2ck_images_part_1
  * with <img> tags.
  * @param string $content Content.
@@ -954,9 +965,11 @@ function _swim_client_peek( $data ) {
   }
   $markup = $data['markup'];
   //Convert content to pure ReST.
-  $content = _swim_ckhtml2rest($markup);
+  $content = swim_ckhtml2markdown($markup);
+//  $content = _swim_ckhtml2rest($markup);
   //Convert the ReST content to HTML.
-  $html = swim_rest2html($content);
+  $html = swim_markdown2html($content);
+//  $html = swim_rest2html($content);
   $module_path = $base_url . base_path() 
           . drupal_get_path('module', 'swim') . '/';
   $themed = theme(
@@ -978,7 +991,7 @@ function _swim_client_peek( $data ) {
   return $themed;
 }
 
-/**
+/** OLD_REST
  * Change error messages from Python's docutils into something that
  * will look OK for a drupal_set_message(). Sample input:
  * <string>:5: (ERROR/3) Error in "image" directive:
@@ -1199,4 +1212,215 @@ function _swim_follow_break_w_spaces( $string ) {
     list( $pos, $eol_length ) = _swim_find_next_line_break($string, $start);
   }
   return $string;
+}
+
+
+/**
+ * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function swim_ckhtml2markdown( $content ) {
+  //Convert to pure Markdown.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to markdown.
+//  $content = _swim_ck_mathjx2markdown( $content );
+  //Remove the <br>s, leaving just the \ns.
+  $content = _swim_remove_brs( $content );
+  
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml2markdown', $content); 
+  //Replace image HTML tags with MD tags.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  $content = _swim_img_2_path( $content );
+  //Add tags that MathJax needs.
+  $content = _swim_ckhtml2markdown_math($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Translate pure Markdown into HTML.
+ * @param string $markdown Markdown
+ * @return string HTML
+ */
+function swim_markdown2html( $markdown ) {
+  $parser = new SwimMarkdown();
+  $html = $parser->parse($markdown);
+  //Wrap math formula in span MathJax uses. Same as CK plugin uses.
+  $html = _swim_markdown2ckhtml_math( $html );
+  //Wrap everything in a SWIM wrapper.
+  $html = '<div class="swim">' . $html . '</div>';
+  return $html;
+}
+
+/**
+ * Prepare some Markdown for editing in CK.
+ */
+function swim_markdown2ckhtml( $content ) {
+  //Remove \rs. They are evil.
+  $content = str_replace("\r", '', $content);
+  //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
+  //Doesn't insert HTML tags directly, since they would be messed up
+  //by the other translation code below. Instead, inserts temp markers that
+  //are replaced by HTML after other translation is done.
+  //Make sure there is a \n at the end.
+  $last_char = substr($content, strlen( $content ) - 1, 1);
+  if ( $last_char != "\n" ) {
+    $content .= "\n";
+  }
+//  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
+//  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
+  //Trigger other module's translators.
+//  drupal_alter( 'swim_markdown2betwixt', $content);
+  //Encode everything the user typed.
+  $content = htmlspecialchars( $content );
+  //Grab image paths and wrap them in <img> tags.
+  $content = _swim_markdown2ckhtml_images($content);
+  //Wrap MathJax class around math stuff.
+  $content = _swim_markdown2ckhtml_math($content);
+  //Trigger other module's translators.
+  drupal_alter( 'swim_markdown2ckhtml', $content);
+  $content = str_replace("\n", "<br>", $content);
+  //Replace two spaces with &nbsp; and a space.
+  //Otherwise, CK collapses multiple spaces.
+  $content = str_replace('  ', '&nbsp; ', $content);
+  //Replace math temp markers with HTML tags used by MathJax.
+//  $content = _swim_betwixt2ckhtml_mathjx( $content, $math_replacements );
+  //Replace image temp markers with HTML tags.
+//  $content = _swim_betwixt2ckhtml_images( $content, $image_replacements );
+  return $content;
+}
+
+/**
+ * Grab paths in MD image tags, and wrap them in <img>.
+ * @param string $content Content with raw MD image tags.
+ * @return string Content with wrapped tags.
+ */
+function _swim_markdown2ckhtml_images( $content ) {
+  //Match ![stuff](path  - not including the end of the tag.
+  //This allows for titles to be there or not.
+  $pattern = '/\!\[.*?\]\s*\(\s*([A-Za-z0-9\/\_\-\.]*)?.*\)?/i';
+  $matches = array();
+  preg_match_all($pattern, $content, $matches);
+  //$matches[0] are the complete matches, including the paths.
+  //$matches[1] just has the paths.
+  foreach( $matches[0] as $key => $full_match ) {
+    $file_path = $matches[1][$key];
+    $replacement = str_replace(
+        $file_path, //Search for this - the file path
+        '<img src="' . $file_path . '">', //Replacement
+        $full_match //Subject of the search.
+    );
+    $content = str_replace(
+        $full_match, //Find this
+        $replacement, //Replace it with this.
+        $content //In this
+    );
+  }
+  return $content;
+}
+
+/**
+ * Wrap TeX in classes that MathJax looks at.
+ * @param string $content Content with uwrapped tags.
+ * @return string Content with wrapped tags.
+ */
+function _swim_markdown2ckhtml_math( $content ) {
+  //Match ![stuff](path  - not including the end of the tag.
+  //This allows for titles to be there or not.
+  //Backticks end up being removed.
+  $patterns = array(
+    '/\\\\\(.*\\\\\)/',  //Inline
+    '/\\\\\[.*\\\\\]/',  //Display
+  );
+  $matches = array();
+  foreach( $patterns as $pattern ) {
+    preg_match_all($pattern, $content, $matches);
+    //$matches[0] are the complete matches, including the paths.
+    //$matches[1] just has the paths.
+    foreach( $matches[0] as $matched ) {
+      //Needs the style and data-, else CK plugin won't recognize it as 
+      //something that belongs to it. Why? Don't know. Suspect Satan's 
+      //involvement.
+      $replacement = 
+          '<span class="' . SWIM_MATH_JAX_CLASS 
+          . '" style="display:inline-block" data-cke-survive=1>' . $matched . '</span>';
+      $content = str_replace(
+          '`' . $matched . '`', //Find this
+          $replacement, //Replace it with this.
+          $content //In this
+      );
+    } //End match loop.
+  } //End pattern loop.
+  return $content;
+}
+
+/**
+ * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function _swim_ckhtml2markdown( $content ) {
+  //Convert to pure Markdown.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to Markdown.
+//  $content = _swim_ck_mathjx_2_rest( $content );
+  //Remove the <br>s, leaving just the \ns.
+  $content = _swim_remove_brs( $content );
+  
+  //Handle numeric codes correctly.
+  // See http://www.php.net/manual/en/function.html-entity-decode.php#47371
+//  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
+//  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml2markdown', $content); //, $type );
+  //Replace image HTML tags with directives.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  $content = _swim_img_2_path( $content );
+  //Strip all remaining HTML tags.
+  //This gets rid of paste errors. I hope!
+//  $content = strip_tags($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Remove span wrapper from MathJax things.
+ * @param string $content Content with wrapped tags.
+ * @return string Content with unwrapped tags.
+ */
+function _swim_ckhtml2markdown_math( $content ) {
+  $pattern = '/\<.*span.*class.*' . SWIM_MATH_JAX_CLASS . '.*\>(.*)?\<\/span\>/';
+  $matches = array();
+  preg_match_all($pattern, $content, $matches);
+  //$matches[0] are the complete matches, including the equations.
+  //$matches[1] just has the equations.
+  foreach( $matches[0] as $key => $full_match ) {
+    $eqn = '`' . $matches[1][ $key ] . '`';
+    $content = str_replace(
+        $full_match, //Find this
+        $eqn, //Replace it with this.
+        $content //In this
+    );
+  } //End match loop.
+  return $content;
 }

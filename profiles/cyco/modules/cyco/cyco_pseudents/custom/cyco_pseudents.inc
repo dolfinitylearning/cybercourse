@@ -52,19 +52,6 @@ function cyco_pseudents_flush_cache() {
 /**
  * Register the CKEditor plugin.
  */
-//function cyco_pseudents_ckeditor_plugin() {
-//  return array(
-//    'pseudent' => array(
-//      // Plugin name.
-//      'name' => 'pseudent',
-//      // Plugin description - it will be displayed in the plugins management section of the profile settings.
-//      'desc' => t('Cyco: Insert a pseudent into content.'),
-//      // The full path to the CKEditor plugin directory, trailing slash included.
-//      'path' => drupal_get_path('module', 'cyco_pseudents') . '/custom/ck_plugins/',
-//    )
-//  );
-//}
-
 function cyco_pseudents_swim_load_ck_plugins() {
   //Only add plugin if the user is allowed to create course page
   //content.
@@ -404,7 +391,7 @@ function cyco_pseudents_swim_betwixt2html_alter(&$content) {
     = preg_replace_callback($regex, '_cyco_pseudents_make_view_replacements', $content);
 }
 
-function _cyco_pseudents_make_view_replacements($matches) {
+function _cyco_pseudents_make_view_replacements_old($matches) {
   $pseudent_nid = $matches[1];
   $content = $matches[2];
   //Load pseudent data.
@@ -755,4 +742,163 @@ function cyco_pseudents_menu_local_tasks_alter(&$data, $router_item, $root_path)
       }
       break;
   }
+}
+
+/**
+ * Implements hook_swim_tag_info().
+ * 
+ * Defines a custom tag for adding pseudents.
+ * 
+ * @return string Name of the tag.
+ */
+function cyco_pseudents_swim_tag_info() {
+  return 'pseudent';
+}
+
+/**
+ * Implements hook_swim_tag_process_alter().
+ * 
+ */
+function cyco_pseudents_swim_tag_process_alter(  ) {
+}
+
+/**
+ * Implements hook_swim_markdown2html_TAG_alter().
+ * @param stdClass $args Untranslated markdown.
+ */
+function cyco_pseudents_swim_markdown2html_pseudent_alter( &$args ) {
+  $template = <<<EOT
+<div class="pseudent" data-pseudent-id="**NID**">
+  <div class="pseudent-image-container">
+    <img class="pseudent-image" src="**IMAGE_PATH**">
+    <div class="pseudent-image-caption">**CAPTION**</div>
+  </div>
+  <div class="pseudent-content">**CONTENT**</div>
+</div>
+EOT;
+  //Find the end of the tag.
+  $end_line = SwimMarkdown::findEndCustomTag(
+      $args->content, 
+      $args->current_line + 1
+  );
+  if ( is_null($end_line) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' id not find end tag.';
+    cyco_core_handle_error( $message );
+    return;
+  }
+  //Parse the content in the pseudent tag.
+  $pseudent_markdown = array_slice(
+      $args->content,
+      $args->current_line + 1,
+      $end_line - $args->current_line - 1
+  );
+  $parser = new SwimMarkdown();
+  $content = $parser->parse( implode("\n", $pseudent_markdown) );
+  //Load pseudent attributes.
+  $pseudent_nid = intval($args->args);
+  $pseudent_node = node_load($pseudent_nid);
+  if ( isset( $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'] ) ) {
+    $caption = $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'];
+  }
+  else {
+    $caption = $pseudent_node->title;
+  }
+  //Get the path to the pseudent's image file.
+  $usable_url = cyco_core_uri2path(
+      $pseudent_node->field_image[LANGUAGE_NONE][0]['uri']
+  );
+  //Use template.
+  $replacement = str_replace('**NID**', $pseudent_nid, $template);
+  $replacement = str_replace('**CAPTION**', $caption, $replacement);
+  $replacement = str_replace('**CONTENT**', $content, $replacement);
+  $replacement = str_replace('**IMAGE_PATH**', $usable_url, $replacement);
+  //Return to sen-der.
+  $args->replacement_content = $replacement;
+  $args->current_line = $end_line + 1;
+}
+
+/**
+ * Implements hook_swim_ckhtml2rest_alter().
+ * @param string $content Content to change.
+ */
+function cyco_pseudents_swim_ckhtml2markdown_alter( &$content ) {
+  $regex = 
+      '/\<div class\=\"pseudent\".*?data\-pseudent\-id\=\"(.*?)\"*.\>\s*'
+      .  '\<div class\=\"pseudent\-image\-container\"\>\s*'
+      .    '\<img.*?\>\s*'
+      .    '\<div class\=\"pseudent-image-caption\"\>.*?\<\/div\>\s*'
+      .  '\<\/div\>\s*'
+      .  '\<div class=\"pseudent\-content\"\>(.*?)\<\/div\>\s*'
+      . '\<\/div\>/is';
+    //? for lazy eval.
+    //s option to include new lines in whitespace matches.
+  //NB: does not include last \n.
+  $content
+    = preg_replace_callback($regex, '_cyco_pseudents_make_markdown_replacements', $content);
+}
+
+function _cyco_pseudents_make_markdown_replacements($matches) {
+  $nid = $matches[1];
+  $content = $matches[2];
+  $replacement = 
+      SwimMarkdown::START_CUSTOM_TAG . ' pseudent ' . $nid . "\n"
+      . $content . "\n"
+      . SwimMarkdown::END_CUSTOM_TAG;
+  return $replacement;
+}
+
+/**
+ * Implements hook_swim_markdown2ckhtml.
+ * 
+ * Translate intermediate (betwixt) markup in $content (as inserted by
+ * custom ReST directive) to its HTML equivalent. Sample betwixt markup:
+ * 
+ * [[[animal 666|||note]]]
+ * 
+ */
+function cyco_pseudents_swim_markdown2ckhtml_alter(&$content) {
+  $regex = 
+      '/' . SwimMarkdown::START_CUSTOM_TAG_REGEX_ESCAPED 
+      . '\s+pseudent\s+(\d+)?\s*\n(.*)' 
+      . SwimMarkdown::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*\n/is';
+  //? is for lazy match.
+  //s option so it can contain new line chars.
+  $content
+    = preg_replace_callback($regex, '_cyco_pseudents_make_view_replacements', $content);
+}
+
+function _cyco_pseudents_make_view_replacements($matches) {
+  $pseudent_nid = $matches[1];
+  $content = $matches[2];
+  //Load pseudent data.
+  $node = node_load($pseudent_nid);
+  if ( !$node ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' bad nid: ' . $pseudent_nid;
+    cyco_core_handle_error( $message );
+    return;
+  }
+  $caption = '';
+  if ( isset( $node->field_caption[LANGUAGE_NONE][0]['value'] ) ) {
+    $caption = $node->field_caption[LANGUAGE_NONE][0]['value'];
+  }
+  else {
+    $caption = $node->title;
+  }
+  $usable_url = cyco_core_uri2path(
+     $node->field_image[LANGUAGE_NONE][0]['uri']
+  );
+  $html =   '<div class="pseudent" data-pseudent-id="' . $pseudent_nid . '" >'
+          .   '<div class="pseudent-image-container">'
+          .     '<img class="pseudent-image" '
+          .         'src="' . $usable_url . '" '
+          .         'alt="' . $caption . '" >'
+          .     '<div class="pseudent-image-caption">' 
+          .       $caption
+          .     '</div>'
+          .   '</div>'
+          .   '<div class="pseudent-content">' . $content . '</div>'
+          . '</div>';
+  return $html;
 }
