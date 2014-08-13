@@ -24,7 +24,7 @@ array(
         'und' => array(
           array(
             'value' => 'The second topic in your course.',
-            'summary' => "<span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">This is topic 2.</span>",
+            'summary' => "This is topic 2.",
           ),
         ),
       ),
@@ -247,7 +247,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "This is the first page of the actual course content. Courses are often organized into topics (or chapters) and lessons (or pages). You can do anything you want. It's your course.",
+            'value' => "This is the first page of the actual course content. Courses are often organized into topics (or chapters) and lessons (or pages). However, you can do anything you want. It's your course.",
             'summary' => 'The first page of the course itself.',
           ),
         ),

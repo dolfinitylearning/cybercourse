@@ -100,14 +100,17 @@ function cyco_patterns_menu_default_menu_links() {
     'link_title' => 'Patterns',
     'options' => array(
       'identifier' => 'menu-cp-instructors_patterns:patterns',
+      'attributes' => array(
+        'title' => 'A pattern is a common way of doing something',
+      ),
     ),
     'module' => 'menu',
     'hidden' => 0,
     'external' => 0,
     'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 3,
-    'customized' => 0,
+    'expanded' => 1,
+    'weight' => -48,
+    'customized' => 1,
   );
   // Exported menu link: menu-cp-reviewers_patterns:patterns
   $menu_links['menu-cp-reviewers_patterns:patterns'] = array(

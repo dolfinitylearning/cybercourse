@@ -1,10 +1,5 @@
 <?php
 /**
- * @file
- * Collapse the summary field and the file attachment field.
- */
-
-/**
  * Implements hook_form_alter().
  */
 function cyco_node_edit_tweaks_form_alter( &$form, &$form_state, $form_id ) {

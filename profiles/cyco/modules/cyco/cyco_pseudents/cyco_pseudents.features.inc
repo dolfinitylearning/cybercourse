@@ -34,5 +34,6 @@ function cyco_pseudents_node_info() {
       'help' => '',
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }

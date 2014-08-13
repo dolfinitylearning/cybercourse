@@ -255,9 +255,9 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'delete own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
       'author' => 'author',
       'instructor' => 'instructor',
+      'student' => 'student',
     ),
     'module' => 'node',
   );
@@ -458,9 +458,9 @@ function cyco_exercises_user_default_permissions() {
     'name' => 'edit own exercise_submission content',
     'roles' => array(
       'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
       'author' => 'author',
       'instructor' => 'instructor',
+      'student' => 'student',
     ),
     'module' => 'node',
   );

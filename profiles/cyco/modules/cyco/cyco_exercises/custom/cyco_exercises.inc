@@ -467,7 +467,7 @@ function _cyco_exercises_get_submission_theme() {
  */
 function cyco_exercises_node_view($node, $view_mode, $langcode) {
   if ($node->type == 'exercise' && $view_mode == 'full') {
-    if (user_access('edit any course_page')) {
+    if ( user_access('edit any course_page content') ) {
       drupal_set_title($node->title . ' (' . $node->nid . ')');
     }
   }
@@ -576,6 +576,10 @@ function _cyco_exercises_form_submit($form, &$form_state) {
 
 
 function cyco_exercises_form_course_page_node_form_alter(&$form, $form_state) {
+  //Hide the exercise field. 
+  if ( ! cyco_core_current_user_has_role('administrator') ) {
+    $form['field_exercises']['#access'] = FALSE;
+  }
   $form['#submit'][] = '_cyco_exercises_store_exercise_refs';
 }
 
@@ -652,10 +656,13 @@ function cyco_exercises_libraries_info() {
  * If form is opened from "Work on it" link, add some stuff.
  */
 function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_state) {
+  $parsed_url = drupal_parse_url( $form['#action'] );
+    //Use $form['#action'] value, because $_GET not set correctly when 
+    //uploading a file for a new submission.
   //Get operation from the URL.
   $operation = NULL;
-  if ( isset( $_GET['op'] ) ) {
-    $operation = check_plain( $_GET['op'] );
+  if ( isset( $parsed_url['query']['op'] ) ) {
+    $operation = $parsed_url['query']['op'];
   }
   //If there is no op, this is a normal edit, not through a popup. 
   //Don't need to do any of the other processing here.
@@ -673,13 +680,13 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   //Compute exerice nid and version.
   if ( $operation == 'add' ) {
     //Compute the exercise id.
-    if ( ! isset( $_GET['field_exercise'] ) ) {
+    if ( ! isset( $parsed_url['query']['field_exercise'] ) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' exercise id not passed for add';
       cyco_core_handle_error( $message );
       return;
      }
-    $exercise_id = $_GET['field_exercise'];
+    $exercise_id = $parsed_url['query']['field_exercise'];
     if ( is_nan($exercise_id) || $exercise_id < 1 ) {
       //Bad version.
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
@@ -691,8 +698,8 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     $form['field_exercise'][$language]['#default_value'][0] = $exercise_id;
     //Version is 1, unless there is a value in the URL.
     $version = 1;
-    if ( isset( $_GET['version'] ) ) {
-      $version = $_GET['version'];
+    if ( isset( $parsed_url['query']['version'] ) ) {
+      $version = $parsed_url['query']['version'];
       if ( is_nan($version) || $version < 1 ) {
         //Bad version.
         $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
@@ -714,6 +721,8 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     cyco_core_handle_error( $message );
     return;
   }
+  $form['title']['#access'] = false;
+  
   //Hide the exercise field.
   $form['field_exercise']['#access'] = false;
   //Hide the version field.
@@ -876,6 +885,29 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = '';
     }
   }
+  //Set the submission title.
+  $language = $form_state['node']->language;
+  $exercise_nid = intval( 
+      $form_state['values']['field_exercise'][ $language ][0]['target_id']
+  );
+  $exercise = node_load( $exercise_nid );
+  $exercise_title = $exercise->title;
+  $version = $form_state['values']['field_version'][ $language ][0]['value']; 
+  global $user;
+  $user_data = user_load($user->uid);
+  $user_language = $user_data->language ? $user_data->language : LANGUAGE_NONE;
+  $first_name = $user_data->field_first_name[ $user_language ][0]['value'];
+  $last_name = $user_data->field_last_name[ $user_language ][0]['value'];
+  $full_name = $user->name;
+  if ( $first_name || $last_name ) {
+    $full_name .= ' (' 
+        . $first_name 
+        . ($first_name ? ' ' : '') 
+        . $last_name . ')';
+  }
+  $title = 'Sub by ' . $full_name . ' for ' . $exercise_title 
+      . ' (ver ' . $version . ')';
+  $form_state['values']['title'] = $title;
 }
 
 /**
@@ -910,6 +942,10 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
   $gids = array();
   foreach ( $records as $record ) {
     $gids[] = $record->gid;
+  }
+  //Is the user a grader in any group?
+  if ( sizeof($gids) == 0 ) {
+    return;
   }
   //Get the names of those groups.
   $groups = cyco_core_groups_get_group_names($gids);

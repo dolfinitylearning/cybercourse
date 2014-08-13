@@ -101,14 +101,17 @@ function cyco_pseudents_menu_default_menu_links() {
     'link_title' => 'Pseudent poses',
     'options' => array(
       'identifier' => 'menu-cp-instructors_pseudent-poses:pseudent-poses',
+      'attributes' => array(
+        'title' => 'Show pseudent images and captions',
+      ),
     ),
     'module' => 'menu',
     'hidden' => 0,
     'external' => 0,
     'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 2,
-    'customized' => 0,
+    'expanded' => 1,
+    'weight' => -47,
+    'customized' => 1,
   );
   // Exported menu link: menu-cp-reviewers_pseudent-poses:pseudent-poses
   $menu_links['menu-cp-reviewers_pseudent-poses:pseudent-poses'] = array(

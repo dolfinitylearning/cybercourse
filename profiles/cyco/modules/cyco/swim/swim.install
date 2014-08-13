@@ -35,30 +35,30 @@ function swim_field_schema($field) {
  * Implements hook_install.
  */
 function swim_install() {
-  _swim_install_input_filter();
+//  _swim_install_input_filter();
   _swim_install_help();
 }
 
 /**
  * Install the ReST input filter.
  */
-function _swim_install_input_filter() {
-  //Create a ReST input format that contains the ReST filter.
-  $rest_format = array(
-    'format' => 'rest',
-    'name' => 'reStructuredText',
-    'weight' => 1,
-    'filters' => array(
-      // ReST filter.
-      'rest' => array(
-        'weight' => 0,
-        'status' => 1,
-      ),
-    ),
-  );
-  $rest_format = (object) $rest_format;
-  filter_format_save($rest_format);
-}
+//function _swim_install_input_filter() {
+//  //Create a ReST input format that contains the ReST filter.
+//  $rest_format = array(
+//    'format' => 'rest',
+//    'name' => 'reStructuredText',
+//    'weight' => 1,
+//    'filters' => array(
+//      // ReST filter.
+//      'rest' => array(
+//        'weight' => 0,
+//        'status' => 1,
+//      ),
+//    ),
+//  );
+//  $rest_format = (object) $rest_format;
+//  filter_format_save($rest_format);
+//}
 
 /**
  * Create initial help content. 
@@ -67,12 +67,10 @@ function _swim_install_help() {
   //Default SWIM help popup content.
   $help = 
 <<<EOT
-SWIM help
-=========
-
 Paragraphs are separated by blank lines.
-      
-    Quotes are indented.
+
+``> Quote.``      
+> Quote.
 
 ``*emphasis*``
   *emphasis*
@@ -80,69 +78,32 @@ Paragraphs are separated by blank lines.
 ``**strong emphasis**``
   **strong emphasis**
 
-::
+``# Title level 1``
+# Title level 1
 
-  Title
-  =====
+``## Title level 2``
+## Title level 2
 
-Title
-=====
+``### Title level 3``
+### Title level 3
 
-::
-
-  Subtitle
-  --------
-
-Subtitle
---------
-
-::
-
-  * List item
-  * List item
+``* List item``
 
 * List item
-* List item
 
-::
-
-  1. List item
-  2. List item
+``1. List item``
 
 1. List item
-2. List item
 
-::
+``Links: You can add forums, quizzes, maps, polls, and many other [Drupal](http://drupal.org/) modules.``
 
-  ======  ===== ======
-  Name   Type  Rating
-  ======  ===== ======
-  Oscar   Dog   Great!
-  Renata  Dog   Great!
-  Elsie   Cat   So so
-  Joab    Horse Evil
-  ======  ===== ======
+Links: You can add forums, quizzes, maps, polls, and many other [Drupal](http://drupal.org/) modules.
 
-======  ===== ======
-Name    Type  Rating
-======  ===== ======
-Oscar   Dog   Great!
-Renata  Dog   Great!
-Elsie   Cat   So so
-Joab    Horse Evil
-======  ===== ======
+``This is an image: ![Drupal](INSERT IMAGE HERE)``
 
-::
-
-  Links: You can add forums, quizzes, maps, polls, and many other `Drupal <http://drupal.org/>`_ modules.
-
-Links: You can add forums, quizzes, maps, polls, and many other `Drupal <http://drupal.org/>`_ modules.
-
-::
-      
-.. figure:: 
-      
-See the `CyberCourse wiki <http://wiki.cybercour.se/>`_ for more.
+This is an image: ![Drupal](http://drupal.org/files/powered-blue-80x15.png)
+    
+Tables, footnotes, math formulas, pseudents... See the [CyberCourse wiki](http://wiki.cybercour.se/) for more.
 EOT;
   variable_set('swim_help_message', $help);
   $rendered_help = swim_rest2html( $help );

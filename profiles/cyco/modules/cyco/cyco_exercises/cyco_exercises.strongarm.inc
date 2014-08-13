@@ -28,14 +28,14 @@ function cyco_exercises_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_pattern_node_exercise_submission';
-  $strongarm->value = 'Solution for exercise [node:field_exercise:nid] created by uid [node:author:uid]';
+  $strongarm->value = 'Solution for exercise [node:field_exercise] created by uid [node:author:uid]';
   $export['auto_entitylabel_pattern_node_exercise_submission'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_pattern_node_exercise_submission_rubric_item_';
-  $strongarm->value = 'Submission [node:field-submission:title] on item [node:field-rubric-item:title]';
+  $strongarm->value = 'Submission [node:field-submission] on item [node:field-rubric-item]';
   $export['auto_entitylabel_pattern_node_exercise_submission_rubric_item_'] = $strongarm;
 
   $strongarm = new stdClass();

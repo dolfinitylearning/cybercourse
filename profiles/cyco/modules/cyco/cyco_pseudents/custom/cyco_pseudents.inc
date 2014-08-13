@@ -55,7 +55,7 @@ function cyco_pseudents_flush_cache() {
 function cyco_pseudents_swim_load_ck_plugins() {
   //Only add plugin if the user is allowed to create course page
   //content.
-  if ( user_access( 'create course page content' ) ) {
+  if ( user_access( 'create course_page content' ) ) {
     global $base_url;
     $result = array(
       'name' => 'insert_pseudent',

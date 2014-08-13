@@ -82,6 +82,9 @@ function cyco_exercises_default_services_endpoint() {
         'chkTtl' => array(
           'enabled' => '1',
         ),
+        'saveNewItemComments' => array(
+          'enabled' => '1',
+        ),
       ),
     ),
     'rubric_item_categories' => array(

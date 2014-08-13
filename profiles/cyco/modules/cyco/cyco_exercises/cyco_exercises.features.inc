@@ -88,5 +88,6 @@ function cyco_exercises_node_info() {
       'help' => '',
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }

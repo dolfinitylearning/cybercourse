@@ -7,6 +7,11 @@ function cyco_test_menu() {
     'page callback' => '_test_t1',
     'access arguments' => array('administer content types'),
   );
+  $items['t2'] = array(
+    'title' => 'Test ',
+    'page callback' => '_test_t2',
+    'access callback' => TRUE,
+  );
   return $items;
 }
 
@@ -39,4 +44,13 @@ function _test_t1() {
 function cyco_test_form_exercise_submission_node_form_alter( &$form, $form_state) {
   $r=4;
   
+}
+
+function _test_t2() {
+  $uid = 1;
+  $role = 'grader';
+  $is_admin = cyco_core_user_has_role( $uid, $role );
+  $result = '<p>User ' . $uid . ' does ' . ( $is_admin ? '' : 'not ' ) 
+      . 'have the ' . $role . ' role';
+  return $result;
 }

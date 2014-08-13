@@ -41,6 +41,10 @@ function _cyco_render_control_panel() {
     'showMenuTitles' => TRUE,
   );
   drupal_add_js(
+      drupal_get_path('module', 'cyco_core')
+        . '/custom/js/cyco_core_xkcd.js'
+  );
+  drupal_add_js(
       array('cycoControlPanel' => $settings),
       'setting'
   );
@@ -56,7 +60,10 @@ function _cyco_render_control_panel() {
   );
   //Add intro elements.
   $wiki_link = l( t('The CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
-  $message = $wiki_link . t( ' explains how to use the control panel.' );
+  $message = $wiki_link . t( ' explains how to use the control panel. ' );
+  if ( cyco_core_current_user_has_role('author') ) {
+    $message .= 'For complete control, log in as an administrator.';
+  }
   $result['all_content']['introduction'] = array(
     '#type' => 'markup',
     '#markup' => $message,
@@ -64,12 +71,25 @@ function _cyco_render_control_panel() {
   //Show user's groups.
   if ( module_exists( 'og' ) ) {
     $groups = cyco_core_groups_render_basic_list();
+    if ( strstr($groups, 'views-row') === FALSE ) {
+      $groups .= '<p>You are not a member of any groups.</p>';
+    }
     $result['all_content']['groups_title'] =
           _cyco_control_panel_show_title( 'Your groups' );
     $result['all_content']['groups'] = array(
       '#type' => 'markup',
       '#markup' => $groups,
     );
+    $result['all_content']['groups-list'] = array(
+      '#type' => 'markup',
+      '#markup' => l(t('List of classes'), 'classes-public',
+        array( 'attributes' => 
+          array(
+            'class' => array('cyco_control_panel_group_list'), 
+          ) 
+        )
+      ),
+    );    
   }
   if ( cyco_core_current_user_has_role( array('author') ) ) {
     $result['all_content']['author_title'] = 

@@ -246,7 +246,7 @@ function cyco_exercises_menu_default_menu_links() {
     'link_title' => 'Exercises',
     'options' => array(
       'attributes' => array(
-        'title' => 'List exercises',
+        'title' => 'List exercises that students complete',
       ),
       'identifier' => 'menu-cp-instructors_exercises:exercises',
     ),
@@ -255,7 +255,7 @@ function cyco_exercises_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 1,
-    'weight' => -47,
+    'weight' => -46,
     'customized' => 1,
   );
   // Exported menu link: menu-cp-instructors_rubric-items:rubric-items
@@ -266,7 +266,7 @@ function cyco_exercises_menu_default_menu_links() {
     'link_title' => 'Rubric items',
     'options' => array(
       'attributes' => array(
-        'title' => 'List rubric items',
+        'title' => 'List rubric items used to grade exercises',
       ),
       'identifier' => 'menu-cp-instructors_rubric-items:rubric-items',
     ),
@@ -275,7 +275,7 @@ function cyco_exercises_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 1,
-    'weight' => -46,
+    'weight' => -45,
     'customized' => 1,
   );
   // Translatables

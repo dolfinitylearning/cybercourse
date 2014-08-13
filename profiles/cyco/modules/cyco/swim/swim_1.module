@@ -1,0 +1,1426 @@
+<?php
+/**
+ * @file
+ * Server-side SWIM implementation.
+ */
+
+//Default heights for the editor and summary.
+define('SWIM_DEFAULT_HEIGHT', '15');
+define('SWIM_DEFAULT_SUMMARY_HEIGHT', '5');
+//Class MathJax uses to detect what content it should mess with.
+define('SWIM_MATH_JAX_CLASS', 'math');
+
+require_once drupal_get_path('module', 'swim') . '/SwimMarkdown.php';
+
+/**
+ * Implements hook_help().
+ * @todo Write SWIMmy help in hook_help.
+ */
+function swim_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim':
+      return '<p>' . t('Helpy helpy help help, <a href="@jquery">jQuery</a>.', 
+          array(
+            '@jquery' => 'http://jquery.com',
+          )) . '</p>';
+  }
+}
+
+/**
+ * Implements hook_menu.
+ */
+function swim_menu() {
+  $items = array();
+  $items['admin/config/content/swim'] = array(
+    'title' => 'SWIM',
+    'description' => 'Configure the Show-What-I-Mean editor.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_swim_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'swim.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function swim_permission() {
+  return array(
+    'peek content' => array(
+      'title' => t('Peek at rendered content'),
+      'description' => t('When editing, see what the content looks like on various devices.')
+    ),
+  );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function swim_ctools_plugin_api($owner, $api) {
+  if ($owner == 'services' && $api == 'services') {
+    return array(
+      'version' => 3,
+      'file' => 'swim.services.inc', // File to load.
+      'path' => drupal_get_path('module', 'swim') . '/includes', // If specifying the file key, path is required.
+    );
+  }
+}
+
+/**
+ * Implement hook_field_widget_info().
+ * 
+ * Define two new widgets. Both have 'editor' in its name.
+ */
+function swim_field_widget_info() {
+  $info = array(
+    'swim_widget' => array(
+      'label' => t('SWIM editor'),
+      'description' => t(
+          'SWIM anti-WYSIWYG editor.'),
+      'field types' => array('swim_field'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+    'swim_with_summary_widget' => array(
+      'label' => t('SWIM editor with summary'),
+      'description' => t(
+          'SWIM anti-WYSIWYG editor with summary.'),
+      'field types' => array('swim_with_summary_field'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+  );
+  return $info;
+}
+    
+function swim_field_widget_form(
+    &$form, &$form_state, $field, $instance, 
+    $langcode, $items, $delta, $element) {
+  $base = $element;
+  if (
+         $instance['widget']['type'] == 'swim_widget' 
+      || $instance['widget']['type'] == 'swim_with_summary_widget') {
+    $with_summary = ( $instance['widget']['type'] == 'swim_with_summary_widget' );
+    _swim_add_client_pieces();
+    //Prep content for widget.
+    $value = '';
+    if ( isset( $items[$delta]['value'] ) ) {
+      $value = _swim_prep_widget_content($items[$delta]['value']);
+    }
+    $element['value'] = array(
+      '#type' => 'textarea',
+      '#title' => t( $element['#title'] ),
+      //Remove grippie.
+      '#resizable' => FALSE,
+      '#default_value' => $value ? swim_markdown2ckhtml( $value ) : '',
+//      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
+      '#attributes' => array(
+        'class' => array('swim-editor swim-editor-main text-full'),
+      ),
+      '#value_callback' => '_swim_field_widget_value',
+    ) + $base;
+    if ( $with_summary ) {
+      //Prep content for widget.
+      $summary = '';
+      if ( isset( $items[$delta]['summary'] ) ) {
+        $summary = _swim_prep_widget_content($items[$delta]['summary']);
+      }
+      $element['summary'] = array(
+        '#type' => 'textarea',
+        '#title' => t('Summary'),
+        '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
+        //Remove grippie.
+        '#resizable' => FALSE,
+        '#default_value' => $summary ? swim_markdown2ckhtml( $summary ) : '',
+//        '#default_value' => $summary ? swim_rest2ckhtml( $summary ) : '',
+        '#attributes' => array(
+          'class' => array('swim-editor swim-editor-summary'),
+        ),
+        '#prefix' => '<div class="swim-summary-wrapper">',
+        '#suffix' => '</div>',
+        '#weight' => -10,
+        '#attached' => array(
+          'js' => array(drupal_get_path('module', 'swim') 
+                  . '/js/swim_summary_links.js'),
+        ),
+        '#value_callback' => '_swim_field_widget_value',
+      ) + $base;
+    } //End with_summary
+  }
+  return $element;
+}
+
+
+function _swim_prep_widget_content( $content ) {
+  //Strip \r from content.
+  $content = str_replace("\r", '', $content);
+  return $content;
+}
+
+function swim_field_is_empty($item, $field) {
+  if ($field['type'] == 'swim_field') {
+    $mt = ! $item['value'];
+    return $mt;
+  }
+  if ($field['type'] == 'swim_with_summary_field') {
+    $mt = (!$item['value'] ) && (!$item['summary'] );
+    return $mt;
+  }
+  return FALSE;
+}
+
+/**
+ * Called after returning from edit form. Strip out the CK stuff, and
+ * just get some ReST.
+ * @param type $element
+ * @param type $input Da goods from CK.
+ * @param type $form_state
+ * @return string Da ReST goods.
+ */
+function _swim_field_widget_value($element, $input = FALSE, $form_state = array()) {
+  if ( $input !== FALSE ) {
+    $result = swim_ckhtml2markdown($input);
+//    $result = _swim_ckhtml2rest($input);
+    return $result;
+  }
+}
+
+
+/**
+ * Implements hook_libraries_info().
+ * 
+ * Define CKEditor in the libraries.
+ */
+function swim_libraries_info() {
+  $libraries = array();
+  $libraries['ckeditor'] = array(
+    'name' => 'CKEditor',
+    'vendor url' => 'http://ckeditor.com/',
+    'download url' => 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.2/ckeditor_4.3.2_standard.zip',
+    'version arguments' => array(
+      'file' => 'ckeditor.js',
+      // version:"4.4"
+      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
+//      // version:"4.4"
+      'lines' => 10,
+    ),
+    'files' => array(
+      'js' => array(
+        'ckeditor.js',
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Add stuff the browser will need.
+ * @param boolean $add_plugins If false, don' add no steekin' plugins, gringo.
+ */
+function _swim_add_client_pieces( $add_plugins = TRUE ) {
+  //Only run this once per page.
+  static $already_added = FALSE;
+  if ( $already_added ) {
+    return;
+  }
+  $already_added = TRUE;
+  global $base_url;
+  //Set up UI stuff.
+  drupal_add_library('system', 'ui.dialog');
+  //Load CKEditor.
+  $ckLibraryInfo = libraries_load('ckeditor');
+  $numFilesLoaded = libraries_load_files($ckLibraryInfo);
+  if ( $numFilesLoaded <= 0 ) {
+    $mess = t('SWIM error: no CKEditor files loaded. Is CK installed?');
+    drupal_set_message( $mess );
+    watchdog('SWIM', $message);
+    return;
+  }
+  //Add CSS.
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
+  //Add services library.
+  _swim_add_client_services_lib();
+  //Obscurer code.
+  $obscurer = theme('obscurer');
+  //Send settings to JS.
+  $settings = array(
+    'base_url' => $base_url,
+    'editing_stylesheet' => 
+      $base_url . '/' . drupal_get_path('module', 'swim') . '/css/swim_editing.css',
+    //The height are in lines.
+    'editor_height' => variable_get('swim_default_height', SWIM_DEFAULT_HEIGHT),
+    'editor_summary_height' => variable_get('swim_default_summary_height', 
+        SWIM_DEFAULT_SUMMARY_HEIGHT),
+    'obscurer' => $obscurer,
+  );
+  if ( $add_plugins ) {
+    //Build a list of extra plugins to load.
+    //Array of arrays of form name=>?, path=>?.
+    $plugins = module_invoke_all('swim_load_ck_plugins');
+    //The array is flat if there is only one plugin. Unflatten it, if needed.
+    $plugins = _swim_unflatten( $plugins );
+    //Add peek CK plugin.
+    $plugins['name'][] = 'peek';
+    $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+          . '/ck_plugins/peek/';
+    //Add modified MathJax CK plugin.
+    $plugins['name'][] = 'mathjax';
+    $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+          . '/ck_plugins/mathjax/';
+    //Add help CK plugin, if there is a message to show.
+    $help_message = variable_get('swim_help_message_rendered', FALSE);
+    if ( $help_message ) {
+      $plugins['name'][] = 'swim_help';
+      $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
+            . '/ck_plugins/swim_help/';
+    }
+    //Make sure the last char in each path is /.
+    foreach ($plugins['path'] as $key => $value) {
+      if ( substr($value, -1) != '/' ) {
+        $plugins['path'][$key] .= '/';
+      }
+    }
+    //Send settings to JS.
+    $settings['extraPlugins'] = $plugins;
+    $settings['can_peek'] = user_access('peek content') ? 'yes' : 'no';
+    $settings['peekIconsPath'] = $base_url . '/' . 
+        drupal_get_path('module', 'swim') . '/ck_plugins/peek/icons/';
+  } //End adding plugins.
+  drupal_add_js(
+      array('swim' => $settings),
+      'setting'
+  );
+  //Load SWIM JS.
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_base_config.js' );
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim.js' );
+  //Let other modules add their own stuff.
+  $js_lines = module_invoke_all('swim_add_client_stuff');
+  drupal_add_js( implode(' ', $js_lines), 'inline');
+}
+
+/**
+ * Add client-side library for services.
+ */
+function _swim_add_client_services_lib() {
+  global $base_url;
+  $settings = array(
+    'baseUrl' => $base_url,
+  );
+  drupal_add_js(
+      array('swimServices' => $settings),
+      'setting'
+  );
+  drupal_add_js( 
+      drupal_get_path('module', 'swim') . '/js/swim_services.js' 
+  );    
+}
+
+/**
+ * Unflatten plugins array, if needed.
+ * @param array $plugins Original array.
+ * @return array Unflattened array.
+ */
+function _swim_unflatten ( $plugins ) {
+  if ( ! isset( $plugins['name'] ) ) {
+    return $plugins;
+  }
+  if ( is_array($plugins['name']) ) {
+    return $plugins;
+  }
+  $new_array = array(
+    'name' => array( $plugins['name'] ),
+    'path' => array( $plugins['path'] ),
+  );
+  return $new_array;
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function swim_field_info() {
+  return array(
+    'swim_field' => array(
+      'label' => t('SWIM'),
+      'description' => t('Show What I Mean.'),
+      'default_widget' => 'swim_widget',
+      'default_formatter' => 'swim_default_formatter',
+    ),
+    'swim_with_summary_field' => array(
+      'label' => t('SWIM with summary'),
+      'description' => t('Show What I Mean.'),
+      'default_widget' => 'swim_with_summary_widget',
+      'default_formatter' => 'swim_default_formatter',
+    ),
+  );
+ } 
+
+/**
+ * Implements hook_field_formatter_info().
+ * 
+ * Defines formatters for SWIM and SWIM with summary. They have the same
+ * ones as text.module's long text and long text summary.
+ */
+function swim_field_formatter_info() {
+  $info = array(
+    //Default shows main, no summary.
+    'swim_default_formatter' => array(
+      'label' => t('Default'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
+    ),
+    //Trimmed version of main, no summary.
+    'swim_trimmed_formatter' => array(
+      'label' => t('Trimmed'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
+      'settings' => array('trim_length' => 600),
+    ),
+    //Prefer summary, if not, use trimmed version of main.
+    'swim_summary_or_trimmed_formatter' => array(
+      'label' => t('Summary or trimmed'),
+      'field types' => array('swim_field', 'swim_with_summary_field'),
+      'settings' => array('trim_length' => 600),
+    ),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ * 
+ * Trimmed formats have a trim length.
+ */
+function swim_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  if (   $display['type'] == 'swim_trimmed_formatter'
+      || $display['type'] == 'swim_summary_or_trimmed_formatter'
+     ) {
+    $element['trim_length'] = array(
+      '#title' => t('Trim length'),
+      '#type' => 'textfield',
+      '#size' => 10,
+      '#default_value' => $settings['trim_length'],
+      '#element_validate' => array('element_validate_integer_positive'),
+      '#required' => TRUE,
+    );
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ * 
+ * Return a short summary of a formatter's settings.
+ */
+function swim_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = '';
+  if (   $display['type'] == 'swim_trimmed_formatter'
+      || $display['type'] == 'swim_summary_or_trimmed_formatter'
+     ) {
+    $summary = t('Trim length') . ': ' . $settings['trim_length'];
+  }
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ * 
+ * Compute formatter output.
+ */
+function swim_field_formatter_view(
+    $obj_type, $object, $field, $instance, 
+    $langcode, $items, $display
+  ) {
+  //MathJax
+  drupal_add_js('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_mathjax_config.js' );
+  //Styles
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
+  $element = array();
+  switch ($display['type']) {
+    case 'swim_default_formatter':
+    case 'swim_trimmed_formatter':
+      foreach ($items as $delta => $item) {
+        //Replace tokens.
+        $tokenized = swim_process_tokens( 
+            $obj_type, $object, $field, $item['value']
+        );
+        //Convert from Markdown to HTML
+        $output = swim_markdown2html( $tokenized );
+//        $output = swim_rest2html( $tokenized );
+        if ($display['type'] == 'swim_trimmed_formatter') {
+          $output = text_summary($output, NULL, $display['settings']['trim_length']);
+        }
+        $element[$delta] = array('#markup' => $output);
+      }
+      break;
+
+    case 'swim_summary_or_trimmed_formatter':
+      foreach ($items as $delta => $item) {
+        if (!empty($item['summary'])) {
+          $output = swim_markdown2html( $item['summary'] );
+//          $output = swim_rest2html( $item['summary'] );
+        }
+        else {
+          $output = text_summary($item['value']);
+          $output = swim_markdown2html( $output );
+//          $output = swim_rest2html( $output );
+        }
+        $element[$delta] = array('#markup' => $output);
+      }
+      break;
+
+  } //end switch
+  
+  return $element;
+}
+
+
+function swim_process_tokens( $obj_type, $object, $field, $content ) {
+  //Replace tokens.
+  $content = token_replace($content);
+  return $content;
+  if ( $obj_type == 'node' ) {
+    //Is this a content type supporting tokens?
+    $content_type = $object->type;
+    //The function might not exist during installation.
+//    if ( function_exists('cyco_core_content_types_supporting_tokens') ) {
+      $types_supporting_tokens = cyco_core_content_types_supporting_tokens();
+      if ( in_array( $content_type, $types_supporting_tokens ) ) {
+        //Is this a field that supports tokens?
+        $field_name = $field['field_name'];
+        $fields_supporting_tokens 
+            = cyco_core_fields_supporting_tokens($content_type);
+        if (in_array($field_name, $fields_supporting_tokens) ) {
+          //Is the page owned by a user allowed to substitute tokens?
+          $page_owner_uid = $object->uid;
+          $page_owner = user_load($page_owner_uid);
+          if (  cyco_core_user_has_role(
+                  $page_owner,
+                  array( 'author', 'administrator', 'grader', 'instructor')
+                ) 
+             ) {
+            //Replace tokens.
+            $content = token_replace($content);
+          }
+        }
+      }
+//    }
+  }
+  return $content;
+}
+
+/** OLD_REST
+ * Translate pure ReST into HTML.
+ * @param string $rest ReST
+ * @return string HTML
+ */
+function swim_rest2html( $rest ) {
+  //Run content through ReST translator. Returns mixed ReST and betwixt markup.
+  // descriptor array
+  $desc = array(
+      0 => array('pipe', 'r'), // 0 is STDIN for process
+      1 => array('pipe', 'w'), // 1 is STDOUT for process
+      2 => array('pipe', 'w') // 2 is STDERR for process
+  );
+  //Can't remember where this code was adapted from. Some human did it.
+  //Command to invoke markup engine. Reads custom config file.
+  $command =  'python convert_rest.py'; 
+  // spawn the process
+  $cwd = DRUPAL_ROOT . '/' . drupal_get_path('module', 'swim') .'/python/';
+  $env = array(
+    'PYTHONIOENCODING' => 'utf-8',
+    'path' => getenv('path'),
+  );
+  $p = proc_open($command, $desc, $pipes, $cwd, $env);
+  fwrite($pipes[0], $rest);
+  fclose($pipes[0]);
+  // read the output from the engine
+  $html = stream_get_contents($pipes[1]);
+  $error_message = stream_get_contents($pipes[2]);
+  // all done! Clean up
+  fclose($pipes[1]);
+  fclose($pipes[2]);
+  proc_close($p);
+  //Show error messages, if any. These are author errors.
+  if ( $error_message ) {
+    $error_message = _swim_format_docutils_errors( $error_message );
+    drupal_set_message($error_message, 'warning');
+  }
+  //Remove extra formula markers added by docutils math directive.
+  $html = str_ireplace('\begin{equation*}', '', $html);
+  $html = str_ireplace('\end{equation*}', '', $html);
+  //Trigger other module's translators.
+  drupal_alter( 'swim_betwixt2html', $html );
+  //Wrap everything in a SWIM wrapper.
+  $html = '<div class="swim">' . $html . '</div>';
+  return $html;
+}
+
+/** OLD_REST
+ * Prepare some ReST for editing in CK.
+ */
+function swim_rest2ckhtml( $content ) {
+  //Remove \rs. They are evil.
+  $content = str_replace("\r", '', $content);
+  //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
+  //Doesn't insert HTML tags directly, since they would be messed up
+  //by the other translation code below. Instead, inserts temp markers that
+  //are replaced by HTML after other translation is done.
+  //Make sure there is a \n at the end.
+  $last_char = substr($content, strlen( $content ) - 1, 1);
+  if ( $last_char != "\n" ) {
+    $content .= "\n";
+  }
+  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
+  //Grab image paths and wrap them in <img> tags that can be inserted later.
+  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
+  //Trigger other module's translators.
+  drupal_alter( 'swim_rest2betwixt', $content);
+  //Encode everything the user typed.
+  $content = htmlspecialchars( $content );  
+  $content = str_replace("\n", "<br>", $content);
+//  $content = str_replace("\n", "<br/>\n", $content);
+  //Replace two spaces with &nbsp; and a space.
+  //Otherwise, CK collapses multiple spaces.
+  $content = str_replace('  ', '&nbsp; ', $content);
+  //Replace math temp markers with HTML tags used by MathJax.
+  $content = _swim_betwixt2ckhtml_mathjx( $content, $math_replacements );
+  //Replace image temp markers with HTML tags.
+  $content = _swim_betwixt2ckhtml_images( $content, $image_replacements );
+  //Trigger other module's translators.
+  drupal_alter( 'swim_betwixt2ckhtml', $content);
+  return $content;
+}
+
+/** OLD_REST
+ * Replace ReST math tags with betwixt tags.
+ * @param type $content
+ * @return string Content with temporary math tag replacements.
+ */
+function _swim_rest2betwixt_mathjx( $content ) {
+  $replacements = array();
+  //Process directives.
+  list($content, $replacements['directives']) = 
+      _swim_rest2ck_mathjax_add_directive_temp_tags( 
+          $content, 'swimmathdirective'
+      );
+  //Process roles.
+  list($content, $replacements['roles']) = 
+ _swim_rest2ck_mathjax_add_role_temp_tags( 
+          $content, 'swimmathrole'
+      );
+  return array( $content, $replacements );
+}
+
+/** OLD_REST
+ * Replace .. math:: directives with temp tag, used later to 
+ * add HTML tags CK uses.
+ * @param string $content Da goods, ReSTy.
+ * @param string $tag Temp tag to use.
+ * @return array, content and array of replacement info.
+ */
+function _swim_rest2ck_mathjax_add_directive_temp_tags($content, $tag) {
+  $math_tags = array();
+  $pattern = '/\.\.\s+math\:\:.*\r?\n/i';
+  preg_replace_callback(
+      $pattern, 
+      function ($matches) use (&$math_tags) {
+        //Got one.
+        $math_tags[] = $matches[0];
+      },
+      $content
+  );
+  if ( sizeof($math_tags) == 0 ) {
+    //Didna' find nuthin', lass.
+    return array( $content, array() );
+  }
+  $replacements = array();
+  //Count of formula found so far.
+  $formula_count = 0;
+  foreach ( $math_tags as $math_tag ) {
+    //Find position of the math directive tag.
+    $formula_start = stripos($content, $math_tag);
+    //Remove the directive from the content.
+    $content = substr($content, 0, $formula_start) 
+        . substr( $content, $formula_start + strlen($math_tag) );
+    //Find the next line that isn't indented.
+    $search_start = $formula_start;
+    $done = false;
+    while( ! $done ) {
+      list( $break_pos, $break_length) 
+          = _swim_find_next_line_break($content, $search_start);
+      if ( $break_pos == -1 ) {
+        //Not found. Formula goes to the end of the content.
+        $formula_end = strlen( $content ) - 1;
+        $done = TRUE;
+      }
+      else if ( ($break_pos + $break_length) >= strlen($content) )  {
+        //Line break is at the end of string.
+        $formula_end = strlen( $content ) - 1;
+        $done = TRUE;
+      }
+      else {
+        $next_char = substr($content, $break_pos + $break_length, 1);
+        if ( ! ctype_space($next_char) ) {
+          //Line starts with non-whitespace, so not indented. It's the end.
+          $formula_end = $break_pos + $break_length - 1;
+          $done = TRUE;
+        }
+      }
+      $search_start = $break_pos + $break_length;
+    }
+    //Put formula into result array.
+    $formula 
+        = substr($content, $formula_start, $formula_end - $formula_start + 1);
+    $replacements[ $formula_count ] = $formula;
+    //Repalce formula in content with a marker.
+    $marker = '[' . $tag . $formula_count . ']';
+    $content = substr($content, 0, $formula_start) 
+        . $marker . "\n\n" . substr($content, $formula_end + 1);
+    $formula_count++;
+  } //End foreach.
+  return array($content, $replacements);
+}
+
+/** OLD_REST
+ * Replace :math: roles with temp tag, used later to 
+ * add HTML tags CK uses.
+ * @param string $content Da goods, ReSTy.
+ * @param string $tag Temp tag to use.
+ * @return array, content and array of replacement info.
+ */
+function _swim_rest2ck_mathjax_add_role_temp_tags($content, $tag) {
+  $replacements = array();
+  //Count of formula found so far.
+  $formula_count = 0;
+
+  $target = ':math:`';
+  $target_len = strlen($target);
+  $pos = stripos($content, $target);
+  while ( $pos !== FALSE) {
+    //Remove what was just found.
+    $content =  substr($content, 0, $pos) 
+              . substr($content, $pos + $target_len );
+    $formula_start = $pos;
+    //Find the end position of the formula.
+    $done = FALSE;
+    $formula_end = $formula_start + 1;
+    while( ! $done ) {
+      if ( $formula_end >= ( strlen($content) - 1 ) ) {
+        //Reached the end of the content.
+        $done = TRUE;
+      }
+      else if ( substr($content, $formula_end, 1) == '`' ) {
+        //Got to the end of the formula.
+        $done = TRUE;
+      }
+      else {
+        //On to the next character.
+        $formula_end ++;
+      }
+    } //Finished the formula.
+    //Get the formula.
+    $formula 
+        = substr($content, $formula_start, $formula_end - $formula_start + 1);
+    //Strip off last char if it's a `
+    if ( substr($formula, -1, 1) == '`' ) {
+      $formula = substr($formula, 0, strlen($formula) - 1);
+    }
+    //Put formula into result array.
+    $replacements[ $formula_count ] = $formula;
+    //Replace formula in content with a marker.
+    $marker = '[' . $tag . $formula_count . ']';
+    $content = substr($content, 0, $formula_start) 
+        . $marker . substr($content, $formula_end + 1);
+    $formula_count++;
+
+    //Find the next one.
+    $pos = stripos($content, ':math:`');
+  }
+  return array($content, $replacements);  
+}
+
+/** OLD_REST
+ * Replace math temp markers with HTML tags used by MathJax.
+ * See http://ckeditor.com/ckeditor_4.3_beta/samples/plugins/mathjax/mathjax.html
+ * @param string $content Content with markers.
+ * @param array $replacements Forumala. [x] => formula to replace marker x.
+ * @return string Content with HTML tags.
+ */
+function _swim_betwixt2ckhtml_mathjx( $content, $replacements ) {
+  //Replace temp directives tags with HTML.
+  $pattern = '/\[swimmathdirective(\d+)\]/i';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($match) use ($replacements) {
+        $result = '<span class="' . SWIM_MATH_JAX_CLASS . '">' 
+            . $replacements['directives'][ $match[1] ] . '</span>' ;
+        return $result;
+      },
+      $content
+  );
+  //Replace temp roles tags with HTML.
+  $pattern = '/\[swimmathrole(\d+)\]/i';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($match) use ($replacements) {
+        $formula = $replacements['roles'][ $match[1] ];
+        //Plugin wants \( and \) around formula, and no trailing spaces.
+        $formula_for_plugin = '\(' . trim( $formula ) . '\)';
+        $result = '<span class="' . SWIM_MATH_JAX_CLASS . '">' 
+            . $formula_for_plugin . '</span>' ;
+        return $result;
+      },
+      $content
+  );
+  return $content;
+}
+
+/** OLD_REST
+ * Convert content from CKHTML (HTML from CK field) to pure ReST.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function _swim_ckhtml2rest( $content ) {
+  //Convert to pure ReST.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to ReST.
+  $content = _swim_ck_mathjx_2_rest( $content );
+  //Remove the <br>s, leaving just the \ns.
+  $content = _swim_remove_brs( $content );
+  
+  //Handle numeric codes correctly.
+  // See http://www.php.net/manual/en/function.html-entity-decode.php#47371
+//  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
+//  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml2rest', $content); //, $type );
+  //Replace image HTML tags with directives.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  $content = _swim_img_2_path( $content );
+  //Strip all remaining HTML tags.
+  //This gets rid of paste errors. I hope!
+//  $content = strip_tags($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Remove <br>s from $content.
+ * Replace with nothing. CK sends us \ns after each <br>
+ * @param type $content Content to remove <br>s from.
+ */
+function _swim_remove_brs( $content ) {
+  $result = preg_replace('/\<\s*br\s*\/?\s*\>/i', '', $content);
+  return $result;
+}
+
+/** OLD_REST
+ * Convert HTML inserted by mathjax CK plugin into ReSt math directive.
+ * @param type $content Content from CK.
+ */
+function _swim_ck_mathjx_2_rest( $content ) {
+  //Find TeX on a line(s) of its own.
+  $pattern = '/\<br\s*\/?\>\s*\<span\s*class\=\"math\"\>(.*?)\<\/span\>\s*\<br\s*\/?\>/ims';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got one.
+        $match = $matches[1];
+        //Make sure that all the TeX is indented if the user types line breaks
+        //into the TeX.
+        $result = _swim_follow_break_w_spaces( $match );
+        //Output directive, not role.
+        $result = "\n\n.. math::\n\n    " . $result . "\n\n";
+        return $result;
+      },
+      $content
+  );  
+  //Process role, TeX that's embedded inline.
+  $pattern = '/\<span\s*class\=\"math\"\>(.*?)\<\/span\>/ims';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got one.
+        $match = $matches[1];
+        //Kill the <br>s.
+        $match = _swim_remove_brs($match);
+        //Make sure that all the TeX is indented if the user types line breaks
+        //into the TeX.
+        $result = _swim_follow_break_w_spaces( $match );
+        //Remove the first two and last two characters. \( and \)
+        $result = substr($result, 2);
+        $result = substr($result, 0, strlen($result)-2 );
+        //ReST parser dinna lyke trailin spaces, lassie. Nor leadin, likanot.
+        $result = trim($result);
+        //Output role.
+        $result = ':math:`' . $result . '`';
+        return $result;
+      },
+      $content
+  );
+  return $content;
+}
+
+/**
+ * Replace img tags with just the src attribute.
+ * @param string $content The content.
+ */
+function _swim_img_2_path( $content ) {
+  //Pattern to find the img tags. Need the ? to make the match lazy, not greedy.
+  $pattern = '/\<img.*?src=[\'|"](.*?)[\'|"].*?\/?\>/is';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) {
+        //Got an image tag.
+        //Parse it with the src.
+        $src = $matches[1];
+        return $src;
+      },
+      $content
+  );
+  return $content;
+}
+
+/** OLD_REST
+ * Grab paths in image/figure directives, and replace them
+ * with temp tokens.
+ * @param string $content Content
+ * @return array [0] = content, [1] array of paths, where index matches
+ *    token number.
+ */
+function _swim_rest2betwixt_images( $content ) {
+  $image_paths = array();
+  $path_counter = 0;
+  $pattern = '/\.\.\s*(image|figure)(\:\:\s*)(\S*)/i';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($matches) use (&$image_paths, &$path_counter) {
+        //Got one.
+        $image_paths[ $path_counter ] = $matches[3];
+        $tag = '[imagepath' . $path_counter . ']';
+        $result = '.. ' . $matches[1] . $matches[2] . $tag;
+        $path_counter ++;
+        return $result;
+      },
+      $content
+  );
+  return array( $content, $image_paths );
+}
+
+/** OLD_REST
+ * Replace image tokens created in _swim_rest2ck_images_part_1
+ * with <img> tags.
+ * @param string $content Content.
+ * @param array $replacements array of paths, where index matches
+ *    token number.
+ * @return string New content.
+ */
+function _swim_betwixt2ckhtml_images( $content, $replacements ) {
+  //Replace temp directives tags with HTML.
+  $pattern = '/\[imagepath(\d+)\]/i';
+  $content = preg_replace_callback(
+      $pattern, 
+      function ($match) use ($replacements) {
+        $result = '<img src="' . $replacements[ $match[1] ] . '">' ;
+        return $result;
+      },
+      $content
+  );
+  return $content;
+}
+
+/**
+ * Return rendered HTML for preview.
+ */
+function _swim_client_peek( $data ) {
+  global $base_url;
+  //Get markup.
+  if ( !isset($data['markup']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' markup missing.';
+    drupal_set_message( $message );
+    watchdog('SWIM', $message);
+    return;
+  }
+  $markup = $data['markup'];
+  //Convert content to pure ReST.
+  $content = swim_ckhtml2markdown($markup);
+//  $content = _swim_ckhtml2rest($markup);
+  //Convert the ReST content to HTML.
+  $html = swim_markdown2html($content);
+//  $html = swim_rest2html($content);
+  $module_path = $base_url . base_path() 
+          . drupal_get_path('module', 'swim') . '/';
+  $themed = theme(
+    'content_only', 
+    array(
+      'title' => 'Peek',
+      'stylesheets' => array(
+        $module_path . 'css/swim.css',
+        $module_path . 'content_only/content_only.css',
+      ),
+      'javascript_files' => array(
+         'http://cdn.mathjax.org/mathjax/latest/MathJax.js'
+        . '?config=TeX-AMS-MML_HTMLorMML',
+      ),
+      'content' => $html,
+    )
+  );
+  //Return rendered content. 
+  return $themed;
+}
+
+/** OLD_REST
+ * Change error messages from Python's docutils into something that
+ * will look OK for a drupal_set_message(). Sample input:
+ * <string>:5: (ERROR/3) Error in "image" directive:
+ * 1 argument(s) required, 0 supplied.
+ * 
+ * .. image::
+ * 
+ * @param string $docutils_error_messages Error messages returned from Python.
+ * @return string Messages formatted for drupal_set_message().
+ */
+function _swim_format_docutils_errors( $docutils_error_messages ) {
+  $drupal_message = str_replace('<string>', '', $docutils_error_messages);
+  $drupal_message = preg_replace('/\:[0-9]+\:\ /m', '', $drupal_message);
+  // :, then 1 or more digits, then :, then space.
+  $drupal_message = '<pre>' . $drupal_message . '</pre>';
+  $themed_message = theme(
+      'swim_format_error',
+      array(
+        'message' => $drupal_message,
+      )
+  );
+  return $themed_message;
+}
+
+/**
+ * Check if use has 'peek content' access. Other modules
+ * can implement a hook to give access.
+ * @return boolean Yea or nay.
+ */
+function _swim_check_peek_perm() {
+  if ( user_access( 'peek content' ) ) {
+    return TRUE;
+  }
+  //Check if other modules want to grant access.
+  $results = module_invoke_all('swim_peek_access');
+  $access_granted = FALSE;
+  foreach( $results as $result ) {
+    if ( $result ) {
+      $access_granted = TRUE;
+      break;
+    }
+  }
+  return $access_granted;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function swim_theme() {
+  global $base_url;
+  $info = array(
+    'obscurer' => array(
+      'template' => 'obscurer',
+      'variables' => array(
+        'obscurer_throbber_path' =>
+          $base_url . '/' . drupal_get_path('module', 'swim') . '/',
+      ),
+    ),
+    'swim_format_error' => array(
+      'variables' => array(
+        'message' => NULL,
+      ),
+    ),
+    'content_only' => array(
+      'template' => 'content_only/content_only',
+      'variables' => array(
+        'stylesheets' => NULL,
+        'javascript_files' => NULL,
+        'title' => NULL,
+        'content' => NULL,
+      ),
+    ),
+  );
+  return $info;
+}
+
+/**
+ * Theme a format error message from Docutils.
+ */
+function theme_swim_format_error( $variables ) {
+  $message = $variables['message'];
+  $html = "Problems in translating your ReST.<br><br>" . $message
+        . "<br>ReST can be tricky. Check the CyberCourse wiki for help.";
+  return $html;
+}
+
+/**
+* Implements hook_services_resources().
+*/
+function swim_services_resources() {
+  $api = array(
+    /** ReST help **/
+    'swim_help' => _swim_def_help_services(),
+    /** Peek **/
+    'peek' => _swim_def_peek_services(),
+  );
+  return $api;
+}
+
+/**
+ * Define ReST help API.
+ * @return array API definition.
+ */
+function _swim_def_help_services() {
+  $api = array(
+      'actions' => array(
+        'swimHelp' => array(
+          'help' => t('Returns a help message about ReST.'),
+          'access arguments' => array('access content'),
+          'callback' => '_swim_client_help',
+        ),
+      ),
+    ); //End rubric_item_categories
+  return $api;
+}
+
+/**
+ * Define peek API.
+ * @return array API definition.
+ */
+function _swim_def_peek_services() {
+  $api = array(
+    'actions' => array(
+      'peek' => array(
+        'help' => t('Return rendered content for peek window.'),
+        'access arguments' => array('access content'),
+        'callback' => '_swim_client_peek',
+        'args' => array(
+          array(
+           'name' => 'data',
+           'type' => 'struct',
+           'description' => 'Markup to render.',
+           'source' => 'data',
+           'optional' => FALSE,
+          ),
+        ), //End args.
+      ), //End peek.
+    ), //End actions.
+  ); //End rubric_item_categories
+  return $api;
+}
+
+/**
+ * Send ReST help message.
+ * @return string Help message.
+ */
+function _swim_client_help() {
+  global $base_url;
+  $help = variable_get('swim_help_message_rendered', 'Sorry, no help available.');
+  $themed_help = theme(
+    'content_only', 
+    array(
+      'title' => 'SWIM Help',
+      'stylesheets' => array(
+        $base_url . base_path() 
+          . drupal_get_path('module', 'swim') . '/content_only/content_only.css',
+      ),
+      'content' => $help,
+    )
+  );
+  return $themed_help;
+}
+
+/**
+ * Find the next line break in a string, whether it's \r\n, or \n.
+ * @param string $string String to search.
+ * @param int $start Where to start searching.
+ * @return array Result array. 
+ *   [0] = position (-1 if not found).
+ *   [1] = EOL length (0 if not found, 1 if \n, 2 if \r\n). 
+ */
+function _swim_find_next_line_break( $string, $start ) {
+  $pos = stripos( $string, "\n", $start );
+  if ( $pos === FALSE ) {
+    return array(-1, 0);
+  }
+  if ( $pos == 0 ) {
+    return array(0, 1);
+  }
+  if ( substr($string, $pos - 1, 1) == "\r" ) {
+    return array( $pos - 1, 2);
+  }
+  return array( $pos, 1 );
+}
+
+/**
+ * Make sure that line breaks inside a string have spaces following them.
+ * Used when moving TeX from CK to ReST, keeping indentation when the 
+ * user puts TeX over multiple lines.
+ * 
+ * @param string $string String to process.
+ * @return string Processed string.
+ */
+function _swim_follow_break_w_spaces( $string ) {
+  $start = 0;
+  list( $pos, $eol_length ) = _swim_find_next_line_break($string, $start);
+  while ( $pos != -1 ) {
+    if ( $pos == 0 ) {
+      //At the start of the string.
+    }
+    else if ( $pos == ( strlen( $string ) - $eol_length ) ) {
+      //At the end. 
+    }
+    else {
+      //EOL in the middle of the text.
+      //Make sure there's a space after the EOL.
+      $next_char = substr($string, $pos + $eol_length, 1);
+      if ( $next_char != ' ' ) {
+        $left = substr( $string, 0, $pos + $eol_length );
+        $right = substr( $string, $pos + $eol_length );
+        $string = $left . ' ' . $right;
+        $start++;
+      }
+    }
+    //Skip the processed line break.
+    $start += $eol_length;
+    //Next one.
+    list( $pos, $eol_length ) = _swim_find_next_line_break($string, $start);
+  }
+  return $string;
+}
+
+
+/**
+ * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function swim_ckhtml2markdown( $content ) {
+  //Convert to pure Markdown.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to markdown.
+//  $content = _swim_ck_mathjx2markdown( $content );
+  //Remove the <br>s, leaving just the \ns.
+  $content = _swim_remove_brs( $content );
+  
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml2markdown', $content); 
+  //Replace image HTML tags with MD tags.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  $content = _swim_img_2_path( $content );
+  //Add tags that MathJax needs.
+  $content = _swim_ckhtml2markdown_math($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Translate pure Markdown into HTML.
+ * @param string $markdown Markdown
+ * @return string HTML
+ */
+function swim_markdown2html( $markdown ) {
+  $parser = new SwimMarkdown();
+  $html = $parser->parse($markdown);
+  //Wrap math formula in span MathJax uses. Same as CK plugin uses.
+  $html = _swim_markdown2ckhtml_math( $html );
+  //Wrap everything in a SWIM wrapper.
+  $html = '<div class="swim">' . $html . '</div>';
+  return $html;
+}
+
+/**
+ * Prepare some Markdown for editing in CK.
+ */
+function swim_markdown2ckhtml( $content ) {
+  //Remove \rs. They are evil.
+  $content = str_replace("\r", '', $content);
+  //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
+  //Doesn't insert HTML tags directly, since they would be messed up
+  //by the other translation code below. Instead, inserts temp markers that
+  //are replaced by HTML after other translation is done.
+  //Make sure there is a \n at the end.
+  $last_char = substr($content, strlen( $content ) - 1, 1);
+  if ( $last_char != "\n" ) {
+    $content .= "\n";
+  }
+//  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
+//  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
+  //Trigger other module's translators.
+//  drupal_alter( 'swim_markdown2betwixt', $content);
+  //Encode everything the user typed.
+  $content = htmlspecialchars( $content );
+  //Grab image paths and wrap them in <img> tags.
+  $content = _swim_markdown2ckhtml_images($content);
+  //Wrap MathJax class around math stuff.
+  $content = _swim_markdown2ckhtml_math($content);
+  //Trigger other module's translators.
+  drupal_alter( 'swim_markdown2ckhtml', $content);
+  $content = str_replace("\n", "<br>", $content);
+  //Replace two spaces with &nbsp; and a space.
+  //Otherwise, CK collapses multiple spaces.
+  $content = str_replace('  ', '&nbsp; ', $content);
+  //Replace math temp markers with HTML tags used by MathJax.
+//  $content = _swim_betwixt2ckhtml_mathjx( $content, $math_replacements );
+  //Replace image temp markers with HTML tags.
+//  $content = _swim_betwixt2ckhtml_images( $content, $image_replacements );
+  return $content;
+}
+
+/**
+ * Grab paths in MD image tags, and wrap them in <img>.
+ * @param string $content Content with raw MD image tags.
+ * @return string Content with wrapped tags.
+ */
+function _swim_markdown2ckhtml_images( $content ) {
+  //Match ![stuff](path  - not including the end of the tag.
+  //This allows for titles to be there or not.
+  $pattern = '/\!\[.*?\]\s*\(\s*([A-Za-z0-9\/\_\-\.]*)?.*\)?/i';
+  $matches = array();
+  preg_match_all($pattern, $content, $matches);
+  //$matches[0] are the complete matches, including the paths.
+  //$matches[1] just has the paths.
+  foreach( $matches[0] as $key => $full_match ) {
+    $file_path = $matches[1][$key];
+    $replacement = str_replace(
+        $file_path, //Search for this - the file path
+        '<img src="' . $file_path . '">', //Replacement
+        $full_match //Subject of the search.
+    );
+    $content = str_replace(
+        $full_match, //Find this
+        $replacement, //Replace it with this.
+        $content //In this
+    );
+  }
+  return $content;
+}
+
+/**
+ * Wrap TeX in classes that MathJax looks at.
+ * @param string $content Content with uwrapped tags.
+ * @return string Content with wrapped tags.
+ */
+function _swim_markdown2ckhtml_math( $content ) {
+  //Match ![stuff](path  - not including the end of the tag.
+  //This allows for titles to be there or not.
+  //Backticks end up being removed.
+  $patterns = array(
+    '/\\\\\(.*\\\\\)/',  //Inline
+    '/\\\\\[.*\\\\\]/',  //Display
+  );
+  $matches = array();
+  foreach( $patterns as $pattern ) {
+    preg_match_all($pattern, $content, $matches);
+    //$matches[0] are the complete matches, including the paths.
+    //$matches[1] just has the paths.
+    foreach( $matches[0] as $matched ) {
+      //Needs the style and data-, else CK plugin won't recognize it as 
+      //something that belongs to it. Why? Don't know. Suspect Satan's 
+      //involvement.
+      $replacement = 
+          '<span class="' . SWIM_MATH_JAX_CLASS 
+          . '" style="display:inline-block" data-cke-survive=1>' . $matched . '</span>';
+      $content = str_replace(
+          '`' . $matched . '`', //Find this
+          $replacement, //Replace it with this.
+          $content //In this
+      );
+    } //End match loop.
+  } //End pattern loop.
+  return $content;
+}
+
+/**
+ * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Anything the user typed must by HTML encoded, e.g., if the user typed
+ * <, then &lt; should be in the content.
+ * HTML that CK inserted should be as regular tags.
+ * @param string $content Content to convert.
+ */
+function _swim_ckhtml2markdown( $content ) {
+  //Convert to pure Markdown.
+  //Replace &nbsp; with real spaces.
+  $content = str_replace('&nbsp;', ' ', $content);
+  //Replace &#39; with real quotes.
+  $content = str_replace('&#39;', '\'', $content);
+  //Change markup form Mathjax CK plugin to Markdown.
+//  $content = _swim_ck_mathjx_2_rest( $content );
+  //Remove the <br>s, leaving just the \ns.
+  $content = _swim_remove_brs( $content );
+  
+  //Handle numeric codes correctly.
+  // See http://www.php.net/manual/en/function.html-entity-decode.php#47371
+//  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
+//  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
+  //Trigger other module's translators.
+  drupal_alter( 'swim_ckhtml2markdown', $content); //, $type );
+  //Replace image HTML tags with directives.
+  //  These must be after other module's hooks are called, so that other 
+  //  modules have processes the images they own.
+  $content = _swim_img_2_path( $content );
+  //Strip all remaining HTML tags.
+  //This gets rid of paste errors. I hope!
+//  $content = strip_tags($content);
+  //HTML entities to their real characters.
+  $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+  //Special chars - particularly #39; -> '.
+  $content = htmlspecialchars_decode( $content );
+  return $content;
+}
+
+/**
+ * Remove span wrapper from MathJax things.
+ * @param string $content Content with wrapped tags.
+ * @return string Content with unwrapped tags.
+ */
+function _swim_ckhtml2markdown_math( $content ) {
+  $pattern = '/\<.*span.*class.*' . SWIM_MATH_JAX_CLASS . '.*\>(.*)?\<\/span\>/';
+  $matches = array();
+  preg_match_all($pattern, $content, $matches);
+  //$matches[0] are the complete matches, including the equations.
+  //$matches[1] just has the equations.
+  foreach( $matches[0] as $key => $full_match ) {
+    $eqn = '`' . $matches[1][ $key ] . '`';
+    $content = str_replace(
+        $full_match, //Find this
+        $eqn, //Replace it with this.
+        $content //In this
+    );
+  } //End match loop.
+  return $content;
+}

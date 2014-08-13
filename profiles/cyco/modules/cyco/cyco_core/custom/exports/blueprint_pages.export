@@ -136,7 +136,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "Context is the course's environment. \n\n* Who are the students? What do they know at the beginning of the course? What are their goals?\n* Who are the instructors? <span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">What are their goals?\n* Who are other important stakeholders? Employers, administrators...\n* What resources will students and instructors need? Time, software, supplies...\n\nPay attention to the time constraints of a course. Realistically, how much time do students and instructors have?\n\nAn important question: who decides which textbook or CyCo will be used in the context? What are they looking for?</span>\n ",
+            'value' => "Context is the course's environment. \n\n* Who are the students? What do they know at the beginning of the course? What are their goals?\n* Who are the instructors? What are their goals?\n* Who are other important stakeholders? Employers, administrators...\n* What resources will students and instructors need? Time, software, supplies...\n\nPay attention to the time constraints of a course. Realistically, how much time do students and instructors have?\n\nAn important question: who decides which textbook or CyCo will be used in the context? What are they looking for?\n ",
             'summary' => "The course's environment. Who are the students? Who are the instructors? ...",
           ),
         ),
@@ -248,7 +248,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "<span style=\"font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;\">A blueprint is a design for a course. Design is key. Create a good design, and you're halfway to making a good course.\n\nThis sample blueprint shows some of the things you should think about.</span>",
+            'value' => "A blueprint is a design for a course.\n\nDesign is key. Create a good design, and you're halfway to making a good course.\n\n\n\nSee the [CyberCourse wiki](http://wiki.cybercour.se/) for more.",
             'summary' => 'A blueprint is a design for a course.',
           ),
         ),

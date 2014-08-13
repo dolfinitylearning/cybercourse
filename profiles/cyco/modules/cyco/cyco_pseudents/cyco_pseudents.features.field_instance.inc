@@ -30,6 +30,7 @@ function cyco_pseudents_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -70,6 +71,7 @@ function cyco_pseudents_field_default_field_instances() {
     'label' => 'Caption',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -118,6 +120,7 @@ function cyco_pseudents_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 1,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'library/pseudent-images',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -199,6 +202,7 @@ function cyco_pseudents_field_default_field_instances() {
     'label' => 'Notes',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -236,6 +240,7 @@ function cyco_pseudents_field_default_field_instances() {
     'label' => 'Categories',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -274,6 +279,7 @@ function cyco_pseudents_field_default_field_instances() {
     'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(

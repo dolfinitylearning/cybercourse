@@ -75,6 +75,7 @@ function cyco_book_mods_form_alter( &$form, &$form_state, $form_id) {
       'course_page_node_form',
       'blueprint_page_node_form',
       'learning_map_node_form',
+      'exercise_node_form',
     );
     if ( in_array($form_id, $page_types_to_work_on) ) {
       if (! cyco_core_current_user_has_role('administrator') ) {

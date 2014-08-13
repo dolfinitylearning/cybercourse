@@ -30,6 +30,7 @@ function cyco_patterns_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -69,6 +70,7 @@ function cyco_patterns_field_default_field_instances() {
     'label' => 'Actions',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -106,6 +108,7 @@ function cyco_patterns_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -183,6 +186,7 @@ function cyco_patterns_field_default_field_instances() {
     'label' => 'Explanation',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -224,6 +228,7 @@ function cyco_patterns_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -305,6 +310,7 @@ function cyco_patterns_field_default_field_instances() {
     'label' => 'Pattern categories',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -342,6 +348,7 @@ function cyco_patterns_field_default_field_instances() {
     'label' => 'Situation',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(

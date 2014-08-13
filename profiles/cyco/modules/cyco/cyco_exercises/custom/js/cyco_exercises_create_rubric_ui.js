@@ -198,6 +198,7 @@
           var message = "There is already a rubric item with that title.\n\n"
             + "Are you sure you want to create a new item with the same title?";
           if ( ! confirm( message ) ) {
+            uiNamespace.hideSaveThrobber();
             return false;
           }
         }
@@ -210,6 +211,7 @@
         .then(function() {
           //Tell selection client to update itself.
           Drupal.behaviors.cycoSelectRubricUi.returnFromAddItemUi( uiNamespace.item );
+          uiNamespace.hideSaveThrobber();
           //Hide the create/edit item UI.
           $("#rubric-create-ui").dialog("close");
         })
@@ -289,7 +291,7 @@
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-good-list") );
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-needs-work-list") );
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-poor-list") );
-      
+      uiNamespace.hideSaveThrobber();
     },
     mtPhraseContainer: function( container ) {
       container.empty();
@@ -326,7 +328,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            Drupal.behaviors.cycoSelectRubricUi.token);
+            cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -411,7 +413,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            Drupal.behaviors.cycoSelectRubricUi.token);
+            cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -495,7 +497,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            Drupal.behaviors.cycoSelectRubricUi.token);
+            cycoCoreServices.csrfToken);
         }
       })
       .done(function(result) {
@@ -503,6 +505,7 @@
         if ( result.operation == "create" ) {
           uiNamespace.item.nid = result.nid;
         }
+        uiNamespace.hideSaveThrobber();
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         Drupal.behaviors.cycoErrorHandler.reportError(

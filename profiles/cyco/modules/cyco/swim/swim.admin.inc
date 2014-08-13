@@ -13,12 +13,12 @@ function _swim_settings_form() {
     '#type' => 'textarea',
     '#title' => t( 'SWIM help message' ),
     '#description' => t(
-        'Message to show when user clicks the ReST help button in the SWIM '
+        'Message to show when user clicks the help button in the SWIM '
         . 'editor. If empty, the help button will not be shown.'
     ),
     //Remove grippie.
     '#resizable' => FALSE,
-    '#default_value' => swim_rest2ckhtml(
+    '#default_value' => swim_markdown2ckhtml(
         variable_get('swim_help_message', '') 
     ),
     '#attributes' => array(
@@ -90,13 +90,13 @@ function _swim_check_settings_height_field( &$form_state, $field_name, $default 
 
 /**
  * Settings form submit function. 
- * Save the message (ReST), and a rendered version of it.
+ * Save the message (Markdown), and a rendered version of it.
  */
 function _swim_save_settings( $form, $form_state ) {
-  //ReST help message.
+  //Markdown help message.
   $message = $form_state['values']['swim_help_message'];
   variable_set('swim_help_message', $message);
-  $rendered_message = swim_rest2html( $message );
+  $rendered_message = swim_markdown2html( $message );
   variable_set('swim_help_message_rendered', $rendered_message);
   //Editor height.
   $editor_height = $form_state['values']['swim_default_height'];

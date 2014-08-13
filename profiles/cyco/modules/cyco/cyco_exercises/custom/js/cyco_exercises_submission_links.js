@@ -1,3 +1,5 @@
+var vat=0;
+
 /* 
  * Create submission links for an inserted exercise. 
  */
@@ -187,7 +189,8 @@
         $linkLocation.append( renderedLink );
       });
       //Open links in a popup window.
-      $("a[data-target=popup]").click(function(event) {
+      //Turn off all events first, so that the binding happens only once.
+      $("a[data-target=popup]").off().on("click", function(event) {
         event.preventDefault();
         event.stopPropagation();
         window.windowObjectReference = window.open(
@@ -198,6 +201,18 @@
         return false; //Cancel standard action.
       });
       //Update 
+    },
+    clickWorkLink: function(event) {
+              alert('dog! ' + vat);
+              vat++;
+      event.preventDefault();
+      event.stopPropagation();
+      window.windowObjectReference = window.open(
+      $(this).attr("href"),
+      "Exercise: " + exerciseNid,
+      "resizable,scrollbars,height=640,width=700"
+      );
+      return false; //Cancel standard action.
     },
     /**
      * Constructor for a link label: a link with a pair of labels

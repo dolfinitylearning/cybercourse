@@ -197,8 +197,6 @@
   <div class="rubric-create-ui-row form-item form-group"><?php //Start row 2 outer - for buttons. ?>
     <div id="rubric-create-extra-actions" 
          class="rubric-create-ui-cell"><?php //Start cell for extra buttons. ?>
-      <button id='rubric-create-extra' type='button' 
-          title="Forget it">Extra</button>
     </div><?php //End cell for extra buttons. ?>
     <div id="rubric-create-finish-buttons" 
          class="rubric-create-ui-cell"><?php //Start cell for finish buttons. ?>

@@ -59,6 +59,9 @@ function _cbb_clear_book_tree_menu_caches( $bid ) {
   variable_del($cache_name);
 }
 
+/**
+ * Implements hook_permission().
+ */
 function cyco_book_blocks_permission() {
   return array(
     'view unpublished cyco course content' => array(
@@ -118,7 +121,11 @@ function cyco_book_blocks_block_view($delta = '') {
   if ( !is_numeric($root_nid) ) {
     return;
   }
+  //The root node might have been deleted, but not the block.
   $root_node = node_load( $root_nid );
+  if ( ! $root_node ) {
+    return;
+  }
   $block = array();
   $block['subject'] = '';
   $block['content'] = _cbb_create_block_content( $root_nid );
@@ -409,7 +416,7 @@ function cbb_recursive_link_creator(
           $classes[] = 'open-branch';
           $nextlevel = '';
           $nextlevel = cbb_recursive_link_creator(
-              $id, $include_unpublished, $item['below'], $url_array
+              $url_array, $include_unpublished, $item['below'], $id
           );
           if (!empty($nextlevel)) {
             $classes[] = 'parent_li';

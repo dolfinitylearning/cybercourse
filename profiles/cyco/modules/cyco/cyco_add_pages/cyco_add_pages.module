@@ -45,7 +45,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['menu_name'] //Name of the menu for this level in the book.
     );
     //Can't add a sibling if it's a root node.
-    if ( $node->book['bid'] != 0 ) {
+    if ( $node->book['bid'] != $node->nid ) {
       _cacpl_remember_operation(
           $node->nid,
           'Create sibling page',
@@ -377,73 +377,3 @@ function _cacpl_form_submitted( $form, &$form_state ) {
   } //End there is a book op.
 }
 
-//function cyco_add_pages_path_insert($path) {
-//  $f = 9;
-//}
-  /**
- * Process form submission.
- * 
- * Set up the node object, then call the book module to do most of the 
- * processing. Then adjust menu weights, if needed, to get siblings in the right
- * spot.
- */
-//function cyco_add_pages_node_insert( $node ) {
-//  //Might want to adjust weights, if this is a sibling add.
-//  return;
-//  if ( isset( $_GET['book_op'] ) ) {
-//    $bid = $node->book['bid'];
-//    variable_del(_ccbb_compute_cache_name($bid, TRUE) );
-//    variable_del(_ccbb_compute_cache_name($bid, FALSE) );    
-//    
-//    if ( $_GET['book_op'] == 'addsib' ) {
-//      if ( ! isset( $_GET['left_sib_mlid'] ) ) {
-//        drupal_set_message('Missing left sib mlid', 'error');
-//        return;
-//      }
-//      $left_sib_mlid = $_GET['left_sib_mlid'];
-//      //Get the menu data for the left sib.
-//      $select = db_select('menu_links', 'm')
-//        ->fields('m', array('plid', 'weight',))
-//        ->condition('m.mlid', $left_sib_mlid);
-//        //->addTag('node_access');
-//      $result = $select->execute();
-//      $left_sib_plid = $result['plid'];
-//      $left_sib_weight = $result['weight'];
-//      $new_nodes_weight = $left_sib_weight + 1;
-//      $new_nodes_nid = $node['nid'];
-//      return;
-//      db_update('menu_links')
-//        ->fields( array( 'weight' => $new_nodes_weight ) );
-//    }
-//  }
-//  
-//  
-//}
-
-/**
- * Implements hook_menu_local_tasks_alter().
- * Change the title of some links.
- */
-//function cyco_add_pages_menu_local_tasks_alter(&$data, $router_item, $root_path){
-//  if ( isset($data['tabs'][0]['output'][0]['#link']['title']) ) {
-//    $tabs = $data['tabs'][0]['output'];
-//    foreach ( $tabs as $index => $item ) {
-//      $link = $item['#link'];
-//      if ( $link['title'] == 'Reorder the book' ) {
-//        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Rearrange pages';
-//      }
-//      if ( $link['title'] == 'Clone content' ) {
-//        $data['tabs'][0]['output'][$index]['#link']['title'] = 'Clone page';
-//      }
-//    }
-//  }
-//}
-
-
-function cyco_add_pages_form_page_node_form_alter(&$form, $form_state) {
-  $form['#submit'][] = 'x';
-}
-
-function x($form, &$form_state) {
-  $f=7;
-}

@@ -85,7 +85,8 @@ function _cyco_core_utilities_form_alter(&$form, $form_state, $form_id) {
         '#description' => 
             t('Text like [current-user:field_last_name] are replaced with '
               . 'values like Smith or Jones when content is displayed. '
-              . 'See the CyberCourse wiki for more information.'),
+              . 'See the ' . l('CyberCourse wiki', 'https://wiki.cybercour.se')
+              . ' for more information.'),
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
         '#weight' => $token_display_weight,
@@ -412,4 +413,15 @@ function cyco_core_uri2path( $uri ) {
   $url = parse_url($absolute_url);
   $usable_url = $url['path'];
   return $usable_url;
+}
+
+/**
+ * Get role id given the role name.
+ * See http://drupal.stackexchange.com/questions/50435/how-do-i-find-the-role-id-from-role-name
+ * @param string $name Role name.
+ * @return int The rid.
+ */
+function cyco_core_get_role_id_by_name($name) {
+  $roles = user_roles();
+  return array_search($name, $roles);
 }

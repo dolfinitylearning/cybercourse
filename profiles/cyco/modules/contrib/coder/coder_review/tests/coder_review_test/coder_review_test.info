@@ -1,0 +1,12 @@
+name = Coder Review Test
+package = Coder
+core = 7.x
+hidden = TRUE
+files[] = coder_review_test.module
+
+; Information added by Drupal.org packaging script on 2014-06-01
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "coder"
+datestamp = "1401626929"
+

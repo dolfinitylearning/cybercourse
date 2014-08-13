@@ -231,6 +231,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'administer custom tokens',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'token_custom',
   );
@@ -491,6 +492,11 @@ function cyco_core_user_default_permissions() {
     'name' => 'change own username',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+      'student' => 'student',
     ),
     'module' => 'user',
   );
@@ -953,6 +959,13 @@ function cyco_core_user_default_permissions() {
     'module' => 'comment',
   );
 
+  // Exported permission: 'rename features'.
+  $permissions['rename features'] = array(
+    'name' => 'rename features',
+    'roles' => array(),
+    'module' => 'features',
+  );
+
   // Exported permission: 'restore from backup'.
   $permissions['restore from backup'] = array(
     'name' => 'restore from backup',
@@ -1038,13 +1051,8 @@ function cyco_core_user_default_permissions() {
   $permissions['search course_page content'] = array(
     'name' => 'search course_page content',
     'roles' => array(
-      'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
     ),
     'module' => 'search_config',
   );
@@ -1053,13 +1061,8 @@ function cyco_core_user_default_permissions() {
   $permissions['search page content'] = array(
     'name' => 'search page content',
     'roles' => array(
-      'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
     ),
     'module' => 'search_config',
   );

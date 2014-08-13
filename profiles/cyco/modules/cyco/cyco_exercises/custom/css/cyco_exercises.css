@@ -71,3 +71,12 @@ It's misleading.
 .view-submissions-student-report td {
   vertical-align: middle;
 }
+
+.view-exercises-public- .views-row {
+  margin-bottom: 1em;
+}
+
+
+.view-exercises-public- .views-row .views-field-field-body{
+  margin-left: 2em;
+}

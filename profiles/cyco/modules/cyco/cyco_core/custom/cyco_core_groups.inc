@@ -17,7 +17,7 @@ function cyco_core_groups_render_basic_list() {
 }
 
 /**
- * Get the groups a user is role in.
+ * Get the groups a user has a role in.
  * @global stdClass $user The current user.
  * @param string $group_type Type of group, e.g., class.
  * @param stdClass $user_to_check User to check. Defaults to current user.
@@ -49,10 +49,22 @@ function cyco_core_groups_get_groups_by_role(
     $user_to_check = $user;
   }
   //Find groups the user is in.
-  $user_group_gids = og_get_groups_by_user($user_to_check, $group_type);
+  //Returns null if there are none.
+  $user_group_gids = og_get_groups_by_user($user_to_check, 'node');
+  //Which of the groups are classes?
+  $user_classes_gids = array();
+  if ( ! is_null($user_group_gids) ) {
+    foreach( $user_group_gids as $group_gid ) {
+      $group_node = node_load( $group_gid );
+      if ( $group_node->type == $group_type ) {
+        $user_classes_gids[] = $group_gid;
+      }
+    }
+  }
+  //Now check the roles.
   $user_groups = array();
-  foreach ( $user_group_gids as $gid ) {
-    $roles = og_get_user_roles($group_type, $gid);
+  foreach ( $user_classes_gids as $gid ) {
+    $roles = og_get_user_roles('node', $gid, $user_to_check->uid);
     if ( in_array($role_name, $roles) ) {
       $user_groups[] = $gid;
     }
@@ -180,17 +192,124 @@ function cyco_core_menu_local_tasks_alter(&$data, $router_item, $root_path) {
       switch( $node->type ) {
         case 'class':
           //Link to add class post.
-          $item = menu_get_item('node/add/class-post');
-          $item['title'] = t('Add class post');
-          //Add class nid prepopulate group audience field.
-          $item['localized_options']['query']['og_group_ref'] = $nid;
-          $item['html'] = TRUE;
-          $data['actions']['output'][] = array(
-            '#theme' => 'menu_local_action',
-            '#link' => $item,
-          );
+          if (cyco_core_current_user_has_role( array('instructor', 'administrator') ) ) {
+            $item = menu_get_item('node/add/class-post');
+            $item['title'] = t('Add class post');
+            //Add class nid prepopulate group audience field.
+            $item['localized_options']['query']['og_group_ref'] = $nid;
+            $item['html'] = TRUE;
+            $data['actions']['output'][] = array(
+              '#theme' => 'menu_local_action',
+              '#link' => $item,
+            );
+          }
           break;
       }
           
   }
+}
+
+function cyco_core_og_role_grant($entity_type, $gid, $uid, $og_rid) {
+  _cyco_core_update_student_role($entity_type, $gid, $uid, 'grant', $og_rid);
+}
+
+function cyco_core_og_role_revoke($entity_type, $gid, $uid, $og_rid) {
+  _cyco_core_update_student_role($entity_type, $gid, $uid, 'revoke', $og_rid);
+}
+//
+//function cyco_core_og_membership_delete(OgMembership $og_membership) {
+//  $r=6;
+//}
+//
+//function cyco_core_og_membership_insert(OgMembership $og_membership) {
+//  $r=6;
+//}
+//
+//function cyco_core_og_membership_update(OgMembership $og_membership) {
+//  $r=6;
+//}
+//
+
+
+/**
+ * Update account's student role depending on whether the account has the 
+ * student role in a group. This code is called when there is a role change
+ * in a group.
+ * @param string $entity_type Class is the only one we care about.
+ * $param int $gid Group id.
+ * @param int $uid The user.
+ * @param string $current_op Operation, grant or revoke.
+ * @param int $og_rid The OG role that is affected.
+ */
+function _cyco_core_update_student_role( $entity_type, $gid, $uid, $current_op, $og_rid ) {
+  if ( $entity_type == 'node' ) {
+    $node = node_load( $gid );
+    if ( $node->type == 'class' ) {
+      //This change is for a class.
+      //Get the OG role name that is being changed.
+      $og_role_names = og_get_user_roles_name(array($og_rid));
+      $og_role_name = current( $og_role_names );
+      if ( $og_role_name == 'student' ) {
+        //This change is for the student role in a class.
+        $user_being_changed = user_load( $uid );
+        //Get the classes in which this user has the student role.
+        $gids_where_student = cyco_core_groups_get_groups_by_role(
+            'class', 'student', $user_being_changed
+        );
+        //Adjust the group list depending on the current operation.
+        //Don't need to do this, since the hook is called after the 
+        //data is saved, but do it just in case. Computers are 
+        //not trustworthy.
+        if ( $current_op == 'grant' ) {
+          //Add the new group to the list if it is not already there.
+          if ( ! in_array($gid, $gids_where_student) ) {
+            $gids_where_student[] = $gid;
+          }
+        }
+        else if ( $current_op == 'revoke' ) {
+          //Remove the new group to the list if it is there.
+          if ( in_array($gid, $gids_where_student) ) {
+            unset( $gids_where_student[ $gid ] );
+          }
+        }
+        else {
+          $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+              . ' Bad operation: ' . $current_op;
+          cyco_core_handle_error( $message );
+        }
+        //Should this user be a student?
+        $user_is_student = ( sizeof( $gids_where_student ) > 0 );
+        if ( $user_is_student ) {
+          //If the user is already an instructor or grader in the group being
+          //affected, the user should not be a student as well.
+          //Get the groups for which the current user is an instructor.
+          $instructor_groups = cyco_core_groups_get_groups_by_role(
+              'class', 'instructor', $user_being_changed
+          ); 
+          //Get the groups for which the current user is a grader.
+          $grader_groups = cyco_core_groups_get_groups_by_role( 
+              'class', 'grader', $user_being_changed
+          ); 
+          if ( in_array($gid, $instructor_groups) || in_array($gid, $grader_groups) ) {
+            $user_is_student = FALSE;
+            drupal_set_message( 
+              'Warning! Someone should not be a student in a class if '
+                . 's/he is already an instructor or grader in the same class. '
+                . 'Please check the roles for the class.'
+            );
+          }
+        }
+        //Add/remove role from user.
+        //This is the Drupal student role, not the OG role.
+        $drupal_rid = cyco_core_get_role_id_by_name( 'student' );
+        if ( $user_is_student ) {
+          $user_being_changed->roles[ $drupal_rid ] = 'student';
+        }
+        else {
+          unset( $user_being_changed->roles[ $drupal_rid ] );
+        }
+        user_save($user_being_changed, array('roles' => $user_being_changed->roles));
+      } // End if OG role name is student.
+    } // End if node type == class
+  } // End if entity type == node
 }

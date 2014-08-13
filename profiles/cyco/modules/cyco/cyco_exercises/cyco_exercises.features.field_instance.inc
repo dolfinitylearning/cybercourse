@@ -30,6 +30,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -63,6 +64,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -96,6 +98,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -129,6 +132,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -162,6 +166,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -195,6 +200,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -228,6 +234,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Comment',
     'required' => TRUE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -268,6 +275,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -307,6 +315,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Courses',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -344,6 +353,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -428,6 +438,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Group visibility',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'view modes' => array(
@@ -483,6 +494,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Group',
     'required' => FALSE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'view modes' => array(
@@ -534,6 +546,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -614,6 +627,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -651,6 +665,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -756,6 +771,7 @@ function cyco_exercises_field_default_field_instances() {
           'status' => 1,
         ),
       ),
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'view modes' => array(
@@ -810,6 +826,7 @@ function cyco_exercises_field_default_field_instances() {
           'status' => 0,
         ),
       ),
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -847,6 +864,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -927,6 +945,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -964,6 +983,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/hidden-attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -1041,6 +1061,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -1122,6 +1143,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Keywords',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1159,6 +1181,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Notes',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1198,6 +1221,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Rubric items',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1235,6 +1259,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Workflow tags',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1272,6 +1297,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'student-uploads/[current-user:name]',
       'file_extensions' => 'txt zip tgz doc docx docm xls xlsx xlsc ppt pps pptx pptm mdb accdb csv bmp jpg jpeg png jar gif html css js sda sdb sdc sds sdw odt ods odg opd psd',
       'max_filesize' => '5Mb',
@@ -1353,6 +1379,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Complete',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1390,6 +1417,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Conversation',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1432,6 +1460,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Exercise',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1469,6 +1498,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1508,6 +1538,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback source',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1531,7 +1562,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 10,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1545,6 +1576,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Your solution',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1590,6 +1622,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Version',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'max' => '',
       'min' => 1,
       'prefix' => '',
@@ -1640,6 +1673,7 @@ function cyco_exercises_field_default_field_instances() {
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1693,6 +1727,7 @@ function cyco_exercises_field_default_field_instances() {
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1737,6 +1772,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback comment',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1777,6 +1813,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Rating on rubric item',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1816,6 +1853,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Rubric item',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1855,6 +1893,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Submission',
     'required' => 1,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1892,6 +1931,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '10mb',
@@ -1972,6 +2012,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Body',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2028,6 +2069,7 @@ function cyco_exercises_field_default_field_instances() {
           'status' => 1,
         ),
       ),
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2065,6 +2107,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '1Mb',
@@ -2146,6 +2189,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Notes',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2183,6 +2227,7 @@ function cyco_exercises_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/attachments-bucket',
       'file_extensions' => '',
       'max_filesize' => '',
@@ -2260,6 +2305,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Categories',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2297,6 +2343,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback (good)',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -2337,6 +2384,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback (needs work)',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -2377,6 +2425,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Feedback (poor)',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -2421,6 +2470,7 @@ function cyco_exercises_field_default_field_instances() {
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
+      'exclude_cv' => FALSE,
       'file_directory' => 'course/images-bucket',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -2502,6 +2552,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Notes',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2533,6 +2584,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Request message',
     'required' => FALSE,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -2575,6 +2627,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => '"Good" cutoff',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'max' => 90,
       'min' => 10,
       'prefix' => '',
@@ -2610,6 +2663,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Greetings',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 0,
     ),
@@ -2653,6 +2707,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => '"Needs work" cutoff',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'max' => 90,
       'min' => 10,
       'prefix' => '',
@@ -2688,6 +2743,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Overall: good',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 0,
     ),
@@ -2722,6 +2778,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Overall: needs work',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 0,
     ),
@@ -2756,6 +2813,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Overall: poor',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 0,
     ),
@@ -2790,6 +2848,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Signature',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 0,
     ),
@@ -2835,6 +2894,7 @@ function cyco_exercises_field_default_field_instances() {
           'status' => TRUE,
         ),
       ),
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'view modes' => array(

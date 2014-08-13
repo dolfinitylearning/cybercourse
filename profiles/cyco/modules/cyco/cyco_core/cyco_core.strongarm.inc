@@ -13,6 +13,13 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'admin_theme';
+  $strongarm->value = '0';
+  $export['admin_theme'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'book_top_navbar_content_field_names';
   $strongarm->value = 'body field_body field_notes field_explanation field_description';
   $export['book_top_navbar_content_field_names'] = $strongarm;
@@ -23,6 +30,48 @@ function cyco_core_strongarm() {
   $strongarm->name = 'clean_url';
   $strongarm->value = 1;
   $export['clean_url'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'clientside_validation_default_settings';
+  $strongarm->value = array(
+    'validate_options' => array(
+      'disable_html5' => 1,
+      'captcha' => '1',
+      'validate_onsubmit' => '1',
+      'validate_onblur' => '0',
+      'validate_onblur_always' => '0',
+      'validate_onkeyup' => '0',
+      'validate_before_ajax' => '0',
+      'show_messages' => '0',
+    ),
+    'error' => array(
+      'prefix' => 'Sorry, ',
+      'suffix' => '',
+      'scrollto_errormessage' => 1,
+      'scroll_speed' => '1000',
+      'error_element' => 'label',
+    ),
+    'error_placement' => array(
+      'error_placement_default' => '1',
+      'jquery_selector' => '',
+      'custom_error_function' => '',
+    ),
+    'include_hidden' => array(
+      'include_hidden_fields' => 0,
+      'validate_tabs' => 0,
+      'include_hidden' => '',
+    ),
+  );
+  $export['clientside_validation_default_settings'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'clientside_validation_path_list';
+  $strongarm->value = 'admin/structure/views/*';
+  $export['clientside_validation_path_list'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -49,7 +98,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_blueprint_page';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
   $export['comment_blueprint_page'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -174,6 +223,54 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'content_access_exercise_submission';
+  $strongarm->value = array(
+    'view_own' => array(
+      0 => 2,
+      1 => 4,
+      2 => 3,
+    ),
+    'view' => array(
+      0 => 5,
+      1 => 6,
+      2 => 4,
+      3 => 3,
+    ),
+  );
+  $export['content_access_exercise_submission'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'content_access_model_exercise_solution';
+  $strongarm->value = array(
+    'view_own' => array(
+      0 => 5,
+      1 => 6,
+      2 => 7,
+      3 => 4,
+      4 => 3,
+    ),
+    'view' => array(
+      0 => 5,
+      1 => 6,
+      2 => 7,
+      3 => 4,
+      4 => 3,
+    ),
+  );
+  $export['content_access_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'cyco_exercises_submission_theme';
+  $strongarm->value = 'cybercourse_submission';
+  $export['cyco_exercises_submission_theme'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'date_format_long';
   $strongarm->value = 'l, F j, Y - g:ia';
   $export['date_format_long'] = $strongarm;
@@ -191,6 +288,251 @@ function cyco_core_strongarm() {
   $strongarm->name = 'date_format_short';
   $strongarm->value = 'M j Y - g:ia';
   $export['date_format_short'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_blueprint_page';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_blueprint_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_class';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_class_post';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_class_post'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_course_page';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_course_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_exercise';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_exercise'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_exercise_submission_rubric_item_';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_exercise_submission_rubric_item_'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_model_exercise_solution';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_page';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_pattern';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_pseudent_pose';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_pseudent_pose'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_rubric_item';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_rubric_item'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_blueprint_page';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_blueprint_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_class';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_class_post';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_class_post'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_course_page';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_course_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_exercise';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_exercise'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_exercise_submission_rubric_item_';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_exercise_submission_rubric_item_'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_model_exercise_solution';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_page';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_pattern';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_pseudent_pose';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_pseudent_pose'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_rubric_item';
+  $strongarm->value = 0;
+  $export['diff_show_preview_changes_node_rubric_item'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_blueprint_page';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_blueprint_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_class';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_class_post';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_class_post'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_course_page';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_course_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_exercise';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_exercise'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_exercise_submission_rubric_item_';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_exercise_submission_rubric_item_'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_model_exercise_solution';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_page';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_pattern';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_pseudent_pose';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_pseudent_pose'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_rubric_item';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_rubric_item'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'empty_timezone_message';
+  $strongarm->value = 0;
+  $export['empty_timezone_message'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'extlink_target';
+  $strongarm->value = '_blank';
+  $export['extlink_target'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -326,6 +668,13 @@ function cyco_core_strongarm() {
     ),
   );
   $export['field_bundle_settings_node__page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'file_extensions';
+  $strongarm->value = '';
+  $export['file_extensions'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -475,6 +824,20 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_class_pattern';
+  $strongarm->value = 'class/[node:title]';
+  $export['pathauto_node_class_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_class_post_pattern';
+  $strongarm->value = 'class-post/[node:title]';
+  $export['pathauto_node_class_post_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_course_page_pattern';
   $strongarm->value = 'course/[node:title]';
   $export['pathauto_node_course_page_pattern'] = $strongarm;
@@ -482,9 +845,9 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_page_pattern';
-  $strongarm->value = '[node:title]';
-  $export['pathauto_node_page_pattern'] = $strongarm;
+  $strongarm->name = 'pathauto_node_model_exercise_solution_pattern';
+  $strongarm->value = 'model-exercise-solution/[node:title]';
+  $export['pathauto_node_model_exercise_solution_pattern'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -492,6 +855,307 @@ function cyco_core_strongarm() {
   $strongarm->name = 'pathauto_node_pattern';
   $strongarm->value = 'content/[node:title]';
   $export['pathauto_node_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_blueprint_keywords_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_blueprint_keywords_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_keywords_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_keywords_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_pattern';
+  $strongarm->value = '[term:vocabulary]/[term:name]';
+  $export['pathauto_taxonomy_term_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_workflow_tags_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_workflow_tags_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_user_pattern';
+  $strongarm->value = 'users/[user:name]';
+  $export['pathauto_user_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_button_value';
+  $strongarm->value = 'Save and Edit';
+  $export['save_edit_button_value'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_button_weight';
+  $strongarm->value = '4';
+  $export['save_edit_button_weight'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_default_save_button_value';
+  $strongarm->value = 'Save';
+  $export['save_edit_default_save_button_value'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_default_save_button_weight';
+  $strongarm->value = '5';
+  $export['save_edit_default_save_button_weight'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_hide_default_delete';
+  $strongarm->value = 0;
+  $export['save_edit_hide_default_delete'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_hide_default_preview';
+  $strongarm->value = 1;
+  $export['save_edit_hide_default_preview'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_hide_default_save';
+  $strongarm->value = 0;
+  $export['save_edit_hide_default_save'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_node_types';
+  $strongarm->value = array(
+    'page' => 'page',
+    'blueprint_page' => 'blueprint_page',
+    'class' => 'class',
+    'class_post' => 'class_post',
+    'course_page' => 'course_page',
+    'exercise' => 'exercise',
+    'model_exercise_solution' => 'model_exercise_solution',
+    'pattern' => 'pattern',
+    'exercise_submission' => 0,
+    'exercise_submission_rubric_item_' => 0,
+    'pseudent_pose' => 0,
+    'rubric_item' => 0,
+  );
+  $export['save_edit_node_types'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_publish_button_value';
+  $strongarm->value = 'Publish';
+  $export['save_edit_publish_button_value'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_publish_button_weight';
+  $strongarm->value = '7';
+  $export['save_edit_publish_button_weight'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_unpublish';
+  $strongarm->value = 0;
+  $export['save_edit_unpublish'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'save_edit_unpublish_new_only';
+  $strongarm->value = 0;
+  $export['save_edit_unpublish_new_only'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'search_config';
+  $strongarm->value = array(
+    'forms' => array(
+      'toggle_forms' => 0,
+      'move_keyword_search' => 0,
+      'advanced_populate' => 0,
+      'advanced_expand' => 'default',
+      'remove_containing_wrapper' => 'default',
+    ),
+    'fields' => array(
+      'containing_any' => array(
+        'remove' => 0,
+        'roles' => array(),
+      ),
+      'containing_phrase' => array(
+        'remove' => 0,
+        'roles' => array(),
+      ),
+      'containing_none' => array(
+        'remove' => 0,
+        'roles' => array(),
+      ),
+      'types' => array(
+        'remove' => 0,
+        'roles' => array(),
+        'filter' => array(),
+        'groupings' => array(),
+      ),
+      'category' => array(
+        'remove' => 0,
+        'roles' => array(),
+        'filter' => array(),
+        'widget' => 'textfield',
+      ),
+      'language' => array(
+        'remove' => 0,
+        'roles' => array(),
+      ),
+    ),
+    'restrictions' => array(
+      'admin_bypass' => 1,
+    ),
+    'results' => array(
+      'limit' => '10',
+    ),
+  );
+  $export['search_config'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'site_frontpage';
+  $strongarm->value = 'node/5';
+  $export['site_frontpage'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'theme_cybercourse_settings';
+  $strongarm->value = array(
+    'toggle_logo' => 1,
+    'toggle_name' => 1,
+    'toggle_slogan' => 0,
+    'toggle_node_user_picture' => 1,
+    'toggle_comment_user_picture' => 1,
+    'toggle_comment_user_verification' => 0,
+    'toggle_favicon' => 1,
+    'toggle_main_menu' => 1,
+    'toggle_secondary_menu' => 1,
+    'default_logo' => 0,
+    'logo_path' => 'public://logo_white_fg_sm.png',
+    'default_favicon' => 0,
+    'favicon_path' => 'public://logo_blue_fg_0.png',
+    'favicon_upload' => '',
+    'global__active_tab' => 'edit-logo',
+    'bootstrap__active_tab' => 'edit-general',
+    'bootstrap_grid_columns' => '12',
+    'bootstrap_grid_class_prefix' => 'col-sm',
+    'bootstrap_region_grid-navigation' => '',
+    'bootstrap_region_grid-header' => '',
+    'bootstrap_region_grid-highlighted' => '',
+    'bootstrap_region_grid-help' => '',
+    'bootstrap_region_grid-content' => '',
+    'bootstrap_region_grid-sidebar_first' => '3',
+    'bootstrap_region_grid-sidebar_second' => '3',
+    'bootstrap_region_grid-footer' => '',
+    'bootstrap_region_grid-page_top' => '',
+    'bootstrap_region_grid-page_bottom' => '',
+    'bootstrap_region_grid_dynamic-navigation' => array(),
+    'bootstrap_region_grid_dynamic-header' => array(),
+    'bootstrap_region_grid_dynamic-highlighted' => array(),
+    'bootstrap_region_grid_dynamic-help' => array(),
+    'bootstrap_region_grid_dynamic-content' => array(
+      'sidebar_first' => 'sidebar_first',
+      'sidebar_second' => 'sidebar_second',
+    ),
+    'bootstrap_region_grid_dynamic-sidebar_first' => array(),
+    'bootstrap_region_grid_dynamic-sidebar_second' => array(),
+    'bootstrap_region_grid_dynamic-footer' => array(),
+    'bootstrap_region_grid_dynamic-page_top' => array(),
+    'bootstrap_region_grid_dynamic-page_bottom' => array(),
+    'bootstrap_button_size' => '',
+    'bootstrap_button_colorize' => 1,
+    'bootstrap_button_iconize' => 1,
+    'bootstrap_image_shape' => '',
+    'bootstrap_image_responsive' => 1,
+    'bootstrap_table_bordered' => 0,
+    'bootstrap_table_condensed' => 0,
+    'bootstrap_table_hover' => 1,
+    'bootstrap_table_striped' => 1,
+    'bootstrap_table_responsive' => 1,
+    'bootstrap_breadcrumb' => '1',
+    'bootstrap_breadcrumb_home' => 0,
+    'bootstrap_breadcrumb_title' => 1,
+    'bootstrap_navbar_position' => '',
+    'bootstrap_navbar_inverse' => 0,
+    'bootstrap_region_well-navigation' => '',
+    'bootstrap_region_well-header' => '',
+    'bootstrap_region_well-highlighted' => '',
+    'bootstrap_region_well-help' => '',
+    'bootstrap_region_well-content' => '',
+    'bootstrap_region_well-sidebar_first' => '',
+    'bootstrap_region_well-sidebar_second' => '',
+    'bootstrap_region_well-footer' => '',
+    'bootstrap_region_well-page_top' => '',
+    'bootstrap_region_well-page_bottom' => '',
+    'bootstrap_anchors_fix' => 1,
+    'bootstrap_anchors_smooth_scrolling' => 1,
+    'bootstrap_popover_enabled' => 1,
+    'bootstrap_popover_animation' => 1,
+    'bootstrap_popover_html' => 0,
+    'bootstrap_popover_placement' => 'right',
+    'bootstrap_popover_selector' => '',
+    'bootstrap_popover_trigger' => array(
+      'click' => 'click',
+      'hover' => 0,
+      'focus' => 0,
+      'manual' => 0,
+    ),
+    'bootstrap_popover_trigger_autoclose' => 1,
+    'bootstrap_popover_title' => '',
+    'bootstrap_popover_content' => '',
+    'bootstrap_popover_delay' => '0',
+    'bootstrap_popover_container' => 'body',
+    'bootstrap_tooltip_enabled' => 1,
+    'bootstrap_tooltip_descriptions' => 1,
+    'bootstrap_tooltip_descriptions_length' => '200',
+    'bootstrap_tooltip_animation' => 1,
+    'bootstrap_tooltip_html' => 0,
+    'bootstrap_tooltip_placement' => 'auto left',
+    'bootstrap_tooltip_selector' => '',
+    'bootstrap_tooltip_trigger' => array(
+      'hover' => 'hover',
+      'focus' => 'focus',
+      'click' => 0,
+      'manual' => 0,
+    ),
+    'bootstrap_tooltip_delay' => '0',
+    'bootstrap_tooltip_container' => 'body',
+    'bootstrap_cdn' => '3.0.2',
+    'bootstrap_bootswatch' => 'cerulean',
+    'bootstrap_toggle_jquery_error' => 0,
+    'favicon_mimetype' => 'image/png',
+  );
+  $export['theme_cybercourse_settings'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -738,6 +1402,13 @@ Your account on [site:name] has been canceled.
   $strongarm->name = 'user_signatures';
   $strongarm->value = 0;
   $export['user_signatures'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'views_ui_custom_theme';
+  $strongarm->value = 'seven';
+  $export['views_ui_custom_theme'] = $strongarm;
 
   return $export;
 }

@@ -30,3 +30,19 @@
   margin-top: 0.5em;
 }
 
+.cyco_control_panel_group_list {
+  margin-top: 1em;
+  display: block;
+}
+
+#xkcd-container {
+  margin-top: 2em;
+}
+
+#xkcd-title {
+  font-size: 150%;
+}
+
+#xkcd-container img {
+  max-width: 100%;
+}
