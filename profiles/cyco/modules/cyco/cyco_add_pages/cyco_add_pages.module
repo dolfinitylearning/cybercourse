@@ -1,4 +1,9 @@
 <?php
+/**
+* @file
+* Creates widgets letting the user add child and sibling pages to 
+* courses and blueprints
+*/
 
 require_once realpath( dirname(__FILE__) . '/CacplAddWidgetHelper.inc' );
 
@@ -33,7 +38,6 @@ function cyco_add_pages_node_view_alter(&$build) {
   }
   global $_cacpl_add_info;
   $_cacpl_add_info = new CacplAddWidgetHelper();
-//  $links = array();
   //Course main page.
   if ( $node->type == 'course_page' ) {
     _cacpl_remember_operation(
@@ -188,7 +192,7 @@ function _cacpl_remember_operation(
   if ( $op == 'addkid' ) {
     //Nothing extra to do.
   }
-  else if ( $op == 'addsib') {
+  elseif ( $op == 'addsib') {
     if ( is_null($left_sib_mlid) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' addsib missing sib mlid.';
@@ -226,23 +230,23 @@ function cyco_add_pages_form_alter( &$form, &$form_state, $form_id) {
       $title = $source_node->title;
       $op_desc = ( check_plain( $_GET['book_op'] ) == 'addsib')
           ? 'sibling' : 'child';
-      $message = t('Adding a ') . t($op_desc) . t(' of the page: ') 
-          . t($title) . t('.');
+      $message = t('Adding a') . ' ' . t($op_desc) . ' ' . t('of the page:') 
+          . ' ' . t($title) . t('.');
     }
-    else if ( isset( $_GET['book_op'] ) ) {
+    elseif ( isset( $_GET['book_op'] ) ) {
       //Creating a new course/blueprint.
       if ( check_plain( $_GET['book_op'] ) == 'newbook' ) {
         $content_type = $form['#bundle'];
         if ( $content_type == 'blueprint_page' ) {
           $type_name = 'blueprint';
         }
-        else if ( $content_type == 'course_page' ) {
+        elseif ( $content_type == 'course_page' ) {
           $type_name = 'course';
         }
         else {
           return;
         }
-        $message = t( 'Creating a new ') . t( $type_name ) . t('.');
+        $message = t( 'Creating a new') . ' ' . t( $type_name ) . t('.');
       }
     }
     else {
@@ -294,7 +298,7 @@ function _cacpl_form_submitted( $form, &$form_state ) {
               from {menu_links}
               where plid = :plid
               order by weight, link_title";
-      $query_result = db_query($sql, array(':plid'=>$left_sib_plid) );
+      $query_result = db_query($sql, array( ':plid' => $left_sib_plid ) );
       //Create array with new sequence of weights.
       $new_weights = array();
       $weight = 0;
@@ -326,7 +330,7 @@ function _cacpl_form_submitted( $form, &$form_state ) {
             ->execute();
       }//End updating foreach.
     } //End addsib.
-    else if ( $op == 'addkid' ) {
+    elseif ( $op == 'addkid' ) {
       //Make sure the new child goes at the end of the list.
       $parent_nid = check_plain( $_GET['source_nid'] );
       $parent_mlid = check_plain( $_GET['parent'] );
@@ -335,7 +339,7 @@ function _cacpl_form_submitted( $form, &$form_state ) {
               from {menu_links}
               where plid = :plid
               order by weight, link_title";
-      $query_result = db_query($sql, array(':plid'=>$parent_mlid) );
+      $query_result = db_query($sql, array( ':plid' => $parent_mlid ) );
       //Create array with new sequence of weights.
       $new_weights = array();
       $weight = 0;
@@ -361,7 +365,7 @@ function _cacpl_form_submitted( $form, &$form_state ) {
             ->execute();
       }//End updating foreach.      
     }//End addkid.
-    else if ( $op == 'newbook' ) {
+    elseif ( $op == 'newbook' ) {
       //New book. Set $form_state values to tell the book module that.
       $form_state['values']['book']['bid'] = 'new';
       $form_state['values']['book']['nid'] = 'new';

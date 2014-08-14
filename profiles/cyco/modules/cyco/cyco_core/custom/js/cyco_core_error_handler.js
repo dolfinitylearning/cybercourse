@@ -8,7 +8,7 @@
 (function ($) {
   var nameSpaceyThing; //Convenience reference.
   Drupal.behaviors.cycoErrorHandler = {
-    attach: function() {
+    attach: function(context, settings) {
       nameSpaceyThing = this;
     }, //End attach
     reportError: function( message ) {

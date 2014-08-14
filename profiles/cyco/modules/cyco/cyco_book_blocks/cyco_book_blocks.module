@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @file
+ * Creates menu tree blocks for courses and blueprints.
+ */
 /**
  * Max number characters link text can be.
  */
@@ -17,7 +20,7 @@ define('CBB_MAX_RECURSION_LEVELS', 20);
  * Runs more often than it should. Runs when the content of a page changes, 
  * but its menu data has not.
  */
-function cyco_book_blocks_menu_link_alter(&$item){
+function cyco_book_blocks_menu_link_alter(&$item) {
   if ( isset( $item['bid'] ) ) {
     $bid = $item['bid'];
     $book_root = node_load($bid);
@@ -96,7 +99,7 @@ function _cbb_block_info_for_type( $content_type, $type_label ) {
   //Get the nids of book roots.
   $nids = _cbb_get_nids_book_roots( $content_type );
   $block_info = array();
-  foreach( $nids as $nid ) {
+  foreach ( $nids as $nid ) {
     $node = node_load($nid);
     //Delta of block is cbb_ . nid, used in block_view().
     $block_info[ 'cbb_' . $nid ] = array(
@@ -214,7 +217,7 @@ function _cbb_get_book_tree( $root_nid ) {
       $root_node->status,
       $current_recusion_level
   );
-  $trail = array ( current_path() );
+  $trail = array( current_path() );
   global $_cbb_root_path;
   $_cbb_root_path = 'node/' . $root_nid;
   //Render, with unpublished nodes.
@@ -320,7 +323,7 @@ function _cyco_book_blocks_make_tree( $mlid, $nid, $title, $published,
          ORDER by m.weight, n.title
          ";
   //ATTENTION --- DB_REWRITE MISSING --- 
-  $query_result = db_query($sql, array(':mlid'=>$mlid) );
+  $query_result = db_query($sql, array( ':mlid' => $mlid ) );
   //Output the current link.
   $this_level['link'] = array(
     'path' => 'node/' . $nid,
@@ -334,7 +337,7 @@ function _cyco_book_blocks_make_tree( $mlid, $nid, $title, $published,
     ),
   );
   $current_recusion_level++;
-  if ( $current_recusion_level < CBB_MAX_RECURSION_LEVELS ){
+  if ( $current_recusion_level < CBB_MAX_RECURSION_LEVELS ) {
     $children = array();
     foreach ( $query_result as $child ) {
       $title_to_use = $child->short_title 

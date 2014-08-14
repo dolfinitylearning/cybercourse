@@ -1,4 +1,5 @@
 /**
+ * @file
  * View/controller for the pane that shows the rubric items.
  */
 

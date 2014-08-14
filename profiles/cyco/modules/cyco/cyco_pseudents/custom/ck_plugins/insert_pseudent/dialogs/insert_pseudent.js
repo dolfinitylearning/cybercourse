@@ -1,4 +1,5 @@
 /**
+ * @file
  * Manage a dialog that lets the user choose a pseudent. The HTML for
  * the image display is a set of floated divs (let's call it a cell).
  * 

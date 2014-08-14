@@ -13,6 +13,13 @@ function cyco_pseudents_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_pseudent_pose';
+  $strongarm->value = 'edit-comment';
+  $export['additional_settings__active_tab_pseudent_pose'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_anonymous_pseudent_pose';
   $strongarm->value = 0;
   $export['comment_anonymous_pseudent_pose'] = $strongarm;
@@ -49,7 +56,7 @@ function cyco_pseudents_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_pseudent_pose';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
   $export['comment_pseudent_pose'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -148,6 +155,13 @@ function cyco_pseudents_strongarm() {
   $strongarm->name = 'pathauto_node_pseudent_pose_pattern';
   $strongarm->value = 'pseudent-pose/[node:title]';
   $export['pathauto_node_pseudent_pose_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_pseudent_categories_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_pseudent_categories_pattern'] = $strongarm;
 
   return $export;
 }

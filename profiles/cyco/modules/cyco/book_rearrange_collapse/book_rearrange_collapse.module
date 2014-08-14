@@ -20,8 +20,10 @@ function book_rearrange_collapse_form_book_admin_edit_alter( &$form, $form_state
   );
   $form['instructions'] = array(
     '#type' => 'markup',
-    '#markup' => t('Drag the icons to rearrange. Double-click the icons to '
-        . 'collapse/expand. Type in the text fields to change page titles.'),
+    '#markup' => t(
+        'Drag the icons to rearrange. Double-click the icons to '
+        . 'collapse/expand. Type in the text fields to change page titles.'
+    ),
     '#weight' => 0,
   );
 }

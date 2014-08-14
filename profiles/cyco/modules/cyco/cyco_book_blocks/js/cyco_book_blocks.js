@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Display tree menu blocks for books.
+ */
 (function($) {
   $(document).ready(function() {
     //If no settings set, exit. Will happen when there are no

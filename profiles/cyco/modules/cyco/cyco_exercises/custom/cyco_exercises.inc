@@ -1,8 +1,12 @@
 <?php
+/**
+ * @file
+ * Exercise system implementation.
+ */
 
-//First name to use when the user did not give one.
+// First name to use when the user did not give one.
 define( 'GENERIC_FIRST_NAME', 'Willow' );
-//Last name to use when the user did not give one.
+// Last name to use when the user did not give one.
 define( 'GENERIC_LAST_NAME', 'Rosenberg' );
 
 /**
@@ -10,7 +14,7 @@ define( 'GENERIC_LAST_NAME', 'Rosenberg' );
  */
 function cyco_exercises_menu() {
   $items = array();
-  //A page that just closes the window it is in.
+  // A page that just closes the window it is in.
   $items['cyco-exercises-close-popup'] = array(
     'title' => 'Done',
     'page callback' => '_cyco_exercises_close_popup',
@@ -33,17 +37,17 @@ function cyco_exercises_menu() {
  * Implements hook_menu_local_tasks_alter
  */
 function cyco_exercises_menu_local_tasks_alter(&$data, $router_item, $root_path) {
-  switch($root_path){
+  switch ($root_path) {
     case 'exercises':
       if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
-        //Link to add exercise.
+        // Link to add exercise.
         $item = menu_get_item('node/add/exercise');
         $item['title'] = t('Add exercise');
         $data['actions']['output'][] = array(
           '#theme' => 'menu_local_action',
           '#link' => $item,
         );
-        //Link to add rubric item.
+        // Link to add rubric item.
         $item = menu_get_item('node/add/rubric-item');
         $item['title'] = t('Add rubric item');
         $data['actions']['output'][] = array(
@@ -56,9 +60,9 @@ function cyco_exercises_menu_local_tasks_alter(&$data, $router_item, $root_path)
       $path = $router_item['href'];
       list( $ignore, $nid ) = explode('/', $path);
       $node = node_load($nid);
-      switch( $node->type ) {
+      switch ( $node->type ) {
         case 'rubric_item':
-          //Link to add rubric item.
+          // Link to add rubric item.
           $item = menu_get_item('node/add/rubric-item');
           $item['title'] = t('Add rubric item');
           $data['actions']['output'][] = array(
@@ -134,40 +138,38 @@ function _cyco_exercises_close_popup() {
  */
 function cyco_exercises_node_access( $node, $op, $account ) {
   if ( $node == 'exercise_submission' ) {
-    //It's a new exercise submission. Don't regulate it.
+    // It's a new exercise submission. Don't regulate it.
     return NODE_ACCESS_IGNORE;
   }
   if ( isset( $node->type ) && $node->type == 'exercise_submission' ) {
-    //Don't restrict authors and admins.
+    // Don't restrict authors and admins.
     if (cyco_core_user_has_role($account, array( 'author', 'administrator') ) ) {
       return NODE_ACCESS_IGNORE;
     }
-    //Instructors and graders can only work with submissions from their own groups.
+    // Instructors and graders can only work with submissions from their own groups.
     if (cyco_core_user_has_role($account, array( 'instructor', 'grader') ) ) {
       $gids = cyco_core_groups_get_groups_for_user('class');
       if (sizeof($gids) == 0 ) {
         return NODE_ACCESS_DENY;
       }
-      //Get all users in those groups.
+      // Get all users in those groups.
       $all_uids = array();
-      foreach( $gids as $gid ) {
+      foreach ($gids as $gid) {
         $uids = cyco_core_groups_get_group_users($gid);
         $all_uids = array_merge($all_uids, $uids);
       }
-      //See if the user is in the list.
+      // See if the user is in the list.
       if ( !in_array($account->uid, $all_uids) ) {
         return NODE_ACCESS_DENY;
       }
-      //Is in the list.
-//      return NODE_ACCESS_IGNORE;
     }
     if ( cyco_core_user_has_role($account, 'student') ) {
-      //Students can only view or change their own submissions.
+      // Students can only view or change their own submissions.
       if ( $account->uid != $node->uid ) {
         return NODE_ACCESS_DENY;
       }
       if ( $op == 'update' || $op == 'delete' ) {
-        //Students can only edit submissions that have no feedback.
+        // Students can only edit submissions that have no feedback.
         if ( isset( $node->field_when_feedback_given[ $node->language ][0]['value'] ) ) {
           return NODE_ACCESS_DENY;
         }
@@ -176,28 +178,6 @@ function cyco_exercises_node_access( $node, $op, $account ) {
   }
   return NODE_ACCESS_IGNORE;
 }
-
-
-/**
- * Implementation of hook_filter_info().
- */
-//function cyco_exercises_filter_info() {
-//  //Define a filter that can replace a reference to an exercise in page with the
-//  //exercise content.
-//  $filters['cyco_exercises_insert'] = array(
-//    'title' => t('Insert CyberCourse exercise'),
-//    'description' => t('[[[cycoexercise (node_id)]]], to insert the exercise with given NID'),
-//    'process callback' => 'cyco_exercises_filter_node_insert_process',
-//    'tips callback'  => 'cyco_exercises_filter_node_embed_tips',
-//    'cache' => FALSE,
-//  );
-//  return $filters;
-//}
-
-/**
- * Process callback for hook_filter. Finds [[[cycoexercise (node_id)]]]
- * and passes match data onto function that will do the insertion.
- */
 
 /**
  * Implements hook_swim_betwixt_markup_2_html_alter().
@@ -211,17 +191,10 @@ function cyco_exercises_node_access( $node, $op, $account ) {
  */
 function cyco_exercises_swim_betwixt2html_alter(&$content) {
   $regex = '/\[\[\[\s*cycoexercise\:(\d+)\s*\]\]\]/';
-  //[[[, optional whitespace, cycoexercise, optional whitespace, 
-  //exercise number, optional whitespace, ]]]
+  // [[[, optional whitespace, cycoexercise, optional whitespace, 
+  // exercise number, optional whitespace, ]]]
   $content = preg_replace_callback($regex, '_cyco_exercises_make_replacements', $content);
 }
-
-/**
- * Tips callback for hook_filter
- */
-//function cyco_exercises_filter_node_embed_tips($filter, $format, $long) {
-//  return t('[[[cycoexercise 123]]] - Insert an exercise.');
-//}
 
 /**
  * Generates the HTML for the exercise.
@@ -229,7 +202,7 @@ function cyco_exercises_swim_betwixt2html_alter(&$content) {
 function _cyco_exercises_make_replacements($matches) {
   $exercise_nid = $matches[1];
   $exercise_node = node_load($exercise_nid);
-  //Make sure that this is the right type of node.
+  // Make sure that this is the right type of node.
   if ($exercise_node == FALSE || !node_access('view', $exercise_node) || !$exercise_node->status || $exercise_node->type != 'exercise') {
     $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
     drupal_set_message($message);
@@ -247,17 +220,17 @@ function _cyco_exercises_make_replacements($matches) {
       );
     }
     else {
-      //If there is no submission, there is only a link to create a new one.
-      //If there is an existing submission:
-      //  If there is no feedback yet, there is only an edit link.
-      //  If there is feedback, there is a Review link, and a new version link.
+      // If there is no submission, there is only a link to create a new one.
+      // If there is an existing submission:
+      //   If there is no feedback yet, there is only an edit link.
+      //   If there is feedback, there is a Review link, and a new version link.
       global $base_url;
-      //Create submission links for this exercise.
+      // Create submission links for this exercise.
       drupal_add_js(
           $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
           . '/custom/js/cyco_exercises_submission_links.js'
       );
-      //Send current user uid to client.
+      // Send current user uid to client.
       drupal_add_js(
           array('cyco_exercises' => 
             array(
@@ -283,11 +256,12 @@ function _cyco_exercises_make_replacements($matches) {
 
 /**
  * Make links for exercise solution submission.
+ * 
  * @param type $exercise_node The nid of the exercise.
  * @return array Labelled link data.
  */
 function _cyco_exercises_make_submit_links() {
-  //Make the submission links.
+  // Make the submission links.
   global $user;
   $too_bad_so_sad_message = '';
   if ( ! cyco_core_user_has_role($user, 'student') ) {
@@ -296,17 +270,17 @@ function _cyco_exercises_make_submit_links() {
     );
   }
   else {
-    //If there is no submission, there is only a link to create a new one.
-    //If there is an existing submission:
-    //  If there is no feedback yet, there is only an edit link.
-    //  If there is feedback, there is a Review link, and a new version link.
+    // If there is no submission, there is only a link to create a new one.
+    // If there is an existing submission:
+    //   If there is no feedback yet, there is only an edit link.
+    //   If there is feedback, there is a Review link, and a new version link.
     global $base_url;
-    //Create submission links for this exercise.
+    // Create submission links for this exercise.
     drupal_add_js(
         $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
         . '/custom/js/cyco_exercises_submission_links.js'
     );
-    //Send current user uid to client.
+    // Send current user uid to client.
     drupal_add_js(
         array('cyco_exercises' => 
           array(
@@ -324,13 +298,13 @@ function _cyco_exercises_make_submit_links() {
  */
 function cyco_exercises_theme() {
   $result = array(
-    //HTML for rubric selection UI.
+    // HTML for rubric selection UI.
     'select_rubric_item' => array(
       'template' => 'custom/templates/cyco-exercises-select-rubric-item',
     ),
     'cyco_embedded_exercise' => array(
       'template' => 'custom/templates/cyco-inserted-exercise',
-      //Default variable values
+      // Default variable values
       'variables' => array(
         'title' => '(no title)',
         'body' => '(MT)',
@@ -407,24 +381,12 @@ function cyco_exercises_page_alter(&$page) {
  */
 function _cyco_exercises_is_submission_page_in_popup() {
   static $is_submission_popup = FALSE;
-  if ( ! $is_submission_popup ) {
-  //Is the page in a popup?
-  if ((    isset($_GET['destination']) 
-        && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
-      $is_submission_popup = TRUE;
-//    //Is this a submission add form?
-//    $current_path = current_path();
-//    if ( $current_path == 'node/add/exercise-submission' ) {
-//      //It's an add form.
-//      $is_submission_popup = TRUE;
-//    }
-//    else if (preg_match('/node\/(\d+)\/edit/', $current_path, $matches) ) {
-//      //Is this an edit form?
-//      $nid = $matches[1];
-//      $node = node_load($nid);
-//      $is_submission_popup = ( $node->type == 'exercise_submission' );
-//    }
-  }
+  if ( !$is_submission_popup ) {
+    //Is the page in a popup?
+    if ((    isset($_GET['destination']) 
+          && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
+        $is_submission_popup = TRUE;
+    }
   }
   return $is_submission_popup;
   
@@ -432,7 +394,9 @@ function _cyco_exercises_is_submission_page_in_popup() {
 
 /**
  * Get the machine name of the theme to use for the exercise submission form.
+ * 
  * @global string $theme Machine name of current default theme.
+ * 
  * @return string Machine theme name.
  */
 function _cyco_exercises_get_submission_theme() {
@@ -444,17 +408,6 @@ function _cyco_exercises_get_submission_theme() {
   }
   return $theme_to_use;
 }
-
-/**
- * When inserting an exercise into a page, use a special template that
- * strips most of the content away.
- * @param string $vars
- */
-//function cyco_exercises_preprocess_node(&$vars) {
-//  if ($vars['node']->type == 'exercise' && $vars['view_mode'] == 'cyco_exercises_insert') {
-//    $vars['theme_hook_suggestions'][] = 'node__exercise__cyco_exercises_insert';
-//  }
-//}
 
 /**
  * Implements hook_node_view().
@@ -497,8 +450,8 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   //Load the client UI stuff.
   drupal_add_library('system', 'ui.dialog');
   //Load Fancytree.
-  $ftLibraryInfo = libraries_load('fancytree');
-  $numFilesLoaded = libraries_load_files($ftLibraryInfo);
+  $library_info = libraries_load('fancytree');
+  $numFilesLoaded = libraries_load_files($library_info);
   if ($numFilesLoaded <= 0) {
     $mess = t('Error: no Fancytree files loaded. Is Fancytree installed?');
     watchdog('cyco_exercises', $mess);
@@ -597,7 +550,7 @@ function _cyco_exercises_store_exercise_refs($form, &$form_state) {
   );
   if ( sizeof( $matches ) > 0 ) {
     $form_state['values']['field_exercises'][LANGUAGE_NONE] = array();
-    foreach( $matches[1] as $index => $exercise_nid ) {
+    foreach ( $matches[1] as $index => $exercise_nid ) {
       $form_state['values']['field_exercises'][LANGUAGE_NONE][$index]
           = array('target_id' => $exercise_nid);
     }
@@ -618,10 +571,7 @@ function cyco_exercises_libraries_info() {
     'path' => 'dist',
     'version arguments' => array(
       'file' => 'package.json',
-      // "version": "2.0.0-10"
       'pattern' => '/\"version\"\:\s*\"(.*)\"/',
-//      // version:"4.3"
-//      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
       'lines' => 10,
     ),
     'files' => array(
@@ -636,19 +586,6 @@ function cyco_exercises_libraries_info() {
   return $libraries;
 }
 
-/**
- * Implement hook_theme().
- * @return array
- */
-//function cyco_exercises_theme() {
-//  $result = array(
-//    //HTML for rubric selection UI.
-//    'select_rubric_item' => array(
-//      'template' => 'templates/cybercourse-exercises-select-rubric-item',
-//    ),
-//  );
-//  return $result;
-//}
 
 /**
  * Implements hook_form_alter() for exercise submission form.
@@ -657,15 +594,15 @@ function cyco_exercises_libraries_info() {
  */
 function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_state) {
   $parsed_url = drupal_parse_url( $form['#action'] );
-    //Use $form['#action'] value, because $_GET not set correctly when 
-    //uploading a file for a new submission.
-  //Get operation from the URL.
+    // Use $form['#action'] value, because $_GET not set correctly when 
+    // uploading a file for a new submission.
+  // Get operation from the URL.
   $operation = NULL;
   if ( isset( $parsed_url['query']['op'] ) ) {
     $operation = $parsed_url['query']['op'];
   }
-  //If there is no op, this is a normal edit, not through a popup. 
-  //Don't need to do any of the other processing here.
+  // If there is no op, this is a normal edit, not through a popup. 
+  // Don't need to do any of the other processing here.
   if (is_null($operation) ) {
     return;
   }
@@ -674,12 +611,12 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
       . '/custom/js/cyco_exercises_prep_submission_form.js'
   );
-  //Flag - has this been submitted?
+  // Flag - has this been submitted?
   $has_been_submitted = FALSE;
   $language = $form['#entity']->language;
-  //Compute exerice nid and version.
+  // Compute exerice nid and version.
   if ( $operation == 'add' ) {
-    //Compute the exercise id.
+    // Compute the exercise id.
     if ( ! isset( $parsed_url['query']['field_exercise'] ) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' exercise id not passed for add';
@@ -688,7 +625,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
      }
     $exercise_id = $parsed_url['query']['field_exercise'];
     if ( is_nan($exercise_id) || $exercise_id < 1 ) {
-      //Bad version.
+      // Bad version.
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' bad exercise_id: ' . $exercise_id;
       cyco_core_handle_error( $message );
@@ -701,7 +638,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     if ( isset( $parsed_url['query']['version'] ) ) {
       $version = $parsed_url['query']['version'];
       if ( is_nan($version) || $version < 1 ) {
-        //Bad version.
+        // Bad version.
         $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
             . ' bad version: ' . $version;
         cyco_core_handle_error( $message );
@@ -710,18 +647,18 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     }
     $form['field_version'][$language][0]['value']['#default_value'] = $version;
   }
-  else if ( $operation == 'edit' ) {
+  elseif( $operation == 'edit' ) {
     $exercise_id = $form['field_exercise'][$language]['#default_value'][0];
     $version = $form['field_version'][$language][0]['value']['#default_value'];
   }
   else {
-    //Bad operation.
+    // Bad operation.
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' unknown operation: ' + $op;
     cyco_core_handle_error( $message );
     return;
   }
-  $form['title']['#access'] = false;
+  $form['title']['#access'] = FALSE;
   
   //Hide the exercise field.
   $form['field_exercise']['#access'] = false;
@@ -736,7 +673,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       ),
       'setting'
   );
-  //Show version number if > 1.
+  // Show version number if > 1.
   if ( $version >= 1 ) {
     $form['version_display'] = array(
       '#type' => 'markup',
@@ -746,19 +683,18 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       '#suffix' => '</div>',
     );
   }
-  //Kill preview if showing.
+  // Kill preview if showing.
   if ( isset( $form['actions']['preview'] ) ) {
     unset( $form['actions']['preview'] );
   }
-  //Kill delete if showing.
+  // Kill delete if showing.
   if ( isset( $form['actions']['delete'] ) ) {
     unset( $form['actions']['delete'] );
   }
   unset( $form['additional_settings'] );
-  //Change the rest of the form, depending on the operation.
+  // Change the rest of the form, depending on the operation.
   if ( $operation == 'add' ) {
-    //Adding a new submission.
-//    unset( $form['field_when_submitted'] );
+    // Adding a new submission.
     $form['field_when_submitted']['#access'] = FALSE;
     unset( $form['field_when_feedback_given'] );
     unset( $form['field_feedback_source'] );
@@ -767,7 +703,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     unset( $form['field_rubric_item_ratings'] );
     unset( $form['field_complete'] );
   }
-  else if ( $operation == 'edit' ) {
+  elseif ( $operation == 'edit' ) {
     //Show the when submitted field if there is something there.
     if ( isset( $form['field_when_submitted'][$language][0]['#default_value']['value'] ) ) {
       $has_been_submitted = TRUE;
@@ -783,7 +719,6 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       }
     }
     $form['field_when_submitted']['#access'] = FALSE;
-    //unset( $form['field_when_submitted'] );
     //Unset other things.
     unset( $form['field_when_feedback_given'] );
     unset( $form['field_feedback_source'] );
@@ -857,18 +792,19 @@ function _cyco_exercises_submission_form_validate($form, &$form_state) {
   }
   if ( ! $content_given ) {
     form_set_error( 'field_solution', 
-        t('Sorry, you must give a solution and/or attachment before saving. ')
+        t('Sorry, you must give a solution and/or attachment before saving.')
     );
   }
 }
 
 /**
  * Exercise submission form has been submitted.
+ * 
  * @param type $form
  * @param type $form_state
  */
 function _cyco_exercises_submission_form_submission($form, &$form_state) {
-  //Record whether it has been submitted.
+  // Record whether it has been submitted.
   $submit_checked = ($form_state['values']['submit_solution'] == 1);
   if ( $submit_checked ) {
       //Record current date/time as the submission date/time.
@@ -876,16 +812,16 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = $now;
   }
   else {
-    //Submit not checked.
+    // Submit not checked.
     if ( ! isset($form_state['values']['field_when_submitted'][LANGUAGE_NONE][0]['value'] ) ) {
-      //Nothing to change.
+      // Nothing to change.
     }
     else {
-      //There is a date. Clear it.
+      // There is a date. Clear it.
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = '';
     }
   }
-  //Set the submission title.
+  // Set the submission title.
   $language = $form_state['node']->language;
   $exercise_nid = intval( 
       $form_state['values']['field_exercise'][ $language ][0]['target_id']
@@ -911,8 +847,10 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
 }
 
 /**
- * Get the submissions ready to grade. 
+ * Get the submissions ready to grade.
+ * 
  * @global stdClass $user Current user object.
+ * 
  * @param int $uid Grader UID, defaults to current user.
  * @return array Submission info.
  */
@@ -921,14 +859,14 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
     global $user;
     $uid = $user->uid;
   }
-  //Get the id of the grader group role.
+  // Get the id of the grader group role.
   $query = db_select('og_role')
     ->fields('og_role', array('rid'))
     ->condition('group_type', 'node')
     ->condition('group_bundle', 'class')
     ->condition('name', 'grader');
   $grader_role_id = $query->execute()->fetchField();
-  //Get the groups the user is a grader in.
+  // Get the groups the user is a grader in.
   $query = db_select('og_membership', 'ogm');
   $query->fields('ogm', array('id', 'gid', 'group_type'))
     ->condition('entity_type', 'user')
@@ -943,13 +881,13 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
   foreach ( $records as $record ) {
     $gids[] = $record->gid;
   }
-  //Is the user a grader in any group?
+  // Is the user a grader in any group?
   if ( sizeof($gids) == 0 ) {
     return;
   }
-  //Get the names of those groups.
+  // Get the names of those groups.
   $groups = cyco_core_groups_get_group_names($gids);
-  //Get all the members of those groups.
+  // Get all the members of those groups.
   $query = db_select('og_membership', 'ogm');
   $query
       ->distinct()
@@ -957,23 +895,23 @@ function cyco_exercises_get_submissions_to_grade($uid = NULL) {
       ->condition('entity_type', 'user')
       ->condition('gid', $gids, 'IN');
   $records = $query->execute()->fetchAll();
-  //Array of uids to be imploded to use in SQL INI.
+  // Array of uids to be imploded to use in SQL INI.
   $users_in_groups = array();
-  //Track the groups a user is in.
+  // Track the groups a user is in.
   $groups_users_are_in = array();
-  foreach( $records as $record ) {
+  foreach ( $records as $record ) {
     $gid = $record->gid;
     $etid = $record->etid;
-    //Add to array of all members in all groups.
+    // Add to array of all members in all groups.
     $users_in_groups[] = $etid;
-    //Track groups for each individual member.
+    // Track groups for each individual member.
     if ( ! isset( $groups_users_are_in[ $etid ] ) ) {
       $groups_users_are_in[ $etid ] = array();
     }
     $groups_users_are_in[ $etid ][] = $gid;
   }
-  //Get the submissions for those users that have a submission date, but
-  //no feedback date.
+  // Get the submissions for those users that have a submission date, but
+  // no feedback date.
   $sql = "
 select 
   submission_node.nid as submission_nid,
@@ -1038,13 +976,13 @@ order by when_submitted_table.field_when_submitted_value asc;
       $submissions[] = $row;
     }
   }
-  //Only pass group membership info for students with submissions.
+  // Only pass group membership info for students with submissions.
   $memberships = array();
   
   foreach ( $submissions as $index => $submission ) {
     $submitter_uid = $submission['submitter_uid'];
     $memberships[ $submitter_uid ] = $groups_users_are_in[ $submitter_uid ];
-    //When-submitted comes out in UTC. Convert to user time zone.
+    // When-submitted comes out in UTC. Convert to user time zone.
     $when_submitted = strtotime( $submission['when_submitted'] . ' UTC' );
     $interval = format_interval(
         time() - $when_submitted
@@ -1139,12 +1077,12 @@ function _cyco_structure_feedback_phrases_preview_data( $form_state, $field_name
 }
 
 function _cyco_exercises_user_profile_form_submit( $form, &$form_state ) {
-  //Check the cutoff percentages.
-  $good_cutoff = null;
+  // Check the cutoff percentages.
+  $good_cutoff = NULL;
   if ( $form_state['values']['field_good_cutoff'][LANGUAGE_NONE][0]['value'] ) {
     $good_cutoff = $form_state['values']['field_good_cutoff'][LANGUAGE_NONE][0]['value'];
   }
-  $needs_work_cutoff = null;
+  $needs_work_cutoff = NULL;
   if ( $form_state['values']['field_needs_work_cutoff'][LANGUAGE_NONE][0]['value'] ) {
     $needs_work_cutoff = $form_state['values']['field_good_cutoff'][LANGUAGE_NONE][0]['value'];
   }
@@ -1308,7 +1246,7 @@ function cyco_exercises_tokens($type, $tokens, array $data = array(),
       }
     }
   } //End processing feedback type.
-  else if ($type == 'current-user') {
+  elseif ($type == 'current-user') {
     // Loop through each of the available tokens.
     foreach ($tokens as $name => $original) {
       // Find the desired token by name.
@@ -1383,7 +1321,6 @@ function _cyco_test_use_generic_name( $field_to_check ) {
  * Implements hook_views_api().
  */
 function cyco_exercises_views_api_alter(&$vars) {
-  $r=6;
   if (isset($vars['cyco_exercises'])) {
     $vars['cyco_exercises']['path'] 
         = drupal_get_path('module', 'cyco_exercises') . '/custom/views';

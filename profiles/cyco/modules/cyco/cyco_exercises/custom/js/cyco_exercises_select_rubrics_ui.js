@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Manages the exercise selection UI.
+ */
 "use strict";
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.

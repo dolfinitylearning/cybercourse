@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Manage the list of submissions to grade.
+ */
 var app = app || {};
 
 //Create a namespacey object for this pane.

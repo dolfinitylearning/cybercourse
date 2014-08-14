@@ -1,4 +1,5 @@
 /**
+ * @file
  * Data models. There are constructors, and containers. 
  * 
  * The constructors use null as MT for all properties.

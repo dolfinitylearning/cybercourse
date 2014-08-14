@@ -291,6 +291,7 @@ function cyco_exercises_field_default_field_instances() {
   $field_instances['node-class-field_courses'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
+    'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Courses this class has access to.',
     'display' => array(
@@ -311,10 +312,16 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_courses',
     'label' => 'Courses',
     'required' => 1,
     'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
       'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
@@ -801,7 +808,7 @@ function cyco_exercises_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Exercises this page includes.',
+    'description' => 'Exercises this page includes. Internal use only.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -817,6 +824,7 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_exercises',
     'label' => 'Exercises',
     'required' => 0,
@@ -1148,9 +1156,12 @@ function cyco_exercises_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
+      'module' => 'taxonomy',
+      'settings' => array(
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'taxonomy_autocomplete',
       'weight' => 1,
     ),
   );
@@ -2938,7 +2949,7 @@ function cyco_exercises_field_default_field_instances() {
   t('Exercise');
   t('Exercise this is a submission for.');
   t('Exercises');
-  t('Exercises this page includes.');
+  t('Exercises this page includes. Internal use only.');
   t('Feedback');
   t('Feedback (good)');
   t('Feedback (needs work)');

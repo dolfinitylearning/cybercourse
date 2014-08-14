@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Implements the way kewl pseudent thing.
+ */
+
+/**
  * Flag showing whether the poses preview data (used with CKEditor) is dirty.
  */
 define('POSES_PREVIW_DIRTY_FLAG_VAR', 'pseudents_poses_preview_dirty');
@@ -75,10 +80,6 @@ function cyco_pseudents_permission() {
       'title' => t('Administer pseudents'),
       'description' => t('Create, delete, and update pseudents.')
     ),
-//    'use pseudents in content' => array(
-//      'title' => t('Use pseudents in content'),
-//      'description' => t('Insert pseudent token in content.')
-//    ),
   );
 }
 
@@ -125,7 +126,7 @@ function _cyco_pseudents_generate_ck_pseudent_table() {
       }
       $categories = array();
       if ( isset($node->field_pseudent_categories[LANGUAGE_NONE]) ) {
-        foreach( $node->field_pseudent_categories[LANGUAGE_NONE] as $term ) {
+        foreach ( $node->field_pseudent_categories[LANGUAGE_NONE] as $term ) {
           $categories[ $term['tid'] ] = $term_names[ $term['tid'] ];
         }
       }
@@ -259,15 +260,6 @@ function cyco_pseudents_swim_add_client_stuff() {
  * @param string $content Content to change.
  */
 function cyco_pseudents_swim_ckhtml2rest_alter( &$content ) {
-//  require_once __DIR__ . '/../../../../libraries/phpQuery/phpQuery/phpQuery.php';
-//  phpQuery::newDocument($content);
-//  $divs = pq('div.pseudent');
-// foreach(pq('div.pseudent') as $pseudent_container) {
-//   $nid = pq($pseudent_container)->attr('data-pseudent-id');
-//   $pseudent_content = pq($pseudent_container)->find('.pseudent-content')->html();
-//   drupal_set_message($nid . ' ' . $pseudent_content);
-//}
-  $r=7;
   $regex = 
       '/\<div class\=\"pseudent\".*?data\-pseudent\-id\=\"(.*?)\"*.\>\s*'
       .  '\<div class\=\"pseudent\-image\-container\"\>\s*'
@@ -322,7 +314,7 @@ function cyco_pseudents_swim_rest2betwixt_alter( &$content ) {
       $right .= "\n"; //Slimy patch.
       $left .= "\n"; //Slimy patch.
     }
-    $content = $left  . $betwixt . $right;
+    $content = $left . $betwixt . $right;
   }
 }
 
@@ -430,7 +422,7 @@ function _cyco_pseudents_make_view_replacements_old($matches) {
  */
 function cyco_pseudents_node_view($node, $view_mode, $langcode) {
   global $base_url;
-  if ( $node->type == 'pseudent_pose' ){
+  if ( $node->type == 'pseudent_pose' ) {
     //Add links - "Add another" and "Back to list."
     if ( $view_mode == 'full' ) {
           $weight = cyco_core_highest_content_weight( 
@@ -476,11 +468,6 @@ function cyco_pseudents_ckeditor_plugin() {
         // The full path to the CKEditor plugin directory, trailing slash included.
         'path' => drupal_get_path('module', 'cyco_pseudents') 
                   . '/custom/ck_plugins/insert_pseudent/',
-        // Plugin buttons definition (optional).
-//        'buttons' => array(
-//           'button_name' => array('label' => 'Button label', 'icon' => '/path/to/icon/image'),
-//           'button_name' => array('label' => 'Button label', 'icon' => '/path/to/icon/image'),
-//        )
          )
     );
   return $definition;
@@ -588,7 +575,7 @@ function _cyco_pseudents_find_pseudent_elements( $content ) {
             $candidate_content_end = $next_line_start - 1;
             list( $line, $line_length, $end_char_pos, $indent_level, $is_blank, $EOS) 
               = _cyco_pseudents_get_line($content, $next_line_start);
-          } while( ! $is_blank && ! $EOS );
+          } while ( ! $is_blank && ! $EOS );
           if ( $EOS ) {
             //Done.
             $pseudent_content_end = strlen($content) - 1;
@@ -692,7 +679,7 @@ function _cyco_pseudents_get_line( $content, $start_pos ) {
   if ( $char != "\n" && $char != ' ') {
     $is_blank = FALSE;
   }
-  while( $char != "\n" && ($eol_pos + 1) < strlen($content) ) {
+  while ( $char != "\n" && ($eol_pos + 1) < strlen($content) ) {
     $eol_pos ++;
     $char = substr($content, $eol_pos, 1);
     if ( $char != "\n" && $char != ' ') {
@@ -711,7 +698,7 @@ function _cyco_pseudents_get_line( $content, $start_pos ) {
   if ( $char != "\n" && $char != ' ') {
     $is_blank = FALSE;
   }
-  while( $char == ' ' && ($content_start_pos + 1) < strlen($content) ) {
+  while ( $char == ' ' && ($content_start_pos + 1) < strlen($content) ) {
     $content_start_pos ++;
     $char = substr( $content, $content_start_pos, 1);
     if ( $char != "\n" && $char != ' ') {
@@ -729,7 +716,7 @@ function _cyco_pseudents_get_line( $content, $start_pos ) {
  * Implements hook_menu_local_tasks_alter
  */
 function cyco_pseudents_menu_local_tasks_alter(&$data, $router_item, $root_path) {
-  switch($root_path){
+  switch ($root_path) {
     case 'pseudent-poses':
       if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
         //Link to add exercise.

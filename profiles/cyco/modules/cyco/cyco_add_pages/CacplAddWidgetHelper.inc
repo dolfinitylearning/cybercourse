@@ -1,8 +1,7 @@
 <?php
 /**
+ * @file
  * Collects data about things user can add - kids and siblings.
- *
- * @author mathieso
  */
 class CacplAddWidgetHelper {
   

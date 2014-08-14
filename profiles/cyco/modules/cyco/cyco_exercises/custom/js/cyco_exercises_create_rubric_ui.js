@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Manage the rubric creation UI.
+ */
 (function($) {
   "use strict";
   var uiNamespace; //Convenient ref to a namespacey thing.

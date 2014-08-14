@@ -1,4 +1,5 @@
 /**
+ * @file
  * Prepare the exerise submisssion form.
  */
 "use strict";

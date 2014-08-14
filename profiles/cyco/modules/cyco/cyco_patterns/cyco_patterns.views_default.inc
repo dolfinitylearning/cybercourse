@@ -82,8 +82,8 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'A pattern is a common way of doing things. Here are the patterns used in the course.';
-  $handler->display->display_options['header']['area']['format'] = 'full_html';
+  $handler->display->display_options['header']['area']['content'] = 'A pattern is a common way of doing things. Here are the patterns on this site.';
+  $handler->display->display_options['header']['area']['format'] = 'plain_text';
   /* Field: Content: Pattern categories */
   $handler->display->display_options['fields']['field_pattern_categories']['id'] = 'field_pattern_categories';
   $handler->display->display_options['fields']['field_pattern_categories']['table'] = 'field_data_field_pattern_categories';

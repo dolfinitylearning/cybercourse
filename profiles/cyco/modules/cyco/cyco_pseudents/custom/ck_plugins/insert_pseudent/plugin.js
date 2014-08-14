@@ -1,4 +1,5 @@
 /**
+ * @file
  * CK plugin to insert a pseudent into a SWIM editor's content.
  */
 (function ($) {

@@ -14,7 +14,7 @@ function cyco_exercises_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_node_exercise_submission';
-  $strongarm->value = '1';
+  $strongarm->value = '0';
   $export['auto_entitylabel_node_exercise_submission'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -112,7 +112,7 @@ function cyco_exercises_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'comment_class_post';
-  $strongarm->value = '2';
+  $strongarm->value = '0';
   $export['comment_class_post'] = $strongarm;
 
   $strongarm = new stdClass();

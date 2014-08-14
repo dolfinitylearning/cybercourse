@@ -26,5 +26,13 @@ function cyco_exercises_og_features_default_roles() {
     'name' => 'instructor',
   );
 
+  // Exported OG Role: 'node:class:student'.
+  $roles['node:class:student'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'class',
+    'name' => 'student',
+  );
+
   return $roles;
 }

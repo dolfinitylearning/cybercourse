@@ -145,6 +145,48 @@ function cyco_core_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_other:admin/content',
   );
+  // Exported menu link: menu-cp-authors_appearance:admin/appearance
+  $menu_links['menu-cp-authors_appearance:admin/appearance'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/appearance',
+    'router_path' => 'admin/appearance',
+    'link_title' => 'Appearance',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Change the look of the site',
+      ),
+      'identifier' => 'menu-cp-authors_appearance:admin/appearance',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -46,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_other:admin/content',
+  );
+  // Exported menu link: menu-cp-authors_backup:admin/config/system/backup_migrate
+  $menu_links['menu-cp-authors_backup:admin/config/system/backup_migrate'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/config/system/backup_migrate',
+    'router_path' => 'admin/config/system/backup_migrate',
+    'link_title' => 'Backup',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Backup the database',
+      ),
+      'identifier' => 'menu-cp-authors_backup:admin/config/system/backup_migrate',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -48,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_other:admin/content',
+  );
   // Exported menu link: menu-cp-authors_basic-pages:basic-pages
   $menu_links['menu-cp-authors_basic-pages:basic-pages'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -164,6 +206,27 @@ function cyco_core_menu_default_menu_links() {
     'expanded' => 1,
     'weight' => -45,
     'customized' => 1,
+  );
+  // Exported menu link: menu-cp-authors_blocks:admin/structure/block
+  $menu_links['menu-cp-authors_blocks:admin/structure/block'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/structure/block',
+    'router_path' => 'admin/structure/block',
+    'link_title' => 'Blocks',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add/remove blocks, e.g., course tree',
+      ),
+      'identifier' => 'menu-cp-authors_blocks:admin/structure/block',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -47,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_other:admin/content',
   );
   // Exported menu link: menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords
   $menu_links['menu-cp-authors_blueprints-and-keywords:blueprints-and-keywords'] = array(
@@ -775,7 +838,10 @@ function cyco_core_menu_default_menu_links() {
   t('Add class');
   t('Add user');
   t('All content');
+  t('Appearance');
+  t('Backup');
   t('Basic pages');
+  t('Blocks');
   t('Blueprints and keywords');
   t('Classes');
   t('Control panel');

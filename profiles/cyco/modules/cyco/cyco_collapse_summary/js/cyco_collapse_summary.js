@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Collapse the summary part of a bodyish field.
+ */
+
 (function ($) {
   "use strict";
 

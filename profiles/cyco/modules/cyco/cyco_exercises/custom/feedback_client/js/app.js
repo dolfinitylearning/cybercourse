@@ -1,3 +1,9 @@
+/**
+ * @file
+ * Main file for the application.
+ * 
+ */
+
 var app = app || {};
 
 /**
@@ -20,11 +26,11 @@ app.compiledTemplates = {
 
 
 app.start = function() {
+  //Kick off the error handler.
+  Drupal.behaviors.cycoErrorHandler.attach();
   //Hide everything to start.
   $("body > div").hide();
-  
   app.basePath = window.opener.Drupal.settings.basePath;
-  
   //Show the Please wait thing.
   $("#global-wait-message").show();
   $.when(

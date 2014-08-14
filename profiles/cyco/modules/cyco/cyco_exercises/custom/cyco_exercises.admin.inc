@@ -1,5 +1,6 @@
 <?php
 /**
+ * @file
  * Admin function for cybercourse_exercise.
  */
 
@@ -9,8 +10,8 @@
 function cyco_exercises_settings_form($form, &$form_state) {
   //Select list of enabled themes, plus Default at the top.
   $theme_details = list_themes();
-  $theme_select_options = array( 'default' => 'Use default theme' );
-  foreach( $theme_details as $machine_name => $theme ) {
+  $theme_select_options = array('default' => 'Use default theme');
+  foreach ( $theme_details as $machine_name => $theme ) {
     if ( $theme->status == 1 ) {
       $theme_select_options[$machine_name] = $theme->info['name'];
     }
@@ -38,6 +39,6 @@ function cyco_exercises_settings_form($form, &$form_state) {
 function cyco_exercises_settings_form_submit($form, &$form_state) {
   variable_set('cyco_exercises_submission_theme',
     $form_state['values']['exercise_theme']);
-  drupal_set_message( t('Settings have been saved.') );
+  drupal_set_message(t('Settings have been saved.'));
 }
 

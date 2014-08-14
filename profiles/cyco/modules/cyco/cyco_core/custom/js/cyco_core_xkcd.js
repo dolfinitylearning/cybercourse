@@ -1,5 +1,6 @@
-/* 
-Add XKCD comic to the page.
+/**
+* @file
+* Add XKCD comic to the page.
 */
 "use strict";
 (function ($) {

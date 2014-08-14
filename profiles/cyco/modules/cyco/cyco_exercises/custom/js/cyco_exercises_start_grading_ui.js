@@ -1,6 +1,7 @@
-/* 
-Open the grading UI in a new window.
-*/
+/** 
+ * @file
+ * Open the grading UI in a new window.
+ */
 "use strict";
 (function ($) {
   Drupal.behaviors.openGradingUi = {

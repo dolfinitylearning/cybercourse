@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Implement client-side of the tweaks.
+ */
+
 "use strict";
 (function ($) {
 

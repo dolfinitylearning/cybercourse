@@ -27,8 +27,6 @@ function cyco_toc_node_view_alter(&$build) {
     if ( $build['#node']->field_show_table_of_contents[LANGUAGE_NONE][0]['value'] == 1 ) {
       drupal_add_js(drupal_get_path('module', 'cyco_toc') 
           . '/custom/js/cyco_toc.js', 'file');
-//      drupal_add_css(drupal_get_path('module', 'cyco_toc') 
-//          . '/custom/js/cyco_toc.css', 'file');
     }
   }
 }

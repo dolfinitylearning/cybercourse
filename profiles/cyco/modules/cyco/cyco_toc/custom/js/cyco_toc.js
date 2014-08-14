@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Show a table of contents.
+ */
 (function ($) {
   Drupal.behaviors.cycoToc = {
     attach: function (context, settings) {

@@ -1,4 +1,5 @@
 /* 
+ * @file
  * Guess the user's time zone.
  */
 "use strict";

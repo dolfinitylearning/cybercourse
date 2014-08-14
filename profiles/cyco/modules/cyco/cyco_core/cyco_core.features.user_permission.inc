@@ -15,7 +15,6 @@ function cyco_core_user_default_permissions() {
     'name' => 'access administration menu',
     'roles' => array(
       'administrator' => 'administrator',
-      'author' => 'author',
     ),
     'module' => 'admin_menu',
   );
@@ -138,6 +137,9 @@ function cyco_core_user_default_permissions() {
     'name' => 'access user profiles',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
     ),
     'module' => 'user',
   );
@@ -193,6 +195,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'administer blocks',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'block',
   );
@@ -423,6 +426,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'administer themes',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'system',
   );
@@ -704,7 +708,6 @@ function cyco_core_user_default_permissions() {
     'name' => 'display drupal links',
     'roles' => array(
       'administrator' => 'administrator',
-      'author' => 'author',
     ),
     'module' => 'admin_menu',
   );

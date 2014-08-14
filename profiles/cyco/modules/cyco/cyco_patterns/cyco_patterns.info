@@ -44,6 +44,7 @@ features[user_permission][] = edit any pattern content
 features[user_permission][] = edit own pattern content
 features[user_permission][] = edit terms in pattern_categories
 features[user_permission][] = search pattern content
+features[variable][] = additional_settings__active_tab_pattern
 features[variable][] = comment_anonymous_pattern
 features[variable][] = comment_default_mode_pattern
 features[variable][] = comment_default_per_page_pattern

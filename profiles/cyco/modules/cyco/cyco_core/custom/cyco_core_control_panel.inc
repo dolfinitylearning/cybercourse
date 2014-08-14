@@ -35,8 +35,8 @@ function cyco_core_menu_link_alter(&$link) {
  * @return string HTML.
  */
 function _cyco_render_control_panel() {
-  //Add JS to show menu titles as text.
-  //Flag to tell JS to do its Evil Work.
+  // Add JS to show menu titles as text.
+  // Flag to tell JS to do its Evil Work.
   $settings = array(
     'showMenuTitles' => TRUE,
   );
@@ -49,7 +49,7 @@ function _cyco_render_control_panel() {
       'setting'
   );
   $result = array();
-  //Wrap all in a class with a known name, so JS menu code can target.
+  // Wrap all in a class with a known name, so JS menu code can target.
   $result['all_content'] = array(
     '#type' => 'container',
     '#attributes' => array(
@@ -58,9 +58,10 @@ function _cyco_render_control_panel() {
       ),
     ),
   );
-  //Add intro elements.
+  // Add intro elements.
   $wiki_link = l( t('The CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
-  $message = $wiki_link . t( ' explains how to use the control panel. ' );
+  $message = $wiki_link . ' ' 
+      . t('explains how to use the control panel.' ) . ' ';
   if ( cyco_core_current_user_has_role('author') ) {
     $message .= 'For complete control, log in as an administrator.';
   }
@@ -68,7 +69,7 @@ function _cyco_render_control_panel() {
     '#type' => 'markup',
     '#markup' => $message,
   );
-  //Show user's groups.
+  // Show user's groups.
   if ( module_exists( 'og' ) ) {
     $groups = cyco_core_groups_render_basic_list();
     if ( strstr($groups, 'views-row') === FALSE ) {
@@ -89,7 +90,7 @@ function _cyco_render_control_panel() {
           ) 
         )
       ),
-    );    
+    );
   }
   if ( cyco_core_current_user_has_role( array('author') ) ) {
     $result['all_content']['author_title'] = 
@@ -221,7 +222,8 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
       $message = t('You have one submission to grade. ');
     }
     else {
-      $message = t('You have ' . $num_submissions . ' submissions to grade. ');
+      $message 
+          = t('You have ' . $num_submissions . ' submissions to grade.');
     }
     $link = l( 
       'Give feedback', 
@@ -229,7 +231,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
         . '/custom/feedback_client/index.html', 
       array( 'attributes' => 
         array( 'class' => 
-          array ( 'cyco-control-panel-grade-link' ) 
+          array ( 'cyco-control-panel-grade-link' ) ,
         ), 
       ) 
     );

@@ -84,13 +84,8 @@ function cyco_patterns_user_default_permissions() {
   $permissions['search pattern content'] = array(
     'name' => 'search pattern content',
     'roles' => array(
-      'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
     ),
     'module' => 'search_config',
   );

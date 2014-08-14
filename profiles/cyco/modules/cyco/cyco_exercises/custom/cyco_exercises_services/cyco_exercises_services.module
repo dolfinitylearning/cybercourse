@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Responds to client requests.
+ */
 
 //Greeting to use when the grader did not give one.
 define( 'CYCO_EXER_GENERIC_GREETING', 'Your feedback:' );
@@ -307,7 +311,7 @@ function _exri_access($operation, $args) {
  * @param int $nid Node id.
  * @return \stdClass Item.
  */
-function _exri_retrieve( $nid ){
+function _exri_retrieve( $nid ) {
   //Load the node.
   $node = node_load($nid);
   if ( ! $node || $node->type != 'rubric_item') {
@@ -364,7 +368,7 @@ function _exri_retrieve( $nid ){
  * Create a new rubric item.
  * @param array $data Data from client about the rubric item.
  */
-function _exri_create($data){
+function _exri_create($data) {
   global $user;
   $node = new stdClass();
   $node->title = $data['title'];
@@ -400,7 +404,7 @@ function _exri_create($data){
 
 }
 
-function _exri_update($nid, $data){
+function _exri_update($nid, $data) {
   //Load the node, check it is there.
   $node = node_load( $nid );
   $node->title = $data['title'];
@@ -443,9 +447,9 @@ function _cyco_exer_move_arr_into_node( $source, $inner_key ) {
   return $result;
 }
 
-function _exri_delete(){}
+function _exri_delete() {}
 
-function _exri_index(){}
+function _exri_index() {}
 
 /**
  * Return all rubric item titles and their categories.
@@ -546,10 +550,10 @@ function _exri_save_new_item_comments( $data ) {
       if ( $new_comment_rating == 'good' ) {
         $field_name = 'field_feedback_good';
       }
-      else if ( $new_comment_rating == 'needs_work' ) {
+      elseif ( $new_comment_rating == 'needs_work' ) {
         $field_name = 'field_feedback_needs_work';
       }
-      else if ( $new_comment_rating == 'poor' ) {
+      elseif ( $new_comment_rating == 'poor' ) {
         $field_name = 'field_feedback_poor';
       }
       else {
@@ -561,13 +565,13 @@ function _exri_save_new_item_comments( $data ) {
       //Check that the comment isn't already in the list.
       $found = FALSE;
       $search = $rubric_item->{$field_name}[ $rubric_item->language ];
-      foreach( $search as $comment ) {
+      foreach ( $search as $comment ) {
         if ( strtolower( trim( $comment['value'] ) ) == $new_comment ) {
           $found = TRUE;
           break;
         }
       }
-      if ( ! $found ) {
+      if ( !$found ) {
         //Add the comment.
         $rubric_item->{$field_name}[ $rubric_item->language ][]
             = array( 'value' => check_plain( $new_comment ) );
@@ -653,15 +657,15 @@ function _exex_access($operation, $args) {
   return $access;
 }
 
-function _exex_retrieve(){}
+function _exex_retrieve() {}
 
-function _exex_create(){}
+function _exex_create() {}
 
-function _exex_update(){}
+function _exex_update() {}
 
-function _exex_delete(){}
+function _exex_delete() {}
 
-function _exex_index(){}
+function _exex_index() {}
 
 /**
  * Get the rubric item vocabulary.
@@ -738,7 +742,7 @@ function _exri_check_title( $data ) {
     //Unique title.
     $warn_user = FALSE;
   }
-  else if ( sizeof($result_nids) == 1 ) {
+  elseif ( sizeof($result_nids) == 1 ) {
     if ( $result_nids[0] == $nid_to_check ) {
       //Title hasn't changed for the item.
       $warn_user = FALSE;
@@ -763,7 +767,7 @@ function _exri_check_title( $data ) {
  * Dates are ISO8601.
  * @return \stdClass
  */
-function _cycoex_get_sub_meta_student_exer( $data ) {
+function _cycoex_get_sub_meta_student_exer($data) {
   //Get params.
   if ( !isset($data['student']) ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
@@ -785,7 +789,7 @@ function _cycoex_get_sub_meta_student_exer( $data ) {
   if ( $student_uid == $user->uid ) {
     $permission = TRUE;
   }
-  else if ( cyco_core_current_user_has_role( 
+  elseif ( cyco_core_current_user_has_role( 
             array('administrator', 'instructor', 'grader') ) 
           ) {
     $permission = TRUE;
@@ -810,7 +814,7 @@ function _cycoex_get_sub_meta_student_exer( $data ) {
   }
   $view_results = $view->result;
   $submissions = array();
-  foreach( $view_results as $view_result ) {
+  foreach ( $view_results as $view_result ) {
     $submisson = array();
     $submisson['nid'] = $view_result->nid;
     $submisson['version'] = $view_result->field_field_version[0]['raw']['value'];
@@ -945,7 +949,7 @@ function _cycoex_get_sub_rendered( $data ) {
   }
   $sub_nid = $data['sub_nid'];
   $submission = node_load($sub_nid);
-  if ( ! $submission ){
+  if ( ! $submission ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' could not load submission for nid=' . $sub_nid;
     cyco_core_handle_services_error( $message );
@@ -988,18 +992,18 @@ function _cycoex_get_exercise_rendered( $data ) {
   }
   $exer_nid = $data['exer_nid'];
   $exercise = node_load($exer_nid);
-  if ( ! $exercise ){
+  if ( ! $exercise ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' could not load exercise for nid=' . $exer_nid;
     cyco_core_handle_services_error( $message );
     return;
   }
   $body = $exercise->field_body[LANGUAGE_NONE][0]['value'];
-  $body_rendered = swim_rest2html($body);
+  $body_rendered = swim_markdown2html($body);
   //Render the notes.
   $notes_rendered = '';
   if ( isset( $exercise->field_notes[LANGUAGE_NONE][0] ) ) {
-    $notes_rendered = swim_rest2html( 
+    $notes_rendered = swim_markdown2html( 
         $exercise->field_notes[LANGUAGE_NONE][0]['value'] 
     );
   }
@@ -1032,7 +1036,7 @@ function _cycoex_get_exercise_rendered( $data ) {
   if (isset($result['node'])) {
     $models = array();
     $model_nids = array_keys($result['node']); 
-    foreach( $model_nids as $model_nid ) {
+    foreach ( $model_nids as $model_nid ) {
       $model = array();
       $model['model_nid'] = $model_nid;
       $model_node = node_load( $model_nid );
@@ -1040,10 +1044,10 @@ function _cycoex_get_exercise_rendered( $data ) {
         $model['exercise_nid'] = $model_node->field_exercise_solved[LANGUAGE_NONE][0]['target_id'];
       }
       if ( isset( $model_node->field_body[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['rendered'] = swim_rest2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
+        $model['rendered'] = swim_markdown2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
       }
       if ( isset( $model_node->field_notes[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['notes'] = swim_rest2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
+        $model['notes'] = swim_markdown2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
       }
       if ( isset( $model_node->field_attachments[LANGUAGE_NONE][0] ) ) {
         $model['attachments'] = _cyco_exercises_package_attachment_data(
@@ -1084,7 +1088,7 @@ function _cycoex_get_exercise_rendered( $data ) {
  */
 function _cyco_exercises_package_attachment_data( $field ) {
   $attached_files = array();
-  foreach( $field[LANGUAGE_NONE] as $attachment ) {
+  foreach ( $field[LANGUAGE_NONE] as $attachment ) {
     $filename = $attachment['filename'];
     $url = file_create_url( $attachment['uri'] );
     $attached_files[] = array(
@@ -1101,15 +1105,8 @@ function _cyco_exercises_package_attachment_data( $field ) {
  * @return array Da goods.
  */
 function _cycoex_get_rubric_items( $rubric_item_nids ) {
-  //Get params.
-//  if ( !isset($rubric_item_nids['sub_nid']) ) {
-//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-//        . ' sub_nid missing.';
-//    cyco_core_current_user_has_role( $message );
-//    return;
-//  }
   $rubric_items_jsony = array();
-  foreach( $rubric_item_nids as $rubric_item_nid ) {
+  foreach ( $rubric_item_nids as $rubric_item_nid ) {
     $rubric_item_node = node_load($rubric_item_nid);
     if ( ! $rubric_item_node ){
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
@@ -1137,7 +1134,7 @@ function _cycoex_get_rubric_items( $rubric_item_nids ) {
     }
     if ( isset( $rubric_item_node->field_feedback_poor[LANGUAGE_NONE][0] ) ) {
       $rubric_item_jsony['poor'] = array();
-      foreach( $rubric_item_node->field_feedback_poor[LANGUAGE_NONE] as $index => $comment) {
+      foreach ( $rubric_item_node->field_feedback_poor[LANGUAGE_NONE] as $index => $comment) {
         $rubric_item_jsony['poor'][] = $comment['value'];
       }
     }
@@ -1153,7 +1150,7 @@ function _cycoex_get_rubric_items( $rubric_item_nids ) {
  * @return array Feedback message.
  */
 function _cycoex_make_feedback_message( $feedback_data ) {
-  //Get params.
+  // Get params.
   $student_uid = _cycoex_check_feedback_parameter(
       $feedback_data, 'student_uid', TRUE,
       __FILE__, __LINE__, __FUNCTION__
@@ -1162,14 +1159,14 @@ function _cycoex_make_feedback_message( $feedback_data ) {
       $feedback_data, 'exercise_nid', TRUE,
       __FILE__, __LINE__, __FUNCTION__
   );
-  //Get the selected comments.
+  // Get the selected comments.
   $comments = array();
   if ( isset( $feedback_data['rubric_ratings'] ) ) {
-    foreach( $feedback_data['rubric_ratings'] as $rating ) {
+    foreach ( $feedback_data['rubric_ratings'] as $rating ) {
       $comments[] = t($rating['comment']);
     }
   }
-  //Load the grader's feedback phrases.
+  // Load the grader's feedback phrases.
   global $user;
   $grader_uid = $user->uid;
   $users = entity_load('user', array($grader_uid) );
@@ -1189,37 +1186,37 @@ function _cycoex_make_feedback_message( $feedback_data ) {
       && isset( $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value'] ) 
       && is_numeric( $grader_all_data->field_good_cutoff[LANGUAGE_NONE][0]['value'] )
       && is_numeric( $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value'] )
-     ){
+     ) {
     $good_cutoff = $grader_all_data->field_good_cutoff[LANGUAGE_NONE][0]['value'];
-    $needs_work_cutoff 
+    $needs_work_cutoff
         = $grader_all_data->field_needs_work_cutoff[LANGUAGE_NONE][0]['value'];
   }
-  //Score depends on how many good, needs work, and poor ratings.
+  // Score depends on how many good, needs work, and poor ratings.
   $score = _cyco_exer_compute_feedback_score( $feedback_data['rubric_ratings'] );
   if ( !is_null($score) ) {
     if ( $score >= $good_cutoff ) {
       $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_good');
     }
-    else if ( $score >= $needs_work_cutoff ) {
+    elseif ( $score >= $needs_work_cutoff ) {
       $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_needs_work');
     }
     else {
       $overall = _cyco_exer_choose_fragment( $grader_all_data, 'field_overall_poor');
     }
   }
-  //Choose a signature.
+  // Choose a signature.
   $signature = _cyco_exer_choose_fragment( 
     $grader_all_data, 
     'field_signature'
   );
-  //Theme the feedback message.
+  // Theme the feedback message.
   $message = theme('cyco_feedback_message', array(
     'greeting' => $greeting,
     'overall' => $overall,
     'comments' => $comments,
     'signature' => $signature,
   ));
-  //Data for token_replace.
+  // Data for token_replace.
   $data = array(
     'context' => 'creating_feedback_message',
     'student_uid' => $student_uid,
@@ -1279,7 +1276,7 @@ function _cycoex_check_feedback_parameter(
  */
 function _cyco_exer_choose_fragment( $grader_all_data, $field_name, $default = '' ) {
   $result = $default;
-  if ( isset( $grader_all_data->{$field_name}[LANGUAGE_NONE][0] ) ){
+  if ( isset( $grader_all_data->{$field_name}[LANGUAGE_NONE][0] ) ) {
     $item_count = sizeof( $grader_all_data->{$field_name}[LANGUAGE_NONE] );
     if ( $item_count == 1 ) {
       //Only one value - use it.
@@ -1302,15 +1299,15 @@ function _cyco_exer_choose_fragment( $grader_all_data, $field_name, $default = '
 function _cyco_exer_compute_feedback_score( $rubric_ratings ) {
   $num_comments = sizeof($rubric_ratings);
   if ( $num_comments == 0 ) {
-    return null;
+    return NULL;
   }
   $num_good = 0;
   $num_needs_work = 0;
-  foreach( $rubric_ratings as $rubric_rating ) {
+  foreach ( $rubric_ratings as $rubric_rating ) {
     if ( $rubric_rating['comment_rating'] == 'good') {
       $num_good++;
     }
-    else if ( $rubric_rating['comment_rating'] == 'needs_work') {
+    elseif ( $rubric_rating['comment_rating'] == 'needs_work') {
       $num_needs_work++;
     }
   }
@@ -1339,10 +1336,11 @@ function cyco_exercises_services_theme() {
 
 /**
  * Make a feedback message from the data in the passed array.
+ * 
  * @param array $feedback_data Feedback data for a submission.
  * @return array Data on success/failure..
  */
-function _cycoex_save_feedback( $feedback_data ) {
+function _cycoex_save_feedback($feedback_data) {
   //Get params.
   $submission_nid = _cycoex_check_feedback_parameter(
       $feedback_data, 'submission_nid', TRUE,
@@ -1372,7 +1370,7 @@ function _cycoex_save_feedback( $feedback_data ) {
 //    'model_solution_nid' => $model_solution_nid,
   );  
   $message = token_replace($message, $data);
-  $message = t( $message );
+  $message = t($message);
   $complete = _cycoex_check_feedback_parameter(
       $feedback_data, 'complete', FALSE,
       __FILE__, __LINE__, __FUNCTION__

@@ -1,4 +1,5 @@
 /**
+ * @file
  *  Functions to exchange data with the server.
  */
 

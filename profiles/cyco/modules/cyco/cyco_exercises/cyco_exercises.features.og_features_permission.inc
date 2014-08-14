@@ -40,7 +40,9 @@ function cyco_exercises_og_features_default_permissions() {
 
   // Exported og permission: 'node:class:delete any class_post content'
   $permissions['node:class:delete any class_post content'] = array(
-    'roles' => array(),
+    'roles' => array(
+      'instructor' => 'instructor',
+    ),
   );
 
   // Exported og permission: 'node:class:delete own class_post content'
@@ -90,7 +92,9 @@ function cyco_exercises_og_features_default_permissions() {
 
   // Exported og permission: 'node:class:update any class_post content'
   $permissions['node:class:update any class_post content'] = array(
-    'roles' => array(),
+    'roles' => array(
+      'instructor' => 'instructor',
+    ),
   );
 
   // Exported og permission: 'node:class:update group'

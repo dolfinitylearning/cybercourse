@@ -1,8 +1,9 @@
-var vat=0;
-
-/* 
+/**
+ * @file
  * Create submission links for an inserted exercise. 
  */
+var vat=0;
+
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   /**

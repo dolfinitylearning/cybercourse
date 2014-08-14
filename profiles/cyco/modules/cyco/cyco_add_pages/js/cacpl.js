@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Create a form to let users add child and sibling pages.
+ */
 (function ($) {
   Drupal.behaviors.cacpl = {
     attach: function (context, settings) {

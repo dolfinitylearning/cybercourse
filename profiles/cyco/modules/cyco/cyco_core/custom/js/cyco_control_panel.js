@@ -1,4 +1,5 @@
-/* 
+/**
+ * @file
 For control panel menus, show the title text after each link.
 */
 "use strict";
