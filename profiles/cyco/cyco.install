@@ -21,8 +21,6 @@ function cyco_install() {
   cyco_set_default_theme('cybercourse');
 }
 
-
-
 function cyco_define_blocks() {
   // Enable some standard blocks.
   $default_theme = variable_get('theme_default', 'bartik');
@@ -58,26 +56,6 @@ function cyco_define_blocks() {
       'pages' => '',
       'cache' => -1,
     ),
-//    array(
-//      'module' => 'system',
-//      'delta' => 'navigation',
-//      'theme' => $default_theme,
-//      'status' => 1,
-//      'weight' => 0,
-//      'region' => 'sidebar_first',
-//      'pages' => '',
-//      'cache' => -1,
-//    ),
-//    array(
-//      'module' => 'system',
-//      'delta' => 'powered-by',
-//      'theme' => $default_theme,
-//      'status' => 1,
-//      'weight' => 10,
-//      'region' => 'footer',
-//      'pages' => '',
-//      'cache' => -1,
-//    ),
     array(
       'module' => 'system',
       'delta' => 'help',

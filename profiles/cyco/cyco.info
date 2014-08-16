@@ -79,10 +79,6 @@ dependencies[] = views_bulk_operations
 ;Views stuff
 dependencies[] = views_distinct
 
-;User stuff
-dependencies[] = logintoboggan
-dependencies[] = timezone_detect
-
 ;Search
 dependencies[] = porterstemmer
 dependencies[] = search_config

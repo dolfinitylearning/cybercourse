@@ -1,138 +1,6 @@
 array(
   (object) array(
-      'vid' => '16',
-      'uid' => '1',
-      'title' => 'Terms of use',
-      'log' => '',
-      'status' => '1',
-      'comment' => '1',
-      'promote' => '0',
-      'sticky' => '0',
-      'vuuid' => '4b6b97fd-6f27-4ab1-abcc-729a4a9bbe64',
-      'nid' => '15',
-      'type' => 'page',
-      'language' => 'und',
-      'created' => '1404506692',
-      'changed' => '1404506692',
-      'tnid' => '0',
-      'translate' => '0',
-      'uuid' => '145331c7-e97f-46d9-943a-f7f28d6d6408',
-      'revision_timestamp' => '1404506692',
-      'revision_uid' => '1',
-      'field_show_table_of_contents' => array(
-        'und' => array(
-          array(
-            'value' => '0',
-          ),
-        ),
-      ),
-      'field_attachments' => array(),
-      'field_body' => array(
-        'und' => array(
-          array(
-            'value' => 'Your terms of use here.',
-            'summary' => '',
-          ),
-        ),
-      ),
-      'field_images' => array(),
-      'field_keywords' => array(),
-      'field_workflow_tags' => array(
-        'und' => array(
-          array(
-            'tid' => '1',
-          ),
-        ),
-      ),
-      'rdf_mapping' => array(
-        'rdftype' => array(
-          'sioc:Item',
-          'foaf:Document',
-        ),
-        'title' => array(
-          'predicates' => array(
-            'dc:title',
-          ),
-        ),
-        'created' => array(
-          'predicates' => array(
-            'dc:date',
-            'dc:created',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'changed' => array(
-          'predicates' => array(
-            'dc:modified',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'body' => array(
-          'predicates' => array(
-            'content:encoded',
-          ),
-        ),
-        'uid' => array(
-          'predicates' => array(
-            'sioc:has_creator',
-          ),
-          'type' => 'rel',
-        ),
-        'name' => array(
-          'predicates' => array(
-            'foaf:name',
-          ),
-        ),
-        'comment_count' => array(
-          'predicates' => array(
-            'sioc:num_replies',
-          ),
-          'datatype' => 'xsd:integer',
-        ),
-        'last_activity' => array(
-          'predicates' => array(
-            'sioc:last_activity_date',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-      ),
-      'cid' => '0',
-      'last_comment_timestamp' => '1404506692',
-      'last_comment_name' => NULL,
-      'last_comment_uid' => '1',
-      'comment_count' => '0',
-      'name' => 'admin',
-      'picture' => '0',
-      'data' => 'b:0;',
-      'path' => array(
-        'pid' => '18',
-        'source' => 'node/15',
-        'alias' => 'terms-use',
-        'language' => 'und',
-      ),
-      'menu' => array(
-        'link_title' => 'Terms of use',
-        'mlid' => 0,
-        'plid' => '0',
-        'menu_name' => 'menu-footer-menu',
-        'weight' => '0',
-        'options' => array(),
-        'module' => 'menu',
-        'expanded' => '0',
-        'hidden' => '0',
-        'has_children' => '0',
-        'customized' => 0,
-        'parent_depth_limit' => 8,
-        'description' => '',
-        'enabled' => 1,
-      ),
-      'node_export_drupal_version' => '7',
-    ),
-  (object) array(
-      'vid' => '15',
+      'vid' => '454',
       'uid' => '1',
       'title' => 'Credits',
       'log' => '',
@@ -140,16 +8,16 @@ array(
       'comment' => '1',
       'promote' => '0',
       'sticky' => '0',
-      'vuuid' => 'b3e44506-2eed-4d1c-8b59-11f11a0646f7',
-      'nid' => '14',
+      'vuuid' => '05a65bfd-4c1d-4443-99cc-d80f553edea8',
+      'nid' => '2',
       'type' => 'page',
       'language' => 'und',
-      'created' => '1404506448',
-      'changed' => '1404506448',
+      'created' => '1404753613',
+      'changed' => '1408128730',
       'tnid' => '0',
       'translate' => '0',
       'uuid' => '1fafdd33-0134-4873-9777-334314d03432',
-      'revision_timestamp' => '1404506448',
+      'revision_timestamp' => '1408128730',
       'revision_uid' => '1',
       'field_show_table_of_contents' => array(
         'und' => array(
@@ -232,7 +100,7 @@ array(
         ),
       ),
       'cid' => '0',
-      'last_comment_timestamp' => '1404506448',
+      'last_comment_timestamp' => '1404753613',
       'last_comment_name' => NULL,
       'last_comment_uid' => '1',
       'comment_count' => '0',
@@ -240,8 +108,8 @@ array(
       'picture' => '0',
       'data' => 'b:0;',
       'path' => array(
-        'pid' => '17',
-        'source' => 'node/14',
+        'pid' => '5',
+        'source' => 'node/2',
         'alias' => 'credits',
         'language' => 'und',
       ),
@@ -249,8 +117,8 @@ array(
         'link_title' => 'Credits',
         'mlid' => 0,
         'plid' => '0',
-        'menu_name' => 'menu-footer-menu',
-        'weight' => '0',
+        'menu_name' => 'menu-footer',
+        'weight' => '6',
         'options' => array(),
         'module' => 'menu',
         'expanded' => '0',
@@ -264,7 +132,7 @@ array(
       'node_export_drupal_version' => '7',
     ),
   (object) array(
-      'vid' => '14',
+      'vid' => '452',
       'uid' => '1',
       'title' => 'Copyright, you, 20xx',
       'log' => '',
@@ -272,16 +140,16 @@ array(
       'comment' => '1',
       'promote' => '0',
       'sticky' => '0',
-      'vuuid' => 'b0f68029-1a00-4675-8c73-72065248cfa9',
-      'nid' => '13',
+      'vuuid' => 'eebffc4f-c252-4d10-9bf4-35c4aefa07a3',
+      'nid' => '3',
       'type' => 'page',
       'language' => 'und',
-      'created' => '1404505459',
-      'changed' => '1404506316',
+      'created' => '1404753613',
+      'changed' => '1408128679',
       'tnid' => '0',
       'translate' => '0',
       'uuid' => 'b291017b-8b99-4350-8a55-09c917288ac7',
-      'revision_timestamp' => '1404506316',
+      'revision_timestamp' => '1408128679',
       'revision_uid' => '1',
       'field_show_table_of_contents' => array(
         'und' => array(
@@ -364,7 +232,7 @@ array(
         ),
       ),
       'cid' => '0',
-      'last_comment_timestamp' => '1404505459',
+      'last_comment_timestamp' => '1404753613',
       'last_comment_name' => NULL,
       'last_comment_uid' => '1',
       'comment_count' => '0',
@@ -372,8 +240,8 @@ array(
       'picture' => '0',
       'data' => 'b:0;',
       'path' => array(
-        'pid' => '16',
-        'source' => 'node/13',
+        'pid' => '6',
+        'source' => 'node/3',
         'alias' => 'copyright-you-20xx',
         'language' => 'und',
       ),
@@ -381,7 +249,7 @@ array(
         'link_title' => 'Copyright, you, 20xx',
         'mlid' => 0,
         'plid' => '0',
-        'menu_name' => 'menu-footer-menu',
+        'menu_name' => 'menu-footer',
         'weight' => '0',
         'options' => array(),
         'module' => 'menu',
@@ -396,24 +264,24 @@ array(
       'node_export_drupal_version' => '7',
     ),
   (object) array(
-      'vid' => '3',
+      'vid' => '389',
       'uid' => '1',
-      'title' => 'Help',
+      'title' => 'Welcome',
       'log' => '',
       'status' => '1',
       'comment' => '1',
       'promote' => '0',
       'sticky' => '0',
-      'vuuid' => '54a247d9-3532-4ebd-8b4a-8d1060a369ec',
-      'nid' => '3',
+      'vuuid' => '55a47a6d-28bd-4b4d-b8a2-a3aee9fc97c2',
+      'nid' => '5',
       'type' => 'page',
       'language' => 'und',
-      'created' => '1404483319',
-      'changed' => '1404483319',
+      'created' => '1404753613',
+      'changed' => '1407686667',
       'tnid' => '0',
       'translate' => '0',
-      'uuid' => '3af5119b-bc24-4c28-9d50-613090bb8ca8',
-      'revision_timestamp' => '1404483319',
+      'uuid' => '546ff16e-718d-40b0-88c4-2a4c2f55b036',
+      'revision_timestamp' => '1407686667',
       'revision_uid' => '1',
       'field_show_table_of_contents' => array(
         'und' => array(
@@ -426,7 +294,174 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "What would you like help with?\n\n* [Getting around a course](https://wiki.cybercour.se/getting-around)\n* [Doing exercises](https://wiki.cybercour.se/exercises)\n* [Grading](https://wiki.cybercour.se/grading)\n* [Managing student accounts](https://wiki.cybercour.se/managing-student-accounts)\n* [Making a course](https://wiki.cybercour.se/authoring)\n\nThese questions and many others are answered on [the CyberCourse wiki](https://wiki.cybercour.se/).\n",
+            'value' => "This is the welcome page for your site. Here you explain why it's *wicked awesome!*\r\n\r\n* Thing\r\n* Another\r\n\r\n## Level 2 ##\r\n\r\n`\\(x = {r \\over 2r}\\)`\r\n\r\nIf you see a menu with a bazillion options, don't worry, it's because you're logged in as an administrator. Most of the time you'll use an author account.\r\n\r\n![Thing](/sites/default/files/course/images-bucket/fig_sm.png)\r\n\r\nSee the [CyberCourse wiki](http://wiki.cybercour.se/) for help getting started.\r\n\r\n![Thing](/sites/default/files/course/images-bucket/fig_sm.png)\r\n\r\n![Nothing](/sites/default/files/course/images-bucket/logo_blue_fg.png \"Title text\")\r\n\r\n\r\n\r\n\r\n\r\n\r\n ",
+            'summary' => 'Welcome to the awesomeness that is this CyCo!',
+          ),
+        ),
+      ),
+      'field_images' => array(
+        'und' => array(
+          array(
+            'fid' => '7',
+            'uid' => '1',
+            'filename' => 'fig_sm.png',
+            'uri' => 'public://course/images-bucket/fig_sm.png',
+            'filemime' => 'image/png',
+            'filesize' => '6756',
+            'status' => '1',
+            'timestamp' => '1405177822',
+            'uuid' => '836ae205-d1ed-4df8-8bbc-04a444b6dfb3',
+            'rdf_mapping' => array(),
+            'alt' => '',
+            'title' => '',
+            'width' => '70',
+            'height' => '62',
+          ),
+          array(
+            'fid' => '10',
+            'uid' => '1',
+            'filename' => 'logo_blue_fg.png',
+            'uri' => 'public://course/images-bucket/logo_blue_fg.png',
+            'filemime' => 'image/png',
+            'filesize' => '4793',
+            'status' => '1',
+            'timestamp' => '1407346263',
+            'uuid' => 'b074e9a8-78c8-476f-984a-1a4371d72a5b',
+            'rdf_mapping' => array(),
+            'alt' => '',
+            'title' => '',
+            'width' => '90',
+            'height' => '85',
+          ),
+        ),
+      ),
+      'field_keywords' => array(),
+      'field_workflow_tags' => array(
+        'und' => array(
+          array(
+            'tid' => '1',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1404753613',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'b:0;',
+      'path' => array(
+        'pid' => '8',
+        'source' => 'node/5',
+        'alias' => 'welcome',
+        'language' => 'und',
+      ),
+      'menu' => array(
+        'link_title' => 'Welcome',
+        'mlid' => 0,
+        'plid' => '0',
+        'menu_name' => 'main-menu',
+        'weight' => '0',
+        'options' => array(),
+        'module' => 'menu',
+        'expanded' => '0',
+        'hidden' => '0',
+        'has_children' => '0',
+        'customized' => 0,
+        'parent_depth_limit' => 8,
+        'description' => '',
+        'enabled' => 1,
+      ),
+      'node_export_drupal_version' => '7',
+    ),
+  (object) array(
+      'vid' => '384',
+      'uid' => '1',
+      'title' => 'Help',
+      'log' => '',
+      'status' => '1',
+      'comment' => '1',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => 'f929fa52-59ec-4868-929e-dbc62cfd1b28',
+      'nid' => '4',
+      'type' => 'page',
+      'language' => 'und',
+      'created' => '1404753613',
+      'changed' => '1407513477',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => '3af5119b-bc24-4c28-9d50-613090bb8ca8',
+      'revision_timestamp' => '1407513477',
+      'revision_uid' => '1',
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'field_attachments' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "What would you like help with?\r\n\r\n* [Getting around a course](https://wiki.cybercour.se/getting-around)\r\n* [Doing exercises](https://wiki.cybercour.se/exercises)\r\n* [Grading](https://wiki.cybercour.se/grading)\r\n* [Managing student accounts](https://wiki.cybercour.se/managing-student-accounts)\r\n* [Making a course](https://wiki.cybercour.se/authoring)\r\n\r\nThese questions and many others are answered on [the CyberCourse wiki](https://wiki.cybercour.se/).\r\n ",
             'summary' => 'Help in using this site.',
           ),
         ),
@@ -496,7 +531,7 @@ array(
         ),
       ),
       'cid' => '0',
-      'last_comment_timestamp' => '1404483319',
+      'last_comment_timestamp' => '1404753613',
       'last_comment_name' => NULL,
       'last_comment_uid' => '1',
       'comment_count' => '0',
@@ -504,8 +539,8 @@ array(
       'picture' => '0',
       'data' => 'b:0;',
       'path' => array(
-        'pid' => '6',
-        'source' => 'node/3',
+        'pid' => '7',
+        'source' => 'node/4',
         'alias' => 'help',
         'language' => 'und',
       ),
@@ -515,270 +550,6 @@ array(
         'plid' => '0',
         'menu_name' => 'main-menu',
         'weight' => '2',
-        'options' => array(),
-        'module' => 'menu',
-        'expanded' => '0',
-        'hidden' => '0',
-        'has_children' => '0',
-        'customized' => 0,
-        'parent_depth_limit' => 8,
-        'description' => '',
-        'enabled' => 1,
-      ),
-      'node_export_drupal_version' => '7',
-    ),
-  (object) array(
-      'vid' => '2',
-      'uid' => '1',
-      'title' => 'Welcome',
-      'log' => '',
-      'status' => '1',
-      'comment' => '1',
-      'promote' => '0',
-      'sticky' => '0',
-      'vuuid' => '3e4817e0-7ae5-4639-b2a2-ce8e2ebe02a2',
-      'nid' => '2',
-      'type' => 'page',
-      'language' => 'und',
-      'created' => '1404483319',
-      'changed' => '1404483319',
-      'tnid' => '0',
-      'translate' => '0',
-      'uuid' => '546ff16e-718d-40b0-88c4-2a4c2f55b036',
-      'revision_timestamp' => '1404483319',
-      'revision_uid' => '1',
-      'field_show_table_of_contents' => array(
-        'und' => array(
-          array(
-            'value' => '0',
-          ),
-        ),
-      ),
-      'field_attachments' => array(),
-      'field_body' => array(
-        'und' => array(
-          array(
-            'value' => "This is the welcome page for your site. Here you explain why it's *wicked awesome!*\n\nIf you see a menu with a bazillion options, don't worry, it's because you're logged in as an administrator. Most of the time you'll use an author account. \n\nSee the [CyberCourse wiki](http://wiki.cybercour.se/) for help getting started.",
-            'summary' => 'Welcome to the awesomeness that is this CyCo!',
-          ),
-        ),
-      ),
-      'field_images' => array(),
-      'field_keywords' => array(),
-      'field_workflow_tags' => array(
-        'und' => array(
-          array(
-            'tid' => '1',
-          ),
-        ),
-      ),
-      'rdf_mapping' => array(
-        'rdftype' => array(
-          'sioc:Item',
-          'foaf:Document',
-        ),
-        'title' => array(
-          'predicates' => array(
-            'dc:title',
-          ),
-        ),
-        'created' => array(
-          'predicates' => array(
-            'dc:date',
-            'dc:created',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'changed' => array(
-          'predicates' => array(
-            'dc:modified',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'body' => array(
-          'predicates' => array(
-            'content:encoded',
-          ),
-        ),
-        'uid' => array(
-          'predicates' => array(
-            'sioc:has_creator',
-          ),
-          'type' => 'rel',
-        ),
-        'name' => array(
-          'predicates' => array(
-            'foaf:name',
-          ),
-        ),
-        'comment_count' => array(
-          'predicates' => array(
-            'sioc:num_replies',
-          ),
-          'datatype' => 'xsd:integer',
-        ),
-        'last_activity' => array(
-          'predicates' => array(
-            'sioc:last_activity_date',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-      ),
-      'cid' => '0',
-      'last_comment_timestamp' => '1404483319',
-      'last_comment_name' => NULL,
-      'last_comment_uid' => '1',
-      'comment_count' => '0',
-      'name' => 'admin',
-      'picture' => '0',
-      'data' => 'b:0;',
-      'path' => array(
-        'pid' => '5',
-        'source' => 'node/2',
-        'alias' => 'welcome',
-        'language' => 'und',
-      ),
-      'menu' => array(
-        'link_title' => 'Welcome',
-        'mlid' => 0,
-        'plid' => '0',
-        'menu_name' => 'main-menu',
-        'weight' => '0',
-        'options' => array(),
-        'module' => 'menu',
-        'expanded' => '0',
-        'hidden' => '0',
-        'has_children' => '0',
-        'customized' => 0,
-        'parent_depth_limit' => 8,
-        'description' => '',
-        'enabled' => 1,
-      ),
-      'node_export_drupal_version' => '7',
-    ),
-  (object) array(
-      'vid' => '1',
-      'uid' => '1',
-      'title' => 'About',
-      'log' => '',
-      'status' => '1',
-      'comment' => '1',
-      'promote' => '0',
-      'sticky' => '0',
-      'vuuid' => '9a9faa81-6f65-48d4-9e0b-8b759aac3e97',
-      'nid' => '1',
-      'type' => 'page',
-      'language' => 'und',
-      'created' => '1404483319',
-      'changed' => '1404483319',
-      'tnid' => '0',
-      'translate' => '0',
-      'uuid' => 'e1faa190-d982-4cdf-ba11-31a73cc85eb2',
-      'revision_timestamp' => '1404483319',
-      'revision_uid' => '1',
-      'field_show_table_of_contents' => array(
-        'und' => array(
-          array(
-            'value' => '0',
-          ),
-        ),
-      ),
-      'field_attachments' => array(),
-      'field_body' => array(
-        'und' => array(
-          array(
-            'value' => "The usual about page. Who you are, what you're up to, like that.",
-            'summary' => 'About you and this site.',
-          ),
-        ),
-      ),
-      'field_images' => array(),
-      'field_keywords' => array(),
-      'field_workflow_tags' => array(
-        'und' => array(
-          array(
-            'tid' => '1',
-          ),
-        ),
-      ),
-      'rdf_mapping' => array(
-        'rdftype' => array(
-          'sioc:Item',
-          'foaf:Document',
-        ),
-        'title' => array(
-          'predicates' => array(
-            'dc:title',
-          ),
-        ),
-        'created' => array(
-          'predicates' => array(
-            'dc:date',
-            'dc:created',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'changed' => array(
-          'predicates' => array(
-            'dc:modified',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-        'body' => array(
-          'predicates' => array(
-            'content:encoded',
-          ),
-        ),
-        'uid' => array(
-          'predicates' => array(
-            'sioc:has_creator',
-          ),
-          'type' => 'rel',
-        ),
-        'name' => array(
-          'predicates' => array(
-            'foaf:name',
-          ),
-        ),
-        'comment_count' => array(
-          'predicates' => array(
-            'sioc:num_replies',
-          ),
-          'datatype' => 'xsd:integer',
-        ),
-        'last_activity' => array(
-          'predicates' => array(
-            'sioc:last_activity_date',
-          ),
-          'datatype' => 'xsd:dateTime',
-          'callback' => 'date_iso8601',
-        ),
-      ),
-      'cid' => '0',
-      'last_comment_timestamp' => '1404483319',
-      'last_comment_name' => NULL,
-      'last_comment_uid' => '1',
-      'comment_count' => '0',
-      'name' => 'admin',
-      'picture' => '0',
-      'data' => 'b:0;',
-      'path' => array(
-        'pid' => '4',
-        'source' => 'node/1',
-        'alias' => 'about',
-        'language' => 'und',
-      ),
-      'menu' => array(
-        'link_title' => 'About',
-        'mlid' => 0,
-        'plid' => '0',
-        'menu_name' => 'main-menu',
-        'weight' => '1',
         'options' => array(),
         'module' => 'menu',
         'expanded' => '0',
@@ -822,7 +593,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "Terms of use go here. E.g.:\n\nDon't rely on anything on this site, including this sentence.",
+            'value' => "Terms of use go here. E.g.:\r\n\r\nDon't rely on anything on this site, including this sentence.",
             'summary' => '',
           ),
         ),
@@ -919,6 +690,138 @@ array(
         'customized' => 0,
         'parent_depth_limit' => 8,
         'description' => 'Conditions you accept by using this site.',
+        'enabled' => 1,
+      ),
+      'node_export_drupal_version' => '7',
+    ),
+  (object) array(
+      'vid' => '6',
+      'uid' => '1',
+      'title' => 'About',
+      'log' => '',
+      'status' => '1',
+      'comment' => '1',
+      'promote' => '0',
+      'sticky' => '0',
+      'vuuid' => '9a9faa81-6f65-48d4-9e0b-8b759aac3e97',
+      'nid' => '6',
+      'type' => 'page',
+      'language' => 'und',
+      'created' => '1404753613',
+      'changed' => '1404753613',
+      'tnid' => '0',
+      'translate' => '0',
+      'uuid' => 'e1faa190-d982-4cdf-ba11-31a73cc85eb2',
+      'revision_timestamp' => '1404753613',
+      'revision_uid' => '1',
+      'field_show_table_of_contents' => array(
+        'und' => array(
+          array(
+            'value' => '0',
+          ),
+        ),
+      ),
+      'field_attachments' => array(),
+      'field_body' => array(
+        'und' => array(
+          array(
+            'value' => "The usual about page. Who you are, what you're up to, like that.",
+            'summary' => 'About you and this site.',
+          ),
+        ),
+      ),
+      'field_images' => array(),
+      'field_keywords' => array(),
+      'field_workflow_tags' => array(
+        'und' => array(
+          array(
+            'tid' => '1',
+          ),
+        ),
+      ),
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          'sioc:Item',
+          'foaf:Document',
+        ),
+        'title' => array(
+          'predicates' => array(
+            'dc:title',
+          ),
+        ),
+        'created' => array(
+          'predicates' => array(
+            'dc:date',
+            'dc:created',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'changed' => array(
+          'predicates' => array(
+            'dc:modified',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+        'body' => array(
+          'predicates' => array(
+            'content:encoded',
+          ),
+        ),
+        'uid' => array(
+          'predicates' => array(
+            'sioc:has_creator',
+          ),
+          'type' => 'rel',
+        ),
+        'name' => array(
+          'predicates' => array(
+            'foaf:name',
+          ),
+        ),
+        'comment_count' => array(
+          'predicates' => array(
+            'sioc:num_replies',
+          ),
+          'datatype' => 'xsd:integer',
+        ),
+        'last_activity' => array(
+          'predicates' => array(
+            'sioc:last_activity_date',
+          ),
+          'datatype' => 'xsd:dateTime',
+          'callback' => 'date_iso8601',
+        ),
+      ),
+      'cid' => '0',
+      'last_comment_timestamp' => '1404753613',
+      'last_comment_name' => NULL,
+      'last_comment_uid' => '1',
+      'comment_count' => '0',
+      'name' => 'admin',
+      'picture' => '0',
+      'data' => 'b:0;',
+      'path' => array(
+        'pid' => '9',
+        'source' => 'node/6',
+        'alias' => 'about',
+        'language' => 'und',
+      ),
+      'menu' => array(
+        'link_title' => 'About',
+        'mlid' => 0,
+        'plid' => '0',
+        'menu_name' => 'main-menu',
+        'weight' => '1',
+        'options' => array(),
+        'module' => 'menu',
+        'expanded' => '0',
+        'hidden' => '0',
+        'has_children' => '0',
+        'customized' => 0,
+        'parent_depth_limit' => 8,
+        'description' => '',
         'enabled' => 1,
       ),
       'node_export_drupal_version' => '7',

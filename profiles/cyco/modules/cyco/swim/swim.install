@@ -35,30 +35,8 @@ function swim_field_schema($field) {
  * Implements hook_install.
  */
 function swim_install() {
-//  _swim_install_input_filter();
   _swim_install_help();
 }
-
-/**
- * Install the ReST input filter.
- */
-//function _swim_install_input_filter() {
-//  //Create a ReST input format that contains the ReST filter.
-//  $rest_format = array(
-//    'format' => 'rest',
-//    'name' => 'reStructuredText',
-//    'weight' => 1,
-//    'filters' => array(
-//      // ReST filter.
-//      'rest' => array(
-//        'weight' => 0,
-//        'status' => 1,
-//      ),
-//    ),
-//  );
-//  $rest_format = (object) $rest_format;
-//  filter_format_save($rest_format);
-//}
 
 /**
  * Create initial help content. 
@@ -106,7 +84,7 @@ This is an image: ![Drupal](http://drupal.org/files/powered-blue-80x15.png)
 Tables, footnotes, math formulas, pseudents... See the [CyberCourse wiki](http://wiki.cybercour.se/) for more.
 EOT;
   variable_set('swim_help_message', $help);
-  $rendered_help = swim_rest2html( $help );
+  $rendered_help = swim_markdown2html( $help );
   variable_set('swim_help_message_rendered', $rendered_help);  
 }
 

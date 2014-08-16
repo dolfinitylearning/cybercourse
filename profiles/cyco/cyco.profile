@@ -42,10 +42,10 @@ function _cyco_finalize_install() {
   _cyco_add_terms_to_content();
   //Link pages into books.
   _cyco_make_books();
-  //Add pages to the main menu.
-  _cyco_add_links_main_menu();
-  //Add pages to the footer.
-  _cyco_add_links_footer_menu();
+//  //Add pages to the main menu.
+//  _cyco_add_links_main_menu();
+//  //Add pages to the footer.
+//  _cyco_add_links_footer_menu();
   //Add links to control panel menu. I can't make features do it, 
   //except for cp-author.
   _cyco_add_links_cp_menus();
@@ -65,6 +65,9 @@ function _cyco_finalize_install() {
   //Turn off some modules.
   _cyco_disable_modules();
   node_access_rebuild();
+  cache_clear_all();
+  //Add control panel link to user menu.
+  _cyco_add_cp_link();
   cache_clear_all();
 }
 
@@ -686,4 +689,28 @@ function _cyco_add_links_cp_menus() {
     menu_link_save($item);
   }
 
+}
+
+function _cyco_add_cp_link() {
+  $item = array(
+    'menu_name' => 'user-menu',
+    'link_path' => 'user/control-panel',
+    'router_path' => 'user/control-panel',
+    'link_title' => 'Control panel',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'CyberCourse control panel.',
+      ),
+      'identifier' => 'user-menu_control-panel:user/control-panel',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -5,
+    'customized' => 1,    
+    'language' => 'und',
+  );
+  menu_link_save($item);
 }

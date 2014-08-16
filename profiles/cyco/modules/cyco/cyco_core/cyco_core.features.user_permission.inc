@@ -1133,16 +1133,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'save_edit',
   );
 
-  // Exported permission: 'use text format rest'.
-  $permissions['use text format rest'] = array(
-    'name' => 'use text format rest',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'filter',
-  );
-
   // Exported permission: 'view advanced help index'.
   $permissions['view advanced help index'] = array(
     'name' => 'view advanced help index',

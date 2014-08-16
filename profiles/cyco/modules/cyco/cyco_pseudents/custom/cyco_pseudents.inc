@@ -72,6 +72,22 @@ function cyco_pseudents_swim_load_ck_plugins() {
 }
 
 /**
+ * Return CSS file to show pseudent in peek.
+ */
+function cyco_pseudents_swim_peek_load_css() {
+  //Only add plugin if the user is allowed to create course page
+  //content.
+  if ( user_access( 'create course_page content' ) ) {
+    global $base_url;
+    $result = array(
+      $base_url . base_path() . drupal_get_path('module', 'cyco_pseudents') 
+        . '/custom/css/cyco_pseudents.css',
+    );
+    return $result;
+  }
+}
+
+/**
  * Implementation of hook_perm().
  */
 function cyco_pseudents_permission() {

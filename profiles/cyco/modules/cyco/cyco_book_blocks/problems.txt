@@ -1,0 +1,19 @@
+cybercou_cytest
+
+Vf!xVC[Sz;L&
+
+? 1. Footer missing
+
+? 4. Subdomain external link does not have icon.
+
+? 5. Images don't resize for mobile.
+
+X 6. (can't fix) 6. CK: syntax error when pasting text with ].
+
+X (don't know how to fix) 7. Math equations do not show in SWIM preview. See LaTeX instead.
+
+? 8. In peek, pseudent not styled correctly.
+
+
+
+
