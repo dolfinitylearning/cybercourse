@@ -17,13 +17,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'cyco_exercises',
   );
 
-  // Exported permission: 'administer group'.
-  $permissions['administer group'] = array(
-    'name' => 'administer group',
-    'roles' => array(),
-    'module' => 'og',
-  );
-
   // Exported permission: 'create class content'.
   $permissions['create class content'] = array(
     'name' => 'create class content',

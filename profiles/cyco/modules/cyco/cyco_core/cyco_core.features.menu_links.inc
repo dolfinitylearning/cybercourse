@@ -684,6 +684,26 @@ function cyco_core_menu_default_menu_links() {
     'weight' => -49,
     'customized' => 1,
   );
+  // Exported menu link: menu-cp-instructors_courses-pages-and-keywords:courses-and-keywords
+  $menu_links['menu-cp-instructors_courses-pages-and-keywords:courses-and-keywords'] = array(
+    'menu_name' => 'menu-cp-instructors',
+    'link_path' => 'courses-and-keywords',
+    'router_path' => 'courses-and-keywords',
+    'link_title' => 'Courses pages and keywords',
+    'options' => array(
+      'identifier' => 'menu-cp-instructors_courses-pages-and-keywords:courses-and-keywords',
+      'attributes' => array(
+        'title' => 'List pages in courses, and their keywords',
+      ),
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => -50,
+    'customized' => 1,
+  );
   // Exported menu link: menu-cp-instructors_list-users:admin/people
   $menu_links['menu-cp-instructors_list-users:admin/people'] = array(
     'menu_name' => 'menu-cp-instructors',
@@ -846,6 +866,7 @@ function cyco_core_menu_default_menu_links() {
   t('Classes');
   t('Control panel');
   t('Courses and keywords');
+  t('Courses pages and keywords');
   t('Create a new blueprint');
   t('Create a new course');
   t('Custom tokens');

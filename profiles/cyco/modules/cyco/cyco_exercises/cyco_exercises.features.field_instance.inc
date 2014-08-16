@@ -728,80 +728,6 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class_post-og_group_ref'
-  $field_instances['node-class_post-og_group_ref'] = array(
-    'bundle' => 'class_post',
-    'default_value' => NULL,
-    'default_value_function' => 'entityreference_prepopulate_field_default_value',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'og_group_ref',
-    'label' => 'Groups audience',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'og_widget' => array(
-          'access_override' => 0,
-          'admin' => array(
-            'widget_type' => 'options_select',
-          ),
-          'default' => array(
-            'widget_type' => 'options_select',
-          ),
-          'status' => TRUE,
-        ),
-        'prepopulate' => array(
-          'action' => 'none',
-          'action_on_edit' => 0,
-          'fallback' => 'none',
-          'providers' => array(
-            'og_context' => 1,
-            'url' => 1,
-          ),
-          'skip_perm' => 0,
-          'status' => 1,
-        ),
-      ),
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'view modes' => array(
-      'full' => array(
-        'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'og_list_default',
-      ),
-      'teaser' => array(
-        'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'og_list_default',
-      ),
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'og',
-      'settings' => array(),
-      'type' => 'og_complex',
-      'weight' => 1,
-    ),
-  );
-
   // Exported field_instance: 'node-course_page-field_exercises'
   $field_instances['node-course_page-field_exercises'] = array(
     'bundle' => 'course_page',
@@ -2575,40 +2501,6 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'og_membership-og_membership_type_default-og_membership_request'
-  $field_instances['og_membership-og_membership_type_default-og_membership_request'] = array(
-    'bundle' => 'og_membership_type_default',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'This is the text a user may send to the group administrators.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'og_membership',
-    'field_name' => 'og_membership_request',
-    'label' => 'Request message',
-    'required' => FALSE,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 5,
-      ),
-      'type' => 'text_textarea',
-      'weight' => 0,
-    ),
-  );
-
   // Exported field_instance: 'user-user-field_good_cutoff'
   $field_instances['user-user-field_good_cutoff'] = array(
     'bundle' => 'user',
@@ -2874,60 +2766,6 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-og_user_node'
-  $field_instances['user-user-og_user_node'] = array(
-    'bundle' => 'user',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
-        'weight' => 3,
-      ),
-    ),
-    'entity_type' => 'user',
-    'field_name' => 'og_user_node',
-    'label' => 'Group membership',
-    'required' => FALSE,
-    'settings' => array(
-      'behaviors' => array(
-        'og_widget' => array(
-          'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
-          ),
-          'default' => array(
-            'widget_type' => 'options_select',
-          ),
-          'status' => TRUE,
-        ),
-      ),
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'view modes' => array(
-      'full' => array(
-        'custom settings' => FALSE,
-        'label' => 'Full',
-        'type' => 'og_list_default',
-      ),
-      'teaser' => array(
-        'custom settings' => FALSE,
-        'label' => 'Teaser',
-        'type' => 'og_list_default',
-      ),
-    ),
-    'widget' => array(
-      'module' => 'og',
-      'settings' => array(),
-      'type' => 'og_complex',
-      'weight' => 13,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('"Good" cutoff');
@@ -2967,9 +2805,7 @@ function cyco_exercises_field_default_field_instances() {
   t('Files that are not shown to regular users.');
   t('Greetings');
   t('Group');
-  t('Group membership');
   t('Group visibility');
-  t('Groups audience');
   t('Has the student completed this exercise?');
   t('Hidden attachments');
   t('Image source, copyright...');
@@ -2992,14 +2828,12 @@ function cyco_exercises_field_default_field_instances() {
   t('Phrases that tell a student s/he did well on an exercise. Enter as many as you like. E.g. "Good job, [feedback:student_first_name]!", "[feedback:student_first_name], I like it!", "Nice work.". (See the Token section below for a full list of tokens.)');
   t('Rating on rubric item');
   t('Rating on this rubric item: good, needs work, or poor.');
-  t('Request message');
   t('Rubric item');
   t('Rubric item this rating is for.');
   t('Rubric items');
   t('Signature');
   t('Submission');
   t('The main text of the exercise.');
-  t('This is the text a user may send to the group administrators.');
   t('Version');
   t('When feedback given');
   t('When submitted');

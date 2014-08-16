@@ -14,6 +14,12 @@ X (don't know how to fix) 7. Math equations do not show in SWIM preview. See LaT
 
 ? 8. In peek, pseudent not styled correctly.
 
+? 9. Email registration removed.
+
+10. Search button 10 too close to login button above it.
+
+
+
 
 
 

@@ -52,6 +52,27 @@ function cyco_patterns_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-authors_patterns:patterns',
   );
+  // Exported menu link: menu-cp-authors_manage-pattern-categories:admin/structure/taxonomy/pattern_categories
+  $menu_links['menu-cp-authors_manage-pattern-categories:admin/structure/taxonomy/pattern_categories'] = array(
+    'menu_name' => 'menu-cp-authors',
+    'link_path' => 'admin/structure/taxonomy/pattern_categories',
+    'router_path' => 'admin/structure/taxonomy/%',
+    'link_title' => 'Manage pattern categories',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Group patterns into categories to make them easier to work with. Manage the categories here.',
+      ),
+      'identifier' => 'menu-cp-authors_manage-pattern-categories:admin/structure/taxonomy/pattern_categories',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 0,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-authors_patterns:patterns',
+  );
   // Exported menu link: menu-cp-authors_patterns:patterns
   $menu_links['menu-cp-authors_patterns:patterns'] = array(
     'menu_name' => 'menu-cp-authors',
@@ -133,6 +154,7 @@ function cyco_patterns_menu_default_menu_links() {
   // Included for use with string extractors like potx.
   t('Add a pattern');
   t('List patterns');
+  t('Manage pattern categories');
   t('Patterns');
 
 

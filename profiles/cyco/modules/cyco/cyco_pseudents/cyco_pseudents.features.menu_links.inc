@@ -93,6 +93,26 @@ function cyco_pseudents_menu_default_menu_links() {
     'weight' => -47,
     'customized' => 1,
   );
+  // Exported menu link: menu-cp-graders_pseudent-poses:pseudent-poses
+  $menu_links['menu-cp-graders_pseudent-poses:pseudent-poses'] = array(
+    'menu_name' => 'menu-cp-graders',
+    'link_path' => 'pseudent-poses',
+    'router_path' => 'pseudent-poses',
+    'link_title' => 'Pseudent poses',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'A list of all the pseudent poses.',
+      ),
+      'identifier' => 'menu-cp-graders_pseudent-poses:pseudent-poses',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
+    'weight' => 2,
+    'customized' => 1,
+  );
   // Exported menu link: menu-cp-instructors_pseudent-poses:pseudent-poses
   $menu_links['menu-cp-instructors_pseudent-poses:pseudent-poses'] = array(
     'menu_name' => 'menu-cp-instructors',

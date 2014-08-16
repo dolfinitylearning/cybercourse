@@ -217,6 +217,23 @@ function _cyco_core_user_profile_form_validate($form, &$form_state) {
 }
 
 /**
+ * Implements hook_user_view().
+ */
+function cyco_core_user_view($account, $view_mode, $langcode) {
+  //Slimy hack to show user's time zone, as a reminder.
+  $timezone = isset( $account->timezone ) 
+      ? $account->timezone
+      : 'Not set - PLEASE SET IT!';
+  $markup = '<p><strong>' . t('Time zone:') . '</strong><br>' 
+      . $timezone . '</p>';
+  $account->content['timezone'] = array(
+    '#weight' => -1, //$account->content['field_about']['#weight'] + 1,
+//    '#title' => t('Time zone'), //Dinna work.
+    '0' => array( '#markup' => $markup ),
+  );
+}
+
+/**
  * Check whether the current user has a role, or one of a set of roles.
  * 
  * @global stdClass $user Current user.

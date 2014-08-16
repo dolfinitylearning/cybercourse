@@ -20,6 +20,22 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'book_allowed_types';
+  $strongarm->value = array(
+    0 => 'book',
+  );
+  $export['book_allowed_types'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'book_child_type';
+  $strongarm->value = 'book';
+  $export['book_child_type'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'book_top_navbar_content_field_names';
   $strongarm->value = 'body field_body field_notes field_explanation field_description';
   $export['book_top_navbar_content_field_names'] = $strongarm;
@@ -219,6 +235,36 @@ function cyco_core_strongarm() {
   $strongarm->name = 'comment_subject_field_page';
   $strongarm->value = 1;
   $export['comment_subject_field_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'configurable_timezones';
+  $strongarm->value = 1;
+  $export['configurable_timezones'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'content_access_course_page';
+  $strongarm->value = array(
+    'view_own' => array(
+      0 => 1,
+      1 => 2,
+      2 => 4,
+      3 => 3,
+    ),
+    'view' => array(
+      0 => 1,
+      1 => 2,
+      2 => 5,
+      3 => 6,
+      4 => 7,
+      5 => 4,
+      6 => 3,
+    ),
+  );
+  $export['content_access_course_page'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -526,6 +572,46 @@ function cyco_core_strongarm() {
   $strongarm->name = 'empty_timezone_message';
   $strongarm->value = 0;
   $export['empty_timezone_message'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'entityreference:base-tables';
+  $strongarm->value = array(
+    'comment' => array(
+      0 => 'comment',
+      1 => 'cid',
+    ),
+    'node' => array(
+      0 => 'node',
+      1 => 'nid',
+    ),
+    'og_membership_type' => array(
+      0 => 'og_membership_type',
+      1 => 'id',
+    ),
+    'og_membership' => array(
+      0 => 'og_membership',
+      1 => 'id',
+    ),
+    'file' => array(
+      0 => 'file_managed',
+      1 => 'fid',
+    ),
+    'taxonomy_term' => array(
+      0 => 'taxonomy_term_data',
+      1 => 'tid',
+    ),
+    'taxonomy_vocabulary' => array(
+      0 => 'taxonomy_vocabulary',
+      1 => 'vid',
+    ),
+    'user' => array(
+      0 => 'users',
+      1 => 'uid',
+    ),
+  );
+  $export['entityreference:base-tables'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -887,6 +973,55 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'og_features_ignore_og_fields';
+  $strongarm->value = 0;
+  $export['og_features_ignore_og_fields'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_group_manager_default_rids_node_class';
+  $strongarm->value = array();
+  $export['og_group_manager_default_rids_node_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_group_manager_full_access';
+  $strongarm->value = 1;
+  $export['og_group_manager_full_access'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_node_access_strict';
+  $strongarm->value = 1;
+  $export['og_node_access_strict'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_orphans_delete';
+  $strongarm->value = 0;
+  $export['og_orphans_delete'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_ui_admin_people_view';
+  $strongarm->value = 'og_members_admin:default';
+  $export['og_ui_admin_people_view'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'og_use_queue';
+  $strongarm->value = 0;
+  $export['og_use_queue'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_blueprint_page_pattern';
   $strongarm->value = 'blueprint/[node:title]';
   $export['pathauto_node_blueprint_page_pattern'] = $strongarm;
@@ -922,9 +1057,23 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_page_pattern';
+  $strongarm->value = '[node:title]';
+  $export['pathauto_node_page_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_pattern';
   $strongarm->value = 'content/[node:title]';
   $export['pathauto_node_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_punctuation_hyphen';
+  $strongarm->value = 1;
+  $export['pathauto_punctuation_hyphen'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

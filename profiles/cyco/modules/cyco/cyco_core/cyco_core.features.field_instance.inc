@@ -486,6 +486,80 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-class_post-og_group_ref'
+  $field_instances['node-class_post-og_group_ref'] = array(
+    'bundle' => 'class_post',
+    'default_value' => NULL,
+    'default_value_function' => 'entityreference_prepopulate_field_default_value',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'og_ui',
+        'settings' => array(),
+        'type' => 'og_list_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'og_group_ref',
+    'label' => 'Groups audience',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'og_widget' => array(
+          'access_override' => 0,
+          'admin' => array(
+            'widget_type' => 'options_select',
+          ),
+          'default' => array(
+            'widget_type' => 'options_select',
+          ),
+          'status' => TRUE,
+        ),
+        'prepopulate' => array(
+          'action' => 'none',
+          'action_on_edit' => 0,
+          'fallback' => 'none',
+          'providers' => array(
+            'og_context' => 1,
+            'url' => 1,
+          ),
+          'skip_perm' => 0,
+          'status' => 1,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'custom settings' => FALSE,
+        'label' => 'Full',
+        'type' => 'og_list_default',
+      ),
+      'teaser' => array(
+        'custom settings' => FALSE,
+        'label' => 'Teaser',
+        'type' => 'og_list_default',
+      ),
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance: 'node-course_page-field_attachments'
   $field_instances['node-course_page-field_attachments'] = array(
     'bundle' => 'course_page',
@@ -1088,12 +1162,46 @@ function cyco_core_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'og_membership-og_membership_type_default-og_membership_request'
+  $field_instances['og_membership-og_membership_type_default-og_membership_request'] = array(
+    'bundle' => 'og_membership_type_default',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'This is the text a user may send to the group administrators.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'og_membership',
+    'field_name' => 'og_membership_request',
+    'label' => 'Request message',
+    'required' => FALSE,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_about'
   $field_instances['user-user-field_about'] = array(
     'bundle' => 'user',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'About you. What are you into? What do you want out of life?',
+    'description' => 'About you. What are you into? Movies, sports, books...',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1104,6 +1212,7 @@ function cyco_core_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'user',
+    'exclude_cv' => 0,
     'field_name' => 'field_about',
     'label' => 'About',
     'required' => 0,
@@ -1197,10 +1306,64 @@ You can leave it blank, although your instructor might require it.',
     ),
   );
 
+  // Exported field_instance: 'user-user-og_user_node'
+  $field_instances['user-user-og_user_node'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'og_ui',
+        'settings' => array(),
+        'type' => 'og_list_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'og_user_node',
+    'label' => 'Group membership',
+    'required' => FALSE,
+    'settings' => array(
+      'behaviors' => array(
+        'og_widget' => array(
+          'admin' => array(
+            'widget_type' => 'entityreference_autocomplete',
+          ),
+          'default' => array(
+            'widget_type' => 'options_select',
+          ),
+          'status' => TRUE,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'custom settings' => FALSE,
+        'label' => 'Full',
+        'type' => 'og_list_default',
+      ),
+      'teaser' => array(
+        'custom settings' => FALSE,
+        'label' => 'Teaser',
+        'type' => 'og_list_default',
+      ),
+    ),
+    'widget' => array(
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 13,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('About');
-  t('About you. What are you into? What do you want out of life?');
+  t('About you. What are you into? Movies, sports, books...');
   t('Attachments');
   t('Blueprint keywords');
   t('Body');
@@ -1208,7 +1371,9 @@ You can leave it blank, although your instructor might require it.',
   t('Files attached to this page.');
   t('Files for this page.');
   t('First name');
+  t('Group membership');
   t('Group roles and permissions');
+  t('Groups audience');
   t('Images');
   t('Images for this page.');
   t('Images for your content.');
@@ -1218,8 +1383,10 @@ You can leave it blank, although your instructor might require it.',
   t('Keywords relevant to course design. Shown in the blueprint only.');
   t('Last name');
   t('Page content.');
+  t('Request message');
   t('Short title');
   t('Tasks for this page.');
+  t('This is the text a user may send to the group administrators.');
   t('Title used in tree menus. If blank, the full title will be used.');
   t('What is your first name (e.g., Willow)?<br>
 <br>

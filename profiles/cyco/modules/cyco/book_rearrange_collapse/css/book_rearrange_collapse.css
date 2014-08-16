@@ -5,5 +5,5 @@
 
 table#book-outline tr.collapsed td .handle {
   background-image: url(../images/draggable-collapsed.png);
-  height: 18px;
+  /*height: 18px;*/
 }

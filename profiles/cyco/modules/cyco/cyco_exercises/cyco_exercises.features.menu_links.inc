@@ -278,23 +278,6 @@ function cyco_exercises_menu_default_menu_links() {
     'weight' => -45,
     'customized' => 1,
   );
-  // Exported menu link: menu-cp-students_your-submissions:submissions-student-report
-  $menu_links['menu-cp-students_your-submissions:submissions-student-report'] = array(
-    'menu_name' => 'menu-cp-students',
-    'link_path' => 'submissions-student-report',
-    'router_path' => 'submissions-student-report',
-    'link_title' => 'Your submissions',
-    'options' => array(
-      'identifier' => 'menu-cp-students_your-submissions:submissions-student-report',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 0,
-    'customized' => 0,
-  );
   // Exported menu link: menu-tools_your-submissions:submissions-student-report
   $menu_links['menu-tools_your-submissions:submissions-student-report'] = array(
     'menu_name' => 'menu-tools',
