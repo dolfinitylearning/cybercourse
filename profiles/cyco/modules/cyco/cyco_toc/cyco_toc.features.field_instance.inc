@@ -39,6 +39,7 @@ function cyco_toc_field_default_field_instances() {
     'label' => 'Show table of contents',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -81,6 +82,7 @@ function cyco_toc_field_default_field_instances() {
     'label' => 'Show table of contents',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -123,6 +125,7 @@ function cyco_toc_field_default_field_instances() {
     'label' => 'Show table of contents',
     'required' => 0,
     'settings' => array(
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(

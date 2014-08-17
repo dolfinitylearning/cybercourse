@@ -58,16 +58,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'backup_migrate',
   );
 
-  // Exported permission: 'access comments'.
-  $permissions['access comments'] = array(
-    'name' => 'access comments',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'comment',
-  );
-
   // Exported permission: 'access content'.
   $permissions['access content'] = array(
     'name' => 'access content',
@@ -208,16 +198,6 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'book',
-  );
-
-  // Exported permission: 'administer comments'.
-  $permissions['administer comments'] = array(
-    'name' => 'administer comments',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'comment',
   );
 
   // Exported permission: 'administer content types'.
@@ -769,16 +749,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'edit own comments'.
-  $permissions['edit own comments'] = array(
-    'name' => 'edit own comments',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'comment',
-  );
-
   // Exported permission: 'edit own course_page content'.
   $permissions['edit own course_page content'] = array(
     'name' => 'edit own course_page content',
@@ -958,17 +928,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'services',
   );
 
-  // Exported permission: 'post comments'.
-  $permissions['post comments'] = array(
-    'name' => 'post comments',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
-      'author' => 'author',
-    ),
-    'module' => 'comment',
-  );
-
   // Exported permission: 'rename features'.
   $permissions['rename features'] = array(
     'name' => 'rename features',
@@ -1091,16 +1050,6 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'services',
-  );
-
-  // Exported permission: 'skip comment approval'.
-  $permissions['skip comment approval'] = array(
-    'name' => 'skip comment approval',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'comment',
   );
 
   // Exported permission: 'switch shortcut sets'.

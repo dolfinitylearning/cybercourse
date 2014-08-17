@@ -65,11 +65,12 @@ function _cyco_finalize_install() {
   // Put course and blueprint blocks in sidebar, footer menu 
   // in (gasp!) the footer.
   _cyco_place_blocks();
+  //Remove all blocks from submission theme, except for content.
+  _cyco_remove_submission_blocks();
   // Add class to some blocks.
   _cyco_add_classes2blocks();
   // Set the front page.
   _cyco_set_frontpage();
-  
   
   // Secondary links source - none.
   variable_set('menu_secondary_links_source', '');
@@ -695,11 +696,9 @@ function _cyco_add_links_cp_menus() {
     'plid' => $plid,
     'module' => $module,
   );
-
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-
 }
 
 function _cyco_add_cp_link() {
@@ -818,5 +817,20 @@ function _cyco_remove_title_from_block( $module, $block, $theme ) {
     ->condition('module', $module)
     ->condition('delta', $block)
     ->condition('theme', $theme)
+    ->execute();
+}
+
+/**
+ * Remove all blocks from the submission theme, except for 
+ * content in the main area.
+ */
+function _cyco_remove_submission_blocks() {
+  //There isn't an entry for content.
+  db_update('block')
+    ->fields(array(
+      'status' => 0,
+    ))
+    ->condition('theme', 'cybercourse_submission')
+    ->condition('delta', 'main', '!=')
     ->execute();
 }

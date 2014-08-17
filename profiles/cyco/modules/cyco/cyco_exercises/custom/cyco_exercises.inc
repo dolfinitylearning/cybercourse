@@ -375,7 +375,6 @@ function cyco_exercises_page_alter(&$page) {
   }
 }
 
-
 /**
  * Return true if the current page is an exercise submission shown in a popup.
  */
@@ -385,7 +384,7 @@ function _cyco_exercises_is_submission_page_in_popup() {
     //Is the page in a popup?
     if ((    isset($_GET['destination']) 
           && $_GET['destination'] == 'cyco-exercises-close-popup' ) ) {
-        $is_submission_popup = TRUE;
+      $is_submission_popup = TRUE;
     }
   }
   return $is_submission_popup;
