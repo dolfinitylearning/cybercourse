@@ -13,7 +13,6 @@ dependencies[] = block
 dependencies[] = block_class
 dependencies[] = book
 dependencies[] = clone
-dependencies[] = comment
 dependencies[] = content_access
 dependencies[] = contextual
 dependencies[] = ctools

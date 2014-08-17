@@ -15,6 +15,10 @@ function cyco_form_install_configure_form_alter(&$form, $form_state) {
       = 'CyberCourse instance';
 }
 
+/**
+ * Add an install task.
+ * @return array Definition
+ */
 function cyco_install_tasks() {
   $task = array();
   $task['finalize'] = array(
@@ -26,56 +30,67 @@ function cyco_install_tasks() {
   return $task;
 }
 
-
+/*
+ * Finish up the installation.
+ */
 function _cyco_finalize_install() {
-  //Clean URLs
+  // Clean URLs
   _cyco_clean_urls();
-  //Give user 1 the administrator role.
+  // Give user 1 the administrator role.
   _cyco_make_user_1_admin_author();
-  //Define services.
+  // Define services.
   _cyco_define_services();
-  //Add some taxonomy terms.
+  // Add some taxonomy terms.
   _cyco_add_workflow_terms();
-  //Add starting content. Basic pages, course pages, blueprint pages.
+  // Add starting content. Basic pages, course pages, blueprint pages.
   _cyco_add_content();
-  //Add terms to content.
+  // Add terms to content.
   _cyco_add_terms_to_content();
-  //Link pages into books.
+  // Link pages into books.
   _cyco_make_books();
 //  //Add pages to the main menu.
 //  _cyco_add_links_main_menu();
-//  //Add pages to the footer.
-//  _cyco_add_links_footer_menu();
-  //Add links to control panel menu. I can't make features do it, 
-  //except for cp-author.
+  // Create pages for ToU, credits, and copyright. Why not just import them?
+  // Because I can't figure out Mysterious Menu Misplacement. They won't go
+  // in the footer menu. (Oh, just figured it out. Maybe. Leave this here
+  // anyway.)
+  _cyco_create_footer_linked_pages();
+  // Add pages to the footer.
+  _cyco_add_links_footer_menu();
+  //Remove the title from the footer block.
+  _cyco_remove_footer_title();
+  // Add links to control panel menu. I can't make features do it, 
+  // except for cp-author.
   _cyco_add_links_cp_menus();
-  //Put course and blueprint blocks in sidebar.
+  // Put course and blueprint blocks in sidebar, footer menu 
+  // in (gasp!) the footer.
   _cyco_place_blocks();
-  //Add class to some blocks.
+  // Add class to some blocks.
   _cyco_add_classes2blocks();
-  //Set the front page.
+  // Set the front page.
   _cyco_set_frontpage();
-  //Secondary links source - none.
-  variable_set('menu_secondary_links_source', '');
-  //Tell extlink to open external targets in a new window.
-  variable_set('extlink_target', '_blank');
-  //Theme stuff
-  _cyco_theme_stuff();
   
-  //Turn off some modules.
+  
+  // Secondary links source - none.
+  variable_set('menu_secondary_links_source', '');
+  // Tell extlink to open external targets in a new window.
+  variable_set('extlink_target', '_blank');
+  // Theme stuff
+  _cyco_theme_stuff();
+  // Turn off some modules.
   _cyco_disable_modules();
   node_access_rebuild();
   cache_clear_all();
-  //Add control panel link to user menu.
+  // Add control panel link to user menu.
   _cyco_add_cp_link();
   cache_clear_all();
 }
 
 /**
  * Give user 1 the administrator role.
+ * See https://api.drupal.org/api/drupal/modules!user!user.module/function/user_multiple_role_edit/7
  */
 function _cyco_make_user_1_admin_author() {
-//See https://api.drupal.org/api/drupal/modules!user!user.module/function/user_multiple_role_edit/7
   $admin_role = user_role_load_by_name( 'administrator' );
   $author_role = user_role_load_by_name( 'author' );
   if ( $admin_role ) {
@@ -372,7 +387,9 @@ function _cyco_place_blocks() {
       'cybercourse', '', 0, 4);
   _cyco_activate_block('search', 'form', 'sidebar_first',
       'cybercourse', '', 0, 5);
-  _cyco_activate_block('menu', 'menu-footer', 'footer',
+  //Position the footer.
+  $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
+  _cyco_activate_block('menu', $footer_menu_machine_name, 'footer',
       'cybercourse', '', 0, 1);
 }
 
@@ -437,15 +454,6 @@ function _cyco_add_links_main_menu() {
 }
 
 /**
- * Add links to the footer menu.
- */
-function _cyco_add_links_footer_menu() {
-  _cyco_add_menu_item('Copyright, you, 20xx', 'page', 'main-footer', 0);
-  _cyco_add_menu_item('Credits', 'page', 'main-footer', 1);
-  _cyco_add_menu_item('Terms of use', 'page', 'main-footer', 2);
-}
-
-/**
  * Create a menu item.
  * @param string $node_title Node title.
  * @param string $node_type Node content type.
@@ -471,11 +479,14 @@ function _cyco_add_menu_item($node_title, $node_type, $menu, $weight) {
  */
 function _cyco_add_classes2blocks() {
   //Footer menu block.
-  _cyco_add_classes2block('menu', 'menu-footer', 'well well-sm');
+  $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
+  _cyco_add_classes2block('menu', $footer_menu_machine_name, 'well well-sm');
   //Tools menu block.
   _cyco_add_classes2block('menu', 'menu-tools', 'well well-sm');
   //User menu block.
   _cyco_add_classes2block('system', 'user-menu', 'well well-sm');
+  //Login block
+  _cyco_add_classes2block('user', 'login', 'well well-sm');
   //Course block.
   $course_node 
       = _cyco_node_load_by_title('Your course', 'course_page');
@@ -708,9 +719,104 @@ function _cyco_add_cp_link() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 0,
-    'weight' => -5,
+    'weight' => -50,
     'customized' => 1,    
     'language' => 'und',
   );
   menu_link_save($item);
+}
+
+/**
+ * Create pages with links in the footer.
+ */
+function _cyco_create_footer_linked_pages() {
+  $summary = 'Copyright.';
+  $body = 'Your copyright details.';
+  _cyco_create_page('page', 1, 'Copyright, you, 20xx', $summary, $body);
+  $summary = 'Web site terms of use.';
+  $body = "Terms of use go here. E.g.,\n\nDon't rely on anything on "
+      . "this site, including this sentence.\n";
+  _cyco_create_page('page', 1, 'Terms of use', $summary, $body);
+  $summary = 'Thanks!';
+  $body = 'Credit other people here.';
+  _cyco_create_page('page', 1, 'Credits', $summary, $body);
+  
+}
+
+/**
+ * Add links to the footer menu.
+ */
+function _cyco_add_links_footer_menu() {
+  //Find the machine name of the footer menu.
+  $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
+  if ( is_null($footer_menu_machine_name) ) {
+    drupal_set_message('Could not find footer menu.');
+    return;
+  }
+  _cyco_add_menu_item('Copyright, you, 20xx', 'page', $footer_menu_machine_name, 0);
+  _cyco_add_menu_item('Credits', 'page', $footer_menu_machine_name, 1);
+  _cyco_add_menu_item('Terms of use', 'page', $footer_menu_machine_name, 2);
+}
+
+/**
+ * Find the machine name of the footer menu.
+ * @param string $menu_title Human title of the menu.
+ * @return string Menu machine name.
+ */
+function _cyco_find_menu_machine_name($menu_title) {
+  $machine_name = NULL;
+  $menu_defs = menu_load_all();
+  foreach ( $menu_defs as $menu_def ) {
+    if ( $menu_def['title'] == $menu_title ) {
+      $machine_name = $menu_def['menu_name'];
+    }
+  }
+  return $machine_name;
+}
+
+/**
+ * Create a page.
+ * @param string $type
+ * @param int $uid
+ * @param string $title
+ * @param string $summary
+ * @param string $body
+ */
+function _cyco_create_page( $type, $uid, $title, $summary, $body) {
+  $values = array(
+    'type' => $type,
+    'uid' => $uid,
+    'status' => 1,
+    'comment' => 1,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $values);
+  $ewrapper = entity_metadata_wrapper('node', $entity);
+  $ewrapper->title->set($title);
+  $ewrapper->body->set(array('value' => $body));
+  $ewrapper->body->summary->set($summary);
+  $ewrapper->save();
+}
+
+/**
+ * Remove the title from the footer block.
+ */
+function _cyco_remove_footer_title() {
+  $block_machine_name = _cyco_find_menu_machine_name('Footer');
+  _cyco_remove_title_from_block('menu', $block_machine_name, 'cybercourse');
+}
+
+/**
+ * Remove title from a block.
+ * @param string $module Name of the module defining the block.
+ * @param string $block Name of the block.
+ * @param string $theme Name of the theme.
+ */
+function _cyco_remove_title_from_block( $module, $block, $theme ) {
+  db_update('block')
+    ->fields(array('title' => '<none>'))
+    ->condition('module', $module)
+    ->condition('delta', $block)
+    ->condition('theme', $theme)
+    ->execute();
 }

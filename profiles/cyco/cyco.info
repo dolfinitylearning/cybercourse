@@ -12,7 +12,6 @@ distribution_name = "CyberCourse"
 dependencies[] = block
 dependencies[] = book
 dependencies[] = color
-dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = help
 dependencies[] = image
