@@ -27,6 +27,13 @@ function cyco_exercises_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'auto_entitylabel_node_model_exercise_solution';
+  $strongarm->value = '2';
+  $export['auto_entitylabel_node_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_pattern_node_exercise_submission';
   $strongarm->value = 'Solution for exercise [node:field_exercise] created by uid [node:author:uid]';
   $export['auto_entitylabel_pattern_node_exercise_submission'] = $strongarm;
@@ -41,6 +48,13 @@ function cyco_exercises_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'auto_entitylabel_pattern_node_model_exercise_solution';
+  $strongarm->value = 'Model solution for [node:field_exercise_solved]';
+  $export['auto_entitylabel_pattern_node_model_exercise_solution'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_php_node_exercise_submission';
   $strongarm->value = 0;
   $export['auto_entitylabel_php_node_exercise_submission'] = $strongarm;
@@ -51,6 +65,13 @@ function cyco_exercises_strongarm() {
   $strongarm->name = 'auto_entitylabel_php_node_exercise_submission_rubric_item_';
   $strongarm->value = 0;
   $export['auto_entitylabel_php_node_exercise_submission_rubric_item_'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'auto_entitylabel_php_node_model_exercise_solution';
+  $strongarm->value = 0;
+  $export['auto_entitylabel_php_node_model_exercise_solution'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -606,6 +627,41 @@ function cyco_exercises_strongarm() {
   $strongarm->name = 'node_submitted_rubric_item';
   $strongarm->value = 0;
   $export['node_submitted_rubric_item'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_exercise_pattern';
+  $strongarm->value = 'exercise/[node:title]';
+  $export['pathauto_node_exercise_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_exercise_submission_pattern';
+  $strongarm->value = 'exercise-submission/[node:title]';
+  $export['pathauto_node_exercise_submission_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_exercise_submission_rubric_item__pattern';
+  $strongarm->value = 'exercise-submission-rubric-rating/[node:title]';
+  $export['pathauto_node_exercise_submission_rubric_item__pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_rubric_item_pattern';
+  $strongarm->value = 'rubric-item/[node:title]';
+  $export['pathauto_node_rubric_item_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_rubric_item_categories_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_rubric_item_categories_pattern'] = $strongarm;
 
   return $export;
 }

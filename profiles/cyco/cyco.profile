@@ -103,6 +103,35 @@ function _cyco_make_user_1_admin_author() {
 }
 
 /**
+ * Return rid of a role, given its name.
+ * @param string $role_name Role name
+ * @return int rid
+ */
+function _cyco_get_role_id_from_name( $role_name ) {
+  $role = user_role_load_by_name( $role_name );
+  return $role->rid;
+}
+
+/**
+ * Show block to certain roles.
+ * @param string $module Name of the module creating the block.
+ * @param string $delta Block id (delta).
+ * @param array $roles_see_block Array of rids who can see the block.
+ */
+function _cyco_set_block_role_visibility( $module, $delta, $roles_see_block ) {
+  //Copied from block_admin_configure_submit().
+  $query = db_insert('block_role')->fields(array('rid', 'module', 'delta'));
+  foreach ($roles_see_block as $rid) {
+    $query->values(array(
+      'rid' => $rid,
+      'module' => $module,
+      'delta' => $delta,
+    ));
+  }
+  $query->execute();  
+}
+
+/**
  * Define services, using an export.
  */
 function _cyco_define_services() {
@@ -384,6 +413,17 @@ function _cyco_place_blocks() {
   $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
   _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_first', 
       'cybercourse', '', 0, 1);
+  //The blueprint block is only visible to some roles.
+  $roles_see_block = array(
+    _cyco_get_role_id_from_name('administrator'),
+    _cyco_get_role_id_from_name('author'),
+    _cyco_get_role_id_from_name('reviewer'),
+    _cyco_get_role_id_from_name('instructor'),
+    _cyco_get_role_id_from_name('grader'),
+  );
+  _cyco_set_block_role_visibility( 'cyco_book_blocks', $blueprint_block_id, 
+      $roles_see_block );
+  //Set up some other blocks.
   _cyco_activate_block('menu', 'menu-tools', 'sidebar_first',
       'cybercourse', '', 0, 2);
   _cyco_activate_block('user', 'login', 'sidebar_first',
