@@ -23,6 +23,7 @@ dependencies[] = cyco_toc
 dependencies[] = diff
 dependencies[] = entity
 dependencies[] = entityreference
+dependencies[] = entityreference_prepopulate
 dependencies[] = features
 dependencies[] = field_group
 dependencies[] = field_permissions

@@ -4,6 +4,8 @@
  */
 (function($) {
   $(document).ready(function() {
+    //Animation speed. Set this to nowt during init.
+    var bccMenuAnimation = "fast";
     //If no settings set, exit. Will happen when there are no
     //book blocks to show.
     if ( ! Drupal.settings.cyco_book_blocks ) {
@@ -38,12 +40,12 @@
       var children = $this.parent('li.parent_li').find(' > ul > li');
       if ( $this.hasClass('open-branch') ) {
         $this.removeClass('open-branch').addClass('close-branch');
-        children.show('fast');// $.bccMenuAnimation );
+        children.show( bccMenuAnimation );
         $this.attr('title', 'Collapse this branch');
       }
       else {
         $this.removeClass('close-branch').addClass('open-branch');
-        children.hide('fast');// $.bccMenuAnimation );
+        children.hide( bccMenuAnimation );
         $this.attr('title', 'Expand this branch');
       }
 
@@ -74,9 +76,11 @@
         }
       }
       //Expand all the menu items on the active path.
+      bccMenuAnimation = "";
       $(".cyco-book-tree-menu .active-path").each(function(){
         $(this).bookBlockMenuClicked();
       });
+      bccMenuAnimation = "fast";
     }
   });
 

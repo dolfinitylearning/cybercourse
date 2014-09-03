@@ -52,7 +52,8 @@ class og_handler_field_user_roles extends og_handler_field_prerender_list {
     $all_rids = array();
     if ($list) {
       foreach ($list as $value) {
-        $rids = og_get_user_roles($value['group_type'], $value['gid'], $value['uid'], FALSE);
+        $rids = og_get_user_roles($value['group_type'], $value['gid'], $value['uid'], FALSE, FALSE);
+// KRM patch from d.o       $rids = og_get_user_roles($value['group_type'], $value['gid'], $value['uid'], FALSE);
         foreach ($rids as $rid => $role) {
           $this->items[$value['gid']][$value['uid']][$rid]['rid'] = $rid;
           $this->items[$value['gid']][$value['uid']][$rid]['role'] = $role;

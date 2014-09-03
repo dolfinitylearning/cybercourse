@@ -451,8 +451,7 @@ function swim_field_formatter_view(
     case 'swim_default_formatter':
     case 'swim_trimmed_formatter':
       foreach ($items as $delta => $item) {
-        //Replace tokens.
-        $content = token_replace($item['value']);
+        $content = $item['value'];
         //Convert from Markdown to HTML
         $output = swim_markdown2html( $content );
 //        $output = swim_rest2html( $tokenized );
@@ -738,6 +737,8 @@ function swim_ckhtml2markdown( $content ) {
  * @return string HTML
  */
 function swim_markdown2html( $markdown ) {
+  //Replace tokens.
+  $markdown = token_replace($markdown);
   $parser = new SwimMarkdown();
   $html = $parser->parse($markdown);
   //Wrap math formula in span MathJax uses. Same as CK plugin uses.

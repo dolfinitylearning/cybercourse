@@ -1,0 +1,57 @@
+diff --git a/includes/views/handlers/og_handler_field_user_roles.inc b/includes/views/handlers/og_handler_field_user_roles.inc
+index 0e0801d..c2f3ec6 100644
+--- a/includes/views/handlers/og_handler_field_user_roles.inc
++++ b/includes/views/handlers/og_handler_field_user_roles.inc
+@@ -52,7 +52,7 @@ class og_handler_field_user_roles extends og_handler_field_prerender_list {
+     $all_rids = array();
+     if ($list) {
+       foreach ($list as $value) {
+-        $rids = og_get_user_roles($value['group_type'], $value['gid'], $value['uid'], FALSE);
++        $rids = og_get_user_roles($value['group_type'], $value['gid'], $value['uid'], FALSE, FALSE);
+         foreach ($rids as $rid => $role) {
+           $this->items[$value['gid']][$value['uid']][$rid]['rid'] = $rid;
+           $this->items[$value['gid']][$value['uid']][$rid]['role'] = $role;
+diff --git a/og.module b/og.module
+index dac0ab7..aaeb1ca 100755
+--- a/og.module
++++ b/og.module
+@@ -2742,7 +2742,7 @@ function og_get_user_roles($group_type, $gid, $uid = NULL, $include = TRUE, $che
+ 
+   $account = user_load($uid);
+ 
+-  $identifier = implode(':', array($group_type, $gid, $uid, $include));
++  $identifier = implode(':', array($group_type, $gid, $uid, $include, $check_active));
+   if (isset($roles[$identifier])) {
+     return $roles[$identifier];
+   }
+@@ -3047,7 +3047,7 @@ function og_role_grant($group_type, $gid, $uid, $rid) {
+   }
+ 
+   // Get the existing user roles.
+-  $user_roles = og_get_user_roles($group_type, $gid, $uid);
++  $user_roles = og_get_user_roles($group_type, $gid, $uid, TRUE, FALSE);
+   if (empty($user_roles[$rid])) {
+     $role = new stdClass();
+     $role->uid = $uid;
+diff --git a/og_ui/og_ui.admin.inc b/og_ui/og_ui.admin.inc
+index e6420eb..901229c 100644
+--- a/og_ui/og_ui.admin.inc
++++ b/og_ui/og_ui.admin.inc
+@@ -310,7 +310,7 @@ function og_ui_edit_membership($form, &$form_state, $group_type, $gid, $og_membe
+       '#type' => 'checkboxes',
+       '#options' => $og_roles,
+       '#title' => t('Roles'),
+-      '#default_value' => array_keys(og_get_user_roles($group_type, $gid, $account->uid)),
++      '#default_value' => array_keys(og_get_user_roles($group_type, $gid, $account->uid, TRUE, FALSE)),
+     );
+   }
+ 
+@@ -359,7 +359,7 @@ function og_ui_edit_membership_submit($form, &$form_state) {
+ 
+   $account = user_load($og_membership->etid);
+   // Assign roles.
+-  $og_roles = og_get_user_roles($group_type, $gid, $account->uid);
++  $og_roles = og_get_user_roles($group_type, $gid, $account->uid, TRUE, FALSE);
+   foreach (array_keys($og_roles) as $rid) {
+     if (!in_array($rid, $form_state['values']['roles'])) {
+       og_role_revoke($group_type, $gid, $account->uid, $rid);

@@ -2,8 +2,6 @@
  * @file
  * Create submission links for an inserted exercise. 
  */
-var vat=0;
-
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   /**
@@ -204,8 +202,6 @@ var vat=0;
       //Update 
     },
     clickWorkLink: function(event) {
-              alert('dog! ' + vat);
-              vat++;
       event.preventDefault();
       event.stopPropagation();
       window.windowObjectReference = window.open(

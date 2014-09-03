@@ -1,3 +1,0 @@
-
-require_once realpath( dirname(__FILE__) . 
-    '/../dolfinity_library/dolfinity_library.inc' );

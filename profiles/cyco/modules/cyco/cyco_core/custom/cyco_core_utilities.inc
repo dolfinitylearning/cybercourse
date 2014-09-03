@@ -428,3 +428,4 @@ function cyco_core_get_role_id_by_name($name) {
   $roles = user_roles();
   return array_search($name, $roles);
 }
+

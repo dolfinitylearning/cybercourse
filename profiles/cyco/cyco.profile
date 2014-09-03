@@ -65,8 +65,6 @@ function _cyco_finalize_install() {
   // Put course and blueprint blocks in sidebar, footer menu 
   // in (gasp!) the footer.
   _cyco_place_blocks();
-  //Remove all blocks from submission theme, except for content.
-  _cyco_remove_submission_blocks();
   // Add class to some blocks.
   _cyco_add_classes2blocks();
   // Set the front page.
@@ -82,6 +80,8 @@ function _cyco_finalize_install() {
   _cyco_disable_modules();
   node_access_rebuild();
   cache_clear_all();
+  //Remove all blocks from submission theme, except for content.
+  _cyco_remove_submission_blocks();
   // Add control panel link to user menu.
   _cyco_add_cp_link();
   cache_clear_all();
@@ -161,8 +161,10 @@ function _cyco_taxonomy_terms_save_terms($terms, $vocab_name){
  */
 function _cyco_add_term2node( $node_title, $node_type, $field, $tid ) {
   $node = _cyco_node_load_by_title($node_title, $node_type);
-  $node->{$field}[$node->language][0]['tid'] = $tid;
-  node_save($node);
+  if ( ! is_null($node) ) {
+    $node->{$field}[$node->language][0]['tid'] = $tid;
+    node_save($node);
+  }
 }
 
 /**
@@ -829,6 +831,7 @@ function _cyco_remove_submission_blocks() {
   db_update('block')
     ->fields(array(
       'status' => 0,
+      'region' => -1,
     ))
     ->condition('theme', 'cybercourse_submission')
     ->condition('delta', 'main', '!=')

@@ -310,7 +310,8 @@ function og_ui_edit_membership($form, &$form_state, $group_type, $gid, $og_membe
       '#type' => 'checkboxes',
       '#options' => $og_roles,
       '#title' => t('Roles'),
-      '#default_value' => array_keys(og_get_user_roles($group_type, $gid, $account->uid)),
+      '#default_value' => array_keys(og_get_user_roles($group_type, $gid, $account->uid, TRUE, FALSE)),
+//KRM oatch      '#default_value' => array_keys(og_get_user_roles($group_type, $gid, $account->uid)),
     );
   }
 
@@ -359,7 +360,8 @@ function og_ui_edit_membership_submit($form, &$form_state) {
 
   $account = user_load($og_membership->etid);
   // Assign roles.
-  $og_roles = og_get_user_roles($group_type, $gid, $account->uid);
+  $og_roles = og_get_user_roles($group_type, $gid, $account->uid, TRUE, FALSE);
+//KEM PATCH  $og_roles = og_get_user_roles($group_type, $gid, $account->uid);
   foreach (array_keys($og_roles) as $rid) {
     if (!in_array($rid, $form_state['values']['roles'])) {
       og_role_revoke($group_type, $gid, $account->uid, $rid);

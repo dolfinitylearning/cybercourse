@@ -240,7 +240,7 @@ function _cyco_exercises_make_replacements($matches) {
           'setting'
       );
     }
-    $body_content = swim_rest2html(
+    $body_content = swim_markdown2html(
         $exercise_node->field_body[LANGUAGE_NONE][0]['value']
     );
     $result = theme('cyco_embedded_exercise', array(
