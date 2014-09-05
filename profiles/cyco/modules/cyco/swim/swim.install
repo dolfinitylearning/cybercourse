@@ -45,46 +45,44 @@ function _swim_install_help() {
   //Default SWIM help popup content.
   $help = 
 <<<EOT
+CyberCourse uses the Textile markup language.
+
 Paragraphs are separated by blank lines.
 
-``> Quote.``      
-> Quote.
+notextile. <code>*bold*</code> and <code>_italic_</code> text<br>
+<br>
+<code>h1. A very large headline</code><br>
+<br>
 
-``*emphasis*``
-  *emphasis*
+notextile. <code>h2. A not so large headline</code><br>
+<br>
+<code>h3. A small headline</code>
 
-``**strong emphasis**``
-  **strong emphasis**
+Bulleted list:
 
-``# Title level 1``
-# Title level 1
+notextile. <code>* Red<br>
+* Green<br>
+* Blue</code>
 
-``## Title level 2``
-## Title level 2
+A link:
 
-``### Title level 3``
-### Title level 3
+notextile. <code>"Wikipedia":http://en.wikipedia.org/</code>
 
-``* List item``
+A table:
 
-* List item
+notextile. <code>|_. First Header |_. Second Header |<br>
+|Content Cell |Content Cell |<br>
+|Content Cell |Content Cell |</code>
 
-``1. List item``
+An image:
 
-1. List item
+notextile. <code>!INSERT IMAGE HERE(alt text)!</code>
 
-``Links: You can add forums, quizzes, maps, polls, and many other [Drupal](http://drupal.org/) modules.``
+For more, see the "wiki":https://wiki.cybercour.se/wiki/cybercourse-editor/.
 
-Links: You can add forums, quizzes, maps, polls, and many other [Drupal](http://drupal.org/) modules.
-
-``This is an image: ![Drupal](INSERT IMAGE HERE)``
-
-This is an image: ![Drupal](http://drupal.org/files/powered-blue-80x15.png)
-    
-Tables, footnotes, math formulas, pseudents... See the [CyberCourse wiki](http://wiki.cybercour.se/) for more.
 EOT;
   variable_set('swim_help_message', $help);
-  $rendered_help = swim_markdown2html( $help );
+  $rendered_help = swim_textile2html( $help );
   variable_set('swim_help_message_rendered', $rendered_help);  
 }
 

@@ -20,6 +20,16 @@ function cyco_patterns_help($path, $arg) {
 }
 
 /**
+ * Implements hook_swim_custom_tag_view_info().
+ */
+function cyco_patterns_swim_custom_tag_view_info() {
+  return array(
+    'tag' => 'pattern',
+    'callback' => '_cyco_patterns_swim_callback',
+  );
+}
+
+/**
  * Implement hook_theme().
  */
 function cyco_patterns_theme() {
@@ -47,7 +57,7 @@ function cyco_patterns_theme() {
  */
 function cyco_patterns_node_view($node, $view_mode, $langcode) {
   if ( $node->type == 'pattern' && $view_mode == 'full' ) {
-    if ( user_access('edit any pattern') ) {
+    if ( user_access('edit any pattern content') ) {
       drupal_set_title( $node->title . ' (' . $node->nid . ')' );
     }
   }
@@ -73,11 +83,11 @@ function cyco_patterns_menu_local_tasks_alter(&$data, $router_item, $root_path) 
 }
 
 /**
- * Implements hook_swim_markdown2html_TAG_alter
- * @param stdClass $args Content to translate
+ * Callback to generate HTML for the pattern.
+ * @param int $pattern_nid Pattern node nid.
+ * @param string $tag_content Inner tag content. Not used.
  */
-function cyco_patterns_swim_markdown2html_pattern_alter( &$args ) {
-  $pattern_nid = intval($args->args);
+function _cyco_patterns_swim_callback( $pattern_nid, $tag_content ) {
   $pattern_node = node_load($pattern_nid);
   //Make sure that this is the right type of node.
   if (   $pattern_node == FALSE 
@@ -94,7 +104,7 @@ function cyco_patterns_swim_markdown2html_pattern_alter( &$args ) {
       isset( 
         $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
       ) 
-      ? swim_markdown2html(
+      ? swim_textile2html(
           $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
         )
       : '';
@@ -102,7 +112,7 @@ function cyco_patterns_swim_markdown2html_pattern_alter( &$args ) {
       isset( 
         $pattern_node->field_actions[LANGUAGE_NONE][0]['value'] 
       )
-      ? swim_markdown2html( 
+      ? swim_textile2html( 
           $pattern_node->field_actions[LANGUAGE_NONE][0]['value']
         )
       : '';
@@ -136,6 +146,18 @@ function cyco_patterns_swim_markdown2html_pattern_alter( &$args ) {
         'pattern_node' => $pattern_node,
       )
   );
-  $args->replacement_content = $result;
-  $args->current_line ++;
+  return $result;
+}
+
+/**
+ * Implements hook_form_FORM_alter().
+ * 
+ * Mess with the pattern node edit form.
+ */
+function cyco_patterns_form_pattern_node_form_alter( &$form, $form_state ) {
+  //Supress author and book options for all users except admins.
+  if ( ! cyco_core_current_user_has_role(array('administrator')) ) {
+    $form['author']['#access'] = FALSE;
+    $form['book']['#access'] = FALSE;
+  }
 }

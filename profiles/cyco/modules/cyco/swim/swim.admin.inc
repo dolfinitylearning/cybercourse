@@ -18,7 +18,7 @@ function _swim_settings_form() {
     ),
     //Remove grippie.
     '#resizable' => FALSE,
-    '#default_value' => swim_markdown2ckhtml(
+    '#default_value' => swim_textile2ckhtml(
         variable_get('swim_help_message', '') 
     ),
     '#attributes' => array(
@@ -96,7 +96,7 @@ function _swim_save_settings( $form, $form_state ) {
   //Markdown help message.
   $message = $form_state['values']['swim_help_message'];
   variable_set('swim_help_message', $message);
-  $rendered_message = swim_markdown2html( $message );
+  $rendered_message = swim_textile2html( $message );
   variable_set('swim_help_message_rendered', $rendered_message);
   //Editor height.
   $editor_height = $form_state['values']['swim_default_height'];

@@ -1,0 +1,23 @@
+.textile .align-left {
+	float: left;
+	margin: 1em 1em 1em 0;
+}
+
+.textile .align-right {
+	float: right;
+	margin: 1em 0 1em 1em;
+}
+
+.textile .align-center {
+	display: block;
+	margin: 1em auto;
+}
+
+
+
+
+.textile .cell-label {
+	vertical-align: middle;
+}
+
+

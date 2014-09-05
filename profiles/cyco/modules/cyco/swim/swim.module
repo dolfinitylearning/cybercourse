@@ -4,13 +4,13 @@
  * Server-side SWIM implementation.
  */
 
+require_once drupal_get_path('module', 'swim') . '/SwimCustomTagParser.php';
+
 //Default heights for the editor and summary.
 define('SWIM_DEFAULT_HEIGHT', '15');
 define('SWIM_DEFAULT_SUMMARY_HEIGHT', '5');
 //Class MathJax uses to detect what content it should mess with.
 define('SWIM_MATH_JAX_CLASS', 'math');
-
-require_once drupal_get_path('module', 'swim') . '/SwimMarkdown.php';
 
 /**
  * Implements hook_help().
@@ -41,6 +41,59 @@ function swim_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   return $items;
+}
+
+/**
+ * Let other modules declare custom tags.
+ * 
+ * Some tags only work in view mode (e.g., pattern, exercise). In edit mode,
+ * they are not translated.
+ * 
+ * Other tags are translated in both view and edit mode (e.g., pseudent).
+ * 
+ * @param SwimCustomTagParser $custom_tag_parser Parser the tags will be 
+ * added to.
+ * @param string $mode Mode the parser is being used for: edit or view.
+ */
+function swim_declare_custom_tags( $custom_tag_parser, $mode ) {
+  if ( get_class($custom_tag_parser) !== 'SwimCustomTagParser') {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' first param: wrong object type: ' . get_class($custom_tag_parser);
+    cyco_core_handle_error( $message );
+    return;    
+  }
+  if ( $mode != 'view' && $mode != 'edit' ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' bad mode: ' . $mode;
+    cyco_core_handle_error( $message );
+    return;    
+  }
+  $custom_tag_definitions = module_invoke_all('swim_custom_tag_' . $mode . '_info');
+  if ( sizeof( $custom_tag_definitions ) == 0 ) {
+    //Nothing declared.
+    return;
+  }
+  if ( !isset($custom_tag_definitions['tag']) 
+      || !isset($custom_tag_definitions['callback']) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' bad tag definition';
+    cyco_core_handle_error( $message );
+    return;
+  }
+  //Maybe only one tag declared.
+  if ( !is_array($custom_tag_definitions['tag']) ) {
+    $custom_tag_parser->declareCustomTag(
+      $custom_tag_definitions['tag'],
+      $custom_tag_definitions['callback']
+    );
+  }
+  else {
+    //More than one tag declared.
+    foreach ($custom_tag_definitions['tag'] as $index => $tag) {
+      $callback = $custom_tag_definitions['callback'][$index];
+      $custom_tag_parser->declareCustomTag($tag, $callback);
+    }
+  }
 }
 
 /**
@@ -118,7 +171,7 @@ function swim_field_widget_form(
       '#title' => t( $element['#title'] ),
       //Remove grippie.
       '#resizable' => FALSE,
-      '#default_value' => $value ? swim_markdown2ckhtml( $value ) : '',
+      '#default_value' => $value ? swim_textile2ckhtml( $value ) : '',
 //      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
       '#attributes' => array(
         'class' => array('swim-editor swim-editor-main text-full'),
@@ -137,7 +190,7 @@ function swim_field_widget_form(
         '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
         //Remove grippie.
         '#resizable' => FALSE,
-        '#default_value' => $summary ? swim_markdown2ckhtml( $summary ) : '',
+        '#default_value' => $summary ? swim_textile2ckhtml( $summary ) : '',
 //        '#default_value' => $summary ? swim_rest2ckhtml( $summary ) : '',
         '#attributes' => array(
           'class' => array('swim-editor swim-editor-summary'),
@@ -185,7 +238,7 @@ function swim_field_is_empty($item, $field) {
  */
 function _swim_field_widget_value($element, $input = FALSE, $form_state = array()) {
   if ( $input !== FALSE ) {
-    $result = swim_ckhtml2markdown($input);
+    $result = swim_ckhtml2textile($input);
 //    $result = _swim_ckhtml2rest($input);
     return $result;
   }
@@ -194,8 +247,6 @@ function _swim_field_widget_value($element, $input = FALSE, $form_state = array(
 
 /**
  * Implements hook_libraries_info().
- * 
- * Define CKEditor in the libraries.
  */
 function swim_libraries_info() {
   $libraries = array();
@@ -213,6 +264,25 @@ function swim_libraries_info() {
     'files' => array(
       'js' => array(
         'ckeditor.js',
+      ),
+    ),
+  );
+  $libraries['php-textile'] = array(
+    'name' => 'PHP-Textile',
+    'vendor url' => 'https://github.com/textile/php-textile',
+    'download url' => 'https://github.com/textile/php-textile',
+    'path' => 'src/Netcarver/Textile/',
+    'version arguments' => array(
+      'file' => 'src/Netcarver/Textile/Parser.php',
+      // Sample: $ver = '3.5.5';
+      'pattern' => '/\$ver\s=\s\'(.*)?\'\;/',
+      'lines' => 500,
+    ),
+    'files' => array(
+      'php' => array(
+        'Parser.php',
+        'DataBag.php',
+        'Tag.php',
       ),
     ),
   );
@@ -237,9 +307,9 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   $ckLibraryInfo = libraries_load('ckeditor');
   $numFilesLoaded = libraries_load_files($ckLibraryInfo);
   if ( $numFilesLoaded <= 0 ) {
-    $mess = t('SWIM error: no CKEditor files loaded. Is CK installed?');
-    drupal_set_message( $mess );
-    watchdog('SWIM', $message);
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: no CKEditor files loaded. Is CK installed?';
+    cyco_core_handle_error( $message );
     return;
   }
   //Add CSS.
@@ -452,8 +522,8 @@ function swim_field_formatter_view(
     case 'swim_trimmed_formatter':
       foreach ($items as $delta => $item) {
         $content = $item['value'];
-        //Convert from Markdown to HTML
-        $output = swim_markdown2html( $content );
+        //Convert from Textile to HTML
+        $output = swim_textile2html( $content );
 //        $output = swim_rest2html( $tokenized );
         if ($display['type'] == 'swim_trimmed_formatter') {
           $output = text_summary($output, NULL, $display['settings']['trim_length']);
@@ -465,12 +535,12 @@ function swim_field_formatter_view(
     case 'swim_summary_or_trimmed_formatter':
       foreach ($items as $delta => $item) {
         if (!empty($item['summary'])) {
-          $output = swim_markdown2html( $item['summary'] );
+          $output = swim_textile2html( $item['summary'] );
 //          $output = swim_rest2html( $item['summary'] );
         }
         else {
           $output = text_summary($item['value']);
-          $output = swim_markdown2html( $output );
+          $output = swim_textile2html( $output );
 //          $output = swim_rest2html( $output );
         }
         $element[$delta] = array('#markup' => $output);
@@ -527,12 +597,12 @@ function _swim_client_peek( $data ) {
   }
   $markup = $data['markup'];
   //Convert content to pure ReST.
-  $content = swim_ckhtml2markdown($markup);
+  $content = swim_ckhtml2textile($markup);
 //  $content = _swim_ckhtml2rest($markup);
   //Replace tokens.
   $content = token_replace($content);
   //Convert the ReST content to HTML.
-  $html = swim_markdown2html($content);
+  $html = swim_textile2html($content);
 //  $html = swim_rest2html($content);
   $module_path = $base_url . base_path() 
           . drupal_get_path('module', 'swim') . '/';
@@ -699,31 +769,31 @@ function _swim_client_help() {
 }
 
 /**
- * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Convert content from CKHTML (HTML from CK field) to pure Textile.
  * Anything the user typed must by HTML encoded, e.g., if the user typed
  * <, then &lt; should be in the content.
  * HTML that CK inserted should be as regular tags.
  * @param string $content Content to convert.
  */
-function swim_ckhtml2markdown( $content ) {
-  //Convert to pure Markdown.
+function swim_ckhtml2textile( $content ) {
+  //Convert to pure Textile.
   //Replace &nbsp; with real spaces.
   $content = str_replace('&nbsp;', ' ', $content);
   //Replace &#39; with real quotes.
   $content = str_replace('&#39;', '\'', $content);
-  //Change markup form Mathjax CK plugin to markdown.
-//  $content = _swim_ck_mathjx2markdown( $content );
+  //Change markup form Mathjax CK plugin to Textile.
+//  $content = _swim_ck_mathjx2textile( $content );
   //Remove the <br>s, leaving just the \ns.
   $content = _swim_remove_brs( $content );
   
-  //Trigger other module's translators.
-  drupal_alter( 'swim_ckhtml2markdown', $content); 
+  //Trigger other module's translators. 
+  drupal_alter( 'swim_ckhtml2textile', $content); 
   //Replace image HTML tags with MD tags.
   //  These must be after other module's hooks are called, so that other 
   //  modules have processes the images they own.
   $content = _swim_img_2_path( $content );
   //Add tags that MathJax needs.
-  $content = _swim_ckhtml2markdown_math($content);
+  $content = _swim_ckhtml2textile_math($content);
   //HTML entities to their real characters.
   $content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
   //Special chars - particularly #39; -> '.
@@ -732,26 +802,45 @@ function swim_ckhtml2markdown( $content ) {
 }
 
 /**
- * Translate pure Markdown into HTML.
- * @param string $markdown Markdown
+ * Translate Textile into HTML for viewing.
+ * @param string $textile Textile
  * @return string HTML
  */
-function swim_markdown2html( $markdown ) {
+function swim_textile2html( $textile ) {
   //Replace tokens.
-  $markdown = token_replace($markdown);
-  $parser = new SwimMarkdown();
-  $html = $parser->parse($markdown);
+  $textile = token_replace($textile);
+  $textile = str_replace("\r", '', $textile);
+  //Custom tags.
+  $p = new SwimCustomTagParser();
+  //Tell other modules to declare their tags for viewing.
+  swim_declare_custom_tags( $p, 'view' ) ;
+  $out = $p->parse($textile);
+  //Load Textile library.
+  $textile_library_info = libraries_load('php-textile');
+  $num_files_loaded = libraries_load_files($textile_library_info);
+  if ( $num_files_loaded <= 0 ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: no Textile files loaded. Is PHP-Textile installed?';
+    cyco_core_handle_error( $message );
+    return;
+  }
+  //Translate textile.
+  $parser = new \Netcarver\Textile\Parser();
+  $html = $parser
+      ->setDocumentType('html5')
+      ->setLineWrap(FALSE)
+      ->parse($out);
   //Wrap math formula in span MathJax uses. Same as CK plugin uses.
-  $html = _swim_markdown2ckhtml_math( $html );
-  //Wrap everything in a SWIM wrapper.
-  $html = '<div class="swim">' . $html . '</div>';
+  $html = _swim_textile2ckhtml_math( $html );
+  //Put everything in a SWIM wrapper.
+  $html = '<div class="swim textile">' . $html . '</div>';
   return $html;
 }
 
 /**
- * Prepare some Markdown for editing in CK.
+ * Prepare some Textile for editing in CK.
  */
-function swim_markdown2ckhtml( $content ) {
+function swim_textile2ckhtml( $content ) {
   //Remove \rs. They are evil.
   $content = str_replace("\r", '', $content);
   //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
@@ -766,15 +855,20 @@ function swim_markdown2ckhtml( $content ) {
 //  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
 //  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
   //Trigger other module's translators.
-//  drupal_alter( 'swim_markdown2betwixt', $content);
+//  drupal_alter( 'swim_textile2betwixt', $content);
   //Encode everything the user typed.
   $content = htmlspecialchars( $content );
   //Grab image paths and wrap them in <img> tags.
-  $content = _swim_markdown2ckhtml_images($content);
+  $content = _swim_textile2ckhtml_images($content);
   //Wrap MathJax class around math stuff.
-  $content = _swim_markdown2ckhtml_math($content);
-  //Trigger other module's translators.
-  drupal_alter( 'swim_markdown2ckhtml', $content);
+  $content = _swim_textile2ckhtml_math($content);
+  //Custom tags.
+  $p = new SwimCustomTagParser();
+  //Tell other modules to declare their tags for editing.
+  swim_declare_custom_tags( $p, 'edit' ) ;
+  $content = $p->parse($content);
+  //Trigger other module's translators. 
+//  drupal_alter( 'swim_textile2ckhtml', $content);
   $content = str_replace("\n", "<br>", $content);
   //Replace two spaces with &nbsp; and a space.
   //Otherwise, CK collapses multiple spaces.
@@ -787,30 +881,53 @@ function swim_markdown2ckhtml( $content ) {
 }
 
 /**
- * Grab paths in MD image tags, and wrap them in <img>.
- * @param string $content Content with raw MD image tags.
+ * Grab paths in  image tags, and wrap them in <img>.
+ * @param string $content Content with raw Textile image tags.
  * @return string Content with wrapped tags.
  */
-function _swim_markdown2ckhtml_images( $content ) {
-  //Match ![stuff](path  - not including the end of the tag.
-  //This allows for titles to be there or not.
-  $pattern = '/\!\[.*?\]\s*\(\s*([A-Za-z0-9\/\_\-\.]*)?.*\)?/i';
+function _swim_textile2ckhtml_images( $content ) {
+  //This regex of Doom comes from php-textile. I don't know how it works.
+  $opt_attrs = "(?:(?:\([^)
+  ]+\))(?:(?:\[[^]
+  ]+\])(?:(?:\{[^}
+  ]+\}))?|(?:\{[^}
+  ]+\})(?:(?:\[[^]
+  ]+\]))?)?|(?:\[[^]
+  ]+\])(?:(?:\([^)
+  ]+\))(?:(?:\{[^}
+  ]+\}))?|(?:\{[^}
+  ]+\})(?:(?:\([^)
+  ]+\)))?)?|(?:\{[^}
+  ]+\})(?:(?:\([^)
+  ]+\))(?:(?:\[[^]
+  ]+\]))?|(?:\[[^]
+  ]+\])(?:(?:\([^)
+  ]+\)))?)?)?";
+
+  $regex='/
+              (?:[[{])?                       # pre
+              \!                              # opening !
+              (?P<align>\<|\=|\>|&lt;|&gt;)?  # optional alignment              $algn
+              (?P<atts>'.$opt_attrs.')        # optional style,class atts       $atts
+              (?:\.\s)?                       # optional dot-space
+              (?P<url>[^\s(!]+)               # presume this is the src         $url
+              \s?                             # optional space
+              (?:\((?P<title>[^\)]+)\))?      # optional title                  $title
+              \!                              # closing
+              (?::(?P<href>\S+)(?<![\]).,]))? # optional href sans final punct. $href
+              (?:[\]}]|(?=[.,\s)|]|$))        # lookahead: space,.)| or end of string ("|" needed if image in table cell)
+              /x'.'u';  
   $matches = array();
-  preg_match_all($pattern, $content, $matches);
-  //$matches[0] are the complete matches, including the paths.
-  //$matches[1] just has the paths.
-  foreach( $matches[0] as $key => $full_match ) {
-    $file_path = $matches[1][$key];
-    $replacement = str_replace(
-        $file_path, //Search for this - the file path
-        '<img src="' . $file_path . '">', //Replacement
-        $full_match //Subject of the search.
-    );
-    $content = str_replace(
-        $full_match, //Find this
-        $replacement, //Replace it with this.
-        $content //In this
-    );
+  preg_match_all($regex, $content, $matches);
+  if ( isset( $matches['url'] ) ) {
+    foreach( $matches['url'] as $url ) {
+      $tag = '<img src="' . $url . '">';
+      $content = str_replace(
+          $url, //Find this
+          $tag, //Replace it with this.
+          $content //In this
+      );
+    }
   }
   return $content;
 }
@@ -820,7 +937,7 @@ function _swim_markdown2ckhtml_images( $content ) {
  * @param string $content Content with uwrapped tags.
  * @return string Content with wrapped tags.
  */
-function _swim_markdown2ckhtml_math( $content ) {
+function _swim_textile2ckhtml_math( $content ) {
   //Match ![stuff](path  - not including the end of the tag.
   //This allows for titles to be there or not.
   //Backticks end up being removed.
@@ -851,19 +968,19 @@ function _swim_markdown2ckhtml_math( $content ) {
 }
 
 /**
- * Convert content from CKHTML (HTML from CK field) to pure Markdown.
+ * Convert content from CKHTML (HTML from CK field) to pure Textile.
  * Anything the user typed must by HTML encoded, e.g., if the user typed
  * <, then &lt; should be in the content.
  * HTML that CK inserted should be as regular tags.
  * @param string $content Content to convert.
  */
-function _swim_ckhtml2markdown( $content ) {
-  //Convert to pure Markdown.
+function _swim_ckhtml2textile( $content ) {
+  //Convert to pure Textile.
   //Replace &nbsp; with real spaces.
   $content = str_replace('&nbsp;', ' ', $content);
   //Replace &#39; with real quotes.
   $content = str_replace('&#39;', '\'', $content);
-  //Change markup form Mathjax CK plugin to Markdown.
+  //Change markup form Mathjax CK plugin to Textile.
 //  $content = _swim_ck_mathjx_2_rest( $content );
   //Remove the <br>s, leaving just the \ns.
   $content = _swim_remove_brs( $content );
@@ -872,8 +989,8 @@ function _swim_ckhtml2markdown( $content ) {
   // See http://www.php.net/manual/en/function.html-entity-decode.php#47371
 //  $content = preg_replace('/&#(\d+);/me',"chr(\\1)",$content); #decimal notation
 //  $content = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$content);  #hex notation
-  //Trigger other module's translators.
-  drupal_alter( 'swim_ckhtml2markdown', $content); //, $type );
+  //Trigger other module's translators. 
+  drupal_alter( 'swim_ckhtml2textile', $content); //, $type );
   //Replace image HTML tags with directives.
   //  These must be after other module's hooks are called, so that other 
   //  modules have processes the images they own.
@@ -893,7 +1010,7 @@ function _swim_ckhtml2markdown( $content ) {
  * @param string $content Content with wrapped tags.
  * @return string Content with unwrapped tags.
  */
-function _swim_ckhtml2markdown_math( $content ) {
+function _swim_ckhtml2textile_math( $content ) {
   $pattern = '/\<.*span.*class.*' . SWIM_MATH_JAX_CLASS . '.*\>(.*)?\<\/span\>/';
   $matches = array();
   preg_match_all($pattern, $content, $matches);
