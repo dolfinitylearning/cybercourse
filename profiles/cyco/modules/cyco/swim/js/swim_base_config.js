@@ -12,7 +12,7 @@ Drupal.swimCkConfig = {
   basicEntities : true, //Entity encode <, >.
   forcePasteAsPlainText : false,
   mathJaxClass : 'math',
-  mathJaxLib : 'https:\/\/c328740.ssl.cf1.rackcdn.com\/mathjax\/latest\/MathJax.js\?config\=TeX\-AMS\-MML\_HTMLorMML',
+  //mathJaxLib : 'https:\/\/c328740.ssl.cf1.rackcdn.com\/mathjax\/latest\/MathJax.js\?config\=TeX\-AMS\-MML\_HTMLorMML',
   tabSpaces: 4,
   disableNativeSpellChecker : false,
   //What the Enter key does.

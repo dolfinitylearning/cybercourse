@@ -286,6 +286,21 @@ function swim_libraries_info() {
       ),
     ),
   );
+//  $libraries['mathjax'] = array(
+//    'name' => 'MathJax',
+//    'vendor url' => 'https://github.com/mathjax/MathJax/',
+//    'download url' => 'https://github.com/mathjax/MathJax/',
+//    'version arguments' => array(
+//      'file' => 'MathJax.js',
+//      // Sample: MathJax.version="2.4.0";
+//      'pattern' => '/version\=\"([\d\.]*)\"/',
+//    ),
+//    'files' => array(
+//      'js' => array(
+//        'MathJax.js',
+//      ),
+//    ),
+//  );
   return $libraries;
 }
 
@@ -304,14 +319,23 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   //Set up UI stuff.
   drupal_add_library('system', 'ui.dialog');
   //Load CKEditor.
-  $ckLibraryInfo = libraries_load('ckeditor');
-  $numFilesLoaded = libraries_load_files($ckLibraryInfo);
-  if ( $numFilesLoaded <= 0 ) {
+  $ck_library_info = libraries_load('ckeditor');
+  $num_files_loaded = libraries_load_files($ck_library_info);
+  if ( $num_files_loaded <= 0 ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . 'SWIM error: no CKEditor files loaded. Is CK installed?';
     cyco_core_handle_error( $message );
     return;
   }
+//  //Load MathJax.
+//  $mj_library_info = libraries_load('mathjax');
+//  $num_files_loaded = libraries_load_files($mj_library_info);
+//  if ( $num_files_loaded <= 0 ) {
+//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+//        . 'SWIM error: no MathJax files loaded. Is it installed?';
+//    cyco_core_handle_error( $message );
+//    return;
+//  }
   //Add CSS.
   drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
   //Add services library.
