@@ -26,37 +26,6 @@
         editor.on('focus',function(evnt) {
           Drupal.ckeditorInstance = evnt.editor;
           Drupal.ckeditorActiveId = evnt.editor.name;
-//          $(editor.element.$).trigger('focus');
-        });
-        editor.on('paste',function(evnt) {
-          var content = evnt.data.dataValue;
-          if ( $(content).find("div.pseudent").length > 0 ) {
-            alert("Pasting pseudents doesn't work at the moment. You can "
-                    + "copy what the student says, create a new student, "
-                    + "and paste that.");
-            evnt.data.dataValue = "";
-            return;
-            if ( $(content).hasClass("cke_widget_wrapper") ) {
-              //This is a widget wrapper.
-              if ( $(content).find("div.pseudent").length > 0 ) {
-                //This is a pseudent widget.
-                var newHtml = nameSpaceyThing.createPseudentElement( content );
-                $(content).html(newHtml);
-              }
-            }
-            else {
-              //html isn't a widget wrapper, but might contain some.
-              var widgetDivs = $(content).find("div.cke_widget_wrapper");
-              $(widgetDivs).each( function( index, widgetDiv ) {
-                if ( widgetDiv.find("div.pseudent").length > 0 ) {
-                  //This is a pseudent widget.
-                  var newHtml = nameSpaceyThing.createPseudentElement( widgetDiv );
-                  $(widgetDiv).html(newHtml);
-                }
-              });
-            }
-            evnt.data.dataValue = $(content).html();
-          };
         });
         editor.document.appendStyleSheet( Drupal.settings.swim.editing_stylesheet );
         //Size the editor.
@@ -68,8 +37,6 @@
         //Flag the editor as initialized.
         $( "#" + editor.id ).attr("data-swim-init", "yes");
       });
-      
-      
       
       //Check that the config exists.
       if ( ! Drupal.swimCkConfig ) {

@@ -109,3 +109,7 @@ footer ul.nav li {
 .region-footer {
   border-top: none;
 }
+
+.bordered {
+  border: 1px solid #777;
+}

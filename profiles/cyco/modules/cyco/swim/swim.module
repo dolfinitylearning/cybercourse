@@ -944,7 +944,9 @@ function _swim_textile2ckhtml_images( $content ) {
   $matches = array();
   preg_match_all($regex, $content, $matches);
   if ( isset( $matches['url'] ) ) {
-    foreach( $matches['url'] as $url ) {
+    //Remove duplicates, otherwise the replacement breaks.
+    $urls = array_unique($matches['url']);
+    foreach( $urls as $url ) {
       $tag = '<img src="' . $url . '">';
       $content = str_replace(
           $url, //Find this

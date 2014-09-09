@@ -27,12 +27,14 @@ Drupal.swimCkConfig = {
     { name: 'about' }
   ],
   removePlugins : "scayt,elementspath,list,liststyle,tabletools,contextmenu,about,"
-    + "blockquote,indentlist,indentblock,sourcearea,pastefromword,pastetext,"
+    + "blockquote,indentlist,indentblock,pastefromword,pastetext,"
+//    + "blockquote,indentlist,indentblock,sourcearea,pastefromword,pastetext,"
     + "colorbutton,colordialog,flash,font,indent,forms.horizontalrule,"
     + "basicstyles",
   removeButtons : "Bold,Italic,Underline,Strike,Superscript,Subscript,"
     + "ShowBlocks,Save,NewPage,DocProps,Preview,Print,Templates,"
-    + "About,Source",
+    + "About",
+//    + "About,Source",
     //@todo Figure out how to get pseudent rules into pseudents only.
     //Removing them from here makes the button vanish.
   allowedContent:
