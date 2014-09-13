@@ -71,16 +71,18 @@ function cyco_add_pages_node_view_alter(&$build) {
         'addkid', //Operation
         $node->book['menu_name'] //Name of the menu for this level in the book.
     );
-    _cacpl_remember_operation(
-        $node->nid,
-        'Create child learning map',
-        'learning-map',
-        $node->book['mlid'], //Parent id for book module.
-        'addkid', //Operation
-        $node->book['menu_name'] //Name of the menu for this level in the book.
-    );    
+    if ( node_type_load('learning-map') ) {
+      _cacpl_remember_operation(
+          $node->nid,
+          'Create child learning map',
+          'learning-map',
+          $node->book['mlid'], //Parent id for book module.
+          'addkid', //Operation
+          $node->book['menu_name'] //Name of the menu for this level in the book.
+      );
+    }
     //Can't add a sibling if it's a root node.
-    if ( $node->book['bid'] != 0 ) {
+    if ( $node->book['bid'] != $node->nid ) {
       _cacpl_remember_operation(
           $node->nid,
           'Create sibling page',
@@ -90,15 +92,17 @@ function cyco_add_pages_node_view_alter(&$build) {
           $node->book['menu_name'], //Name of the menu for this level in the book.
           $node->book['mlid'] //Menu link id for the current page in the book menu.
       );
-      _cacpl_remember_operation(
-          $node->nid,
-          'Create sibling learning map',
-          'learning-map',
-          $node->book['plid'], //Parent id for book module.
-          'addsib', //Operation
-          $node->book['menu_name'], //Name of the menu for this level in the book.
-          $node->book['mlid'] //Menu link id for the current page in the book menu.
-      );
+      if ( node_type_load('learning-map') ) {
+        _cacpl_remember_operation(
+            $node->nid,
+            'Create sibling learning map',
+            'learning-map',
+            $node->book['plid'], //Parent id for book module.
+            'addsib', //Operation
+            $node->book['menu_name'], //Name of the menu for this level in the book.
+            $node->book['mlid'] //Menu link id for the current page in the book menu.
+        );
+      }
     }
   } // End blueprint content page.
   //Learning map page.
@@ -137,7 +141,7 @@ function cyco_add_pages_node_view_alter(&$build) {
         $node->book['menu_name'], //Name of the menu for this level in the book.
         $node->book['mlid'] //Menu link id for the current page in the book menu.
     );
-  } // End blueprint content page.
+  } // End learning map page.
   //Fetch the add operations.
   $add_operations = $_cacpl_add_info->getAddData();
   if (sizeof($add_operations) > 0 ) {

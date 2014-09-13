@@ -1,0 +1,19 @@
+#toggle-sidebar {
+  position: absolute;
+  z-index: 1000;
+  margin-left: 0;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
+  background-size: 1em;
+  vertical-align: middle;
+}
+
+#toggle-sidebar.expanded {
+  background-image: url("../images/arrow_left_alt1.svg");
+}
+
+#toggle-sidebar.collapsed {
+  background-image: url("../images/arrow_right_alt1.svg");
+}

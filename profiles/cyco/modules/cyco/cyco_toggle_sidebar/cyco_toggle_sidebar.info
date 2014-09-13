@@ -1,0 +1,5 @@
+name = Toggle sidebar
+description = Let the user show and hide a sidebar.
+package = CyberCourse
+core = 7.x
+stylesheets[all][] = css/cyco_toggle_sidebar.css

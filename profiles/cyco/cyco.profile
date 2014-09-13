@@ -567,23 +567,72 @@ function _cyco_disable_modules() {
   module_disable( $modules );
 }
 
+/**
+ * Theme settings for two themes: cybercourse, and 
+ * cybercourse_submission.
+ */
 function _cyco_theme_stuff() {
+  //Enable/disable themes.
+  theme_enable(
+      array(
+        //seven is the admin theme.
+        'seven', 
+        //cybercourse is theme for most things.
+        'cybercourse', 
+        //cybercourse_submission is the theme for popups 
+        //students use to submit their work.
+        'cybercourse_submission',
+      )
+  );
   theme_disable(array('bartik'));
-  theme_enable(array('seven', 'cybercourse_submission'));
-  //Settings for CyberCourse  theme.
+  //Set the default theme.
+  variable_set('theme_default', 'cybercourse');  
+  //Settings for the CyberCourse theme.
+  _cyco_cybercourse_theme_settings();
+  //Settings for the CyberCourse submission theme.
+  _cyco_cybercourse_submission_theme_settings();
+  //Set the admin theme.
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'seven')
+    ->execute();
+  variable_set('admin_theme', 'seven');
+  variable_set('node_admin_theme', '1');
+}
+
+/**
+ * Define settings for the CyberCourse theme.
+ */
+function _cyco_cybercourse_theme_settings() {
   $var_name = 'theme_cybercourse_settings';
   $settings = variable_get($var_name, array());
   $settings['bootstrap_bootswatch'] = 'cerulean';
+  //Set the logo.
+  $theme_path = drupal_get_path('theme', 'cybercourse');
+  $settings['logo_path'] = $theme_path . '/images/logo_white_fg.png';
+  //Set the shortcut icon.
+  $settings['favicon_path'] = $theme_path . '/images/logo_blue_fg.png';
   variable_set($var_name, $settings);
-  //Settings for CyberCourse submission theme.
-  $var_name = 'theme_cybercourse_submission_settings';
-  $settings = variable_get($var_name, array());
-  $settings['bootstrap_breadcrumb'] = 0;
-  $settings['bootstrap_breadcrumb_home'] = 0;
-  variable_set($var_name, $settings);
-
 }
 
+/**
+ * Define settings for the CyberCourse submission theme.
+ * This is the theme for popups students use to submit their work.
+ */
+function _cyco_cybercourse_submission_theme_settings() {
+  $var_name = 'theme_cybercourse_submission_settings';
+  $settings = variable_get($var_name, array());
+  $settings['bootstrap_bootswatch'] = 'cerulean';
+  $settings['bootstrap_breadcrumb'] = 0;
+  $settings['bootstrap_breadcrumb_home'] = 0;
+  //Set the logo.
+  $theme_path = drupal_get_path('theme', 'cybercourse_submission');
+  $settings['logo_path'] = $theme_path . '/images/logo_white_fg.png';
+  //Set the shortcut icon.
+  $settings['favicon_path'] = $theme_path . '/images/logo_blue_fg.png';
+  variable_set($var_name, $settings);
+}
 
 function _cyco_add_links_cp_menus() {
   //Links in instructor menu.

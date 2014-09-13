@@ -31,7 +31,7 @@ function swim_help($path, $arg) {
  */
 function swim_menu() {
   $items = array();
-  $items['admin/config/content/swim'] = array(
+  $items['admin/config/cyco/swim'] = array(
     'title' => 'SWIM',
     'description' => 'Configure the Show-What-I-Mean editor.',
     'page callback' => 'drupal_get_form',
@@ -60,7 +60,7 @@ function swim_declare_custom_tags( $custom_tag_parser, $mode ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' first param: wrong object type: ' . get_class($custom_tag_parser);
     cyco_core_handle_error( $message );
-    return;    
+    return;
   }
   if ( $mode != 'view' && $mode != 'edit' ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
