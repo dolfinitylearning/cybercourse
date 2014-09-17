@@ -999,11 +999,11 @@ function _cycoex_get_exercise_rendered( $data ) {
     return;
   }
   $body = $exercise->field_body[LANGUAGE_NONE][0]['value'];
-  $body_rendered = swim_markdown2html($body);
+  $body_rendered = swim_textile2html($body);
   //Render the notes.
   $notes_rendered = '';
   if ( isset( $exercise->field_notes[LANGUAGE_NONE][0] ) ) {
-    $notes_rendered = swim_markdown2html( 
+    $notes_rendered = swim_textile2html( 
         $exercise->field_notes[LANGUAGE_NONE][0]['value'] 
     );
   }
@@ -1044,10 +1044,10 @@ function _cycoex_get_exercise_rendered( $data ) {
         $model['exercise_nid'] = $model_node->field_exercise_solved[LANGUAGE_NONE][0]['target_id'];
       }
       if ( isset( $model_node->field_body[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['rendered'] = swim_markdown2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
+        $model['rendered'] = swim_textile2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
       }
       if ( isset( $model_node->field_notes[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['notes'] = swim_markdown2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
+        $model['notes'] = swim_textile2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
       }
       if ( isset( $model_node->field_attachments[LANGUAGE_NONE][0] ) ) {
         $model['attachments'] = _cyco_exercises_package_attachment_data(
