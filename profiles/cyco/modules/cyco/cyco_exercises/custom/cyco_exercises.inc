@@ -250,7 +250,7 @@ function _cyco_exercises_make_replacements($matches) {
           'setting'
       );
     }
-    $body_content = swim_markdown2html(
+    $body_content = swim_textile2html(
         $exercise_node->field_body[LANGUAGE_NONE][0]['value']
     );
     $result = theme('cyco_embedded_exercise', array(
@@ -1389,10 +1389,10 @@ function cyco_exercises_preprocess_node(&$variables) {
 }
 
 /**
- * Implements hook_swim_markdown2html_TAG_alter
+ * Implements hook_swim_textile2html_TAG_alter
  * @param stdClass $args Content to translate
  */
-//function cyco_exercises_swim_markdown2html_exercise_alter( &$args ) {
+//function cyco_exercises_swim_textile2html_exercise_alter( &$args ) {
 //  $exercise_nid = intval($args->args);
 //  $exercise_node = node_load($exercise_nid);
 //  //Make sure that this is the right type of node.
@@ -1432,7 +1432,7 @@ function cyco_exercises_preprocess_node(&$variables) {
 //        'setting'
 //    );
 //  }
-//  $body_content = swim_markdown2html(
+//  $body_content = swim_textile2html(
 //      $exercise_node->field_body[LANGUAGE_NONE][0]['value']
 //  );
 //  $result = theme('cyco_embedded_exercise', array(
