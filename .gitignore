@@ -7,3 +7,4 @@ sites/*/private
 nbproject/
 /sites/default/files/
 /sites/default/
+/error_log
