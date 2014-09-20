@@ -80,7 +80,7 @@ Drupal.behaviors.collapseSummary = {
   computeStatusMessage: function( widgetToCheck ) {
     return ( widgetToCheck.getData() == "" )
         ? "Summary is empty" 
-        : "Summary has content";
+        : "Content: " + widgetToCheck.getData();
   },
   findCKSummaryWidget: function() {
     for ( var instanceName in CKEDITOR.instances ) {
