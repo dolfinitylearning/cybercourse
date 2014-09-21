@@ -47,7 +47,7 @@
       sideRegionContainer.prepend(uiNameSpace.widgetCode);
       var widget = $(uiNameSpace.widgetSelector);
       //Find the main content region.
-      var mainRegion = $(uiNameSpace.mainRegionClassWhenSidebarExpanded);
+      var mainRegion = $(uiNameSpace.mainRegionSelector);
       //Set up the event.
       var toggleSidebar = this;
       //If cookie says it is hidden, hide it.
