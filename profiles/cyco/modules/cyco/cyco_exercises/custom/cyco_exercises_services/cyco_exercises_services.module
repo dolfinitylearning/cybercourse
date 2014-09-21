@@ -659,14 +659,6 @@ function _exex_access($operation, $args) {
 
 function _exex_retrieve() {}
 
-function _exex_create() {}
-
-function _exex_update() {}
-
-function _exex_delete() {}
-
-function _exex_index() {}
-
 /**
  * Get the rubric item vocabulary.
  * @return \stdClass The vocab.
