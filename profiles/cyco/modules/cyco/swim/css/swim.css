@@ -14,3 +14,9 @@ code {
 .swim img {
   max-width: 100%;
 }
+
+.swim-plugin-error {
+  font-weight: bold;
+  font-size: 120%;
+  color: red;
+}

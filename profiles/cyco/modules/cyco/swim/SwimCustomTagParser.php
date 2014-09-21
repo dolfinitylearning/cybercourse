@@ -35,7 +35,8 @@ class SwimCustomTagParser {
       $this->current_tag_def = $def;
       //Create the regex to look for.
       $this->current_regex = '/^' . SwimCustomTagParser::START_CUSTOM_TAG_REGEX_ESCAPED 
-          . '\s+' . $def['tag'] . '\s+([\w\*\-\_\&\#\@\%\!\~]*)\s*\n'
+          . '\s+' . $def['tag'] . '\s+(.*)\s*\n'
+//          . '\s+' . $def['tag'] . '\s+([\w\*\-\_\&\#\@\%\!\~]*)\s*\n'
           . '(.*?)'
           . SwimCustomTagParser::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*' . $def['tag'] 
           . '\s*\1\s*\n'

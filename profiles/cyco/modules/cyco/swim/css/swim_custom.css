@@ -1,0 +1,17 @@
+/*
+This is for custom styles the user wants to use in authoring SWIM content.
+*/
+/* 
+    Created on : Sep 21, 2014, 12:49:37 PM
+    Author     : mathieso
+*/
+
+.swim .border {
+  border: 1px solid #777;
+}
+
+.swim .padding {
+  padding: 5px;
+}
+
+

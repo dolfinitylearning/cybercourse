@@ -305,7 +305,7 @@ function swim_libraries_info() {
 }
 
 /**
- * Add stuff the browser will need.
+ * Add stuff the editor will need.
  * @param boolean $add_plugins If false, don' add no steekin' plugins, gringo.
  */
 function _swim_add_client_pieces( $add_plugins = TRUE ) {
@@ -338,6 +338,7 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
 //  }
   //Add CSS.
   drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim_custom.css' );
   //Add services library.
   _swim_add_client_services_lib();
   //Obscurer code.
@@ -540,6 +541,7 @@ function swim_field_formatter_view(
   drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_mathjax_config.js' );
   //Styles
   drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
+  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim_custom.css' );
   $element = array();
   switch ($display['type']) {
     case 'swim_default_formatter':
@@ -634,6 +636,7 @@ function _swim_client_peek( $data ) {
   $css_files = module_invoke_all('swim_peek_load_css');
   //Add SWIM's CSS files.
   $css_files[] = $module_path . 'css/swim.css';
+  $css_files[] = $module_path . 'css/swim_custom.css';
   $css_files[] = $module_path . 'content_only/content_only.css';
   
   $themed = theme(
@@ -828,9 +831,11 @@ function swim_ckhtml2textile( $content ) {
 /**
  * Translate Textile into HTML for viewing.
  * @param string $textile Textile
+ * @param boolean $skip_wrapper If true, skip SWIM wrapper. Used by 
+ *   plugins if they don't want their own wrappers (usually the case).
  * @return string HTML
  */
-function swim_textile2html( $textile ) {
+function swim_textile2html( $textile, $skip_wrapper = FALSE ) {
   //Replace tokens.
   $textile = token_replace($textile);
   $textile = str_replace("\r", '', $textile);
@@ -856,8 +861,10 @@ function swim_textile2html( $textile ) {
       ->parse($out);
   //Wrap math formula in span MathJax uses. Same as CK plugin uses.
   $html = _swim_textile2ckhtml_math( $html );
-  //Put everything in a SWIM wrapper.
-  $html = '<div class="swim textile">' . $html . '</div>';
+  if ( ! $skip_wrapper ) {
+    //Put everything in a SWIM wrapper.
+    $html = '<div class="swim textile">' . $html . '</div>';
+  }
   return $html;
 }
 
@@ -1051,4 +1058,13 @@ function _swim_ckhtml2textile_math( $content ) {
     );
   } //End match loop.
   return $content;
+}
+
+/**
+ * Callback from plugins to embed an error message in SWIM content.
+ * Sample use: return swim_plugin_error( t('Bad thing!') );
+ * @param type $message Error message.
+ */
+function swim_plugin_error( $message ) {
+  return '<p class="swim-plugin-error">SWIM plugin error: ' . $message . '</p>';
 }

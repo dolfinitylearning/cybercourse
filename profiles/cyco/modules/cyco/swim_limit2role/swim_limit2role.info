@@ -1,0 +1,6 @@
+name = SWIM plugin: limit to role
+description = SWIM plugin to show content only to users with given role(s).
+core = 7.x
+version = 7.x-1.0
+package = CyberCourse
+dependencies[] = swim

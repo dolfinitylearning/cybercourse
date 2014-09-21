@@ -1093,7 +1093,7 @@ function _cyco_exercises_user_profile_form_submit( $form, &$form_state ) {
   }
   $needs_work_cutoff = NULL;
   if ( $form_state['values']['field_needs_work_cutoff'][LANGUAGE_NONE][0]['value'] ) {
-    $needs_work_cutoff = $form_state['values']['field_good_cutoff'][LANGUAGE_NONE][0]['value'];
+    $needs_work_cutoff = $form_state['values']['field_needs_work_cutoff'][LANGUAGE_NONE][0]['value'];
   }
   if ( ! $good_cutoff || ! $needs_work_cutoff ) {
     drupal_set_message(
@@ -1500,5 +1500,17 @@ function _cyco_exercises_swim_callback( $exercise_nid, $tag_content ) {
     'labeled_links' => $labeled_links,
     'too_bad_so_sad_message' => $too_bad_so_sad_message,
   ));  
+  return $result;
+}
+
+/**
+ * Return CSS file to show pseudent in peek.
+ */
+function cyco_exercises_swim_peek_load_css() {
+  global $base_url;
+  $result = array(
+    $base_url . base_path() . drupal_get_path('module', 'cyco_exercises') 
+      . '/custom/css/cyco_exercises.css',
+  );
   return $result;
 }

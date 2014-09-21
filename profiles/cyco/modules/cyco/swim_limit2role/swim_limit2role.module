@@ -1,0 +1,61 @@
+<?php
+/**
+ * @file
+ * SWIM plugin to insert the output of a view in content. 
+ * Params: view name and (optional) display.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function swim_limit2role_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim_limit2role':
+      return 
+            '<p>' 
+          .   t('Only show content betwixt start and end tags to users with '
+          .     'given role(s). Syntax:') 
+          . '</p>'
+          . '<p><code>@@cyco limit2role ROLE LIST</code></p>'
+          . '<p>' . t('Examples:') . '</p>' 
+          . '<p><code>@@cyco limit2role student</code></p>'
+          . '<p><code>@@cyco limit2role author reviewer grader instructor '
+          .     'administrator</code></p>'
+          ;
+  }
+}
+
+/**
+ * Implements hook_swim_custom_tag_view_info().
+ */
+function swim_limit2role_swim_custom_tag_view_info() {
+  return array(
+    'tag' => 'limit2role',
+    'callback' => '_swim_limit2role_swim_callback',
+  );
+}
+
+/**
+ * Callback to show content only when the current user has a given role.
+ * @param string $param_string Parameters passed to the tag.
+ * @param string $tag_content Inner tag content.
+ */
+function _swim_limit2role_swim_callback( $param_string, $tag_content ) {
+  //Split up params.
+  $params = explode(' ', $param_string);
+  //First param must be a view name.
+  if (sizeof($params) == 0 ) {
+    return swim_plugin_error('limit2role: ' . t('Missing role name'));
+  }
+  $roles = explode(' ', $param_string);
+  global $user;
+  $user_has_role = FALSE;
+  foreach ($user->roles as $user_role) {
+    if ( in_array($user_role, $roles) ) {
+      $user_has_role = TRUE;
+      break;
+    }
+  }
+  return $user_has_role ? swim_textile2html($tag_content, TRUE) : '';
+}
+

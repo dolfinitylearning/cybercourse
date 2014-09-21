@@ -161,3 +161,15 @@ function cyco_patterns_form_pattern_node_form_alter( &$form, $form_state ) {
     $form['book']['#access'] = FALSE;
   }
 }
+
+/**
+ * Return CSS file to show pseudent in peek.
+ */
+function cyco_patterns_swim_peek_load_css() {
+  global $base_url;
+  $result = array(
+    $base_url . base_path() . drupal_get_path('module', 'cyco_patterns') 
+      . '/custom/css/cyco_patterns.css',
+  );
+  return $result;
+}

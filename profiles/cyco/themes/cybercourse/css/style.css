@@ -110,6 +110,9 @@ footer ul.nav li {
   border-top: none;
 }
 
-.bordered {
-  border: 1px solid #777;
+/*
+Patch for module_filter module to put footer under other page elements.
+*/
+#module-filter-tabs {
+  z-index: 2000;
 }

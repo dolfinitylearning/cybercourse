@@ -63,6 +63,11 @@
           widget.addClass("expanded");
         }
       }
+      else {
+        //100% cookie free. Add the expanded class to the widget, so the 
+        //background shows, like the hero it is.
+        widget.addClass("expanded");
+      }
       widget.click(function() {
         var isHidden = (sideRegion.css("display") == "none");
         if (isHidden) {

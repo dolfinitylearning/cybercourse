@@ -1,0 +1,78 @@
+<?php
+/**
+ * @file
+ * SWIM plugin to insert the output of a view in content. 
+ * Params: view name and (optional) display.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function swim_insert_view_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim_insert_view':
+      return '<p>' . t('Insert a view in SWIM content. Syntax:') . '</p>'
+          . '<p><code>@@cyco insert-view VIEW MACHINE NAME [DISPLAY NAME] '
+          . '[ARGS]</code></p>'
+          . '<p>' . t('If DISPLAY NAME is ommitted, the view\'s default '
+              . 'display is used.') . '</p>'
+          . '<p>' . t('Examples:') . '</p>' 
+          . '<p><code>@@cyco insert-view viewofdoom</code></p>'
+          . '<p><code>@@cyco insert-view viewofdoom page</code></p>'
+          . '<p><code>@@cyco insert-view viewofdoom user 23</code></p>'
+          ;
+  }
+}
+
+/**
+ * Implements hook_swim_custom_tag_view_info().
+ */
+function swim_insert_view_swim_custom_tag_view_info() {
+  return array(
+    'tag' => 'insert-view',
+    'callback' => '_swim_insert_view_swim_callback',
+  );
+}
+
+/**
+ * Callback to generate HTML for the view. Based on code from
+ * the insert_view module.
+ * @param string $param_string Parameters passed to the tag.
+ * @param string $tag_content Inner tag content. Not used.
+ */
+function _swim_insert_view_swim_callback( $param_string, $tag_content ) {
+  //Split up params.
+  $params = explode(' ', $param_string);
+  //First param must be a view name.
+  if (sizeof($params) == 0 ) {
+    return swim_plugin_error('insert-view: ' . t('Missing view name'));
+  }
+  $view_name = $params[0];
+  $view = views_get_view($view_name);  
+  if ( empty($view) ) {
+    return swim_plugin_error('insert-view: ' . t('Cannot load view: ') 
+        . $view_name);
+  }
+  //Next param is display.
+  $display_name = isset($params[1]) ? $params[1] : 'default';
+  //Does user have access to it?
+  if (!$view->access($display_name)) {
+    return swim_plugin_error('insert-view: ' . t('Access denied for display: ') 
+        . $display_name);
+  }  
+  $view->set_display($display_name);
+  //Arguments.
+  $args = array();
+  if ( isset($params[2]) ) {
+    for ($index = 2; $index < sizeof($params); $index++) {
+      $args[] = $params[$index];
+    }
+  }
+  $view->set_arguments($args);
+  //Get the view's HTML.
+  $output = $view->preview($display_name, $args);
+  $view->destroy();  
+  //Return it.
+  return $output;
+}
+
