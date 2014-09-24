@@ -8,3 +8,6 @@ nbproject/
 /sites/default/files/
 /sites/default/
 /error_log
+
+# Ignore .htaccess, so subdomain-specific edits aren't killed.
+.htaccess
