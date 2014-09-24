@@ -6,34 +6,33 @@
   var uiNameSpace; //For namespacing.
   Drupal.behaviors.toggleSidebar = {
     setup: function() {
-    this.cookieName = "cyco_toggle_sidebar";
-    //Cookie expires in 3 days, and is site-wide.
-    //  Three days, because humans may have forgotten what they did
-    //  by then.
-    this.cookieOptions = { expires: 3, path: '/' };
-    //Selector identifying the region to collapse.
-    this.regionSelector = 
-        Drupal.settings.toggleSidebar.tsbSidebarSelector;
-            //".region-sidebar-first",
-    //Selector identifying the main region.
-    this.mainRegionSelector =
-        Drupal.settings.toggleSidebar.tsbMainRegionSelector;
-    //The class the main region has when the sidebar is expanded
-    this.mainRegionClassWhenSidebarCollapsed =
-        Drupal.settings.toggleSidebar.tsbMainRegionClassWhenCollapsed;
-            //"col-sm-12",
-    //The class the main region has when the sidebar is collapse.
-    this.mainRegionClassWhenSidebarExpanded =
-        Drupal.settings.toggleSidebar.tsbMainRegionClassWhenExpanded;
-            //"col-sm-9",
-    //Code to show the widget.
-    this.widgetCode = "<span "
-              + "id='toggle-sidebar' "
-              + "title='Show/hide the sidebar'>"
-              + "</span>";
-    //CSS Id for the widget.
-    this.widgetSelector = "#toggle-sidebar";
-  },
+      this.cookieName = "cyco_toggle_sidebar";
+      //Cookie expires in 3 days, and is site-wide.
+      //  Three days, because humans may have forgotten what they did
+      //  by then.
+      this.cookieOptions = { expires: 3, path: '/' };
+      //Selector identifying the region to collapse.
+      this.regionSelector = 
+          Drupal.settings.toggleSidebar.tsbSidebarSelector;
+      //Selector identifying the main region.
+      this.mainRegionSelector =
+          Drupal.settings.toggleSidebar.tsbMainRegionSelector;
+      //The class the main region has when the sidebar is expanded
+      this.mainRegionClassWhenSidebarCollapsed =
+          Drupal.settings.toggleSidebar.tsbMainRegionClassWhenCollapsed;
+              //"col-sm-12",
+      //The class the main region has when the sidebar is collapse.
+      this.mainRegionClassWhenSidebarExpanded =
+          Drupal.settings.toggleSidebar.tsbMainRegionClassWhenExpanded;
+              //"col-sm-9",
+      //Code to show the widget.
+      this.widgetCode = "<span "
+                + "id='toggle-sidebar' "
+                + "title='Show/hide the sidebar'>"
+                + "</span>";
+      //CSS Id for the widget.
+      this.widgetSelector = "#toggle-sidebar";
+    },
     attach: function(context, settings) {
       uiNameSpace = this;
       this.setup();
@@ -43,11 +42,22 @@
       }
       var sideRegion = $(uiNameSpace.regionSelector);
       var sideRegionContainer = sideRegion.parent();
-      //Add the widget in front of the sidebar div.
-      sideRegionContainer.prepend(uiNameSpace.widgetCode);
-      var widget = $(uiNameSpace.widgetSelector);
       //Find the main content region.
       var mainRegion = $(uiNameSpace.mainRegionSelector);
+      //Add the widget as the first child of the region.
+      mainRegion.prepend(uiNameSpace.widgetCode);
+      var widget = $(uiNameSpace.widgetSelector);
+      //Position the widget left or right.
+      if ( uiNameSpace.tsbIconPosition == "left" ) {
+        widget
+          .css("float", "left")
+          .css("margin-left", -($(widget).width()) );
+      }
+      else {
+        widget
+          .css("float", "right")
+          .css("margin-right", -($(widget).width()) );
+      }
       //Set up the event.
       var toggleSidebar = this;
       //If cookie says it is hidden, hide it.

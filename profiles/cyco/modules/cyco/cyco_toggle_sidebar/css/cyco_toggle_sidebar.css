@@ -1,7 +1,5 @@
 #toggle-sidebar {
-  position: absolute;
   z-index: 1000;
-  margin-left: 0;
   display: inline-block;
   width: 1em;
   height: 1em;
@@ -11,9 +9,9 @@
 }
 
 #toggle-sidebar.expanded {
-  background-image: url("../images/arrow_left_alt1.svg");
+  background-image: url("../images/minus_alt.svg");
 }
 
 #toggle-sidebar.collapsed {
-  background-image: url("../images/arrow_right_alt1.svg");
+  background-image: url("../images/plus_alt.svg");
 }

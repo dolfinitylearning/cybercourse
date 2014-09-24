@@ -1,9 +1,10 @@
 <?php
 
-define( 'TSB_DEFAULT_SIDEBAR_SELECTOR', '.region-sidebar-first' );
+define( 'TSB_DEFAULT_SIDEBAR_SELECTOR', '.region-sidebar-second' );
 define( 'TSB_DEFAULT_MAIN_REGION_SELECTOR', '.region-content' );
 define( 'TSB_DEFAULT_MAIN_REGION_CLASS_COLLPASED', 'col-sm-12' );
 define( 'TSB_DEFAULT_MAIN_REGION_CLASS_EXPANDED', 'col-sm-9' );
+define( 'TSB_DEFAULT_ICON_POSITION', 'right' );
 
 /**
  * Implements hook_init().
@@ -36,6 +37,11 @@ function cyco_toggle_sidebar_init() {
         variable_get(
             'tsb_main_region_class_when_collapsed', 
             TSB_DEFAULT_MAIN_REGION_CLASS_COLLPASED
+        ),
+    'tsbIconPosition' => 
+        variable_get(
+            'tsb_icon_position', 
+            TSB_DEFAULT_ICON_POSITION
         ),
   );
   drupal_add_js(

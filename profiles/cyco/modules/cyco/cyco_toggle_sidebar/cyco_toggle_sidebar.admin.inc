@@ -23,10 +23,10 @@ function _tsb_settings_form() {
     '#type' => 'textfield',
     '#title' => t('Sidebar selector'),
     '#description' => t('jQuery selector for the sidebar to be collapsed '
-        . 'E.g.: .region-sidebar-first'),
+        . 'E.g.: .region-sidebar-second'),
     '#default_value' => variable_get('tsb_sidebar_selector', 
         TSB_DEFAULT_SIDEBAR_SELECTOR),
-    );
+  );
   $form['tsb_main_region_selector'] = array(
     '#type' => 'textfield',
     '#title' => t('Main region selector'),
@@ -51,6 +51,18 @@ function _tsb_settings_form() {
         . 'is expanded. E.g.: col-sm-9'),
     '#default_value' => variable_get('tsb_main_region_class_when_expanded', 
         TSB_DEFAULT_MAIN_REGION_CLASS_EXPANDED),
+  );
+  $form['tsb_icon_position'] = array(
+    '#type' => 'radios',
+    '#title' => t('Icon position'),
+    '#description' => t('Should the collapse icon that users click on be on '
+        . 'the left or right of the main region?'),
+    '#options' => array(
+      'left' => 'Left',
+      'right' => 'Right',
+    ),
+    '#default_value' => variable_get('tsb_icon_position', 
+        TSB_DEFAULT_ICON_POSITION),
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -86,7 +98,7 @@ function _tsb_check_selector( $form_state, $field_name ) {
   }
   else {
     $ok = FALSE;
-    $first_char = substr(trim($form_state['values'][$field_name], 0, 1));
+    $first_char = substr(trim($form_state['values'][$field_name]), 0, 1);
     if ( $first_char ) {
       $ok = ( $first_char == '.') || ( $first_char == '#');
     }
@@ -136,7 +148,7 @@ function _tsb_check_class_name( $form_state, $field_name ) {
     );
   }
   else {
-    $first_char = substr(trim($form_state['values'][$field_name], 0, 1));
+    $first_char = substr(trim($form_state['values'][$field_name]), 0, 1);
     if ( $first_char ) {
       if ( $first_char == '.' ) {
         form_set_error(
@@ -169,6 +181,10 @@ function _tsb_save_settings( $form, $form_state ) {
   variable_set(
       'tsb_main_region_class_when_collapsed', 
       trim($form_state['values']['tsb_main_region_class_when_collapsed'])
+  );
+  variable_set(
+      'tsb_icon_position', 
+      trim($form_state['values']['tsb_icon_position'])
   );
   drupal_set_message('Settings saved.');
 }
