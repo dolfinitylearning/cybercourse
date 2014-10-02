@@ -199,70 +199,70 @@ function cyco_exercises_node_access( $node, $op, $account ) {
  * 
  * See SWIM docs for more.
  */
-function cyco_exercises_swim_betwixt2html_alter(&$content) {
-  $regex = '/\[\[\[\s*cycoexercise\:(\d+)\s*\]\]\]/';
-  // [[[, optional whitespace, cycoexercise, optional whitespace, 
-  // exercise number, optional whitespace, ]]]
-  $content = preg_replace_callback($regex, '_cyco_exercises_make_replacements', $content);
-}
+//function cyco_exercises_swim_betwixt2html_alter(&$content) {
+//  $regex = '/\[\[\[\s*cycoexercise\:(\d+)\s*\]\]\]/';
+//  // [[[, optional whitespace, cycoexercise, optional whitespace, 
+//  // exercise number, optional whitespace, ]]]
+//  $content = preg_replace_callback($regex, '_cyco_exercises_make_replacements', $content);
+//}
 
 /**
  * Generates the HTML for the exercise.
  */
-function _cyco_exercises_make_replacements($matches) {
-  $exercise_nid = $matches[1];
-  $exercise_node = node_load($exercise_nid);
-  // Make sure that this is the right type of node.
-  if ($exercise_node == FALSE || !node_access('view', $exercise_node) || !$exercise_node->status || $exercise_node->type != 'exercise') {
-    $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
-    drupal_set_message($message);
-    watchdog('cyco_exercises', $message);
-    return '<p>' . $message . '</p>';
-  }
-  else {
-    //Make the submission links.
-    global $user;
-    $labeled_links = '';
-    $too_bad_so_sad_message = '';
-    if ( ! cyco_core_user_has_role($user, 'student') ) {
-      $too_bad_so_sad_message = t('(If you were logged in as a student, '
-          . 'you could submit an exercise solution, and get some feedback.)'
-      );
-    }
-    else {
-      // If there is no submission, there is only a link to create a new one.
-      // If there is an existing submission:
-      //   If there is no feedback yet, there is only an edit link.
-      //   If there is feedback, there is a Review link, and a new version link.
-      global $base_url;
-      // Create submission links for this exercise.
-      drupal_add_js(
-          $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-          . '/custom/js/cyco_exercises_submission_links.js'
-      );
-      // Send current user uid to client.
-      drupal_add_js(
-          array('cyco_exercises' => 
-            array(
-              'uid' => $user->uid,
-            ),
-          ),
-          'setting'
-      );
-    }
-    $body_content = swim_textile2html(
-        $exercise_node->field_body[LANGUAGE_NONE][0]['value']
-    );
-    $result = theme('cyco_embedded_exercise', array(
-      'exercise_nid' => $exercise_nid,
-      'title' => $exercise_node->title,
-      'body' => $body_content,
-      'labeled_links' => $labeled_links,
-      'too_bad_so_sad_message' => $too_bad_so_sad_message,
-    ));
-    return $result;
-  }
-}
+//function _cyco_exercises_make_replacements($matches) {
+//  $exercise_nid = $matches[1];
+//  $exercise_node = node_load($exercise_nid);
+//  // Make sure that this is the right type of node.
+//  if ($exercise_node == FALSE || !node_access('view', $exercise_node) || !$exercise_node->status || $exercise_node->type != 'exercise') {
+//    $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
+//    drupal_set_message($message);
+//    watchdog('cyco_exercises', $message);
+//    return '<p>' . $message . '</p>';
+//  }
+//  else {
+//    //Make the submission links.
+//    global $user;
+//    $labeled_links = '';
+//    $too_bad_so_sad_message = '';
+//    if ( ! cyco_core_user_has_role($user, 'student') ) {
+//      $too_bad_so_sad_message = t('(If you were logged in as a student, '
+//          . 'you could submit an exercise solution, and get some feedback.)'
+//      );
+//    }
+//    else {
+//      // If there is no submission, there is only a link to create a new one.
+//      // If there is an existing submission:
+//      //   If there is no feedback yet, there is only an edit link.
+//      //   If there is feedback, there is a Review link, and a new version link.
+//      global $base_url;
+//      // Create submission links for this exercise.
+//      drupal_add_js(
+//          $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+//          . '/custom/js/cyco_exercises_submission_links.js'
+//      );
+//      // Send current user uid to client.
+//      drupal_add_js(
+//          array('cyco_exercises' => 
+//            array(
+//              'uid' => $user->uid,
+//            ),
+//          ),
+//          'setting'
+//      );
+//    }
+//    $body_content = swim_textile2html(
+//        $exercise_node->field_body[LANGUAGE_NONE][0]['value']
+//    );
+//    $result = theme('cyco_embedded_exercise', array(
+//      'exercise_nid' => $exercise_nid,
+//      'title' => $exercise_node->title,
+//      'body' => $body_content,
+//      'labeled_links' => $labeled_links,
+//      'too_bad_so_sad_message' => $too_bad_so_sad_message,
+//    ));
+//    return $result;
+//  }
+//}
 
 /**
  * Make links for exercise solution submission.
@@ -1491,7 +1491,9 @@ function _cyco_exercises_swim_callback( $exercise_nid, $tag_content ) {
     );
   }
   $body_content = swim_textile2html(
-      $exercise_node->field_body[LANGUAGE_NONE][0]['value']
+      $exercise_node->field_body[LANGUAGE_NONE][0]['value'],
+      TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
+           //to avoid Certain Things.
   );
   $result = theme('cyco_embedded_exercise', array(
     'exercise_nid' => $exercise_nid,

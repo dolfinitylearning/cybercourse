@@ -105,7 +105,10 @@ function _cyco_patterns_swim_callback( $pattern_nid, $tag_content ) {
         $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
       ) 
       ? swim_textile2html(
-          $pattern_node->field_situation[LANGUAGE_NONE][0]['value']
+          $pattern_node->field_situation[LANGUAGE_NONE][0]['value'],
+          TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
+           //to avoid Certain Things.
+
         )
       : '';
   $actions = 
@@ -113,7 +116,9 @@ function _cyco_patterns_swim_callback( $pattern_nid, $tag_content ) {
         $pattern_node->field_actions[LANGUAGE_NONE][0]['value'] 
       )
       ? swim_textile2html( 
-          $pattern_node->field_actions[LANGUAGE_NONE][0]['value']
+          $pattern_node->field_actions[LANGUAGE_NONE][0]['value'],
+          TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
+               //to avoid Certain Things.
         )
       : '';
   //Make pattern category links.

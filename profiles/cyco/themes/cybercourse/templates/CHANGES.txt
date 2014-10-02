@@ -1,0 +1,10 @@
+This code added to node.tpl.php:
+
+  <?php if ( ! $status ): ?>
+  <h2><em>Unpublished</em></h2>
+  <?php endif; ?>
+
+
+page.tpl.php: made it fluid. Most changes in page.tpl.php, but changing
+navbar class is in page.vars.php.
+

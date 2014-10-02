@@ -2,6 +2,11 @@
  * Styles for the CyberCourse theme.
  */
 
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 nav[role=navigation] #block-system-user-menu {
   float: right;
 }
@@ -115,4 +120,8 @@ Patch for module_filter module to put footer under other page elements.
 */
 #module-filter-tabs {
   z-index: 2000;
+}
+
+.node-unpublished {
+  background-color: #f2dede;
 }

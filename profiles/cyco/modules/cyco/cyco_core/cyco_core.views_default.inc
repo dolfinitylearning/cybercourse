@@ -117,11 +117,10 @@ function cyco_core_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'basic-pages';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Basic pages';
   $handler->display->display_options['menu']['description'] = 'Pages that are not part of a course or blueprint.';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['basic_pages'] = $view;
@@ -245,11 +244,10 @@ function cyco_core_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'blueprints-and-keywords';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'List blueprint pages and keywords';
   $handler->display->display_options['menu']['description'] = 'See all blueprint pages (including unpublished), and their keywords';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['blueprints_and_keywords'] = $view;
@@ -525,9 +523,11 @@ function cyco_core_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'classes';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Classes';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['classes'] = $view;
 
   $view = new view();
@@ -1356,11 +1356,10 @@ function cyco_core_views_default_views() {
   $handler->display->display_options['filters']['field_workflow_tags_tid_1']['group'] = 1;
   $handler->display->display_options['filters']['field_workflow_tags_tid_1']['vocabulary'] = 'workflow_tags';
   $handler->display->display_options['path'] = 'workflow-tagged';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Workflow tagged';
   $handler->display->display_options['menu']['description'] = 'See items that have a workflow tag attached';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['tagged_content'] = $view;

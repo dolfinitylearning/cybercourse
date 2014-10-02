@@ -149,7 +149,7 @@ body {
 .modal-backdrop {
   z-index: 1610;
 }
-.region-footer {
+.footer {
   margin-top: 45px;
   padding-top: 35px;
   padding-bottom: 36px;
@@ -312,7 +312,8 @@ table tr.error {
   background-color: @state-danger-bg;
   color: @state-danger-text;
 }
-.control-group.error {
+.form-group.error,
+.form-group.has-error {
   background: none;
   label, .control-label {
     color: @state-danger-text;
@@ -320,19 +321,13 @@ table tr.error {
   }
   input, textarea, select, .uneditable-input {
     color: @input-color;
-    border: 1px solid @input-border;
   }
   .help-block, .help-inline {
-    color: @text-color;
+    color: @text-muted;
   }
 }
 
 // Lists
-.list-inline {
-  > li.first {
-    padding-left: 0;
-  }
-}
 .nav-tabs {
   margin-bottom: 10px;
 }
@@ -354,59 +349,36 @@ ul li.leaf {
   color: #777;
 }
 
-// Password strength indicator.
-.password-strength {
-  width: 17em;
-  float: right;  /* LTR */
-  margin-top: 1.4em;
-}
-.password-strength-title {
-  display: inline;
-}
-.password-strength-text {
-  float: right; /* LTR */
-  font-weight: bold;
-}
-.password-indicator {
-  background-color: darken(@input-color-placeholder, 2%);
-  height: 0.3em;
-  width: 100%;
-  div {
-    height: 100%;
-    width: 0%;
-    background-color: @input-color-placeholder;
+// Password strength/match.
+.form-type-password-confirm {
+  position: relative;
+  .form-type-password {
+    clear: left;
   }
-}
-input.password-confirm,
-input.password-field {
-  width: 16em;
-  margin-bottom: 0.4em;
-}
-div.password-confirm {
-  float: right;  /* LTR */
-  margin-top: 1.5em;
-  visibility: hidden;
-  width: 17em;
-}
-div.form-item div.password-suggestions {
-  padding: 0.2em 0.5em;
-  margin: 0.7em 0;
-  width: 38.5em;
-  border: 1px solid #B4B4B4;
-}
-div.password-suggestions ul {
-  margin-bottom: 0;
-}
-.confirm-parent,
-.password-parent {
-  clear: left; /* LTR */
-  margin: 0;
-  width: 36.3em;
-}
-
-// Progress bar.
-.progress-wrapper .progress {
-  margin-bottom: 10px;
+  label {
+    display: block;
+    .label {
+      float: right;
+    }
+  }
+  .help-block {
+    border-left: 1px solid @table-border-color;
+    display: inline-block;
+    margin-left: 2em;
+    padding-left: 2em;
+  }
+  .progress {
+    background: transparent;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    .box-shadow(none);
+    height: 4px;
+    margin: -5px 0px 0;
+  }
+  .form-control-feedback {
+    right: 15px;
+  }
 }
 
 // Views AJAX pager.
@@ -637,6 +609,9 @@ td.radio {
     padding:0;
     margin:4px 0 0 0;
   }
+}
+.views-exposed-form .views-exposed-widget .btn {
+  margin-top: 1.8em;
 }
 
 // Radio and checkbox in table fixes

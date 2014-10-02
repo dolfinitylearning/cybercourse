@@ -46,3 +46,7 @@
 #xkcd-container img {
   max-width: 100%;
 }
+
+.groups-section, .grading-section {
+  margin-left: 15px;
+}

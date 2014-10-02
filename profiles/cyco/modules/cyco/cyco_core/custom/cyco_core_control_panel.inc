@@ -80,6 +80,8 @@ function _cyco_render_control_panel() {
     $result['all_content']['groups'] = array(
       '#type' => 'markup',
       '#markup' => $groups,
+      '#prefix' => '<div class="groups-section">',
+      '#suffix' => '</div>',
     );
     $result['all_content']['groups-list'] = array(
       '#type' => 'markup',
@@ -90,40 +92,57 @@ function _cyco_render_control_panel() {
           ) 
         )
       ),
+      '#prefix' => '<div class="groups-section">',
+      '#suffix' => '</div>',
     );
-  }
-  if ( cyco_core_current_user_has_role( array('author') ) ) {
-    $result['all_content']['author_title'] = 
-        _cyco_control_panel_show_title( 'Author actions' );
-    $result['all_content']['author_menu'] = 
-        _cyco_control_panel_show_menu_block( 'menu-cp-authors' );
-  }
-  if ( cyco_core_current_user_has_role( array('instructor') ) ) {
-    $result['all_content']['instructor_title'] = 
-        _cyco_control_panel_show_title( 'Instructor actions' );
-    $result['all_content']['instructor_menu'] = 
-        _cyco_control_panel_show_menu_block( 'menu-cp-instructors' );
   }
   if ( cyco_core_current_user_has_role( array('grader') ) ) {
     $result['all_content']['grader_title'] = 
-        _cyco_control_panel_show_title( 'Grader actions' );
+        _cyco_control_panel_show_title( 'Grading' );
     $result['all_content']['num_submissions'] = 
         _cyco_control_panel_show_waiting_submissions();
-    $result['all_content']['grader_menu'] = 
-        _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
-  }
-  if ( cyco_core_current_user_has_role( array('reviewer') ) ) {
-    $result['all_content']['reviewer_title'] = 
-      _cyco_control_panel_show_title( 'Reviewer actions' );
-    $result['all_content']['reviewer_menu'] = 
-      _cyco_control_panel_show_menu_block( 'menu-cp-reviewers' );
+//    $result['all_content']['grader_menu'] = 
+//        _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
   }
   if ( cyco_core_current_user_has_role( array('student') ) ) {
     $result['all_content']['student_title'] = 
-      _cyco_control_panel_show_title( 'Student actions' );
+      _cyco_control_panel_show_title( 'Your stuff' );
     $result['all_content']['student_menu'] = 
       _cyco_control_panel_show_menu_block( 'menu-cp-students' );
   }
+  else {
+//  if ( cyco_core_current_user_has_role( array('author') ) ) {
+    $result['all_content']['actions_title'] = 
+        _cyco_control_panel_show_title( 'Actions' );
+    $result['all_content']['actions_menu'] = 
+        _cyco_control_panel_show_menu_block( 'menu-cp-actions' );
+  }
+//  if ( cyco_core_current_user_has_role( array('instructor') ) ) {
+//    $result['all_content']['instructor_title'] = 
+//        _cyco_control_panel_show_title( 'Instructor actions' );
+//    $result['all_content']['instructor_menu'] = 
+//        _cyco_control_panel_show_menu_block( 'menu-cp-instructors' );
+//  }
+//  if ( cyco_core_current_user_has_role( array('grader') ) ) {
+//    $result['all_content']['grader_title'] = 
+//        _cyco_control_panel_show_title( 'Grader actions' );
+//    $result['all_content']['num_submissions'] = 
+//        _cyco_control_panel_show_waiting_submissions();
+//    $result['all_content']['grader_menu'] = 
+//        _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
+//  }
+//  if ( cyco_core_current_user_has_role( array('reviewer') ) ) {
+//    $result['all_content']['reviewer_title'] = 
+//      _cyco_control_panel_show_title( 'Reviewer actions' );
+//    $result['all_content']['reviewer_menu'] = 
+//      _cyco_control_panel_show_menu_block( 'menu-cp-reviewers' );
+//  }
+//  if ( cyco_core_current_user_has_role( array('student') ) ) {
+//    $result['all_content']['student_title'] = 
+//      _cyco_control_panel_show_title( 'Student actions' );
+//    $result['all_content']['student_menu'] = 
+//      _cyco_control_panel_show_menu_block( 'menu-cp-students' );
+//  }
   return $result;
 }
 
@@ -132,12 +151,15 @@ function _cyco_render_control_panel() {
  * @param string $title Title.
  * @return array Renderable element.
  */
-function _cyco_control_panel_show_title( $title ) {
+function _cyco_control_panel_show_title( $title, $section_id = FALSE ) {
   $title_element = array(
     '#type' => 'markup',
     '#markup' => theme(
         'cyco_control_panel_section_title', 
-         array( 'title' => $title )
+         array( 
+           'title' => $title,
+           'id' => $section_id,
+        )
     ),
   );
   return $title_element;
@@ -145,7 +167,7 @@ function _cyco_control_panel_show_title( $title ) {
 
 /**
  * Make a renderable array element for a menu block.
- * @param string $block_name Block name, e.g., menu-cp-authors.
+ * @param string $block_name Block name, e.g., menu-cp-actions.
  */
 function _cyco_control_panel_show_menu_block( $block_name ) {
   $block = module_invoke('menu', 'block_view', $block_name);
@@ -184,7 +206,12 @@ function _cyco_control_panel_theme( &$theme_defs ) {
  */
 function theme_cyco_control_panel_section_title( $variables ) {
   $title = $variables['title'];
-  $html =  '<h3 class="cyco-control-panel-section-title">' . $title . '</h3>';
+  $id = $variables['id'];
+  $html =  '<h3 ';
+  if ( $id ) {
+    $html .= 'id="' . $id . '" ';
+  }
+  $html .= 'class="cyco-control-panel-section-title">' . $title . '</h3>';
   return $html;
 }
 
@@ -200,6 +227,8 @@ function _cyco_control_panel_show_waiting_submissions() {
         'cyco_control_panel_submissions_waiting_grading', 
          array( 'num_submissions' => $num_submissions )
     ),
+    '#prefix' => '<div class="grading-section">',
+    '#suffix' => '</div>',
   );  
   return $result;
 }

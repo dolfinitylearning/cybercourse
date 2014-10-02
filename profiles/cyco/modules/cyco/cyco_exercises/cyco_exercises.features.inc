@@ -31,22 +31,6 @@ function cyco_exercises_views_api($module = NULL, $api = NULL) {
  */
 function cyco_exercises_node_info() {
   $items = array(
-    'class' => array(
-      'name' => t('Class'),
-      'base' => 'node_content',
-      'description' => t('Class taking a course or courses. Students, graders, and instructors are all part of the class.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'class_post' => array(
-      'name' => t('Class post'),
-      'base' => 'node_content',
-      'description' => t('Post to a class.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
     'exercise' => array(
       'name' => t('Exercise'),
       'base' => 'node_content',

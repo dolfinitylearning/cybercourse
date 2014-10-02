@@ -4,6 +4,10 @@
  * Install, update and uninstall functions for the CyCo installation profile.
  */
 
+require_once 'cyco_install_debug.php';
+
+CycoInstallDebug::getInstance()->debug = TRUE;
+
 /**
  * Implements hook_install().
  *
@@ -12,14 +16,17 @@
  * @see system_install()
  */
 function cyco_install() {
+  CycoInstallDebug::getInstance()->output('Start');
   cyco_define_blocks();
   //Set version of jQuery to use.
   cyco_jquery_update();
   //Remove book page content type.
   node_type_delete('book');
+  CycoInstallDebug::getInstance()->output('End');
 }
 
 function cyco_define_blocks() {
+  CycoInstallDebug::getInstance()->output('Start');
   // Enable some standard blocks.
   $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'seven';
@@ -30,7 +37,7 @@ function cyco_define_blocks() {
       'theme' => $default_theme,
       'status' => 1,
       'weight' => 20,
-      'region' => 'sidebar_first',
+      'region' => 'sidebar_second',
       'pages' => '',
       'cache' => -1,
     ),
@@ -40,7 +47,7 @@ function cyco_define_blocks() {
       'theme' => $default_theme,
       'status' => 1,
       'weight' => 0,
-      'region' => 'sidebar_first',
+      'region' => 'sidebar_second',
       'pages' => '',
       'cache' => -1,
     ),
@@ -90,14 +97,17 @@ function cyco_define_blocks() {
     $query->values($block);
   }
   $query->execute();  
+  CycoInstallDebug::getInstance()->output('End');
 }
 
 /**
  * Configure jquery_update module to load the right version of jQuery.
  */
 function cyco_jquery_update() {
+  CycoInstallDebug::getInstance()->output('Start');
   //Needs to be 1.7 until admin menu bug is fixed.
   variable_set('jquery_update_jquery_version', '1.7');
   variable_set('jquery_update_jquery_cdn', 'google');  
+  CycoInstallDebug::getInstance()->output('End');
 }
 

@@ -41,7 +41,6 @@
         return;
       }
       var sideRegion = $(uiNameSpace.regionSelector);
-      var sideRegionContainer = sideRegion.parent();
       //Find the main content region.
       var mainRegion = $(uiNameSpace.mainRegionSelector);
       //Add the widget as the first child of the region.
@@ -64,8 +63,7 @@
       if ( $.cookie(this.cookieName) ) {
         if ( $.cookie(this.cookieName) == "hidden") {
           this.hideSidebar(
-            sideRegion, sideRegionContainer, 
-            mainRegion, widget 
+            sideRegion, mainRegion, widget 
           );
           widget.addClass("collapsed");
         }
@@ -82,8 +80,7 @@
         var isHidden = (sideRegion.css("display") == "none");
         if (isHidden) {
           toggleSidebar.showSidebar(
-            sideRegion, sideRegionContainer, 
-            mainRegion, widget, "fast"
+            sideRegion, mainRegion, widget, "fast"
           );
           //Set cookie.
           $.cookie(
@@ -94,8 +91,7 @@
         }
         else {
           toggleSidebar.hideSidebar(
-            sideRegion, sideRegionContainer, 
-            mainRegion, widget, "fast"
+            sideRegion, mainRegion, widget, "fast"
           );
           //Set cookie.
           $.cookie(
@@ -107,42 +103,49 @@
       });
     }, //End atttach
     hideSidebar: function(
-        sideRegion, sideRegionContainer, 
-        mainRegion, widget, animationSpeed
+        sideRegion, mainRegion, widget, animationSpeed
       ) {
         widget.removeClass("expanded");
         widget.addClass("collapsed");
         sideRegion.hide(animationSpeed);
-        if ( mainRegion ) {
-          if ( uiNameSpace.mainRegionClassWhenSidebarExpanded ) {
-            mainRegion.removeClass(
+        //Have all the identifiers we need?
+        if ( mainRegion 
+                && uiNameSpace.mainRegionClassWhenSidebarExpanded 
+                && uiNameSpace.mainRegionClassWhenSidebarCollapsed ) {
+          //Find the ancestor (or self) that has the grid (e.g., sm-col-x) class.
+          var container = mainRegion.closest( 
+              "." + uiNameSpace.mainRegionClassWhenSidebarExpanded
+          );
+          container
+            .removeClass(
                 uiNameSpace.mainRegionClassWhenSidebarExpanded
-            );
-          }
-          if ( uiNameSpace.mainRegionClassWhenSidebarCollapsed ) {
-            mainRegion.addClass(
+            )
+            .addClass(
                 uiNameSpace.mainRegionClassWhenSidebarCollapsed
             );
-          }
         }
     },
     showSidebar: function(
-        sideRegion, sideRegionContainer, 
+        sideRegion,  
         mainRegion, widget, animationSpeed
       ) {
       widget.removeClass("collapsed");
       widget.addClass("expanded");
-      if ( mainRegion ) {
-        if ( uiNameSpace.mainRegionClassWhenSidebarCollapsed ) {
-          mainRegion.removeClass(
+      //Have all the identifiers we need?
+      if ( mainRegion 
+              && uiNameSpace.mainRegionClassWhenSidebarExpanded 
+              && uiNameSpace.mainRegionClassWhenSidebarCollapsed ) {
+        //Find the ancestor (or self) that has the grid (e.g., sm-col-x) class.
+        var container = mainRegion.closest( 
+            "." + uiNameSpace.mainRegionClassWhenSidebarCollapsed
+        );
+        container
+          .removeClass(
               uiNameSpace.mainRegionClassWhenSidebarCollapsed
-          );
-        }
-        if ( uiNameSpace.mainRegionClassWhenSidebarExpanded ) {
-          mainRegion.addClass(
+          )
+          .addClass(
               uiNameSpace.mainRegionClassWhenSidebarExpanded
           );
-        }
       }
       sideRegion.show(animationSpeed);
     }

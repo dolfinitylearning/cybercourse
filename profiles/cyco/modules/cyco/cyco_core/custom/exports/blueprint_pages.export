@@ -248,7 +248,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "A blueprint is a design for a course.\n\nDesign is key. Create a good design, and you're halfway to making a good course.\n\n\n\nSee the [CyberCourse wiki](http://wiki.cybercour.se/) for more.",
+            'value' => "A blueprint is a design for a course.\n\nDesign is key. Create a good design, and you're halfway to making a good course.\n\n\n\nSee the "CyberCourse wiki":http://wiki.cybercour.se/ for more.",
             'summary' => 'A blueprint is a design for a course.',
           ),
         ),

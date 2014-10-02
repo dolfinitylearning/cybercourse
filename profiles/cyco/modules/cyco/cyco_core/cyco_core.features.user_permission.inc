@@ -153,6 +153,13 @@ function cyco_core_user_default_permissions() {
     'module' => 'search_config',
   );
 
+  // Exported permission: 'administer CAPTCHA settings'.
+  $permissions['administer CAPTCHA settings'] = array(
+    'name' => 'administer CAPTCHA settings',
+    'roles' => array(),
+    'module' => 'captcha',
+  );
+
   // Exported permission: 'administer actions'.
   $permissions['administer actions'] = array(
     'name' => 'administer actions',
@@ -522,6 +529,28 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'create class content'.
+  $permissions['create class content'] = array(
+    'name' => 'create class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'create class_post content'.
+  $permissions['create class_post content'] = array(
+    'name' => 'create class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'node',
+  );
+
   // Exported permission: 'create course_page content'.
   $permissions['create course_page content'] = array(
     'name' => 'create course_page content',
@@ -590,6 +619,26 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete any class content'.
+  $permissions['delete any class content'] = array(
+    'name' => 'delete any class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete any class_post content'.
+  $permissions['delete any class_post content'] = array(
+    'name' => 'delete any class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
   // Exported permission: 'delete any course_page content'.
   $permissions['delete any course_page content'] = array(
     'name' => 'delete any course_page content',
@@ -626,6 +675,28 @@ function cyco_core_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete own class content'.
+  $permissions['delete own class content'] = array(
+    'name' => 'delete own class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete own class_post content'.
+  $permissions['delete own class_post content'] = array(
+    'name' => 'delete own class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
     ),
     'module' => 'node',
   );
@@ -709,6 +780,26 @@ function cyco_core_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit any class content'.
+  $permissions['edit any class content'] = array(
+    'name' => 'edit any class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'edit any class_post content'.
+  $permissions['edit any class_post content'] = array(
+    'name' => 'edit any class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
   // Exported permission: 'edit any course_page content'.
   $permissions['edit any course_page content'] = array(
     'name' => 'edit any course_page content',
@@ -745,6 +836,28 @@ function cyco_core_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'edit own class content'.
+  $permissions['edit own class content'] = array(
+    'name' => 'edit own class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'edit own class_post content'.
+  $permissions['edit own class_post content'] = array(
+    'name' => 'edit own class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
     ),
     'module' => 'node',
   );
@@ -807,6 +920,20 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'taxonomy',
+  );
+
+  // Exported permission: 'export nodes'.
+  $permissions['export nodes'] = array(
+    'name' => 'export nodes',
+    'roles' => array(),
+    'module' => 'node_export',
+  );
+
+  // Exported permission: 'export own nodes'.
+  $permissions['export own nodes'] = array(
+    'name' => 'export own nodes',
+    'roles' => array(),
+    'module' => 'node_export',
   );
 
   // Exported permission: 'flush caches'.
@@ -1005,6 +1132,34 @@ function cyco_core_user_default_permissions() {
     'module' => 'search_config',
   );
 
+  // Exported permission: 'search class content'.
+  $permissions['search class content'] = array(
+    'name' => 'search class content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+      'student' => 'student',
+    ),
+    'module' => 'search_config',
+  );
+
+  // Exported permission: 'search class_post content'.
+  $permissions['search class_post content'] = array(
+    'name' => 'search class_post content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
+      'student' => 'student',
+    ),
+    'module' => 'search_config',
+  );
+
   // Exported permission: 'search content'.
   $permissions['search content'] = array(
     'name' => 'search content',
@@ -1052,6 +1207,13 @@ function cyco_core_user_default_permissions() {
     'module' => 'services',
   );
 
+  // Exported permission: 'skip CAPTCHA'.
+  $permissions['skip CAPTCHA'] = array(
+    'name' => 'skip CAPTCHA',
+    'roles' => array(),
+    'module' => 'captcha',
+  );
+
   // Exported permission: 'switch shortcut sets'.
   $permissions['switch shortcut sets'] = array(
     'name' => 'switch shortcut sets',
@@ -1066,6 +1228,13 @@ function cyco_core_user_default_permissions() {
     'name' => 'use PHP for label patterns',
     'roles' => array(),
     'module' => 'auto_entitylabel',
+  );
+
+  // Exported permission: 'use PHP to import nodes'.
+  $permissions['use PHP to import nodes'] = array(
+    'name' => 'use PHP to import nodes',
+    'roles' => array(),
+    'module' => 'node_export',
   );
 
   // Exported permission: 'use advanced search'.

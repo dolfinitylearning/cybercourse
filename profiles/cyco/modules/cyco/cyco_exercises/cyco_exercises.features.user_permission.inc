@@ -13,30 +13,11 @@ function cyco_exercises_user_default_permissions() {
   // Exported permission: 'administer exercises settings'.
   $permissions['administer exercises settings'] = array(
     'name' => 'administer exercises settings',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'cyco_exercises',
-  );
-
-  // Exported permission: 'create class content'.
-  $permissions['create class content'] = array(
-    'name' => 'create class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create class_post content'.
-  $permissions['create class_post content'] = array(
-    'name' => 'create class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
   );
 
   // Exported permission: 'create exercise content'.
@@ -130,26 +111,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'delete any class content'.
-  $permissions['delete any class content'] = array(
-    'name' => 'delete any class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any class_post content'.
-  $permissions['delete any class_post content'] = array(
-    'name' => 'delete any class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'delete any exercise content'.
   $permissions['delete any exercise content'] = array(
     'name' => 'delete any exercise content',
@@ -197,28 +158,6 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own class content'.
-  $permissions['delete own class content'] = array(
-    'name' => 'delete own class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own class_post content'.
-  $permissions['delete own class_post content'] = array(
-    'name' => 'delete own class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
     ),
     'module' => 'node',
   );
@@ -284,26 +223,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'taxonomy',
-  );
-
-  // Exported permission: 'edit any class content'.
-  $permissions['edit any class content'] = array(
-    'name' => 'edit any class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any class_post content'.
-  $permissions['edit any class_post content'] = array(
-    'name' => 'edit any class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
   );
 
   // Exported permission: 'edit any exercise content'.
@@ -395,28 +314,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'edit own class content'.
-  $permissions['edit own class content'] = array(
-    'name' => 'edit own class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own class_post content'.
-  $permissions['edit own class_post content'] = array(
-    'name' => 'edit own class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
   );
 
   // Exported permission: 'edit own exercise content'.
@@ -520,34 +417,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'taxonomy',
-  );
-
-  // Exported permission: 'search class content'.
-  $permissions['search class content'] = array(
-    'name' => 'search class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-      'student' => 'student',
-    ),
-    'module' => 'search_config',
-  );
-
-  // Exported permission: 'search class_post content'.
-  $permissions['search class_post content'] = array(
-    'name' => 'search class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-      'student' => 'student',
-    ),
-    'module' => 'search_config',
   );
 
   // Exported permission: 'search exercise content'.

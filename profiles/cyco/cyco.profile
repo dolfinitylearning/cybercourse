@@ -3,6 +3,8 @@
  * @file
  * Enables modules and site configuration for a standard site installation.
  */
+require_once 'cyco_install_debug.php';
+CycoInstallDebug::getInstance()->debug = TRUE;
 
 /**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
@@ -59,8 +61,7 @@ function _cyco_finalize_install() {
   _cyco_add_links_footer_menu();
   //Remove the title from the footer block.
   _cyco_remove_footer_title();
-  // Add links to control panel menu. I can't make features do it, 
-  // except for cp-author.
+  // Add links to control panel menu. I can't make features do it.
   _cyco_add_links_cp_menus();
   // Put course and blueprint blocks in sidebar, footer menu 
   // in (gasp!) the footer.
@@ -396,7 +397,7 @@ function _cyco_activate_block($module, $block, $region, $theme,
  * Place blocks in regions.
  */
 function _cyco_place_blocks() {
-  _cyco_activate_block('system', 'user-menu', 'sidebar_first',
+  _cyco_activate_block('system', 'user-menu', 'sidebar_second',
       'cybercourse', '', 0, -1, '<none>');
   _cyco_activate_block('menu', 'menu-footer', 'footer',
       'cybercourse', '', 0, 0, '<none>');
@@ -405,13 +406,13 @@ function _cyco_place_blocks() {
   //Cache the menu tree for this block.
   $rendered = _cbb_get_book_tree( $course_node->nid );
   $course_block_id = 'cbb_' . $course_node->nid;
-  _cyco_activate_block('cyco_book_blocks', $course_block_id, 'sidebar_first', 
+  _cyco_activate_block('cyco_book_blocks', $course_block_id, 'sidebar_second', 
       'cybercourse', '', 0, 0);
   $blueprint_node 
       = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
   $rendered = _cbb_get_book_tree( $blueprint_node->nid );
   $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
-  _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_first', 
+  _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_second', 
       'cybercourse', '', 0, 1);
   //The blueprint block is only visible to some roles.
   $roles_see_block = array(
@@ -424,11 +425,11 @@ function _cyco_place_blocks() {
   _cyco_set_block_role_visibility( 'cyco_book_blocks', $blueprint_block_id, 
       $roles_see_block );
   //Set up some other blocks.
-  _cyco_activate_block('menu', 'menu-tools', 'sidebar_first',
+  _cyco_activate_block('menu', 'menu-tools', 'sidebar_second',
       'cybercourse', '', 0, 2);
-  _cyco_activate_block('user', 'login', 'sidebar_first',
+  _cyco_activate_block('user', 'login', 'sidebar_second',
       'cybercourse', '', 0, 4);
-  _cyco_activate_block('search', 'form', 'sidebar_first',
+  _cyco_activate_block('search', 'form', 'sidebar_second',
       'cybercourse', '', 0, 5);
   //Position the footer.
   $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
@@ -635,11 +636,12 @@ function _cyco_cybercourse_submission_theme_settings() {
 }
 
 function _cyco_add_links_cp_menus() {
-  //Links in instructor menu.
   $items = array();
-  $menu_name = 'menu-cp-instructors';
+  $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'menu';
+  
+  //Create top level items.
   $plid = 0;
   $items[] = array(
     'link_path' => 'courses-and-keywords',
@@ -660,9 +662,18 @@ function _cyco_add_links_cp_menus() {
     'module' => $module,
   );
   $items[] = array(
+    'link_path' => 'exercises',
+    'link_title' => 'Exercises and rubrics',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
     'link_path' => 'pseudent-poses',
     'link_title' => 'Pseudent poses',
-    'weight' => 2,
+    'weight' => 3,
     'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $plid,
@@ -671,7 +682,34 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'patterns',
     'link_title' => 'Patterns',
-    'weight' => 3,
+    'weight' => 4,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'basic-pages',
+    'link_title' => 'Basic pages',
+    'weight' => 5,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'workflow-tagged',
+    'link_title' => 'List tagged content',
+    'weight' => 6,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'classes',
+    'link_title' => 'Classes',
+    'weight' => 7,
     'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $plid,
@@ -680,18 +718,285 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'admin/people',
     'link_title' => 'Users',
-    'weight' => 4,
+    'weight' => 8,
     'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $plid,
     'module' => $module,
   );
-
+  $items[] = array(
+    'link_path' => 'admin/content',
+    'link_title' => 'Other',
+    'weight' => 9,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+  );
   $mlids = array();
   foreach ( $items as $item ) {
     $mlids[ $item['link_path'] ] = menu_link_save($item);
   }
 
+  //Courses and keywords submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'courses-and-keywords',
+    'link_title' => 'List course pages and keywords',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'courses-and-keywords' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/course-page?book_op=newbook',
+    'link_title' => 'Create a new course',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'courses-and-keywords' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/keywords',
+    'link_title' => 'Manage keywords',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'courses-and-keywords' ],
+    'module' => $module,
+  );
+  
+  //Blueprints and keywords submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'blueprints-and-keywords',
+    'link_title' => 'List blueprints pages and keywords',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'blueprints-and-keywords' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/blueprint-page?book_op=newbook',
+    'link_title' => 'Create a new blueprint',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'blueprints-and-keywords' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/blueprint_keywords',
+    'link_title' => 'Manage blueprint keywords',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'blueprints-and-keywords' ],
+    'module' => $module,
+  );
+  
+  //Exercises and rubics submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'exercises',
+    'link_title' => 'List exercises',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/exercise',
+    'link_title' => 'Add new exercise',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/keywords',
+    'link_title' => 'Manage exercise keywords',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'rubric-items',
+    'link_title' => 'List rubric items',
+    'weight' => 3,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/rubric-item',
+    'link_title' => 'Add new rubric item',
+    'weight' => 4,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
+    'link_title' => 'Manage rubric item categories',
+    'weight' => 5,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'list-model-solutions',
+    'link_title' => 'List model solutions',
+    'weight' => 6,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/model-exercise-solution',
+    'link_title' => 'Add model solution',
+    'weight' => 7,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'exercises' ],
+    'module' => $module,
+  );
+  
+  //Pseudent poses submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'pseudent-poses',
+    'link_title' => 'List pseudent poses',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'pseudent-poses' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/pseudent-pose',
+    'link_title' => 'Add a new pseudent pose.',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'pseudent-poses' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/pseudent_categories',
+    'link_title' => 'Manage pseudent categories',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'pseudent-poses' ],
+    'module' => $module,
+  );
+  
+  //Patterns submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'patterns',
+    'link_title' => 'List patterns',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'patterns' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/pattern',
+    'link_title' => 'Add a pattern',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'patterns' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/pattern_categories',
+    'link_title' => 'Manage pattern categories',
+    'weight' => 2,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'patterns' ],
+    'module' => $module,
+  );
+
+  //Basic pages submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'node/add/page',
+    'link_title' => 'Add basic page',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'basic-pages' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'basic-pages',
+    'link_title' => 'List basic pages',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'basic-pages' ],
+    'module' => $module,
+  );
+
+  //Workflow tags submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'workflow-tagged',
+    'link_title' => 'Workflow tagged',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'workflow-tagged' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/workflow_tags',
+    'link_title' => 'Manage workflow tags',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'workflow-tagged' ],
+    'module' => $module,
+  );
+
+  //Classes submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'classes',
+    'link_title' => 'List classes',
+    'weight' => 0,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'classes' ],
+    'module' => $module,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/class',
+    'link_title' => 'Add class',
+    'weight' => 1,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $mlids[ 'classes' ],
+    'module' => $module,
+  );
+
+  //Users submenu
   $items = array();
   $items[] = array(
     'link_path' => 'admin/people',
@@ -711,85 +1016,55 @@ function _cyco_add_links_cp_menus() {
     'plid' => $mlids[ 'admin/people' ],
     'module' => $module,
   );
-  
-  $menu_name = 'menu-cp-graders';
+
+  //Other submenu
+  $items = array();
   $items[] = array(
-    'link_path' => 'courses-and-keywords',
-    'link_title' => 'Courses and keywords',
+    'link_path' => 'admin/content',
+    'link_title' => 'All content',
     'weight' => 0,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $plid,
+    'plid' => $mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
-    'link_path' => 'blueprints-and-keywords',
-    'link_title' => 'Blueprints and keywords',
+    'link_path' => 'admin/structure/token-custom',
+    'link_title' => 'Custom tokens',
     'weight' => 1,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $plid,
+    'plid' => $mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
-    'link_path' => 'pseudent-poses',
-    'link_title' => 'Pseudent poses',
+    'link_path' => 'admin/config/system/backup_migrate',
+    'link_title' => 'Backup',
     'weight' => 2,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $plid,
+    'plid' => $mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
-    'link_path' => 'patterns',
-    'link_title' => 'Patterns',
+    'link_path' => 'admin/structure/block',
+    'link_title' => 'Blocks',
     'weight' => 3,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $plid,
-    'module' => $module,
-  );
-  
-  $menu_name = 'menu-cp-reviewers';
-  $items[] = array(
-    'link_path' => 'courses-and-keywords',
-    'link_title' => 'Courses and keywords',
-    'weight' => 0,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $plid,
+    'plid' => $mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
-    'link_path' => 'blueprints-and-keywords',
-    'link_title' => 'Blueprints and keywords',
-    'weight' => 1,
+    'link_path' => 'admin/appearance',
+    'link_title' => 'Appearance',
+    'weight' => 4,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $plid,
+    'plid' => $mlids[ 'admin/content' ],
     'module' => $module,
   );
-  $items[] = array(
-    'link_path' => 'pseudent-poses',
-    'link_title' => 'Pseudent poses',
-    'weight' => 2,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $plid,
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'patterns',
-    'link_title' => 'Patterns',
-    'weight' => 3,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $plid,
-    'module' => $module,
-  );
-  foreach ( $items as $item ) {
-    menu_link_save($item);
-  }
+
 }
 
 function _cyco_add_cp_link() {

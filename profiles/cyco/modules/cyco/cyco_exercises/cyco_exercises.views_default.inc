@@ -116,7 +116,6 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are the exercises.</p>
-
 ';
   /* Relationship: Entity Reference: Referenced Entity */
   $handler->display->display_options['relationships']['field_rubric_items_target_id']['id'] = 'field_rubric_items_target_id';
@@ -217,17 +216,16 @@ function cyco_exercises_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'exercises';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'List exercises';
   $handler->display->display_options['menu']['description'] = 'See all the exercises';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['exercises'] = $view;
 
   $view = new view();
-  $view->name = 'exercises_public_';
+  $view->name = 'exercises_public';
   $view->description = 'List of exercises, available to all.';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -298,7 +296,7 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Exercises';
   $handler->display->display_options['menu']['name'] = 'menu-tools';
-  $export['exercises_public_'] = $view;
+  $export['exercises_public'] = $view;
 
   $view = new view();
   $view->name = 'list_model_solutions';
@@ -361,11 +359,10 @@ function cyco_exercises_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'list-model-solutions';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'List model solutions';
   $handler->display->display_options['menu']['description'] = 'Model solutions to exercises.';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['list_model_solutions'] = $view;
@@ -440,11 +437,10 @@ function cyco_exercises_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'rubric-items';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'List rubric items';
   $handler->display->display_options['menu']['description'] = 'See all rubric items.';
   $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-authors';
+  $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['rubric_items'] = $view;
@@ -578,7 +574,7 @@ function cyco_exercises_views_default_views() {
   $export['submission_metadata_for_student_exercise'] = $view;
 
   $view = new view();
-  $view->name = 'submissions_instructor_report_one_student_';
+  $view->name = 'submissions_instructor_report_one_student';
   $view->description = 'Report for instructors on submissions.';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -705,7 +701,7 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['menu']['name'] = 'menu-cp-students';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
-  $export['submissions_instructor_report_one_student_'] = $view;
+  $export['submissions_instructor_report_one_student'] = $view;
 
   $view = new view();
   $view->name = 'submissions_student_report';
@@ -721,10 +717,8 @@ function cyco_exercises_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Your submissions';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'role';
-  $handler->display->display_options['access']['role'] = array(
-    9 => '9',
-  );
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'create exercise_submission content';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';

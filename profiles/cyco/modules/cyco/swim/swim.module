@@ -831,11 +831,16 @@ function swim_ckhtml2textile( $content ) {
 /**
  * Translate Textile into HTML for viewing.
  * @param string $textile Textile
- * @param boolean $skip_wrapper If true, skip SWIM wrapper. Used by 
- *   plugins if they don't want their own wrappers (usually the case).
+ * @param boolean $nested_call If true, this call is nested within another
+ * call of swim_textile2html. Process SWIM plugins, but don't do Textile
+ * processing, and don't add overall wrapper. Plugins set this to
+ * true for their own calls to swim_textile2html.
+ * 
+ * Nested Textile parsing causes Evil Things, such as coverting to HTML
+ * entities twice.
  * @return string HTML
  */
-function swim_textile2html( $textile, $skip_wrapper = FALSE ) {
+function swim_textile2html( $textile, $nested_call = FALSE ) {
   //Replace tokens.
   $textile = token_replace($textile);
   $textile = str_replace("\r", '', $textile);
@@ -853,19 +858,21 @@ function swim_textile2html( $textile, $skip_wrapper = FALSE ) {
     cyco_core_handle_error( $message );
     return;
   }
-  //Translate textile.
-  $parser = new \Netcarver\Textile\Parser();
-  $html = $parser
-      ->setDocumentType('html5')
-      ->setLineWrap(FALSE)
-      ->parse($out);
-  //Wrap math formula in span MathJax uses. Same as CK plugin uses.
-  $html = _swim_textile2ckhtml_math( $html );
-  if ( ! $skip_wrapper ) {
-    //Put everything in a SWIM wrapper.
-    $html = '<div class="swim textile">' . $html . '</div>';
+  if ( ! $nested_call ) {
+    //Translate textile.
+    $parser = new \Netcarver\Textile\Parser();
+    $out = $parser
+        ->setDocumentType('html5')
+        ->setLineWrap(FALSE)
+        ->parse($out);
   }
-  return $html;
+  //Wrap math formula in span MathJax uses. Same as CK plugin uses.
+  $out = _swim_textile2ckhtml_math( $out );
+  if ( ! $nested_call ) {
+    //Put everything in a SWIM wrapper.
+    $html = '<div class="swim textile">' . $out . '</div>';
+  }
+  return $out;
 }
 
 /**

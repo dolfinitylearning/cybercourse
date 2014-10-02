@@ -31,3 +31,4 @@ function cybercourse_theme_registry_alter(&$registry) {
     unset( $registry['book_navigation']['process functions'][ $target_index ] );
   }
 }
+
