@@ -85,7 +85,7 @@ function cyco_toggle_sidebar_libraries_info() {
     'version arguments' => array(
       'file' => 'jquery.cookie.js',
       //  * jQuery Cookie Plugin v1.4.0
-      'pattern' => '/plugin\s+v(.+?)$/im',
+      'pattern' => '/Plugin\s+v(.+?)$/im',
       'lines' => 10,
     ),
     'files' => array(

@@ -45,6 +45,7 @@ dependencies[] = services_definition
 dependencies[] = rest_server
 dependencies[] = token
 dependencies[] = token_custom
+dependencies[] = entity_token
 dependencies[] = jquery_update
 dependencies[] = backup_migrate
 dependencies[] = uuid

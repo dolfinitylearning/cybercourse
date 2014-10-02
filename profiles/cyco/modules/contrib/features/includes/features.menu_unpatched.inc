@@ -232,7 +232,7 @@ function menu_links_features_export_render($module, $data, $export = NULL) {
           $link['parent_path'] = $parent['link_path'];
         }
         else {
-          $clean_title = features_clean_title($parent['link_title']);
+          $clean_title = features_clean_title($parent['title']);
           $link['parent_identifier'] = "{$parent['menu_name']}_{$clean_title}:{$parent['link_path']}";
         }
       }

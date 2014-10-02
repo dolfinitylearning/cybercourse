@@ -79,6 +79,8 @@ function _cyco_finalize_install() {
   _cyco_theme_stuff();
   // Turn off some modules.
   _cyco_disable_modules();
+  //Turn on others.
+  _cyco_enable_modules();
   node_access_rebuild();
   cache_clear_all();
   //Remove all blocks from submission theme, except for content.
@@ -567,6 +569,26 @@ function _cyco_disable_modules() {
   );
   module_disable( $modules );
 }
+
+/**
+ * Turn on Cyco modules. Don't know why this is needed.
+ */
+function _cyco_enable_modules() {
+  $modules = array(
+    'cyco_core',
+    'cyco_add_pages',
+    'cyco_book_mods',
+    'cyco_book_blocks',
+    'cyco_pseudents',
+    'cyco_patterns',
+    'cyco_toc',
+    'cyco_exercises_services',
+    'cyco_exercises',
+    
+  );
+  module_enable($modules, TRUE);
+}
+  
 
 /**
  * Theme settings for two themes: cybercourse, and 

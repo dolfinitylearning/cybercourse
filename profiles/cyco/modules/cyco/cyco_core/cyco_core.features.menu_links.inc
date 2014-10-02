@@ -61,88 +61,6 @@ function cyco_core_menu_default_menu_links() {
     'weight' => 0,
     'customized' => 0,
   );
-  // Exported menu link: menu-cp-actions_basic-pages:basic-pages
-  $menu_links['menu-cp-actions_basic-pages:basic-pages'] = array(
-    'menu_name' => 'menu-cp-actions',
-    'link_path' => 'basic-pages',
-    'router_path' => 'basic-pages',
-    'link_title' => 'Basic pages',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Pages that are not part of a course or blueprint.',
-      ),
-      'identifier' => 'menu-cp-actions_basic-pages:basic-pages',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 1,
-    'expanded' => 1,
-    'weight' => -44,
-    'customized' => 1,
-  );
-  // Exported menu link: menu-cp-actions_classes:classes
-  $menu_links['menu-cp-actions_classes:classes'] = array(
-    'menu_name' => 'menu-cp-actions',
-    'link_path' => 'classes',
-    'router_path' => 'classes',
-    'link_title' => 'Classes',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Classes are groups of students taking a course, with an instructor.',
-      ),
-      'identifier' => 'menu-cp-actions_classes:classes',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 1,
-    'expanded' => 1,
-    'weight' => -42,
-    'customized' => 1,
-  );
-  // Exported menu link: menu-cp-actions_list-blueprint-pages-and-keywords:blueprints-and-keywords
-  $menu_links['menu-cp-actions_list-blueprint-pages-and-keywords:blueprints-and-keywords'] = array(
-    'menu_name' => 'menu-cp-actions',
-    'link_path' => 'blueprints-and-keywords',
-    'router_path' => 'blueprints-and-keywords',
-    'link_title' => 'List blueprint pages and keywords',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'See all blueprint pages (including unpublished), and their keywords',
-      ),
-      'identifier' => 'menu-cp-actions_list-blueprint-pages-and-keywords:blueprints-and-keywords',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => -50,
-    'customized' => 1,
-    'parent_identifier' => 'menu-cp-actions_blueprints-and-keywords:blueprints-and-keywords',
-  );
-  // Exported menu link: menu-cp-actions_workflow-tagged:workflow-tagged
-  $menu_links['menu-cp-actions_workflow-tagged:workflow-tagged'] = array(
-    'menu_name' => 'menu-cp-actions',
-    'link_path' => 'workflow-tagged',
-    'router_path' => 'workflow-tagged',
-    'link_title' => 'Workflow tagged',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'See items that have a workflow tag attached',
-      ),
-      'identifier' => 'menu-cp-actions_workflow-tagged:workflow-tagged',
-    ),
-    'module' => 'menu',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 1,
-    'weight' => -50,
-    'customized' => 1,
-    'parent_identifier' => 'menu-cp-actions_list-tagged-content:workflow-tagged',
-  );
   // Exported menu link: menu-footer_copyright-you-20xx:node/3
   $menu_links['menu-footer_copyright-you-20xx:node/3'] = array(
     'menu_name' => 'menu-footer',
@@ -258,18 +176,14 @@ function cyco_core_menu_default_menu_links() {
   // Translatables
   // Included for use with string extractors like potx.
   t('About');
-  t('Basic pages');
-  t('Classes');
   t('Control panel');
   t('Copyright, you, 20xx');
   t('Credits');
   t('Help');
-  t('List blueprint pages and keywords');
   t('Log out');
   t('Terms of use');
   t('User account');
   t('Welcome');
-  t('Workflow tagged');
 
 
   return $menu_links;
