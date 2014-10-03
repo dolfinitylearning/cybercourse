@@ -6,7 +6,9 @@
 
 require_once 'cyco_install_debug.php';
 
-CycoInstallDebug::getInstance()->debug = TRUE;
+ini_set('max_execution_time', 180); //180 seconds - 3 minutes. 
+
+CycoInstallDebug::getInstance()->debug = FALSE;
 
 /**
  * Implements hook_install().

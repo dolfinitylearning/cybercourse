@@ -467,7 +467,6 @@ features[variable][] = save_edit_unpublish
 features[variable][] = save_edit_unpublish_new_only
 features[variable][] = search_config
 features[variable][] = site_default_country
-features[variable][] = site_frontpage
 features[variable][] = theme_cybercourse_settings
 features[variable][] = theme_cybercourse_submission_settings
 features[variable][] = theme_default

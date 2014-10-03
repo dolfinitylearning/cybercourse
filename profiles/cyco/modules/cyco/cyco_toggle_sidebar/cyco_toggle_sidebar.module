@@ -12,53 +12,44 @@ define( 'TSB_DEFAULT_ICON_POSITION', 'right' );
 function cyco_toggle_sidebar_init() {
   // Try to load the cookie library, and check if that worked.
   $library = libraries_load('jquery-cookie');
-  if ( empty($library['loaded']) || ! $library['loaded'] ) {
-    //During install, library functions may not work. Check for
-    //existence of global $install_state. See install_drupal()
-    //in install.core.inc.
-    global $install_state;
-    if ( is_null($install_state) ) {
-      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-          . ' jquery-cookie library missing';
-      cyco_core_handle_error( $message );
-    }
+  if ( ! empty($library['loaded']) && $library['loaded'] ) {
+    $settings = array(
+      'tsbSidebarSelector' => 
+          variable_get(
+              'tsb_sidebar_selector', 
+              TSB_DEFAULT_SIDEBAR_SELECTOR
+          ),
+      'tsbMainRegionSelector' => 
+          variable_get(
+              'tsb_main_region_selector', 
+              TSB_DEFAULT_MAIN_REGION_SELECTOR
+          ),
+      'tsbMainRegionClassWhenExpanded' => 
+          variable_get(
+              'tsb_main_region_class_when_expanded', 
+              TSB_DEFAULT_MAIN_REGION_CLASS_EXPANDED
+          ),
+      'tsbMainRegionClassWhenCollapsed' => 
+          variable_get(
+              'tsb_main_region_class_when_collapsed', 
+              TSB_DEFAULT_MAIN_REGION_CLASS_COLLPASED
+          ),
+      'tsbIconPosition' => 
+          variable_get(
+              'tsb_icon_position', 
+              TSB_DEFAULT_ICON_POSITION
+          ),
+    );
+    drupal_add_js(
+        array('toggleSidebar' => $settings),
+        array('type' => 'setting', 'every_page' => TRUE, 'weight' => -10)
+    );
+    drupal_add_js( 
+        drupal_get_path('module', 'cyco_toggle_sidebar') 
+          . '/js/cyco_toggle_sidebar.js',
+        array('type' => 'file', 'every_page' => TRUE, 'weight' => 10)
+    );
   }
-  $settings = array(
-    'tsbSidebarSelector' => 
-        variable_get(
-            'tsb_sidebar_selector', 
-            TSB_DEFAULT_SIDEBAR_SELECTOR
-        ),
-    'tsbMainRegionSelector' => 
-        variable_get(
-            'tsb_main_region_selector', 
-            TSB_DEFAULT_MAIN_REGION_SELECTOR
-        ),
-    'tsbMainRegionClassWhenExpanded' => 
-        variable_get(
-            'tsb_main_region_class_when_expanded', 
-            TSB_DEFAULT_MAIN_REGION_CLASS_EXPANDED
-        ),
-    'tsbMainRegionClassWhenCollapsed' => 
-        variable_get(
-            'tsb_main_region_class_when_collapsed', 
-            TSB_DEFAULT_MAIN_REGION_CLASS_COLLPASED
-        ),
-    'tsbIconPosition' => 
-        variable_get(
-            'tsb_icon_position', 
-            TSB_DEFAULT_ICON_POSITION
-        ),
-  );
-  drupal_add_js(
-      array('toggleSidebar' => $settings),
-      array('type' => 'setting', 'every_page' => TRUE, 'weight' => -10)
-  );
-  drupal_add_js( 
-      drupal_get_path('module', 'cyco_toggle_sidebar') 
-        . '/js/cyco_toggle_sidebar.js',
-      array('type' => 'file', 'every_page' => TRUE, 'weight' => 10)
-  );
 }
 
 /**
