@@ -93,6 +93,8 @@ dependencies[] = search_config
 dependencies[] = extlink
 dependencies[] = scroll_to_top
 dependencies[] = block_class
+dependencies[] = clientside_validation
+dependencies[] = clientside_validation_form
 
 ;SEO
 dependencies[] = pathauto

@@ -13,9 +13,15 @@ function cyco_toggle_sidebar_init() {
   // Try to load the cookie library, and check if that worked.
   $library = libraries_load('jquery-cookie');
   if ( empty($library['loaded']) || ! $library['loaded'] ) {
-    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-        . ' jquery-cookie library missing';
-    cyco_core_handle_error( $message );
+    //During install, library functions may not work. Check for
+    //existence of global $install_state. See install_drupal()
+    //in install.core.inc.
+    global $install_state;
+    if ( is_null($install_state) ) {
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' jquery-cookie library missing';
+      cyco_core_handle_error( $message );
+    }
   }
   $settings = array(
     'tsbSidebarSelector' => 

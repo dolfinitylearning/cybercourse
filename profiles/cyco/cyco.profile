@@ -86,7 +86,7 @@ function _cyco_finalize_install() {
   //Remove all blocks from submission theme, except for content.
   _cyco_remove_submission_blocks();
   // Add control panel link to user menu.
-  _cyco_add_cp_link();
+//  _cyco_add_cp_link();
   cache_clear_all();
 }
 
@@ -1089,29 +1089,29 @@ function _cyco_add_links_cp_menus() {
 
 }
 
-function _cyco_add_cp_link() {
-  $item = array(
-    'menu_name' => 'user-menu',
-    'link_path' => 'user/control-panel',
-    'router_path' => 'user/control-panel',
-    'link_title' => 'Control panel',
-    'options' => array(
-      'attributes' => array(
-        'title' => 'CyberCourse control panel.',
-      ),
-      'identifier' => 'user-menu_control-panel:user/control-panel',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => -50,
-    'customized' => 1,    
-    'language' => 'und',
-  );
-  menu_link_save($item);
-}
+//function _cyco_add_cp_link() {
+//  $item = array(
+//    'menu_name' => 'user-menu',
+//    'link_path' => 'user/control-panel',
+//    'router_path' => 'user/control-panel',
+//    'link_title' => 'Control panel',
+//    'options' => array(
+//      'attributes' => array(
+//        'title' => 'CyberCourse control panel.',
+//      ),
+//      'identifier' => 'user-menu_control-panel:user/control-panel',
+//    ),
+//    'module' => 'system',
+//    'hidden' => 0,
+//    'external' => 0,
+//    'has_children' => 0,
+//    'expanded' => 0,
+//    'weight' => -50,
+//    'customized' => 1,    
+//    'language' => 'und',
+//  );
+//  menu_link_save($item);
+//}
 
 /**
  * Create pages with links in the footer.
