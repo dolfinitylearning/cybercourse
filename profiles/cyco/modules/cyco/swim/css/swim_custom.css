@@ -21,5 +21,11 @@ This is for custom styles the user wants to use in authoring SWIM content.
 }
 
 .swim table {
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
+}
+
+.swim .author-note {
+  border: 1px solid #EEE;
+  background-color: #FFFFDD;
+  padding: 1em;
 }

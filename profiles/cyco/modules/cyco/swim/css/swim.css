@@ -20,3 +20,11 @@ code {
   font-size: 120%;
   color: red;
 }
+
+/*
+Rearrange book, out title field to right of drag marker, otherwise
+indenting level is not clear.
+*/
+table#book-outline td div.form-type-textfield {
+  float: left;
+}
