@@ -870,7 +870,7 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
   $out = _swim_textile2ckhtml_math( $out );
   if ( ! $nested_call ) {
     //Put everything in a SWIM wrapper.
-    $html = '<div class="swim textile">' . $out . '</div>';
+    $out = '<div class="swim textile">' . $out . '</div>';
   }
   return $out;
 }
