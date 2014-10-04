@@ -14,4 +14,9 @@ This is for custom styles the user wants to use in authoring SWIM content.
   padding: 5px;
 }
 
+.swim .table-full-border .td {
+  padding: 0.5em;
+  border: 1px solid #666;
+}
+
 
