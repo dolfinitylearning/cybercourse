@@ -38,3 +38,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
 .swim .indent {
   margin-left: 5em;
 }
+
+.swim .figure {
+  margin-left: 5em;
+}
