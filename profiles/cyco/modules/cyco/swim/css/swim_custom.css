@@ -29,3 +29,12 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-color: #FFFFDD;
   padding: 1em;
 }
+
+.swim .caption {
+  margin-left: 5em;
+  font-weight: bold;
+}
+
+.swim .indent {
+  margin-left: 5em;
+}
