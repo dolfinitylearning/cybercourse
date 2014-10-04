@@ -20,4 +20,6 @@ This is for custom styles the user wants to use in authoring SWIM content.
   border: 1px solid #666;
 }
 
-
+.swim table {
+  margin-bottom: 0.5em;
+}
