@@ -39,8 +39,8 @@ class SwimCustomTagParser {
 //          . '\s+' . $def['tag'] . '\s+([\w\*\-\_\&\#\@\%\!\~]*)\s*\n'
           . '(.*?)'
           . SwimCustomTagParser::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*' . $def['tag'] 
-          . '\s*\1\s*\n'
-          . '/ims';
+          . '\s*?\1\s*?\n'
+          . '/ism';
       $text = preg_replace_callback($this->current_regex, 
           function($matches) {
             //Call the custom tag callback registered earlier.
