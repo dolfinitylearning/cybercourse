@@ -6,7 +6,7 @@
   Drupal.behaviors.cycoToc = {
     attach: function (context, settings) {
       var headingTagList 
-          = $('.document h1, .document h2, .document h3, .document h4');
+          = $('.swim h1, .swim h2, .swim h3, .swim h4');
       if ( headingTagList.size() > 0 ) {
         var html = '<div id="cyco_toc">'
                     + '<p id="cyco_toc_label">Contents</p>';
@@ -22,7 +22,7 @@
         html += '</div>';
         //Only add the ToC to the first instance of a body.
         //Prevents extras from appearing when exercises are inserted.
-        $('#page-title').after(html);
+        $('.field-name-field-body').before(html);
       } // end if
     }
   };
