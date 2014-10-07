@@ -4,6 +4,11 @@
  * Server-side SWIM implementation.
  */
 
+//Set these to big, else regex will send back MT string when the
+//content gets too big. 
+ini_set('pcre.backtrack_limit', 10000000);
+ini_set('pcre.recursion_limit', 10000000);
+
 require_once drupal_get_path('module', 'swim') . '/SwimCustomTagParser.php';
 
 //Default heights for the editor and summary.
@@ -172,7 +177,6 @@ function swim_field_widget_form(
       //Remove grippie.
       '#resizable' => FALSE,
       '#default_value' => $value ? swim_textile2ckhtml( $value ) : '',
-//      '#default_value' => $value ? swim_rest2ckhtml( $value ) : '',
       '#attributes' => array(
         'class' => array('swim-editor swim-editor-main text-full'),
       ),
@@ -628,7 +632,6 @@ function _swim_client_peek( $data ) {
   $content = token_replace($content);
   //Convert the ReST content to HTML.
   $html = swim_textile2html($content);
-//  $html = swim_rest2html($content);
   $module_path = $base_url . base_path() 
           . drupal_get_path('module', 'swim') . '/';
   //Let other modules add their own stuff.
@@ -644,9 +647,11 @@ function _swim_client_peek( $data ) {
       'title' => 'Peek',
       'stylesheets' => $css_files,
       'javascript_files' => array(
+         'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
          'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
             . '?config=TeX-AMS-MML_HTMLorMML',
-         base_path() . drupal_get_path('module', 'swim') . '/js/swim_mathjax_config.js',
+         base_path() . drupal_get_path('module', 'swim') 
+            . '/js/swim_mathjax_config_peek.js',
       ),
       'content' => $html,
     )

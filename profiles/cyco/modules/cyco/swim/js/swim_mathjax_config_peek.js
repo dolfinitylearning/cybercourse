@@ -1,9 +1,7 @@
 //"use strict";
 
 (function ($) {
-
-Drupal.behaviors.addMathJaxConfig = {
-  attach: function (context, settings) {
+  $(document).ready(function(){
     MathJax.Hub.Config({
         tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -17,7 +15,5 @@ Drupal.behaviors.addMathJaxConfig = {
             all[i].SourceElement().parentNode.className += ' has-jax';
         }
     });
-  }
-};
-
+  });
 })(jQuery);
