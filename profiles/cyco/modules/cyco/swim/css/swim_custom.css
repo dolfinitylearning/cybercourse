@@ -42,3 +42,9 @@ This is for custom styles the user wants to use in authoring SWIM content.
 .swim .figure {
   margin-left: 5em;
 }
+
+.swim .warning {
+  color: red;
+  font-weight: bold;
+  font-size: 120%;
+}
