@@ -29,6 +29,9 @@ class SwimCustomTagParser {
   }
   
   public function parse($text) {
+    //Slimy patch to help the regex below. Avoids problems with custom tags
+    //that are the last things in their fields.
+    $text .= "\n";
     //Call registered custom tag hooks.
     foreach($this->custom_tag_definitions as $def) {
       //Remember tag def being processed.
