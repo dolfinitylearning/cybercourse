@@ -640,6 +640,8 @@ function _cyco_cybercourse_theme_settings() {
   $var_name = 'theme_cybercourse_settings';
   $settings = variable_get($var_name, array());
   $settings['bootstrap_bootswatch'] = 'cerulean';
+  //Turn off tooltips.
+  $settings['bootstrap_tooltip_enabled'] = 0;
   //Set the logo.
   $theme_path = drupal_get_path('theme', 'cybercourse');
   $settings['logo_path'] = $theme_path . '/images/logo_white_fg.png';

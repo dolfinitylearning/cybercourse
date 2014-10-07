@@ -624,7 +624,6 @@ function _swim_client_peek( $data ) {
   $markup = $data['markup'];
   //Convert content to pure ReST.
   $content = swim_ckhtml2textile($markup);
-//  $content = _swim_ckhtml2rest($markup);
   //Replace tokens.
   $content = token_replace($content);
   //Convert the ReST content to HTML.

@@ -14,14 +14,14 @@
  */
 function book_top_navbar_admin_settings() {
   $form['#validate'][] = 'book_top_navbar_validate_admin_settings';
-  $form['book_top_navbar_show_toc'] = array(
+  $form['book_top_navbar_suppress_kids'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Top navigation bar includes tables of contents'),
+    '#title' => t('Suppress child page list'),
     '#default_value' =>
-        variable_get('book_top_navbar_show_toc', BOOK_TOP_NAVBAR_DEFAULT_SHOW_TOC),
+        variable_get('book_top_navbar_suppress_kids', TRUE),
     '#description' => t(
-        'If this is off (recommended), tables of contents are '
-        . 'omitted from the top navigation bar.'
+        'If this is on (recommended), the list of immediate child pages that '
+        . 'normally is shown is omitted from the top navigation bar.'
     ),
   );
   $form['book_top_navbar_min_content_length'] = array(
@@ -44,7 +44,8 @@ function book_top_navbar_admin_settings() {
             BOOK_TOP_NAVBAR_CONTENT_FIELD_NAMES),
     '#description' => t(
         'Possible names of field containing main content, separated by'
-        . 'spaces. Checked left to right.'
+        . 'spaces. Checked left to right. Used to determine length of'
+        . 'content to decide whether the show the top navbar.'
     ),
   );
   return system_settings_form($form);

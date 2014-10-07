@@ -449,20 +449,10 @@ function cyco_pseudents_node_view($node, $view_mode, $langcode) {
                 'field_workflow_tags',
               ) 
           );
-          $node->content['pseudent_pose_add_link'] = array(
-              '#markup' =>
-                  '<div class="pseudents-back-link">'
-                .   l(
-                      'Add another pseudent pose', 
-                      $base_url . '/node/add/pseudent-pose'
-                    )
-                . '</div>', 
-              '#weight' => ( $weight + 1 ),
-          );
-          $node->content['pseudent_pose_link'] = array(
-              '#markup' => _cyco_pseudents_make_link2list(),
-              '#weight' => ( $weight + 2 ),
-          );
+//          $node->content['pseudent_pose_link'] = array(
+//              '#markup' => _cyco_pseudents_make_link2list(),
+//              '#weight' => ( $weight + 2 ),
+//          );
     }
   }
 }
@@ -733,7 +723,7 @@ function cyco_pseudents_menu_local_tasks_alter(&$data, $router_item, $root_path)
   switch ($root_path) {
     case 'pseudent-poses':
       if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
-        //Link to add exercise.
+        //Link to add pseudent.
         $item = menu_get_item('node/add/pseudent-pose');
         $item['title'] = t('Add pseudent pose');
         $data['actions']['output'][] = array(
@@ -742,7 +732,28 @@ function cyco_pseudents_menu_local_tasks_alter(&$data, $router_item, $root_path)
         );
       }
       break;
-  }
+    case 'node/%':
+      if ( isset($router_item['map'][1]->type) 
+          && $router_item['map'][1]->type == 'pseudent_pose' ) {
+        if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
+          //Link to pseudent list.
+          $item = menu_get_item('pseudent-poses');
+          $item['title'] = t('List pseudent poses');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          //Link to add pseudent.
+          $item = menu_get_item('node/add/pseudent-pose');
+          $item['title'] = t('Add pseudent pose');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          }
+      }
+      break;
+  }//End switch
 }
 
 /**
