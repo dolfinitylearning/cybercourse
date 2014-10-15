@@ -1,0 +1,12 @@
+.achievement {
+  height:auto;
+}
+
+.achievement-image,
+.achievement-unlocked-stats,
+.achievement-body {
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+}
+

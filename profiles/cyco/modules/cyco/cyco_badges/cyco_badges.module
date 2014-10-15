@@ -1,0 +1,136 @@
+<?php
+
+function cyco_badges_achievements_info() {
+  $achievements = array();
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'badge')
+    ->propertyCondition('status', NODE_PUBLISHED);
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    $badge_nids = array_keys($result['node']);
+    $badge_nodes = node_load_multiple($badge_nids);
+    foreach ($badge_nodes as $nid => $node) {
+      $badge_machine_name 
+          = $node->field_badge_machine_name[$node->language][0]['value'];
+      //Get the node's URL to use as the achievement id.
+      $alias = drupal_get_path_alias('node/' . $nid);
+      $alias_pieces = explode('/', $alias);
+      $achievement = array(
+        'title' => t($node->title),
+        'description' => t($node->field_body[$node->language][0]['value']),
+        'points' => 1,
+        'images' => array(
+          'unlocked'  => file_create_url(
+              $node->field_unlocked_badge_image[$node->language][0]['uri']
+          ),
+          'locked'  => file_create_url(
+              $node->field_locked_badge_image[$node->language][0]['uri']
+          ),
+          // 'secret' will use the defaults.
+        ),
+      );
+      $achievements[$badge_machine_name] = $achievement;
+    }
+    return $achievements;
+  }  
+}
+
+/**
+ * Implements hook_registry_alter().
+ * Replace template from achievements module with one that doesn't include
+ * points.
+ */
+function cyco_badges_theme_registry_alter( &$theme_registry ) {
+  $module_path = drupal_get_path('module', 'cyco_badges');
+  $theme_registry['achievement']['path'] = $module_path . '/templates';
+  $theme_registry['achievement']['theme path'] = $module_path;
+}
+/**
+ * Implements hook_feedback_give, called by the exercises module.
+ * @param type $feedback_data
+ */
+function cyco_badges_feedback_given( $feedback_data ){
+  $exercise_nid = $feedback_data['exercise_nid'];
+  $complete = $feedback_data['complete'];
+  $student_uid = $feedback_data['student_uid'];
+  //Get badges and their exercises, for badges that 
+  //have the exercise this feedback is for.
+  $sql = 'select distinct
+      fdfe.entity_id as badge_nid, 
+      fdfe.field_exercises_target_id as exercise_nid
+    from field_data_field_exercises as fdfe
+    where 
+      fdfe.entity_id in 
+        (select distinct entity_id from field_data_field_exercises fdfe
+          where 
+            fdfe.bundle = \'badge\'
+            and fdfe.field_exercises_target_id = :exer_nid)';
+  $records = db_query($sql, array( ':exer_nid' => $exercise_nid ) );
+  $badge_exercises = array();
+  while ( $row = $records->fetchAssoc() ) {
+    $badge_exercises[ $row['badge_nid'] ][] = $row['exercise_nid'];
+  }
+  //Get all complete exercises for this student.
+  $sql = 'select 
+    distinct fld_exercise.field_exercise_target_id as exercise_nid
+  from field_revision_field_complete as fld_cmplt
+    inner join node as n on fld_cmplt.entity_id = n.nid
+	inner join field_data_field_exercise as fld_exercise on 
+	  fld_exercise.entity_id = n.nid
+  where 
+	  n.type = \'exercise_submission\'
+	  and n.uid = :uid
+	  and fld_cmplt.field_complete_value = 1';
+  $records = db_query($sql, array( ':uid' => $student_uid ) );
+  $completed_exercise_nids = array();
+  while ( $row = $records->fetchAssoc() ) {
+    $completed_exercise_nids[] = $row['exercise_nid'];
+  }
+  //Adjust data for latest compplation.
+  if ( $complete ) {
+    //Completed this exercise. Add that to the completion array
+    //if not already there.
+    if ( ! in_array($exercise_nid, $completed_exercise_nids) ) {
+      $completed_exercise_nids[] = $exercise_nid;
+    }
+  }
+  else {
+    //This exercise not completed. Remove from destination array if there.
+    if ( in_array($exercise_nid, $completed_exercise_nids) ) {
+      $completed_exercise_nids = array_diff(
+          $completed_exercise_nids, 
+          array($exercise_nid)
+      );
+    }
+  }
+  //Array of completed badge nids.
+  $completed_badge_nids = array();
+  foreach ( $badge_exercises as $badge_nid => $badge_exercise_nids ) {
+    //Badge complete if $exercise_nids is subset of $completed_exercise_nids.
+    $missing_exercises = array_diff(
+        $badge_exercise_nids, //Exercises in this badge.
+        $completed_exercise_nids //Exercises the user completed
+    );
+    if ( sizeof($missing_exercises) == 0 ) {
+      //Did all of the exercises for the badge.
+      $completed_badge_nids[] = $badge_nid;
+    }
+  }
+  //Get completed badges for the student.
+  $recorded_student_achievements = achievements_totals_user(0, $student_uid);
+  //Add achievements that need to be added.
+  foreach ( $completed_badge_nids as $badge_nid ) {
+    if ( ! in_array($badge_nid, $recorded_student_achievements) ) {
+      //Get the machine name for the badge.
+      $badge_node = node_load( $badge_nid );
+      $badge_machine_name 
+        = $badge_node->field_badge_machine_name[$badge_node->language][0]['value'];
+      achievements_unlocked( $badge_machine_name, $student_uid );
+    }
+  }
+  //Compute which achievements need to be removed.
+  
+  
+  
+}

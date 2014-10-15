@@ -1420,5 +1420,8 @@ function _cycoex_save_feedback($feedback_data) {
     $node = node_submit($node); // Prepare node for saving
     node_save($node);
   }
+  //Trigger event.
+  module_invoke_all('feedback_given', $feedback_data);
+  
   return 'OK';
 }

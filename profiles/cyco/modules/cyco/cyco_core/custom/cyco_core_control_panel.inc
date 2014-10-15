@@ -110,38 +110,11 @@ function _cyco_render_control_panel() {
     $result['all_content']['student_menu'] = 
       _cyco_control_panel_show_menu_block( 'menu-cp-students' );
   }
-  else {
-//  if ( cyco_core_current_user_has_role( array('author') ) ) {
+//  else {
     $result['all_content']['actions_title'] = 
         _cyco_control_panel_show_title( 'Actions' );
     $result['all_content']['actions_menu'] = 
         _cyco_control_panel_show_menu_block( 'menu-cp-actions' );
-  }
-//  if ( cyco_core_current_user_has_role( array('instructor') ) ) {
-//    $result['all_content']['instructor_title'] = 
-//        _cyco_control_panel_show_title( 'Instructor actions' );
-//    $result['all_content']['instructor_menu'] = 
-//        _cyco_control_panel_show_menu_block( 'menu-cp-instructors' );
-//  }
-//  if ( cyco_core_current_user_has_role( array('grader') ) ) {
-//    $result['all_content']['grader_title'] = 
-//        _cyco_control_panel_show_title( 'Grader actions' );
-//    $result['all_content']['num_submissions'] = 
-//        _cyco_control_panel_show_waiting_submissions();
-//    $result['all_content']['grader_menu'] = 
-//        _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
-//  }
-//  if ( cyco_core_current_user_has_role( array('reviewer') ) ) {
-//    $result['all_content']['reviewer_title'] = 
-//      _cyco_control_panel_show_title( 'Reviewer actions' );
-//    $result['all_content']['reviewer_menu'] = 
-//      _cyco_control_panel_show_menu_block( 'menu-cp-reviewers' );
-//  }
-//  if ( cyco_core_current_user_has_role( array('student') ) ) {
-//    $result['all_content']['student_title'] = 
-//      _cyco_control_panel_show_title( 'Student actions' );
-//    $result['all_content']['student_menu'] = 
-//      _cyco_control_panel_show_menu_block( 'menu-cp-students' );
 //  }
   return $result;
 }
