@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
     var url = Drupal.settings.baseRoot + Drupal.settings.basePath + 'amobb/assertions/' + encodeURIComponent(title) + '/' + Drupal.settings.uid;
     OpenBadges.issue([url], function(errors, successes) {
       // For logging errors.
-       //alert(errors[0]['url']+errors[0]['reason']);
+       alert(errors[0]['url']+errors[0]['reason']);
     });
   });
 });

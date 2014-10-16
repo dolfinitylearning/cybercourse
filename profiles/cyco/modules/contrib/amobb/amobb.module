@@ -88,9 +88,9 @@ function amobb_settings_form($form, $form_state) {
  * @ingroup forms
  */
 function amobb_settings_form_validate($form, $form_state) {
-//  if (!valid_url($form_state['values']['amobb_issuer_origin'], TRUE)) {
-//    form_set_error('amobb_issuer_origin', t('You have not provided a valid origin URL.'));
-//  }
+  if (!valid_url($form_state['values']['amobb_issuer_origin'], TRUE)) {
+    form_set_error('amobb_issuer_origin', t('You have not provided a valid origin URL.'));
+  }
 }
 
 /**
@@ -168,8 +168,7 @@ function amobb_assertions($achievement_url, $uid) {
           'criteria' => url('achievements/leaderboard/' . $key, array('absolute' => TRUE)),
           'image' => url($image, array('absolute' => TRUE)),
           'issuer' => array(
-            'origin' => 'cytest.cybercour.se',
-            //variable_get('amobb_issuer_origin', $base_root),
+            'origin' => variable_get('amobb_issuer_origin', $base_root),
             'name' => variable_get('amobb_issuer_name', variable_get('site_name', '')),
             'org' => variable_get('amobb_issuer_org', variable_get('site_name', '')),
             'contact' => variable_get('amobb_issuer_contact', variable_get('site_mail', '')),
