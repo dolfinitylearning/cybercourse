@@ -132,8 +132,8 @@ function amobb_assertions($achievement_url, $uid) {
   // it is unlocked.
   foreach ($achievements as $key => $achievement) {
     //https://www.drupal.org/node/1737182
-    if (isset($unlocks[$key]) && $achievement['id'] == $achievement_name) {
-//    if (isset($unlocks[$key]) && $achievement['title'] == $achievement_name) {
+//    if (isset($unlocks[$key]) && $achievement['id'] == $achievement_name) {
+    if (isset($unlocks[$key]) && $achievement['title'] == $achievement_name) {
       global $base_root;
       // It appears that the Open Badges api isn't set yet on required values,
       // but here's what we have for now.
