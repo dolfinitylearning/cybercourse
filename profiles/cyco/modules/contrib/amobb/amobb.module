@@ -176,7 +176,8 @@ function amobb_assertions($achievement_url, $uid) {
           ),
         ),
       );
-      
+      watchdog ('thing', 'that');
+      watchdog('evil', print_r($assertion, TRUE));
       file_put_contents('~/jsonout.txt', print_r($assertion, TRUE));
       // Return the assertion as JSON.
       drupal_json_output($assertion);
