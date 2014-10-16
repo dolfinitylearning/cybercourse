@@ -178,6 +178,9 @@ function amobb_assertions($achievement_url, $uid) {
       );
       // Return the assertion as JSON.
       drupal_json_output($assertion);
+      $f=fopen('jsonout.txt', 'w');
+      fwrite($f, print_r($assertion, TRUE));
+      fclose($f);
       return;
     }
   }
