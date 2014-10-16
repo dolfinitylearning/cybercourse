@@ -103,6 +103,14 @@ footer ul.nav li {
 .view-exercises table caption p.exercise-view-rubric-label {
 }
 
+.view-exercises-public .views-row {
+  margin-bottom: 1em;
+}
+
+.view-exercises-public .views-field-title {
+  font-size: 120%;
+}
+
 .form-item.form-group {
   margin-bottom: 2em;
   border: 1px solid #F4F4F4;
