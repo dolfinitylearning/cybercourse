@@ -41,11 +41,11 @@ function cyco_badges_achievements_info() {
  * Replace template from achievements module with one that doesn't include
  * points.
  */
-function cyco_badges_theme_registry_alter( &$theme_registry ) {
-  $module_path = drupal_get_path('module', 'cyco_badges');
-  $theme_registry['achievement']['path'] = $module_path . '/templates';
-  $theme_registry['achievement']['theme path'] = $module_path;
-}
+//function cyco_badges_theme_registry_alter( &$theme_registry ) {
+//  $module_path = drupal_get_path('module', 'cyco_badges');
+//  $theme_registry['achievement']['path'] = $module_path . '/templates';
+//  $theme_registry['achievement']['theme path'] = $module_path;
+//}
 /**
  * Implements hook_feedback_give, called by the exercises module.
  * @param type $feedback_data
