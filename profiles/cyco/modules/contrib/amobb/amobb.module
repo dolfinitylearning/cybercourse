@@ -168,7 +168,8 @@ function amobb_assertions($achievement_url, $uid) {
           'criteria' => url('achievements/leaderboard/' . $key, array('absolute' => TRUE)),
           'image' => url($image, array('absolute' => TRUE)),
           'issuer' => array(
-            'origin' => variable_get('amobb_issuer_origin', $base_root),
+            'origin' => 'cytest.cybercour.se',
+            //variable_get('amobb_issuer_origin', $base_root),
             'name' => variable_get('amobb_issuer_name', variable_get('site_name', '')),
             'org' => variable_get('amobb_issuer_org', variable_get('site_name', '')),
             'contact' => variable_get('amobb_issuer_contact', variable_get('site_mail', '')),
