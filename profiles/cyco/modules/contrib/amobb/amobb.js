@@ -3,8 +3,10 @@ jQuery(document).ready(function($) {
   jQuery('div.achievement-unlocked').each(function (index) {
     var body = jQuery(this).children('div.achievement-body');
     var image = jQuery(this).children('div.achievement-image');
-    var a = image.children('a');
-    var i = a.children('img');
+    //Patch https://www.drupal.org/node/2186317
+    var i = image.find('img');
+//    var a = image.children('a');
+//    var i = a.children('img');
     var ext = i.attr('src').split('.').pop().toLowerCase();
     // Only create a link for the badge if the badge image is in .png format.
     if (ext == 'png') {

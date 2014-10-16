@@ -88,9 +88,9 @@ function amobb_settings_form($form, $form_state) {
  * @ingroup forms
  */
 function amobb_settings_form_validate($form, $form_state) {
-  if (!valid_url($form_state['values']['amobb_issuer_origin'], TRUE)) {
-    form_set_error('amobb_issuer_origin', t('You have not provided a valid origin URL.'));
-  }
+//  if (!valid_url($form_state['values']['amobb_issuer_origin'], TRUE)) {
+//    form_set_error('amobb_issuer_origin', t('You have not provided a valid origin URL.'));
+//  }
 }
 
 /**
