@@ -42,12 +42,20 @@ function cyco_toggle_sidebar_init() {
     );
     drupal_add_js(
         array('toggleSidebar' => $settings),
-        array('type' => 'setting', 'every_page' => TRUE, 'weight' => -10)
+        array('type' => 'setting', 'preprocess' => TRUE, 
+          'every_page' => TRUE, 'weight' => -10)
     );
     drupal_add_js( 
         drupal_get_path('module', 'cyco_toggle_sidebar') 
           . '/js/cyco_toggle_sidebar.js',
-        array('type' => 'file', 'every_page' => TRUE, 'weight' => 10)
+        array('type' => 'file', 'every_page' => TRUE, 'weight' => 10,
+          'preprocess' => TRUE,)
+    );
+    drupal_add_css( 
+        drupal_get_path('module', 'cyco_toggle_sidebar') 
+          . '/css/cyco_toggle_sidebar.css',
+        array('type' => 'file', 'every_page' => TRUE, 'weight' => 10,
+          'preprocess' => TRUE,)
     );
   }
 }

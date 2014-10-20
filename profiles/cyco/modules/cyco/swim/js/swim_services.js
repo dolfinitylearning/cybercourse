@@ -14,7 +14,8 @@ var swimServices = swimServices || {};
   swimServices.getCsrfToken = function(){
    //Connect and get token.
    var webServiceUrl 
-     = Drupal.settings.swimServices.baseUrl + Drupal.settings.basePath 
+     = Drupal.settings.basePath 
+//     = Drupal.settings.swimServices.baseUrl + Drupal.settings.basePath 
        + "services/session/token";
    var promise = $.ajax({ 
        type: "GET",

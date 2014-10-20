@@ -286,10 +286,11 @@ function _cyco_exercises_make_submit_links() {
     //   If there is feedback, there is a Review link, and a new version link.
     global $base_url;
     // Create submission links for this exercise.
-    drupal_add_js(
-        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-        . '/custom/js/cyco_exercises_submission_links.js'
-    );
+    // JS loaded in .info.
+//    drupal_add_js(
+//        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+//        . '/custom/js/cyco_exercises_submission_links.js'
+//    );
     // Send current user uid to client.
     drupal_add_js(
         array('cyco_exercises' => 

@@ -4,5 +4,5 @@ package = CyberCourse
 version = 7.x-1.0
 core = 7.x
 dependencies[] = cyco_core
-stylesheets[all][] = css/cyco_book_blocks.css
 scripts[] = js/cyco_book_blocks.js
+stylesheets[all][] = css/cyco_book_blocks.css

@@ -1,5 +1,4 @@
 //"use strict";
-
 (function ($) {
   $(document).ready(function(){
     MathJax.Hub.Config({

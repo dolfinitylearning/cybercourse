@@ -10,11 +10,10 @@
 'use strict';
 
 ( function() {
+  
+	var cdn = '\/\/cdn.mathjax.org\/mathjax\/2.2-latest\/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
 
-//	var cdn = '\/\/cdn.mathjax.org\/mathjax\/2.2-latest\/MathJax.js?config=TeX-AMS_HTML';
-  var cdn = 'http://cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML';
-
-	CKEDITOR.plugins.add( 'mathjax', {
+  CKEDITOR.plugins.add( 'mathjax', {
 		lang: 'en', // %REMOVE_LINE_CORE%
 		requires: 'widget,dialog',
 		icons: 'mathjax',
@@ -125,7 +124,7 @@
 			editor.on( 'contentPreview', function( evt ) {
 				evt.data.dataValue = evt.data.dataValue.replace( /<\/head>/,
 					'<script src="' + ( editor.config.mathJaxLib ? CKEDITOR.getUrl( editor.config.mathJaxLib ) : cdn ) + '"><\/script><\/head>' );
-			} );
+			} ); 
 
 			editor.on( 'paste', function( evt ) {
 				// Firefox does remove iFrame elements from pasted content so this event do the same on other browsers.

@@ -6,4 +6,3 @@ core = 7.x
 files[] = DacplContentTypeInfo.inc
 dependencies[] = book
 dependencies[] = cyco_core
-stylesheets[all][] = css/cyco_add_pages.css

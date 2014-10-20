@@ -21,6 +21,7 @@ dependencies[] = swim
 dependencies[] = text
 dependencies[] = views
 stylesheets[all][] = custom/css/cyco_exercises.css
+scripts[] = custom/js/cyco_exercises_submission_links.js
 features[ctools][] = field_group:field_group:1
 features[ctools][] = services:services:3
 features[ctools][] = strongarm:strongarm:1

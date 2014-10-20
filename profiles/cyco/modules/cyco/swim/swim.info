@@ -10,4 +10,7 @@ dependencies[] = libraries
 dependencies[] = text
 dependencies[] = services
 dependencies[] = rest_server
+stylesheets[all][] = css/swim.css
 stylesheets[all][] = css/textile.css
+stylesheets[all][] = css/swim_custom.css
+//scripts[] = js/swim_services.js

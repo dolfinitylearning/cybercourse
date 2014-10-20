@@ -29,7 +29,7 @@ Drupal.behaviors.collapseSummary = {
         var indicatorHtml = "<span class='collapse-summary-indicator'>" 
             + indicatorText + "</span>";
         //Get the label embedded in a lower level in the
-        //wrapper, and make it a label for the wrapper.
+        //wrapper, and make it a label for the wrapper (move outside).
         var $label = $($(this).find("label").get(0));
         $label
             .attr("for", "swim-summary-wrapper")

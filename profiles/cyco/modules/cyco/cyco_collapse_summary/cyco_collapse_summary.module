@@ -14,6 +14,10 @@ function cyco_collapse_summary_form_alter( &$form, &$form_state, $form_id ) {
         drupal_get_path('module', 'cyco_collapse_summary') 
           . '/js/cyco_collapse_summary.js'
     );
+    drupal_add_css(
+        drupal_get_path('module', 'cyco_collapse_summary') 
+          . '/css/cyco_collapse_summary.css'
+    );
   }
 }
 

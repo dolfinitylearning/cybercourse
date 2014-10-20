@@ -10,6 +10,7 @@ ini_set('pcre.backtrack_limit', 10000000);
 ini_set('pcre.recursion_limit', 10000000);
 
 require_once drupal_get_path('module', 'swim') . '/SwimCustomTagParser.php';
+require_once drupal_get_path('module', 'swim') . '/SwimShelf.php';
 
 //Default heights for the editor and summary.
 define('SWIM_DEFAULT_HEIGHT', '15');
@@ -18,15 +19,70 @@ define('SWIM_DEFAULT_SUMMARY_HEIGHT', '5');
 define('SWIM_MATH_JAX_CLASS', 'math');
 
 /**
+ * Compute path to MathJax library, including config.
+ * @return string
+ */
+function _swim_compute_mathjax_path() {
+//  global $base_url;
+//  $module_path = drupal_get_path('module', 'swim');
+//  $config_path = $base_url . '/' . $module_path . '/js/mathjax_local_config.js';
+//  $mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=' . $config_path;
+  $config = 'TeX-AMS-MML_HTMLorMML';
+  $mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=' . $config;
+  return $mathjax_path;
+}
+
+/**
+ * Implements hook_init().
+ * @global SwimShelf $_swim_shelf Shelf.
+ * Load JS and CSS required for both editing and viewing.
+ * Define a shelf.
+ */
+function swim_init() {
+  //Create shelf for plugins to use.
+  global $_swim_shelf;
+  $_swim_shelf = new SwimShelf();
+  global $base_url;
+  $module_path = drupal_get_path('module', 'swim');
+  drupal_add_js(
+      _swim_compute_mathjax_path(), 
+      array('preprocess' => FALSE)
+  ); //?config=TeX-AMS-MML_HTMLorMML-full
+  //@todo Should this be loaded locally to get aggregation?
+  //MathJax
+//  $library = libraries_load('mathjax');
+//  drupal_add_js(
+//      $module_path . '/js/swim_mathjax_config.js',
+//      array(
+//        'type' => 'file',
+//        'preprocess' => FALSE,
+//      )
+//  );
+//  //Styles
+//  drupal_add_css( 
+//      $module_path . '/css/swim.css',
+//      $options_file_preprocess
+//  );
+//  drupal_add_css( 
+//      $module_path . '/css/textile.css',
+//      $options_file_preprocess
+//  );
+//  drupal_add_css( 
+//      $module_path . '/css/swim_custom.css',
+//      $options_file_preprocess
+//  );
+}
+
+/**
  * Implements hook_help().
  * @todo Write SWIMmy help in hook_help.
  */
 function swim_help($path, $arg) {
   switch ($path) {
     case 'admin/help#swim':
-      return '<p>' . t('Helpy helpy help help, <a href="@jquery">jQuery</a>.', 
+      return '<p>' . t('See the <a href="@">wiki</a> for help with pseudents.', 
           array(
-            '@jquery' => 'http://jquery.com',
+            '@jquery' => 'https://wiki.cybercour.se',
           )) . '</p>';
   }
 }
@@ -165,7 +221,7 @@ function swim_field_widget_form(
          $instance['widget']['type'] == 'swim_widget' 
       || $instance['widget']['type'] == 'swim_with_summary_widget') {
     $with_summary = ( $instance['widget']['type'] == 'swim_with_summary_widget' );
-    _swim_add_client_pieces();
+    _swim_add_editor_client_pieces();
     //Prep content for widget.
     $value = '';
     if ( isset( $items[$delta]['value'] ) ) {
@@ -234,11 +290,11 @@ function swim_field_is_empty($item, $field) {
 
 /**
  * Called after returning from edit form. Strip out the CK stuff, and
- * just get some ReST.
+ * just get some Textile.
  * @param type $element
  * @param type $input Da goods from CK.
  * @param type $form_state
- * @return string Da ReST goods.
+ * @return string Da goods.
  */
 function _swim_field_widget_value($element, $input = FALSE, $form_state = array()) {
   if ( $input !== FALSE ) {
@@ -295,13 +351,13 @@ function swim_libraries_info() {
 //    'vendor url' => 'https://github.com/mathjax/MathJax/',
 //    'download url' => 'https://github.com/mathjax/MathJax/',
 //    'version arguments' => array(
-//      'file' => 'MathJax.js',
+//      'file' => 'unpacked/MathJax.js',
 //      // Sample: MathJax.version="2.4.0";
 //      'pattern' => '/version\=\"([\d\.]*)\"/',
 //    ),
 //    'files' => array(
 //      'js' => array(
-//        'MathJax.js',
+//        'unpacked/MathJax.js?config\=TeX\-AMS\-MML\_HTMLorMML',
 //      ),
 //    ),
 //  );
@@ -310,9 +366,9 @@ function swim_libraries_info() {
 
 /**
  * Add stuff the editor will need.
- * @param boolean $add_plugins If false, don' add no steekin' plugins, gringo.
+ * @param boolean $add_plugins If false, don' add no steekin' CK plugins, gringo.
  */
-function _swim_add_client_pieces( $add_plugins = TRUE ) {
+function _swim_add_editor_client_pieces( $add_plugins = TRUE ) {
   //Only run this once per page.
   static $already_added = FALSE;
   if ( $already_added ) {
@@ -323,14 +379,19 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   //Set up UI stuff.
   drupal_add_library('system', 'ui.dialog');
   //Load CKEditor.
-  $ck_library_info = libraries_load('ckeditor');
-  $num_files_loaded = libraries_load_files($ck_library_info);
-  if ( $num_files_loaded <= 0 ) {
-    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-        . 'SWIM error: no CKEditor files loaded. Is CK installed?';
-    cyco_core_handle_error( $message );
-    return;
-  }
+  $path = libraries_get_path('ckeditor') . '/ckeditor.js';
+  drupal_add_js(
+      $path,
+      array('preprocess' => FALSE)
+  );
+  //$ck_library_info = libraries_load('ckeditor');
+//  $num_files_loaded = libraries_load_files($ck_library_info);
+//  if ( $num_files_loaded <= 0 ) {
+//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+//        . 'SWIM error: no CKEditor files loaded. Is CK installed?';
+//    cyco_core_handle_error( $message );
+//    return;
+//  }
 //  //Load MathJax.
 //  $mj_library_info = libraries_load('mathjax');
 //  $num_files_loaded = libraries_load_files($mj_library_info);
@@ -340,9 +401,11 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
 //    cyco_core_handle_error( $message );
 //    return;
 //  }
-  //Add CSS.
-  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
-  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim_custom.css' );
+  $module_path = drupal_get_path('module', 'swim');
+//  drupal_add_css( 
+//      $module_path . '/css/swim_custom.css',
+//      $options_file_preprocess
+//  );
   //Add services library.
   _swim_add_client_services_lib();
   //Obscurer code.
@@ -351,7 +414,7 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
   $settings = array(
     'base_url' => $base_url,
     'editing_stylesheet' => 
-      $base_url . '/' . drupal_get_path('module', 'swim') . '/css/swim_editing.css',
+      $base_url . '/' . $module_path . '/css/swim_editing.css',
     //The height are in lines.
     'editor_height' => variable_get('swim_default_height', SWIM_DEFAULT_HEIGHT),
     'editor_summary_height' => variable_get('swim_default_summary_height', 
@@ -366,18 +429,15 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
     $plugins = _swim_unflatten( $plugins );
     //Add peek CK plugin.
     $plugins['name'][] = 'peek';
-    $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
-          . '/ck_plugins/peek/';
+    $plugins['path'][] = $base_url . '/' . $module_path . '/ck_plugins/peek/';
     //Add modified MathJax CK plugin.
     $plugins['name'][] = 'mathjax';
-    $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
-          . '/ck_plugins/mathjax/';
+    $plugins['path'][] = $base_url . '/' . $module_path . '/ck_plugins/mathjax/';
     //Add help CK plugin, if there is a message to show.
     $help_message = variable_get('swim_help_message_rendered', FALSE);
     if ( $help_message ) {
       $plugins['name'][] = 'swim_help';
-      $plugins['path'][] = $base_url . '/' . drupal_get_path('module', 'swim') 
-            . '/ck_plugins/swim_help/';
+      $plugins['path'][] = $base_url . '/' . $module_path . '/ck_plugins/swim_help/';
     }
     //Make sure the last char in each path is /.
     foreach ($plugins['path'] as $key => $value) {
@@ -388,16 +448,21 @@ function _swim_add_client_pieces( $add_plugins = TRUE ) {
     //Send settings to JS.
     $settings['extraPlugins'] = $plugins;
     $settings['can_peek'] = user_access('peek content') ? 'yes' : 'no';
-    $settings['peekIconsPath'] = $base_url . '/' . 
-        drupal_get_path('module', 'swim') . '/ck_plugins/peek/icons/';
+    $settings['peekIconsPath'] = $base_url . '/' . $module_path . '/ck_plugins/peek/icons/';
+    $settings['mathjaxPath'] = _swim_compute_mathjax_path();
   } //End adding plugins.
   drupal_add_js(
       array('swim' => $settings),
       'setting'
   );
-  //Load SWIM JS.
-  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_base_config.js' );
-  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim.js' );
+  drupal_add_js( $module_path . '/js/swim_base_config.js',
+      array('preprocess' => FALSE)
+  );
+  drupal_add_js( $module_path . '/js/swim.js',
+      array('preprocess' => FALSE)
+  );
+  //Add CSS.
+  drupal_add_css( $module_path . '/css/swim_editing.css', 'file' );
   //Let other modules add their own stuff.
   $js_lines = module_invoke_all('swim_add_client_stuff');
   drupal_add_js( implode(' ', $js_lines), 'inline');
@@ -416,7 +481,8 @@ function _swim_add_client_services_lib() {
       'setting'
   );
   drupal_add_js( 
-      drupal_get_path('module', 'swim') . '/js/swim_services.js' 
+      drupal_get_path('module', 'swim') . '/js/swim_services.js',
+      array('preprocess' => FALSE)
   );    
 }
 
@@ -540,12 +606,6 @@ function swim_field_formatter_view(
     $obj_type, $object, $field, $instance, 
     $langcode, $items, $display
   ) {
-  //MathJax
-  drupal_add_js('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
-  drupal_add_js( drupal_get_path('module', 'swim') . '/js/swim_mathjax_config.js' );
-  //Styles
-  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim.css' );
-  drupal_add_css( drupal_get_path('module', 'swim') . '/css/swim_custom.css' );
   $element = array();
   switch ($display['type']) {
     case 'swim_default_formatter':
@@ -554,7 +614,6 @@ function swim_field_formatter_view(
         $content = $item['value'];
         //Convert from Textile to HTML
         $output = swim_textile2html( $content );
-//        $output = swim_rest2html( $tokenized );
         if ($display['type'] == 'swim_trimmed_formatter') {
           $output = text_summary($output, NULL, $display['settings']['trim_length']);
         }
@@ -566,12 +625,10 @@ function swim_field_formatter_view(
       foreach ($items as $delta => $item) {
         if (!empty($item['summary'])) {
           $output = swim_textile2html( $item['summary'] );
-//          $output = swim_rest2html( $item['summary'] );
         }
         else {
           $output = text_summary($item['value']);
           $output = swim_textile2html( $output );
-//          $output = swim_rest2html( $output );
         }
         $element[$delta] = array('#markup' => $output);
       }
@@ -632,27 +689,33 @@ function _swim_client_peek( $data ) {
   $content = token_replace($content);
   //Convert the ReST content to HTML.
   $html = swim_textile2html($content);
-  $module_path = $base_url . base_path() 
-          . drupal_get_path('module', 'swim') . '/';
+  $complete_module_path = //$base_url . base_path() 
+    $base_url . '/' . drupal_get_path('module', 'swim') . '/';
   //Let other modules add their own stuff.
   $css_files = module_invoke_all('swim_peek_load_css');
+  $js_files = module_invoke_all('swim_peek_load_js');
   //Add SWIM's CSS files.
-  $css_files[] = $module_path . 'css/swim.css';
-  $css_files[] = $module_path . 'css/swim_custom.css';
-  $css_files[] = $module_path . 'content_only/content_only.css';
-  
+  $css_files[] = $complete_module_path . 'css/swim.css';
+  $css_files[] = $complete_module_path . 'css/swim_custom.css';
+  $css_files[] = $complete_module_path . 'content_only/content_only.css';
+  //Add JS files needed for peek.
+  $js_files[] = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+  $js_files[] = base_path() . drupal_get_path('module', 'swim') 
+            . '/js/swim_mathjax_config_peek.js';
+  $js_files[] = _swim_compute_mathjax_path();
   $themed = theme(
     'content_only', 
     array(
       'title' => 'Peek',
       'stylesheets' => $css_files,
-      'javascript_files' => array(
-         'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
-         'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
-            . '?config=TeX-AMS-MML_HTMLorMML',
-         base_path() . drupal_get_path('module', 'swim') 
-            . '/js/swim_mathjax_config_peek.js',
-      ),
+      'javascript_files' => $js_files,
+//      array(
+//         'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
+////         'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+////            . '?config=TeX-AMS-MML_HTMLorMML',
+//         base_path() . drupal_get_path('module', 'swim') 
+//            . '/js/swim_mathjax_config_peek.js',
+//      ),
       'content' => $html,
     )
   );
@@ -853,16 +916,16 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
   //Tell other modules to declare their tags for viewing.
   swim_declare_custom_tags( $p, 'view' ) ;
   $out = $p->parse($textile);
-  //Load Textile library.
-  $textile_library_info = libraries_load('php-textile');
-  $num_files_loaded = libraries_load_files($textile_library_info);
-  if ( $num_files_loaded <= 0 ) {
-    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-        . 'SWIM error: no Textile files loaded. Is PHP-Textile installed?';
-    cyco_core_handle_error( $message );
-    return;
-  }
   if ( ! $nested_call ) {
+    //Load Textile library.
+    $textile_library_info = libraries_load('php-textile');
+    $num_files_loaded = libraries_load_files($textile_library_info);
+    if ( $num_files_loaded <= 0 ) {
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . 'SWIM error: no Textile files loaded. Is PHP-Textile installed?';
+      cyco_core_handle_error( $message );
+      return;
+    }
     //Translate textile.
     $parser = new \Netcarver\Textile\Parser();
     $out = $parser
@@ -876,6 +939,9 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
     //Put everything in a SWIM wrapper.
     $out = '<div class="swim textile">' . $out . '</div>';
   }
+  //Restore shelved content.
+  global $_swim_shelf;
+  $out = $_swim_shelf->restore($out);
   return $out;
 }
 
@@ -885,19 +951,12 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
 function swim_textile2ckhtml( $content ) {
   //Remove \rs. They are evil.
   $content = str_replace("\r", '', $content);
-  //Convert math directives to HTML wrappers that CK Mathjax plugin needs.
-  //Doesn't insert HTML tags directly, since they would be messed up
-  //by the other translation code below. Instead, inserts temp markers that
-  //are replaced by HTML after other translation is done.
   //Make sure there is a \n at the end.
   $last_char = substr($content, strlen( $content ) - 1, 1);
   if ( $last_char != "\n" ) {
-    $content .= "\n";
+    //$content .= "\n";
   }
-//  list( $content, $math_replacements ) = _swim_rest2betwixt_mathjx($content);
-//  list( $content, $image_replacements ) = _swim_rest2betwixt_images($content);
   //Trigger other module's translators.
-//  drupal_alter( 'swim_textile2betwixt', $content);
   //Encode everything the user typed.
   $content = htmlspecialchars( $content );
   //Grab image paths and wrap them in <img> tags.
@@ -1078,4 +1137,16 @@ function _swim_ckhtml2textile_math( $content ) {
  */
 function swim_plugin_error( $message ) {
   return '<p class="swim-plugin-error">SWIM plugin error: ' . $message . '</p>';
+}
+
+/**
+ * Shelve content.
+ * @global SwimShelf $_swim_shelf Shelf.
+ * @param string $content Content to shelve.
+ * @return string Marker to return to plugin for output.
+ */
+function swim_shelve($content) {
+  global $_swim_shelf;
+  $marker = $_swim_shelf->shelve($content);
+  return $marker;
 }

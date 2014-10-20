@@ -59,34 +59,29 @@
                 //so show only cells in that category.
                 //Hide everything.
                 $(".pseudent-cell").hide();
-//                //Remove current selection.
-//                $(".pseudent-cell.selected").removeClass("selected");
                 var selectedCategory = this.getValue();
-                //Anything selected?
-//                if (selectedCategory) {
                   //Add spaces around the selected category.
                   //This avoids, e.g., 7 being a false positive for 171.
                   var selectedCategoryString = " " + selectedCategory + " ";
                   $(".pseudent-cell").each(
-                          function(index, element) {
-                            //Does this element have any categories?
-                            var $element = $(element);
-                            if ( selectedCategory == 0 ) {
-                              //"All" was selected.
-                              $element.show();
-                            }
-                            else {
-                              if ($element.attr("data-pseudent-categories")) {
-                                //Does this element have the selected category?
-                                if ($element.attr("data-pseudent-categories")
-                                        .indexOf(selectedCategoryString) != -1) {
-                                  $element.show();
-                                }
-                              }
-                            }
-                          } //End function run on each element.
+                    function(index, element) {
+                      //Does this element have any categories?
+                      var $element = $(element);
+                      if ( selectedCategory == 0 ) {
+                        //"All" was selected.
+                        $element.show();
+                      }
+                      else {
+                        if ($element.attr("data-pseudent-categories")) {
+                          //Does this element have the selected category?
+                          if ($element.attr("data-pseudent-categories")
+                                  .indexOf(selectedCategoryString) != -1) {
+                            $element.show();
+                          }
+                        }
+                      }
+                    } //End function run on each element.
                   ); //End each.
-//                } //End if selectedCategory.
               }
             },
             {
@@ -94,7 +89,7 @@
               id: 'pseudentCells',
               type: 'html',
               html: makeChoosePseudentHtml(
-                      Drupal.settings.pseudents.posePreviews
+                Drupal.settings.pseudents.posePreviews
               ),
               setup: function( widget ) {
                 //Show the selected cell, if there is one.

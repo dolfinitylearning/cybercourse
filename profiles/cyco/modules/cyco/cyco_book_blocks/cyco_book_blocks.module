@@ -13,6 +13,30 @@ define('CBB_MAX_CHARS', 50);
  */
 define('CBB_MAX_RECURSION_LEVELS', 20);
 
+
+/**
+ * Implements hook_init().
+ * 
+ * Load JS and CSS, let it be aggregated.
+ */
+//function cyco_book_blocks_init() {
+//  drupal_add_js(
+//      drupal_get_path('module', 'cyco_book_blocks') . '/js/cyco_book_blocks.js',
+//      array(
+//        'type' => 'file',
+//        'preprocess' => TRUE,
+//      )
+//  );
+//  drupal_add_css(
+//      drupal_get_path('module', 'cyco_book_blocks') . '/css/cyco_book_blocks.css',
+//      array(
+//        'type' => 'file',
+//        'preprocess' => TRUE,
+//      )
+//  );
+//}
+
+
 /**
  * Implements hook_menu_link_alter().
  * 

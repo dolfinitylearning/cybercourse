@@ -1,7 +1,5 @@
 //"use strict";
-
 (function ($) {
-
 Drupal.behaviors.addMathJaxConfig = {
   attach: function (context, settings) {
     MathJax.Hub.Config({

@@ -2,8 +2,12 @@
 Styles for doing editing with swim.
 */
 
-@import url("ck_changes.css");
+/*@import url("ck_changes.css");*/
 
+body.swim_body {
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+  margin: 0.3em;
+}
 
 /* Move field after the form down a bit. */
 /*#edit-field-keywords {
@@ -70,6 +74,10 @@ MT for desktop. */
 .swim-peek-device-phone {
   width: 480px;
   height: 320px;
+}
+
+.ui-dialog .swim-peek-toolbar a.cke_button {
+  height: auto;
 }
 
 /* Dialog on top of top nav bar. */

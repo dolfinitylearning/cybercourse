@@ -1,0 +1,121 @@
+<?php
+/**
+ * @file
+ * SWIM plugin to format code. 
+ * Params: starting line number.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function swim_format_code_init() {
+  // Try to load the cookie library, and check if that worked.
+  $library = libraries_load('google-code-prettify');
+  if ( ! $library['loaded'] ) {
+    return swim_plugin_error('format_code: ' 
+        . t('Code prettifier did not load.'));
+  }
+  drupal_add_css( 
+      drupal_get_path('module', 'swim_format_code') 
+        . '/css/swim_format_code.css',
+      array(
+        'type' => 'file', 
+        'every_page' => TRUE, 
+        'preprocess' => TRUE,
+      )
+  );
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function swim_format_code_libraries_info() {
+  $libraries = array();
+  $libraries['google-code-prettify'] = array(
+    'name' => 'Google code prettify',
+    'vendor url' => 'https://code.google.com/p/google-code-prettify/',
+    'download url' => 'https://code.google.com/p/google-code-prettify/downloads/list',
+    'version' => 'March 13, 2013',
+    'files' => array(
+      'js' => array(
+        'run_prettify.js',
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_help().
+ */
+function swim_format_code_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim_format_code':
+      return '<p>' . t('Format code (HTML, PHP... Syntax:') . '</p>'
+          . '<p><code>@@cyco format-code STARTING_LINE_NUMBER</code></p>'
+//          . '<p>' . t('STARTING LINE NUMBER defaults to 1.') . '</p>'
+          . '<p>' . t('Examples:') . '</p>' 
+          . '<p><code>@@cyco format-code 1</code></p>'
+          . '<p><code>@@cyco format-code 23</code></p>'
+          ;
+  }
+}
+
+/**
+ * Implements hook_swim_custom_tag_view_info().
+ */
+function swim_format_code_swim_custom_tag_view_info() {
+  return array(
+    'tag' => 'format-code',
+    'callback' => '_swim_format_code_swim_callback',
+  );
+}
+
+/**
+ * Callback to generate HTML to show the code.
+ * @param string $param_string Parameters passed to the tag.
+ * @param string $tag_content Code to format.
+ */
+function _swim_format_code_swim_callback( $param_string, $tag_content ) {
+  $param_string = trim($param_string);
+  //If content starts with a \n, remove it. Otherwise, the JS library will
+  //have a blank first line.
+  $output = '<xmp class="prettyprint linenums'
+      . ( is_numeric($param_string) ? (':' . $param_string) : '') 
+      . '">'
+      .$tag_content
+      . '</xmp>';
+  //Shelve it, so Textile doesn't know about it.
+  $marker = swim_shelve($output);
+  return $marker;
+}
+
+/**
+ * Implements hook_swim_peek_load_css().
+ * 
+ * Return CSS file to show code in peek.
+ */
+function swim_format_code_swim_peek_load_css() {
+  global $base_url;
+  $result = array(
+    $base_url . base_path() . drupal_get_path('module', 'swim_format_code') 
+      . '/css/swim_format_code.css',
+  );
+  return $result;
+}
+
+/**
+ * Implements hook_swim_peek_load_js().
+ * 
+ * Return JS file to show code in peek.
+ */
+function swim_format_code_swim_peek_load_js() {
+  global $base_url;
+  $result = array(
+    $base_url . base_path() . libraries_get_path('google-code-prettify') 
+      . '/run_prettify.js',
+  );
+  return $result;
+}
+
+

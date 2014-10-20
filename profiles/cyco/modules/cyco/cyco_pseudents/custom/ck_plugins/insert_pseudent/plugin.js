@@ -82,8 +82,8 @@
           }
         },
         allowedContent:
-                'br;'
-              + 'img[!src];'
+                'img[!src];'
+              + 'br;'
               + 'div(!pseudent)[!data-pseudent-id];'
               + 'div(!pseudent-image-container);'
               + 'div(!pseudent-image);'

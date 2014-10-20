@@ -29,9 +29,6 @@ class SwimCustomTagParser {
   }
   
   public function parse($text) {
-    //Slimy patch to help the regex below. Avoids problems with custom tags
-    //that are the last things in their fields.
-    $text .= "\n";
     //Call registered custom tag hooks.
     foreach($this->custom_tag_definitions as $def) {
       //Remember tag def being processed.
@@ -39,10 +36,9 @@ class SwimCustomTagParser {
       //Create the regex to look for.
       $this->current_regex = '/^' . SwimCustomTagParser::START_CUSTOM_TAG_REGEX_ESCAPED 
           . '\s+' . $def['tag'] . '\s+(.*)\s*\n'
-//          . '\s+' . $def['tag'] . '\s+([\w\*\-\_\&\#\@\%\!\~]*)\s*\n'
           . '(.*?)'
           . SwimCustomTagParser::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*' . $def['tag'] 
-          . '\s*?\1\s*?\n'
+          . '\s*?\1\s*?\n?'
           . '/ism';
       $text = preg_replace_callback($this->current_regex, 
           function($matches) {

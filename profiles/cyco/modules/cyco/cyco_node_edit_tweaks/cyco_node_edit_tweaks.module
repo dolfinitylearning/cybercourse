@@ -17,6 +17,14 @@ function cyco_node_edit_tweaks_form_alter(&$form, &$form_state, $form_id) {
         array('cycoNodeEditTweaks' => $settings),
         'setting'
     );
+    drupal_add_js(
+        drupal_get_path('module', 'cyco_node_edit_tweaks') 
+          . '/js/cyco_node_edit_tweaks.js'
+    );
+    drupal_add_js(
+        drupal_get_path('module', 'cyco_node_edit_tweaks') 
+          . '/css/cyco_node_edit_tweaks.css'
+    );
     if (isset($form['field_attachments'])) {
       //Create the fieldset
       $form['attachments_fieldset'] = array(

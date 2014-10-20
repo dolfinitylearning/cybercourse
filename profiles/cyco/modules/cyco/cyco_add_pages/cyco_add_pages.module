@@ -155,6 +155,10 @@ function cyco_add_pages_node_view_alter(&$build) {
             . '/js/cacpl.js', 
         'file'
     );
+    drupal_add_css(
+        drupal_get_path('module', 'cyco_add_pages') . 'css/cyco_add_pages.css',
+        'file'
+    );
     //Add links to the page build.
     //Replace this with correct Drupally themeing stuff. 
     $build['cacpl_links'] = array(
