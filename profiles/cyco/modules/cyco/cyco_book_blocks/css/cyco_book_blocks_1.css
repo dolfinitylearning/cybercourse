@@ -25,31 +25,23 @@ ul.cyco-book-tree-menu .currentPage > span + a {
 ul.cyco-book-tree-menu li span.open-branch,
 ul.cyco-book-tree-menu li span.close-branch,
 ul.cyco-book-tree-menu li span.no-branch {
-  display: block;
-  float: left;
+  display: inline-block;
   width: 1em;
   height: 1em;
   cursor: pointer;
   background-size: 1em;
+  vertical-align: middle;
 }
 
 ul.cyco-book-tree-menu li span.close-branch {
   background-image: url(../images/minus_alt.svg);
-  margin-top: 0.2em;
 }
 ul.cyco-book-tree-menu li span.open-branch {
   background-image: url(../images/plus_alt.svg);
-  margin-top: 0.2em;
 }
 ul.cyco-book-tree-menu li span.no-branch {
   background-image: url(../images/stop.svg);
   width: 0.6em;
   height: 0.6em;
-  margin-top: 0.4em;
-  margin-left: 0.2em;
-}
-
-ul.cyco-book-tree-menu li a {
-  display: block;
-  margin-left: 1.2em;
+  margin: 0.2em;
 }
