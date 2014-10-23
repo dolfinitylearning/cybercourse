@@ -8,6 +8,11 @@
 define( 'GENERIC_FIRST_NAME', 'Willow' );
 // Last name to use when the user did not give one.
 define( 'GENERIC_LAST_NAME', 'Rosenberg' );
+//Message to show when user is not logged in as a student.
+define( 'TOO_BAD_SO_SAD', 
+      '(If you were logged in as a student, '
+    . 'you could submit an exercise solution, and get some feedback.)'
+);
 
 /**
  * Implements hook_menu.
@@ -275,9 +280,7 @@ function _cyco_exercises_make_submit_links() {
   global $user;
   $too_bad_so_sad_message = '';
   if ( ! cyco_core_user_has_role($user, 'student') ) {
-    $too_bad_so_sad_message = t('(If you were logged in as a student, '
-        . 'you could submit an exercise solution, and get some feedback.)'
-    );
+    $too_bad_so_sad_message = '<p class="not-student">' . t( TOO_BAD_SO_SAD ) . '</p>';
   }
   else {
     // If there is no submission, there is only a link to create a new one.
@@ -1466,9 +1469,7 @@ function _cyco_exercises_swim_callback( $exercise_nid, $tag_content ) {
   $labeled_links = '';
   $too_bad_so_sad_message = '';
   if ( ! cyco_core_user_has_role($user, 'student') ) {
-    $too_bad_so_sad_message = t('(If you were logged in as a student, '
-        . 'you could submit an exercise solution, and get some feedback.)'
-    );
+    $too_bad_so_sad_message = '<p>' . t( TOO_BAD_SO_SAD ) . '</p>';
   }
   else {
     //If there is no submission, there is only a link to create a new one.

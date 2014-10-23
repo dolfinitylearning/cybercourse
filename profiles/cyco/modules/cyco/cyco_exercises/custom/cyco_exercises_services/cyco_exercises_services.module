@@ -7,42 +7,32 @@
 //Greeting to use when the grader did not give one.
 define( 'CYCO_EXER_GENERIC_GREETING', 'Your feedback:' );
 
-
-/**
-* Implements hook_init().
-*/
-function cyco_exercises_services_init() {
-  
-}
-
 /**
 * Implements hook_services_resources().
+ * 
+ * Define all the services for the exercises module.
 */
 function cyco_exercises_services_resources() {
   $api = array(
-    
     /** Rubric item **/
     'rubric_item' => _cyco_exercises_def_rubric_item_services(),
-    
     /** Exercise **/
-    'exercise' => _cyco_exercises_def_exercise_services(),
-    
+//    'exercise' => _cyco_exercises_def_exercise_services(),
     /** Rubic item categories **/
     'rubric_item_categories' => _cyco_exercises_def_category_services(),
-    
     /** Exercise submission. **/
     'submission' => _cyco_exercises_def_sub_meta_services(),
-    
     /** Feedback system. **/
     'feedback' => _cyco_exercises_def_feedback_services(),
-      
   );
   return $api;
 }
 
-
+/**
+ * Define services for rubric items.
+ * @return array Service definitions.
+ */
 function _cyco_exercises_def_rubric_item_services() {
-  
   $retrieve = array(
     'help' => 'Retrieves a rubric item',
     'callback' => '_exri_retrieve',
@@ -98,49 +88,49 @@ function _cyco_exercises_def_rubric_item_services() {
       ),
     ),
   );
-  $delete = array(
-    'help' => 'Deletes a rubric item',
-    'callback' => '_exri_delete',
-    'access callback' => '_exri_access',
-    'access arguments' => array('delete'),
-    'access arguments append' => TRUE,
-    'args' => array(
-      array(
-        'name' => 'nid',
-        'type' => 'int',
-        'description' => 'The id of the rubric item to delete',
-        'source' => array('path' => '0'),
-        'optional' => FALSE,
-      ),
-    ),
-  );
-  $index = array(
-    'help' => 'Retrieves a listing of rubric items',
-    'callback' => '_exri_index',
-    'access callback' => '_exri_access',
-    'access arguments' => array('access content'),
-    'access arguments append' => FALSE,
-    'args' => array(
-      array(
-        'name' => 'page',
-        'type' => 'int',
-        'description' => '',
-        'source' => array(
-          'param' => 'page',
-        ),
-        'optional' => TRUE,
-        'default value' => 0,
-      ),
-      array(
-        'name' => 'parameters',
-        'type' => 'array',
-        'description' => '',
-        'source' => 'param',
-        'optional' => TRUE,
-        'default value' => array(),
-      ),
-    ),
-  );
+//  $delete = array(
+//    'help' => 'Deletes a rubric item',
+//    'callback' => '_exri_delete',
+//    'access callback' => '_exri_access',
+//    'access arguments' => array('delete'),
+//    'access arguments append' => TRUE,
+//    'args' => array(
+//      array(
+//        'name' => 'nid',
+//        'type' => 'int',
+//        'description' => 'The id of the rubric item to delete',
+//        'source' => array('path' => '0'),
+//        'optional' => FALSE,
+//      ),
+//    ),
+//  );
+//  $index = array(
+//    'help' => 'Retrieves a listing of rubric items',
+//    'callback' => '_exri_index',
+//    'access callback' => '_exri_access',
+//    'access arguments' => array('access content'),
+//    'access arguments append' => FALSE,
+//    'args' => array(
+//      array(
+//        'name' => 'page',
+//        'type' => 'int',
+//        'description' => '',
+//        'source' => array(
+//          'param' => 'page',
+//        ),
+//        'optional' => TRUE,
+//        'default value' => 0,
+//      ),
+//      array(
+//        'name' => 'parameters',
+//        'type' => 'array',
+//        'description' => '',
+//        'source' => 'param',
+//        'optional' => TRUE,
+//        'default value' => array(),
+//      ),
+//    ),
+//  );
   $actions = array(
     //For rubric select interface on exercise forms.
     'getTitlesCategories' => array(
@@ -190,40 +180,46 @@ function _cyco_exercises_def_rubric_item_services() {
      'retrieve' => $retrieve,
      'create' => $create,
      'update' => $update,
-     'delete' => $delete,
-     'index' => $index,
+//     'delete' => $delete,
+//     'index' => $index,
     ),
     'actions' => $actions,
   );
   return $api;
 }
 
+/**
+ * Define services for exercise objects.
+ * @return array Definitions.
+ */
+//function _cyco_exercises_def_exercise_services() {
+//  $api = array(
+//      'operations' => array(
+//       'retrieve' => array(
+//         'help' => 'Retrieves an exercise',
+//         'callback' => '_exex_retrieve',
+//         'access callback' => '_exex_access',
+//         'access arguments' => array('view'),
+//         'access arguments append' => TRUE,
+//         'args' => array(
+//           array(
+//             'name' => 'id',
+//             'type' => 'int',
+//             'description' => 'The id of the exercise to get',
+//             'source' => array('path' => '0'),
+//             'optional' => FALSE,
+//           ),
+//         ),
+//       ),
+//     ),
+//    ); // End exercise
+//  return $api;
+//}
 
-function _cyco_exercises_def_exercise_services() {
-  $api = array(
-      'operations' => array(
-       'retrieve' => array(
-         'help' => 'Retrieves an exercise',
-         'callback' => '_exex_retrieve',
-         'access callback' => '_exex_access',
-         'access arguments' => array('view'),
-         'access arguments append' => TRUE,
-         'args' => array(
-           array(
-             'name' => 'id',
-             'type' => 'int',
-             'description' => 'The id of the exercise to get',
-             'source' => array('path' => '0'),
-             'optional' => FALSE,
-           ),
-         ),
-       ),
-     ),
-    ); // End exercise
-  return $api;
-}
-
-
+/**
+ * Define services for exercise categories.
+ * @return array Definitions.
+ */
 function _cyco_exercises_def_category_services() {
   $api = array(
       'actions' => array(
@@ -404,6 +400,12 @@ function _exri_create($data) {
 
 }
 
+/**
+ * Update a rubric item.
+ * @param int $nid Item's nid.
+ * @param array $data Arguments from remote caller.
+ * @return \stdClass Results of operation.
+ */
 function _exri_update($nid, $data) {
   //Load the node, check it is there.
   $node = node_load( $nid );
@@ -447,9 +449,9 @@ function _cyco_exer_move_arr_into_node( $source, $inner_key ) {
   return $result;
 }
 
-function _exri_delete() {}
-
-function _exri_index() {}
+//function _exri_delete() {}
+//
+//function _exri_index() {}
 
 /**
  * Return all rubric item titles and their categories.
@@ -592,36 +594,41 @@ function _exri_save_new_item_comments( $data ) {
 *********************************************/
 
 
-function _exric_access() {
-  return TRUE;
-}
+//function _exric_access() {
+//  return TRUE;
+//}
 
-function _exric_retrieve( $tid ){
-  $thing = new stdClass();
-  $thing->heads = 7;
-  return $thing;
-//  return json_encode($thing);
-  
-  $node = node_load($nid);
-  if ( ! $node || $node->type != 'rubric_item') {
-    cyco_core_handle_services_error('Not a rubric item');
-    return;
-  }
-  $rubric_item = new stdClass();
-  $rubric_item->type = $node->type;
-  $rubric_item->title = $node->title;
-  $rubric_item->body = $node->body[LANGUAGE_NONE][0]['value'];
-  return  $rubric_item;
-}
+//function _exric_retrieve( $tid ){
+//  $thing = new stdClass();
+//  $thing->heads = 7;
+//  return $thing;
+////  return json_encode($thing);
+//  
+//  $node = node_load($nid);
+//  if ( ! $node || $node->type != 'rubric_item') {
+//    cyco_core_handle_services_error('Not a rubric item');
+//    return;
+//  }
+//  $rubric_item = new stdClass();
+//  $rubric_item->type = $node->type;
+//  $rubric_item->title = $node->title;
+//  $rubric_item->body = $node->body[LANGUAGE_NONE][0]['value'];
+//  return  $rubric_item;
+//}
 
 /**
  * Return terms from the rubric item categories vocab.
  */
-function _exric_index() {
-  $rubric_item_tree = new stdClass();
-  $rubric_item_tree->type = 'evil';
-  return $rubric_item_tree;  
-}
+//function _exric_index() {
+//  $rubric_item_tree = new stdClass();
+//  $rubric_item_tree->type = 'evil';
+//  return $rubric_item_tree;  
+//}
+
+
+/********************************************
+* Exercise objects.
+*********************************************/
 
 /**
  * Check user access to exercises. Called during Ajax.
@@ -630,34 +637,34 @@ function _exric_index() {
  * @param array $args Arguments passed in.
  * @return boolean True if access allowed, else false.
  */
-function _exex_access($operation, $args) {
-  global $user;
-  $access = FALSE;
-  $nid = $args[0];
-  $node = node_load($nid);
-  switch ($operation) {
-    case 'view':
-      //View access check depends on content_access module.
-      $access = user_access('view any exercise');
-      $access = $access 
-          || ( $node->uid == $user->uid && user_access('view own exercise') );
-      break;
-    case 'update':
-      $access = user_access('edit any exercise');
-      $access = $access 
-          || ( $node->uid == $user->uid && user_access('edit own exercise') );
-      break;
-    case 'delete':
-      $note = noteresource_get_note($args[0]);
-      $access = user_access('delete any exercise');
-      $access = $access 
-          || $note->uid == $user->uid && user_access('delete own exercise');
-      break;
-  }
-  return $access;
-}
-
-function _exex_retrieve() {}
+//function _exex_access($operation, $args) {
+//  global $user;
+//  $access = FALSE;
+//  $nid = $args[0];
+//  $node = node_load($nid);
+//  switch ($operation) {
+//    case 'view':
+//      //View access check depends on content_access module.
+//      $access = user_access('view any exercise');
+//      $access = $access 
+//          || ( $node->uid == $user->uid && user_access('view own exercise') );
+//      break;
+//    case 'update':
+//      $access = user_access('edit any exercise');
+//      $access = $access 
+//          || ( $node->uid == $user->uid && user_access('edit own exercise') );
+//      break;
+//    case 'delete':
+//      $note = noteresource_get_note($args[0]);
+//      $access = user_access('delete any exercise');
+//      $access = $access 
+//          || $note->uid == $user->uid && user_access('delete own exercise');
+//      break;
+//  }
+//  return $access;
+//}
+//
+//function _exex_retrieve() {}
 
 /**
  * Get the rubric item vocabulary.
@@ -684,9 +691,9 @@ function _cycoex_get_tree() {
   return $tree;
 }
 
-function _cycoex_attach_2_parent( $tree, $child, $parent_id ) {
-  
-}
+//function _cycoex_attach_2_parent( $tree, $child, $parent_id ) {
+//  
+//}
 
 /**
  * Check whether a title is in use for a rubric item.
@@ -828,6 +835,14 @@ function _cycoex_get_sub_meta_student_exer($data) {
   return $submissions;
 }
 
+/********************************************
+* Feedback on submissions
+*********************************************/
+
+/**
+ * Define feedback services
+ * @return array Definition.
+ */
 function _cyco_exercises_def_feedback_services() {
   $api = array(
       'actions' => array(
@@ -926,7 +941,7 @@ function _cycoex_get_grader_sub_need_feedback() {
 }
 
 /**
- * Get rendered body of submission, plus file attachment data.
+ * Get rendered body of a submission, plus file attachment data.
  * @param array $data Parameters passed from client.
  * @return array Da goods.
  */
@@ -972,6 +987,7 @@ function _cycoex_get_sub_rendered( $data ) {
  * Same for the model solutions.
  * @param array $data Parameters passed from client.
  * @return array Da goods.
+ * @todo Move to exercises services section.
  */
 function _cycoex_get_exercise_rendered( $data ) {
   //Get a submission, return it rendered.
@@ -1095,6 +1111,7 @@ function _cyco_exercises_package_attachment_data( $field ) {
  * Get rubric items whose ids are in passed array.
  * @param array $rubric_item_nids Ids.
  * @return array Da goods.
+ * @todo Move to rubric item section.
  */
 function _cycoex_get_rubric_items( $rubric_item_nids ) {
   $rubric_items_jsony = array();
@@ -1327,10 +1344,10 @@ function cyco_exercises_services_theme() {
 }
 
 /**
- * Make a feedback message from the data in the passed array.
+ * Store feedback.
  * 
  * @param array $feedback_data Feedback data for a submission.
- * @return array Data on success/failure..
+ * @return array Data on success/failure.
  */
 function _cycoex_save_feedback($feedback_data) {
   //Get params.
@@ -1368,12 +1385,12 @@ function _cycoex_save_feedback($feedback_data) {
       __FILE__, __LINE__, __FUNCTION__
   );  
   //Remove existing rubric item rating nodes for this submission.
-  $query = new EntityFieldQuery;
-  $query
-    ->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'exer_submssn_rubric_item_rating')
-    ->fieldCondition('field_submission', 'target_id', $submission_nid);
-  $query_result = $query->execute();
+//  $query = new EntityFieldQuery;
+//  $query
+//    ->entityCondition('entity_type', 'node')
+//    ->entityCondition('bundle', 'exer_submssn_rubric_item_rating')
+//    ->fieldCondition('field_submission', 'target_id', $submission_nid);
+//  $query_result = $query->execute();
   //Create the pseudent HTML.
   $rating_nids = array();
   foreach ( $query_result['node'] as $nid => $value ) {  
@@ -1396,32 +1413,34 @@ function _cycoex_save_feedback($feedback_data) {
       = $message;
   $submission_node->field_complete[LANGUAGE_NONE][0]['value']
       = $complete ? 1 : 0;
+  //Store the rubric item ratings.
+  $submission_node->field_rubric_item_ratings[LANGUAGE_NONE][0]['value']
+      = json_encode($rubric_ratings);
   node_save( $submission_node );
   //Add new rubric item rating nodes.
-  foreach ($rubric_ratings as $key => $rubric_rating) { 
-    $rubric_item_nid = $rubric_rating['rubric_item_nid'];
-    $comment = $rubric_rating['comment'];
-    $comment_rating = $rubric_rating['comment_rating'];
-    $node = new stdClass();
-    $node->title = 'Submission: ' . $submission_nid . ' Item: ' . $rubric_item_nid;
-    $node->type = 'exercise_submission_rubric_item_';
-    node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
-    $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
-    //Record is owned by the grader.
-    $node->uid = $grader_uid;
-    $node->status = 1; //(1 or 0): published or not
-    $node->promote = 0; //(1 or 0): promoted to front page
-    $node->comment = 0;
-    $node->field_submission[$node->language][]['target_id'] = $submission_nid;
-    $node->field_rubric_item[$node->language][]['target_id'] = $rubric_item_nid;
-    $node->field_feedback_comment[$node->language][]['value'] = $comment;
-    $node->field_rating_on_rubric_item[$node->language][]['value'] 
-        = $comment_rating;
-    $node = node_submit($node); // Prepare node for saving
-    node_save($node);
-  }
+//  foreach ($rubric_ratings as $key => $rubric_rating) { 
+//    $rubric_item_nid = $rubric_rating['rubric_item_nid'];
+//    $comment = $rubric_rating['comment'];
+//    $comment_rating = $rubric_rating['comment_rating'];
+//    $node = new stdClass();
+//    $node->title = 'Submission: ' . $submission_nid . ' Item: ' . $rubric_item_nid;
+//    $node->type = 'exercise_submission_rubric_item_';
+//    node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+//    $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
+//    //Record is owned by the grader.
+//    $node->uid = $grader_uid;
+//    $node->status = 1; //(1 or 0): published or not
+//    $node->promote = 0; //(1 or 0): promoted to front page
+//    $node->comment = 0;
+//    $node->field_submission[$node->language][]['target_id'] = $submission_nid;
+//    $node->field_rubric_item[$node->language][]['target_id'] = $rubric_item_nid;
+//    $node->field_feedback_comment[$node->language][]['value'] = $comment;
+//    $node->field_rating_on_rubric_item[$node->language][]['value'] 
+//        = $comment_rating;
+//    $node = node_submit($node); // Prepare node for saving
+//    node_save($node);
+//  }
   //Trigger event.
   module_invoke_all('feedback_given', $feedback_data);
-  
   return 'OK';
 }

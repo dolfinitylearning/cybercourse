@@ -18,6 +18,38 @@ function _cyco_core_cp_add_menu_items( &$items ) {
     'weight' => 0,
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['clear-all-caches'] = array(
+    'title' => 'Flush all caches',
+    'page callback' => '_cyco_core_cp_flush_cache',
+    'access callback' => '_cyco_core_cp_flush_cache_access',
+    'type' => MENU_NORMAL_ITEM, //MENU_CALLBACK,
+  );
+  
+}
+
+/**
+ * Is the current user allowed to flush all caches?
+ * @return boolean True of allowed
+ */
+function _cyco_core_cp_flush_cache_access() {
+  return cyco_core_current_user_has_role('author', 'administrator');
+}
+
+/**
+ * Flush all caches.
+ */
+function _cyco_core_cp_flush_cache() {
+  drupal_flush_all_caches();
+  drupal_set_message(t('Drupal caches cleared.'));
+  if (function_exists('cyco_book_blocks_flush_all_tree_menu_caches')) {
+    cyco_book_blocks_flush_all_tree_menu_caches();
+    drupal_set_message(t('Book tree menu caches cleared.'));
+  }
+  if (function_exists('_cyco_pseudents_generate_ck_pseudent_table')) {
+    _cyco_pseudents_generate_ck_pseudent_table();
+    drupal_set_message(t('Pseudent caches cleared.'));
+  }
+  drupal_goto('user/control-panel');
 }
 
 /**
@@ -238,7 +270,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
       ) 
     );
     drupal_add_js(
-        $base_path . drupal_get_path('module', 'cyco_exercises')
+        drupal_get_path('module', 'cyco_exercises')
           . '/custom/js/cyco_exercises_start_grading_ui.js'
     );
   }

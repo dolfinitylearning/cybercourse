@@ -1,5 +1,66 @@
 <?php
 
+/**
+ * Implements hook_menu_local_tasks_alter().
+ * 
+ * Change the title of the tab Achievements to Achievements and badges.
+ */
+function cyco_badges_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if (substr($root_path, 0, 6) == 'user/%' ) {
+    $data['tabs'][0]['output'][1]['#link']['title'] = 'Achievements and badges';
+  }
+}
+
+/**
+ * Implement hook_menu_alter().
+ * 
+ * If there are no badges defined, suppress the Badges entry in the main menu.
+ */
+function cyco_badges_menu_alter( &$links ) {
+  if ( isset($links['badges-public']) ) {
+    $query = "SELECT COUNT(*) amount FROM {node} n ".
+             "WHERE n.type = :type and n.status = 1";
+    $result = db_query($query, array(':type' => 'badge'))->fetch();
+    $num_entities = $result->amount;
+    if ( $num_entities == 0 ) {
+      $links['badges-public']['access callback'] = FALSE;
+//      $items = array();
+//      $items['badges'] = array(
+//        'title' => 'Badges',
+//        'description' => 'Show available badges',
+//        'page callback' => '_cyco_badges_show_list',
+//        'access callback' => TRUE,
+//        'type' => MENU_NORMAL_ITEM,
+//        'menu_name' => 'tools'
+//      );
+//      return $items;
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ * 
+ * Change order of hook invocation, so this module's hooks run
+ * after Views. Otherwise, hook_menu_alter won't work.
+ */
+function cyco_badges_module_implements_alter(&$implementations, $hook) {
+  // When the implementations of hook_menu_alter are called, we need our module
+  // to be called after views, so let's remove it from the implementations then
+  // add it to the end.
+  if ($hook == 'menu_alter') {
+    if (isset($implementations['cyco_badges'])) {
+      $group = $implementations['cyco_badges'];
+      unset($implementations['cyco_badges']);
+      $implementations['cyco_badges'] = $group;
+    }
+  }
+}
+
+//function _cyco_badges_show_list() {
+//  drupal_goto('badges');
+//}
+
 function cyco_badges_achievements_info() {
   $achievements = array();
   $query = new EntityFieldQuery();
@@ -19,7 +80,7 @@ function cyco_badges_achievements_info() {
       $achievement = array(
         'title' => t($node->title),
         'description' => t($node->field_body[$node->language][0]['value']),
-        'points' => 1,
+        'points' => 10,
         'images' => array(
           'unlocked'  => file_create_url(
               $node->field_unlocked_badge_image[$node->language][0]['uri']
@@ -47,7 +108,7 @@ function cyco_badges_achievements_info() {
 //  $theme_registry['achievement']['theme path'] = $module_path;
 //}
 /**
- * Implements hook_feedback_give, called by the exercises module.
+ * Implements hook_feedback_given, called by the exercises module.
  * @param type $feedback_data
  */
 function cyco_badges_feedback_given( $feedback_data ){
@@ -130,7 +191,32 @@ function cyco_badges_feedback_given( $feedback_data ){
     }
   }
   //Compute which achievements need to be removed.
-  
-  
-  
 }
+
+/**
+ * Implements hook_node_postsave().
+ * 
+ * Check if the menu cache needs to be rebuilt, so that the 
+ * visibility of the Badges link in the tools menu is correct.
+ */
+function cyco_badges_node_postsave($node, $op) {
+  _cyco_badges_clear_menu_cache( $node );
+}
+
+/**
+ * Rebuild the menu cache if the passed node is a badge node, and
+ * there are either 0 or 1 badge nodes in existance. This ensures
+ * that the Badge link in the tools menu is shown or hidden correctly.
+ * @param type $node
+ */
+function _cyco_badges_clear_menu_cache( $node ) {
+  if ( $node->type == 'badge' ) {
+    $query = "SELECT COUNT(*) amount FROM {node} n ".
+             "WHERE n.type = :type and n.status = 1";
+    $result = db_query($query, array(':type' => 'badge'))->fetch();
+    $num_entities = $result->amount;
+    if ( $num_entities < 2 ) {
+      menu_rebuild();
+    }
+  }
+} 

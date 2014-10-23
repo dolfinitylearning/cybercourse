@@ -47,14 +47,6 @@ function cyco_exercises_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
-    'exercise_submission_rubric_item_' => array(
-      'name' => t('Exercise submission rubric item rating'),
-      'base' => 'node_content',
-      'description' => t('Rating of one submission on one rubric item.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
     'model_exercise_solution' => array(
       'name' => t('Model exercise solution'),
       'base' => 'node_content',

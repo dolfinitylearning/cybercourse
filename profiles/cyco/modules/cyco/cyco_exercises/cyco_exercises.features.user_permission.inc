@@ -41,17 +41,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'create exercise_submission_rubric_item_ content'.
-  $permissions['create exercise_submission_rubric_item_ content'] = array(
-    'name' => 'create exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'create field_exercise_solved'.
   $permissions['create field_exercise_solved'] = array(
     'name' => 'create field_exercise_solved',
@@ -132,16 +121,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'delete any exercise_submission_rubric_item_ content'.
-  $permissions['delete any exercise_submission_rubric_item_ content'] = array(
-    'name' => 'delete any exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'delete any model_exercise_solution content'.
   $permissions['delete any model_exercise_solution content'] = array(
     'name' => 'delete any model_exercise_solution content',
@@ -180,17 +159,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
       'instructor' => 'instructor',
       'student' => 'student',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own exercise_submission_rubric_item_ content'.
-  $permissions['delete own exercise_submission_rubric_item_ content'] = array(
-    'name' => 'delete own exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
     ),
     'module' => 'node',
   );
@@ -241,16 +209,6 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any exercise_submission_rubric_item_ content'.
-  $permissions['edit any exercise_submission_rubric_item_ content'] = array(
-    'name' => 'edit any exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
       'instructor' => 'instructor',
     ),
     'module' => 'node',
@@ -334,17 +292,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
       'instructor' => 'instructor',
       'student' => 'student',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own exercise_submission_rubric_item_ content'.
-  $permissions['edit own exercise_submission_rubric_item_ content'] = array(
-    'name' => 'edit own exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
     ),
     'module' => 'node',
   );

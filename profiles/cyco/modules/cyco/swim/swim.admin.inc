@@ -8,7 +8,7 @@
  * Form for basic SWIM settings.
  */
 function _swim_settings_form() {
-  _swim_add_client_pieces( FALSE ); //Do not include plugins.
+  _swim_add_editor_client_pieces( FALSE ); //Do not include plugins.
   $form['swim_help_message'] = array(
     '#type' => 'textarea',
     '#title' => t( 'SWIM help message' ),

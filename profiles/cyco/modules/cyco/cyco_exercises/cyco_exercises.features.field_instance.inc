@@ -379,7 +379,7 @@ function cyco_exercises_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
-          'link' => FALSE,
+          'link' => 1,
         ),
         'type' => 'entityreference_label',
         'weight' => 3,
@@ -562,7 +562,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -603,7 +603,7 @@ function cyco_exercises_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -722,6 +722,48 @@ function cyco_exercises_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'node-exercise_submission-field_rubric_item_ratings'
+  $field_instances['node-exercise_submission-field_rubric_item_ratings'] = array(
+    'bundle' => 'exercise_submission',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Ratings on rubric items. ',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 1,
+    'field_name' => 'field_rubric_item_ratings',
+    'label' => 'Rubric item ratings',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 9,
     ),
   );
 
@@ -918,165 +960,6 @@ function cyco_exercises_field_default_field_instances() {
       ),
       'type' => 'date_popup',
       'weight' => 5,
-    ),
-  );
-
-  // Exported field_instance: 'node-exercise_submission_rubric_item_-field_feedback_comment'
-  $field_instances['node-exercise_submission_rubric_item_-field_feedback_comment'] = array(
-    'bundle' => 'exercise_submission_rubric_item_',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Feedback comment given for the rubric item.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_feedback_comment',
-    'label' => 'Feedback comment',
-    'required' => 1,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 5,
-      ),
-      'type' => 'text_textarea',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'node-exercise_submission_rubric_item_-field_rating_on_rubric_item'
-  $field_instances['node-exercise_submission_rubric_item_-field_rating_on_rubric_item'] = array(
-    'bundle' => 'exercise_submission_rubric_item_',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Rating on this rubric item: good, needs work, or poor.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_rating_on_rubric_item',
-    'label' => 'Rating on rubric item',
-    'required' => 1,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
-      'weight' => 4,
-    ),
-  );
-
-  // Exported field_instance: 'node-exercise_submission_rubric_item_-field_rubric_item'
-  $field_instances['node-exercise_submission_rubric_item_-field_rubric_item'] = array(
-    'bundle' => 'exercise_submission_rubric_item_',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Rubric item this rating is for.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 1,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_rubric_item',
-    'label' => 'Rubric item',
-    'required' => 1,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance: 'node-exercise_submission_rubric_item_-field_submission'
-  $field_instances['node-exercise_submission_rubric_item_-field_submission'] = array(
-    'bundle' => 'exercise_submission_rubric_item_',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Which submission is this rating for?',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_submission',
-    'label' => 'Submission',
-    'required' => 1,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 1,
     ),
   );
 
@@ -2024,10 +1907,8 @@ function cyco_exercises_field_default_field_instances() {
   t('Feedback (good)');
   t('Feedback (needs work)');
   t('Feedback (poor)');
-  t('Feedback comment');
   t('Feedback comment for good performance, e.g., "Good code indenting."');
   t('Feedback comment for poor performance, e.g., "No code indenting."');
-  t('Feedback comment given for the rubric item.');
   t('Feedback comment when performance needs improvement, e.g., "Code indenting inconsistent."');
   t('Feedback from grader.');
   t('Feedback source');
@@ -2056,13 +1937,10 @@ function cyco_exercises_field_default_field_instances() {
   t('Phrases that tell a student his/her submission needs work. Enter as many as you like. E.g., "Not too bad, [feedback:student_first_name], but there are some issues.", "There are things you should fix, [feedback:student_first_name].", "It\'s OK, but needs fixing." (See the Token section below for a full list of tokens.)');
   t('Phrases that tell a student s/he did poorly on an exercise. Enter as many as you like. E.g., "You can do better, [feedback:student_first_name].", "[feedback:student_first_name], you need to improve.", "Not that good. Come in for some help." (See the Token section below for a full list of tokens.)');
   t('Phrases that tell a student s/he did well on an exercise. Enter as many as you like. E.g. "Good job, [feedback:student_first_name]!", "[feedback:student_first_name], I like it!", "Nice work.". (See the Token section below for a full list of tokens.)');
-  t('Rating on rubric item');
-  t('Rating on this rubric item: good, needs work, or poor.');
-  t('Rubric item');
-  t('Rubric item this rating is for.');
+  t('Ratings on rubric items. ');
+  t('Rubric item ratings');
   t('Rubric items');
   t('Signature');
-  t('Submission');
   t('The main text of the exercise.');
   t('Version');
   t('When feedback given');
@@ -2070,7 +1948,6 @@ function cyco_exercises_field_default_field_instances() {
   t('When was the feedback recorded?');
   t('When was the solution submitted for feedback?');
   t('Which exercise is this for?');
-  t('Which submission is this rating for?');
   t('Which version is this? First submission is version 1. If resubmitted, that is version 2. Etc.');
   t('Who gave the feedback?');
   t('Work this exercise needs.');

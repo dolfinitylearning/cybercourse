@@ -5,4 +5,5 @@ version = 7.x-1.0
 core = 7.x
 dependencies[] = cyco_core
 dependencies[] = achievements
-;stylesheets[all][] = css/cyco_badges.css
+dependencies[] = hook_post_action
+stylesheets[all][] = css/cyco_badges.css

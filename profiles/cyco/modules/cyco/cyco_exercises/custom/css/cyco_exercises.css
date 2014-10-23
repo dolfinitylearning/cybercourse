@@ -80,3 +80,8 @@ It's misleading.
 .view-exercises-public- .views-row .views-field-field-body{
   margin-left: 2em;
 }
+
+.not-student {
+  margin-top: 1em;
+  font-style: italic;
+}

@@ -53,6 +53,7 @@ dependencies[] = node_export
 dependencies[] = content_access
 dependencies[] = clientside_validation_form
 dependencies[] = clientside_validation
+dependencies[] = hook_post_action
 
 ;Field related
 ;dependencies[] = field_group
