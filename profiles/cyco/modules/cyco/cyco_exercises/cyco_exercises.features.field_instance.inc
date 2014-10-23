@@ -689,6 +689,7 @@ function cyco_exercises_field_default_field_instances() {
   $field_instances['node-exercise_submission-field_feedback_source'] = array(
     'bundle' => 'exercise_submission',
     'default_value' => NULL,
+    'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Who gave the feedback?',
     'display' => array(
@@ -709,10 +710,16 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_feedback_source',
     'label' => 'Feedback source',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
       'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
