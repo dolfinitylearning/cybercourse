@@ -18,20 +18,20 @@ app.rubricPane.simClickDuringReset = true;
  * Initialize the rubric pane. Call this only once.
  */
 app.rubricPane.initRubricPane = function() {
-  //When the user clicks the Complete checkbox...
+  //When the Complete checkbox changes...
   $(".cyco-exercise-complete").change(function(event){
     //Set both checkboxes to the same value.
     var newState = $(this).prop("checked");
     $(".cyco-exercise-complete").prop("checked", newState);
     //Change the complete indicator in feedback pane.
     app.feedbackPane.updateStatusComplete( newState );
-    //Update data model.
-    app.submissionsToGrade[ app.currentState.submissionNid ].complete = newState;
-    //Set dirty flag.
     if ( ! app.rubricPane.simClickDuringReset ) {
+      //Update data model.
+      app.submissionsToGrade[ app.currentState.submissionNid ].complete = newState;
+      //Set dirty flag.
       app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
     }
-  });
+  }); //End complete checkbox changes.
   //When user clicks a generate feedback button...
   $(".generate-feedback-button").click(function() {
     $.when(
@@ -49,6 +49,15 @@ app.rubricPane.initRubricPane = function() {
 app.rubricPane.resetRubricPaneForSubmission = function() {
   var exerciseNid = app.currentState.exerciseNid;
   var submissionNid = app.currentState.submissionNid;
+  //Show the complete checkbox in the right state.
+  //Remmeber what simClickDuringReset is (paranoia).
+  var tempValue = app.rubricPane.simClickDuringReset;
+  app.rubricPane.simClickDuringReset = true;
+  $(".cyco-exercise-complete").prop("checked",
+    app.submissionsToGrade[ app.currentState.submissionNid ].complete
+  );
+  //Restore whatever value it had.
+  app.rubricPane.simClickDuringReset = tempValue;
   //Get the exercise's rubric list.
   var rubricNids = app.allExercises[ exerciseNid ].rubricItems;
   //Clear existing content.

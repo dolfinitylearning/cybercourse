@@ -35,6 +35,14 @@ function cyco_exercises_menu() {
     'file' => 'custom/cyco_exercises.admin.inc',
     'file path' => drupal_get_path('module', 'cyco_exercises'),
     );
+  //Confirm that user wants to erase feedback.
+  $items['confirm-erase-feedback/%'] = array(
+    'title' => 'Confirm feedback erase?',
+    'page callback' => '_cyco_exercises_confirm_erase_feedback',
+    'page arguments' => array(1),
+    'access callback' => '_cyco_exercises_erase_feedback_access',
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 }
 
@@ -1517,4 +1525,116 @@ function cyco_exercises_swim_peek_load_css() {
       . '/custom/css/cyco_exercises.css',
   );
   return $result;
+}
+
+/**
+ * Is this user able to erase feedback?
+ * @return boolean True if user is able to erase feedback.
+ */
+function _cyco_exercises_erase_feedback_access() {
+  return cyco_core_current_user_has_role( 
+      array('instructor', 'grader', 'administrator') 
+  );
+}
+
+
+function _cyco_exercises_confirm_erase_feedback( $submission_nid ) {
+  $form = drupal_get_form(
+      'cyco_exercise_confirm_feedback_erase_form',
+      $submission_nid
+  );
+  return $form;
+}
+
+
+function cyco_exercise_confirm_feedback_erase_form($form, &$form_state, $submission_nid) {
+  $submission = node_load($submission_nid);
+  $form['intro'] = array(
+    '#markup' => '<p>' . $submission->title . '</p>'
+        . '<p>' . t('Are you sure you want to erase the feedback?') . '</p>',
+  );
+  $form['confirm'] = array(
+    '#type' => 'submit',
+    '#value' => 'Confirm',
+  );
+  $form['cancel'] = array(
+    '#type' => 'submit',
+    '#value' => 'Cancel',
+  );
+  $form['submission_nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $submission_nid,
+  );
+  $form['#submit'][] = '_cyco_exercise_feedback_erase';
+  return $form;
+}
+
+function _cyco_exercise_feedback_erase($form, &$form_state) {
+  if ( ! _cyco_exercises_erase_feedback_access() ) {
+    global $user;
+    $message = t('Permission failure: User @uid does not have '
+        . 'permission to erase feedback. Incident recorded.',
+        array('@uid' => $user->uid)
+    );
+    drupal_set_message($message, 'warning');
+    watchdog('cyco_exercises', $message);
+  }
+  //Did the user confirm?
+  if ( strtolower($form_state['clicked_button']['#value']) == 'confirm' ) {
+    $submission_nid = (int)$form_state['values']['submission_nid'];
+    cyco_exercises_erase_feedback( $submission_nid );
+    drupal_set_message( t('Feedback erased.') );
+  }
+  else {
+    drupal_set_message( t('Feedback not erased.') );
+  }
+  drupal_goto('manage-submissions');
+}
+
+/**
+ * Erase the feedback from a submission. 
+ * @param type $submission_nid Nid of submission to erase feedback from.
+ */
+function cyco_exercises_erase_feedback( $submission_nid ) {
+  $submission = node_load($submission_nid);
+  //Get feedback data to send to hook implementations.
+  $feedback_data 
+      = cyco_exercises_package_submission_node_feedback( $submission );
+  //Clear the feedback fields.
+  //Clear the feedback date.
+  $submission->field_when_feedback_given = array();
+  //Clear the feedback.
+  $submission->field_feedback = array();
+  //Clear the feedback source.
+  $submission->field_feedback_source = array();
+  //Set to not complete.
+  $submission->field_complete[$submission->language][0]['value'] = 0;
+  node_save( $submission );
+  //Trigger event.
+  module_invoke_all('feedback_erased', $feedback_data);
+}
+
+/**
+ * Take feedback data from a submission and paskage in an array.
+ * @param stdClass $submission Submission node.
+ * @return array Feedback data.
+ */
+function cyco_exercises_package_submission_node_feedback( $submission ) {
+  $submission_nid = $submission->nid;
+  $student_uid = $submission->uid; //Student owns the submission.
+  $exercise_nid 
+      = $submission->field_exercise[$submission->language][0]['target_id'];
+  $rubric_ratings 
+      = $submission->field_rubric_item_ratings[$submission->language][0]['value'];
+  $complete = $submission->field_complete[$submission->language][0]['value'];
+  $message = $submission->field_feedback[$submission->language][0]['value'];
+  $feedback_data = array(
+    'submission_nid' => $submission_nid,
+    'student_uid' => $student_uid,
+    'exercise_nid' => $exercise_nid,
+    'rubric_ratings' => $rubric_ratings,
+    'complete' => $complete,
+    'message' => $message,
+  );
+  return $feedback_data;
 }

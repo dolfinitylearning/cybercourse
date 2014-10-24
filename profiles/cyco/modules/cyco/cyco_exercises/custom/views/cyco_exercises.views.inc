@@ -10,7 +10,7 @@
 function cyco_exercises_views_data_alter(&$data) {
   $data['cyco_exercises']['table']['group'] = t('Cyco exercises');
   $data['cyco_exercises']['table']['join'] = array(
-    // #global is a special flag which let's a table appear all the time.
+    // #global is a special flag which lets a table appear all the time.
     '#global' => array(),
   );
   $data['cyco_exercises']['submission_status'] = array(
@@ -25,6 +25,13 @@ function cyco_exercises_views_data_alter(&$data) {
     'help' => t('Show completion badge, if submission complete.'),
     'field' => array(
       'handler' => 'cyco_exercises_handler_completion_badge',
+    ),
+  );
+  $data['cyco_exercises']['erase_feedback_link'] = array(
+    'title' => t('Erase feedback link'),
+    'help' => t('Show a link to erase a submission\'s feedback, if there is any.'),
+    'field' => array(
+      'handler' => 'cyco_exercises_erase_submission_feedback_link',
     ),
   );
 }

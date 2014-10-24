@@ -1384,13 +1384,6 @@ function _cycoex_save_feedback($feedback_data) {
       $feedback_data, 'complete', FALSE,
       __FILE__, __LINE__, __FUNCTION__
   );  
-  //Remove existing rubric item rating nodes for this submission.
-//  $query = new EntityFieldQuery;
-//  $query
-//    ->entityCondition('entity_type', 'node')
-//    ->entityCondition('bundle', 'exer_submssn_rubric_item_rating')
-//    ->fieldCondition('field_submission', 'target_id', $submission_nid);
-//  $query_result = $query->execute();
   //Create the pseudent HTML.
   $rating_nids = array();
   foreach ( $query_result['node'] as $nid => $value ) {  
@@ -1417,29 +1410,6 @@ function _cycoex_save_feedback($feedback_data) {
   $submission_node->field_rubric_item_ratings[LANGUAGE_NONE][0]['value']
       = json_encode($rubric_ratings);
   node_save( $submission_node );
-  //Add new rubric item rating nodes.
-//  foreach ($rubric_ratings as $key => $rubric_rating) { 
-//    $rubric_item_nid = $rubric_rating['rubric_item_nid'];
-//    $comment = $rubric_rating['comment'];
-//    $comment_rating = $rubric_rating['comment_rating'];
-//    $node = new stdClass();
-//    $node->title = 'Submission: ' . $submission_nid . ' Item: ' . $rubric_item_nid;
-//    $node->type = 'exercise_submission_rubric_item_';
-//    node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
-//    $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
-//    //Record is owned by the grader.
-//    $node->uid = $grader_uid;
-//    $node->status = 1; //(1 or 0): published or not
-//    $node->promote = 0; //(1 or 0): promoted to front page
-//    $node->comment = 0;
-//    $node->field_submission[$node->language][]['target_id'] = $submission_nid;
-//    $node->field_rubric_item[$node->language][]['target_id'] = $rubric_item_nid;
-//    $node->field_feedback_comment[$node->language][]['value'] = $comment;
-//    $node->field_rating_on_rubric_item[$node->language][]['value'] 
-//        = $comment_rating;
-//    $node = node_submit($node); // Prepare node for saving
-//    node_save($node);
-//  }
   //Trigger event.
   module_invoke_all('feedback_given', $feedback_data);
   return 'OK';

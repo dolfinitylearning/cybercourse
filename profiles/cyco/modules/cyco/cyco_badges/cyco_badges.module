@@ -24,16 +24,6 @@ function cyco_badges_menu_alter( &$links ) {
     $num_entities = $result->amount;
     if ( $num_entities == 0 ) {
       $links['badges-public']['access callback'] = FALSE;
-//      $items = array();
-//      $items['badges'] = array(
-//        'title' => 'Badges',
-//        'description' => 'Show available badges',
-//        'page callback' => '_cyco_badges_show_list',
-//        'access callback' => TRUE,
-//        'type' => MENU_NORMAL_ITEM,
-//        'menu_name' => 'tools'
-//      );
-//      return $items;
     }
   }
 }
@@ -98,16 +88,6 @@ function cyco_badges_achievements_info() {
 }
 
 /**
- * Implements hook_registry_alter().
- * Replace template from achievements module with one that doesn't include
- * points.
- */
-//function cyco_badges_theme_registry_alter( &$theme_registry ) {
-//  $module_path = drupal_get_path('module', 'cyco_badges');
-//  $theme_registry['achievement']['path'] = $module_path . '/templates';
-//  $theme_registry['achievement']['theme path'] = $module_path;
-//}
-/**
  * Implements hook_feedback_given, called by the exercises module.
  * @param type $feedback_data
  */
@@ -148,7 +128,7 @@ function cyco_badges_feedback_given( $feedback_data ){
   while ( $row = $records->fetchAssoc() ) {
     $completed_exercise_nids[] = $row['exercise_nid'];
   }
-  //Adjust data for latest compplation.
+  //Adjust data for latest completion.
   if ( $complete ) {
     //Completed this exercise. Add that to the completion array
     //if not already there.
@@ -165,8 +145,8 @@ function cyco_badges_feedback_given( $feedback_data ){
       );
     }
   }
-  //Array of completed badge nids.
-  $completed_badge_nids = array();
+  //Array of actually completed badge nids.
+  $actually_completed_badge_nids = array();
   foreach ( $badge_exercises as $badge_nid => $badge_exercise_nids ) {
     //Badge complete if $exercise_nids is subset of $completed_exercise_nids.
     $missing_exercises = array_diff(
@@ -175,22 +155,58 @@ function cyco_badges_feedback_given( $feedback_data ){
     );
     if ( sizeof($missing_exercises) == 0 ) {
       //Did all of the exercises for the badge.
-      $completed_badge_nids[] = $badge_nid;
+      $actually_completed_badge_nids[] = $badge_nid;
     }
   }
-  //Get completed badges for the student.
+  //Get recorded completed badges for the student.
   $recorded_student_achievements = achievements_totals_user(0, $student_uid);
   //Add achievements that need to be added.
-  foreach ( $completed_badge_nids as $badge_nid ) {
-    if ( ! in_array($badge_nid, $recorded_student_achievements) ) {
+  foreach ( $actually_completed_badge_nids as $actual_badge_nid ) {
+    if ( ! in_array($actual_badge_nid, $recorded_student_achievements) ) {
+      //Award achievement.
       //Get the machine name for the badge.
-      $badge_node = node_load( $badge_nid );
+      $badge_node = node_load( $actual_badge_nid );
       $badge_machine_name 
         = $badge_node->field_badge_machine_name[$badge_node->language][0]['value'];
       achievements_unlocked( $badge_machine_name, $student_uid );
     }
   }
   //Compute which achievements need to be removed.
+  foreach ( $recorded_student_achievements as $recorded_badge_nid => $recorded_student_achievement) {
+    if ( ! in_array($recorded_badge_nid, $actually_completed_badge_nids) ) {
+      //Remove achievement.
+      //Get the machine name for the badge.
+      $badge_machine_name = $recorded_student_achievement->achievement_id;
+      achievements_locked( $badge_machine_name, $student_uid );
+    }
+  }
+}
+
+/**
+ * Implements hook_feedback_erased, called by the exercises module.
+ * @param type $feedback_data
+ */
+function cyco_badges_feedback_erased( $feedback_data ) {
+  //Set to not complete.
+  $feedback_data['complete'] = 0;
+  //Treat as new feedback given.
+  cyco_badges_feedback_given($feedback_data);
+}
+
+/**
+ * Implements hook_node_postdelete.
+ * @param stdClass $node Node deleted.
+ */
+function cyco_badges_node_postdelete($node) {
+  if ( $node->type == 'exercise_submission' ) {
+    //Get feedback data to send to hook implementations.
+    $feedback_data 
+        = cyco_exercises_package_submission_node_feedback( $node );
+    //Set to not complete.
+    $feedback_data['complete'] = 0;
+    //Treat as new feedback given.
+    cyco_badges_feedback_given($feedback_data);
+  }
 }
 
 /**
@@ -200,7 +216,9 @@ function cyco_badges_feedback_given( $feedback_data ){
  * visibility of the Badges link in the tools menu is correct.
  */
 function cyco_badges_node_postsave($node, $op) {
-  _cyco_badges_clear_menu_cache( $node );
+  if ( $node->type == 'badge' ) {
+    _cyco_badges_clear_menu_cache( $node );
+  }
 }
 
 /**

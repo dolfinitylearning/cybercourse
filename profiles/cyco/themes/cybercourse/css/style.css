@@ -133,3 +133,16 @@ Patch for module_filter module to put footer under other page elements.
 .node-unpublished {
   background-color: #f2dede;
 }
+
+/*
+For view for managing student submissions.
+*/
+#submissions-manage-filter-values-block {
+  display:inline-block;
+}
+
+#submissions-manage-filter-button-block {
+  display: inline-block;
+  /*width: 200px;*/
+  margin-bottom: 4em;
+}
