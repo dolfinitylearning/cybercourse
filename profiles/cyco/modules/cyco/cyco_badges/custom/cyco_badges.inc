@@ -7,7 +7,7 @@
  */
 function cyco_badges_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   if (substr($root_path, 0, 6) == 'user/%' ) {
-    $data['tabs'][0]['output'][1]['#link']['title'] = 'Achievements and badges';
+    $data['tabs'][0]['output'][1]['#link']['title'] = 'Badges';
   }
 }
 
@@ -46,10 +46,6 @@ function cyco_badges_module_implements_alter(&$implementations, $hook) {
     }
   }
 }
-
-//function _cyco_badges_show_list() {
-//  drupal_goto('badges');
-//}
 
 function cyco_badges_achievements_info() {
   $achievements = array();
