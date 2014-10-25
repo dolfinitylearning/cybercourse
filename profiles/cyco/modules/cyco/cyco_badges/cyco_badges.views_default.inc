@@ -137,7 +137,7 @@ function cyco_badges_views_default_views() {
   $export['badges'] = $view;
 
   $view = new view();
-  $view->name = 'badges_public_';
+  $view->name = 'badges_public';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -166,6 +166,12 @@ function cyco_badges_views_default_views() {
   $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Students earn badges when they master certain skills. For instance, a student who completes 20 JavaScript programming exercises might earn the Basic JavaScript Proficiency badge.</p>
 
 <p>CyberCourse uses Mozilla\'s <a href="http://openbadges.org/" target="_blank">Open Badges</a> system. Students can add Cyco badges to their Mozilla badge <a href="http://backpack.openbadges.org/" target="_blank">Backpack</a>. Employers, universities, and others can verify that students have earned the badges they claim.</p>';
+  /* Field: Cyco badges: Badge */
+  $handler->display->display_options['fields']['badge_image_for_current_user']['id'] = 'badge_image_for_current_user';
+  $handler->display->display_options['fields']['badge_image_for_current_user']['table'] = 'cyco_badges';
+  $handler->display->display_options['fields']['badge_image_for_current_user']['field'] = 'badge_image_for_current_user';
+  $handler->display->display_options['fields']['badge_image_for_current_user']['label'] = '';
+  $handler->display->display_options['fields']['badge_image_for_current_user']['element_label_colon'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -173,6 +179,22 @@ function cyco_badges_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Field: Content: Body */
+  $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
+  $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
+  $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
+  $handler->display->display_options['fields']['field_body']['label'] = '';
+  $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
+  $handler->display->display_options['fields']['field_body']['settings'] = array(
+    'trim_length' => '400',
+  );
+  /* Field: Cyco badges: Has the current user earned the badge? */
+  $handler->display->display_options['fields']['has_user_earned_badge']['id'] = 'has_user_earned_badge';
+  $handler->display->display_options['fields']['has_user_earned_badge']['table'] = 'cyco_badges';
+  $handler->display->display_options['fields']['has_user_earned_badge']['field'] = 'has_user_earned_badge';
+  $handler->display->display_options['fields']['has_user_earned_badge']['label'] = 'Earned?';
+  $handler->display->display_options['fields']['has_user_earned_badge']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
@@ -198,7 +220,7 @@ function cyco_badges_views_default_views() {
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Badges';
   $handler->display->display_options['menu']['name'] = 'menu-tools';
-  $export['badges_public_'] = $view;
+  $export['badges_public'] = $view;
 
   return $export;
 }
