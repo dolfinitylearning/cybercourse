@@ -4,6 +4,9 @@
  * Adds display fields for Views.
  */
 
+include_once realpath(dirname(__FILE__)) . '/cyco_badges_has_user_earned_badge.inc';
+include_once realpath(dirname(__FILE__)) . '/cyco_badges_user_badge_image.inc';
+
 /**
  * Implements hook_views_data().
  */
@@ -14,10 +17,17 @@ function cyco_badges_views_data_alter(&$data) {
     '#global' => array(),
   );
   $data['cyco_badges']['has_user_earned_badge'] = array(
-    'title' => t('Has current user earned a badge?'),
-    'help' => t('Show whether the current user has earned a badge or not.'),
+    'title' => t('Has the current user earned the badge?'),
+    'help' => t('Show whether the current user has earned the badge or not.'),
     'field' => array(
-      'handler' => 'cyco_badges_has_user_earned_badge',
+      'handler' => 'cyco_badges_handler_has_user_earned_badge',
+    ),
+  );
+  $data['cyco_badges']['badge_image_for_current_user'] = array(
+    'title' => t('Badge'),
+    'help' => t('Show the badge image for the current user (locked or not).'),
+    'field' => array(
+      'handler' => 'cyco_badges_user_badge_image',
     ),
   );
 }
@@ -26,15 +36,15 @@ function cyco_badges_views_data_alter(&$data) {
  * Implementation of hook_views_default_views().
  * seehttps://api.drupal.org/api/views/views.api.php/function/hook_views_default_views/7
  **/
-function cyco_badges_views_default_views() {
-  $files = file_scan_directory(drupal_get_path('module', 'cyco_badges') 
-      . '/custom/views/imports', '/.*/');
-  foreach ($files as $filepath => $file) {
-    require $filepath;
-    if (isset($view)) {
-      $views[$view->name] = $view;
-    }
-  }
-  return $views;
-}  
+//function cyco_badges_views_default_views() {
+//  $files = file_scan_directory(drupal_get_path('module', 'cyco_badges') 
+//      . '/custom/views/imports', '/.*/');
+//  foreach ($files as $filepath => $file) {
+//    require $filepath;
+//    if (isset($view)) {
+//      $views[$view->name] = $view;
+//    }
+//  }
+//  return $views;
+//}  
 

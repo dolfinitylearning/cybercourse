@@ -203,6 +203,9 @@ function cyco_badges_node_postdelete($node) {
     //Treat as new feedback given.
     cyco_badges_feedback_given($feedback_data);
   }
+  if ( $node->type == 'badge' ) {
+    cyco_badges_clear_cache();
+  }
 }
 
 /**
@@ -234,3 +237,32 @@ function _cyco_badges_clear_menu_cache( $node ) {
     }
   }
 } 
+
+/**
+ * Implements hook_views_api().
+ */
+function cyco_badges_views_api_alter(&$vars) {
+  if (isset($vars['cyco_badges'])) {
+    $vars['cyco_badges']['path'] 
+        = drupal_get_path('module', 'cyco_badges') . '/custom/views';
+  }
+}
+
+/**
+ * Clear badges (achievement) cache.
+ */
+function cyco_badges_clear_cache() {
+  achievements_load(NULL, FALSE, TRUE);
+}
+
+/**
+ * Implements hook_node_postsave().
+ * 
+ * Clear the achievements cache.
+ */
+function cyco_badges_node_postsave($node, $op) {
+  if ( $node->type == 'badge' ) {
+    cyco_badges_clear_cache();
+  }
+}
+

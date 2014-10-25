@@ -18,3 +18,21 @@ Not in use.
 .achievement-points-box {
   float: right;
 }
+
+.view-badges-public .view-header {
+  margin-bottom: 2em;
+}
+
+.view-badges-public .views-row {
+  clear: both;
+}
+
+.view-badges-public .views-row .views-field-badge-image-for-current-user {
+  float: left;
+  margin-bottom: 2em;
+}
+
+.view-badges-public .views-row .views-field-badge-image-for-current-user img {
+  max-width: 100px;
+  margin-right: 2em;
+}

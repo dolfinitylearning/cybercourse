@@ -49,6 +49,10 @@ function _cyco_core_cp_flush_cache() {
     _cyco_pseudents_generate_ck_pseudent_table();
     drupal_set_message(t('Pseudent caches cleared.'));
   }
+  if ( function_exists('cyco_badges_clear_cache') ) {
+    cyco_badges_clear_cache();
+    drupal_set_message( t('Badges cache cleared.') );
+  }
   drupal_goto('user/control-panel');
 }
 
