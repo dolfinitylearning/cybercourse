@@ -217,6 +217,7 @@ function cyco_badges_node_postdelete($node) {
 function cyco_badges_node_postsave($node, $op) {
   if ( $node->type == 'badge' ) {
     _cyco_badges_clear_menu_cache( $node );
+    cyco_badges_clear_cache();
   }
 }
 
@@ -254,15 +255,3 @@ function cyco_badges_views_api_alter(&$vars) {
 function cyco_badges_clear_cache() {
   achievements_load(NULL, FALSE, TRUE);
 }
-
-/**
- * Implements hook_node_postsave().
- * 
- * Clear the achievements cache.
- */
-function cyco_badges_node_postsave($node, $op) {
-  if ( $node->type == 'badge' ) {
-    cyco_badges_clear_cache();
-  }
-}
-
