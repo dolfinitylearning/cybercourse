@@ -20,6 +20,23 @@ class SwimShelf {
   //Where things are stored.
   protected $shelf = array();
   
+  private static $_instance = null;
+  
+  /**
+   * Protected constructor to prevent creating a new instance of the
+   * *Singleton* via the `new` operator from outside of this class.
+   */
+  protected function __construct() {
+  }
+  
+  // A method to get our singleton instance
+  public static function getInstance() {
+    if (!(self::$_instance instanceof SwimShelf)) {
+      self::$_instance = new SwimShelf();
+    }
+    return self::$_instance;
+  }
+
   /**
    * Shelf content, for later restoration.
    * @param type $content Content to shelve.

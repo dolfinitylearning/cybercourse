@@ -1017,9 +1017,11 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
   $strongarm->value = array(
-    'captcha' => 1411997596,
-    'backup_migrate_sftp' => 1411998557,
-    'menu_clone' => 1412004843,
+    'swim_format_code' => 1413812845,
+    'hook_post_action' => 1413989032,
+    'views_data_export' => 1414097298,
+    'achievements_views' => 1414170741,
+    'cyco_badges' => 1414178197,
   );
   $export['module_filter_recent_modules'] = $strongarm;
 
@@ -1528,7 +1530,7 @@ function cyco_core_strongarm() {
     'favicon_path' => 'profiles/cyco/themes/cybercourse/images/logo_blue_fg.png',
     'favicon_upload' => '',
     'global__active_tab' => 'edit-theme-settings',
-    'bootstrap__active_tab' => 'edit-advanced',
+    'bootstrap__active_tab' => 'edit-javascript',
     'bootstrap_button_size' => '',
     'bootstrap_button_colorize' => 1,
     'bootstrap_button_iconize' => 1,
@@ -1575,7 +1577,7 @@ function cyco_core_strongarm() {
     'bootstrap_popover_content' => '',
     'bootstrap_popover_delay' => '0',
     'bootstrap_popover_container' => 'body',
-    'bootstrap_tooltip_enabled' => 1,
+    'bootstrap_tooltip_enabled' => 0,
     'bootstrap_tooltip_descriptions_length' => '200',
     'bootstrap_tooltip_animation' => 1,
     'bootstrap_tooltip_html' => 0,
@@ -1885,7 +1887,7 @@ Your account on [site:name] has been canceled.
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'user_picture_default';
-  $strongarm->value = 'profiles/cyco/assets/anonymous.png';
+  $strongarm->value = '';
   $export['user_picture_default'] = $strongarm;
 
   $strongarm = new stdClass();

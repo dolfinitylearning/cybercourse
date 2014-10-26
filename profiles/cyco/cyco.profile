@@ -4,7 +4,7 @@
  * Enables modules and site configuration for a standard site installation.
  */
 require_once 'cyco_install_debug.php';
-CycoInstallDebug::getInstance()->debug = FALSE;
+CycoInstallDebug::getInstance()->debug = TRUE;
 
 /**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
@@ -673,6 +673,7 @@ function _cyco_add_links_cp_menus() {
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'menu';
+  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menus');
   
   //Create top level items.
   $plid = 0;
@@ -1236,6 +1237,7 @@ function _cyco_add_links_cp_menus() {
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
+  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_cp_menus');
 
 }
 
@@ -1284,15 +1286,18 @@ function _cyco_create_footer_linked_pages() {
  * Add links to the footer menu.
  */
 function _cyco_add_links_footer_menu() {
+  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_footer_menu');
   //Find the machine name of the footer menu.
   $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
   if ( is_null($footer_menu_machine_name) ) {
     drupal_set_message('Could not find footer menu.');
     return;
   }
+  CycoInstallDebug::getInstance()->output('Middle _cyco_add_links_footer_menu');
   _cyco_add_menu_item('Copyright, you, 20xx', 'page', $footer_menu_machine_name, 0);
   _cyco_add_menu_item('Credits', 'page', $footer_menu_machine_name, 1);
   _cyco_add_menu_item('Terms of use', 'page', $footer_menu_machine_name, 2);
+  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_footer_menu');
 }
 
 /**

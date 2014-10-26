@@ -34,14 +34,8 @@ function _swim_compute_mathjax_path() {
 
 /**
  * Implements hook_init().
- * @global SwimShelf $_swim_shelf Shelf.
- * Load JS and CSS required for both editing and viewing.
- * Define a shelf.
  */
 function swim_init() {
-  //Create shelf for plugins to use.
-  global $_swim_shelf;
-  $_swim_shelf = new SwimShelf();
   global $base_url;
   $module_path = drupal_get_path('module', 'swim');
   drupal_add_js(
@@ -940,8 +934,8 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
     $out = '<div class="swim textile">' . $out . '</div>';
   }
   //Restore shelved content.
-  global $_swim_shelf;
-  $out = $_swim_shelf->restore($out);
+  $shelf = SwimShelf::getInstance();
+  $out = $shelf->restore($out);
   return $out;
 }
 
@@ -1141,12 +1135,11 @@ function swim_plugin_error( $message ) {
 
 /**
  * Shelve content.
- * @global SwimShelf $_swim_shelf Shelf.
  * @param string $content Content to shelve.
  * @return string Marker to return to plugin for output.
  */
 function swim_shelve($content) {
-  global $_swim_shelf;
-  $marker = $_swim_shelf->shelve($content);
+  $shelf = SwimShelf::getInstance();
+  $marker = $shelf->shelve($content);
   return $marker;
 }

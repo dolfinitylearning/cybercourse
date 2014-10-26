@@ -24,8 +24,8 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 0,
-    'weight' => 1,
-    'customized' => 0,
+    'weight' => -48,
+    'customized' => 1,
   );
   // Exported menu link: main-menu_help:node/4
   $menu_links['main-menu_help:node/4'] = array(
@@ -41,8 +41,8 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 0,
-    'weight' => 2,
-    'customized' => 0,
+    'weight' => -47,
+    'customized' => 1,
   );
   // Exported menu link: main-menu_welcome:node/5
   $menu_links['main-menu_welcome:node/5'] = array(
@@ -58,8 +58,29 @@ function cyco_core_menu_default_menu_links() {
     'external' => 0,
     'has_children' => 0,
     'expanded' => 0,
+    'weight' => -50,
+    'customized' => 1,
+  );
+  // Exported menu link: menu-cp-actions_flush-all-caches:clear-all-caches
+  $menu_links['menu-cp-actions_flush-all-caches:clear-all-caches'] = array(
+    'menu_name' => 'menu-cp-actions',
+    'link_path' => 'clear-all-caches',
+    'router_path' => 'clear-all-caches',
+    'link_title' => 'Flush all caches',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Flush all Cyco\'s caches, rebuilding menus, etc.',
+      ),
+      'identifier' => 'menu-cp-actions_flush-all-caches:clear-all-caches',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 1,
     'weight' => 0,
-    'customized' => 0,
+    'customized' => 1,
+    'parent_identifier' => 'menu-cp-actions_other:admin/content',
   );
   // Exported menu link: menu-footer_copyright-you-20xx:node/3
   $menu_links['menu-footer_copyright-you-20xx:node/3'] = array(
@@ -179,6 +200,7 @@ function cyco_core_menu_default_menu_links() {
   t('Control panel');
   t('Copyright, you, 20xx');
   t('Credits');
+  t('Flush all caches');
   t('Help');
   t('Log out');
   t('Terms of use');

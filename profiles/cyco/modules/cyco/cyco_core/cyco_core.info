@@ -146,6 +146,7 @@ features[menu_custom][] = user-menu
 features[menu_links][] = main-menu_about:node/6
 features[menu_links][] = main-menu_help:node/4
 features[menu_links][] = main-menu_welcome:node/5
+features[menu_links][] = menu-cp-actions_flush-all-caches:clear-all-caches
 features[menu_links][] = menu-footer_copyright-you-20xx:node/3
 features[menu_links][] = menu-footer_credits:node/2
 features[menu_links][] = menu-footer_terms-of-use:node/63

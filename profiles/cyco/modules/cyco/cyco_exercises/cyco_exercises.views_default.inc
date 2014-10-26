@@ -577,137 +577,7 @@ function cyco_exercises_views_default_views() {
   $export['submission_metadata_for_student_exercise'] = $view;
 
   $view = new view();
-  $view->name = 'submissions_instructor_report_one_student';
-  $view->description = 'Report for instructors on submissions.';
-  $view->tag = 'default';
-  $view->base_table = 'node';
-  $view->human_name = 'Submissions (instructor report)';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Exercise submissions';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'role';
-  $handler->display->display_options['access']['role'] = array(
-    3 => '3',
-    5 => '5',
-    6 => '6',
-  );
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
-  $handler->display->display_options['style_plugin'] = 'table';
-  /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_exercise_target_id']['id'] = 'field_exercise_target_id';
-  $handler->display->display_options['relationships']['field_exercise_target_id']['table'] = 'field_data_field_exercise';
-  $handler->display->display_options['relationships']['field_exercise_target_id']['field'] = 'field_exercise_target_id';
-  /* Relationship: Content: Author */
-  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
-  $handler->display->display_options['relationships']['uid']['table'] = 'node';
-  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
-  /* Field: User: First name */
-  $handler->display->display_options['fields']['field_first_name']['id'] = 'field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['table'] = 'field_data_field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['field'] = 'field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['field_first_name']['element_label_colon'] = FALSE;
-  /* Field: User: Last name */
-  $handler->display->display_options['fields']['field_last_name']['id'] = 'field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['table'] = 'field_data_field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['field'] = 'field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['field_last_name']['element_label_colon'] = FALSE;
-  /* Field: User: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'users';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['name']['label'] = 'User name';
-  /* Field: Content: Version */
-  $handler->display->display_options['fields']['field_version']['id'] = 'field_version';
-  $handler->display->display_options['fields']['field_version']['table'] = 'field_data_field_version';
-  $handler->display->display_options['fields']['field_version']['field'] = 'field_version';
-  $handler->display->display_options['fields']['field_version']['label'] = '';
-  $handler->display->display_options['fields']['field_version']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_version']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_version']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['relationship'] = 'field_exercise_target_id';
-  $handler->display->display_options['fields']['title']['label'] = 'Exercise';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['text'] = '[title] (ver. [field_version])';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: When submitted */
-  $handler->display->display_options['fields']['field_when_submitted']['id'] = 'field_when_submitted';
-  $handler->display->display_options['fields']['field_when_submitted']['table'] = 'field_data_field_when_submitted';
-  $handler->display->display_options['fields']['field_when_submitted']['field'] = 'field_when_submitted';
-  $handler->display->display_options['fields']['field_when_submitted']['label'] = 'Submitted';
-  $handler->display->display_options['fields']['field_when_submitted']['settings'] = array(
-    'format_type' => 'short_date_only',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-  );
-  /* Field: Cyco exercises: Submission status */
-  $handler->display->display_options['fields']['submission_status']['id'] = 'submission_status';
-  $handler->display->display_options['fields']['submission_status']['table'] = 'cyco_exercises';
-  $handler->display->display_options['fields']['submission_status']['field'] = 'submission_status';
-  $handler->display->display_options['fields']['submission_status']['label'] = 'Status';
-  $handler->display->display_options['fields']['submission_status']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['submission_status']['hide_alter_empty'] = FALSE;
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Content: Author uid */
-  $handler->display->display_options['arguments']['uid']['id'] = 'uid';
-  $handler->display->display_options['arguments']['uid']['table'] = 'node';
-  $handler->display->display_options['arguments']['uid']['field'] = 'uid';
-  $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'current_user';
-  $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'exercise_submission' => 'exercise_submission',
-  );
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'submissions';
-  $handler->display->display_options['menu']['title'] = 'Your submissions';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'menu-cp-students';
-  $handler->display->display_options['menu']['context'] = 0;
-  $handler->display->display_options['menu']['context_only_inline'] = 0;
-  $export['submissions_instructor_report_one_student'] = $view;
-
-  $view = new view();
-  $view->name = 'submissions_manage_';
+  $view->name = 'submissions_manage';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'node';
@@ -729,6 +599,7 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['style_plugin'] = 'table';
@@ -844,6 +715,15 @@ function cyco_exercises_views_default_views() {
     ),
   );
   $handler->display->display_options['style_options']['sticky'] = TRUE;
+  /* Header: Global: Unfiltered text */
+  $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>The filter section lets you limit the submissions you see. You can focus on one student, one class, etc. </p>
+
+<p>Click on the table headings in the submission section to sort the data. Click once to sort ascending, again to sort descending.</p>
+
+<p>There\'s a button at the bottom of the page that will export the data in Excel XLS format.</p>';
   /* Relationship: Content: Author */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
   $handler->display->display_options['relationships']['uid']['table'] = 'node';
@@ -963,6 +843,11 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['fields']['delete_node']['exclude'] = TRUE;
   $handler->display->display_options['fields']['delete_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['delete_node']['text'] = 'Delete';
+  /* Field: Cyco exercises: Erase feedback link */
+  $handler->display->display_options['fields']['erase_feedback_link']['id'] = 'erase_feedback_link';
+  $handler->display->display_options['fields']['erase_feedback_link']['table'] = 'cyco_exercises';
+  $handler->display->display_options['fields']['erase_feedback_link']['field'] = 'erase_feedback_link';
+  $handler->display->display_options['fields']['erase_feedback_link']['exclude'] = TRUE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -973,7 +858,7 @@ function cyco_exercises_views_default_views() {
 <br>
 [delete_node]<br>
 <br>
-<a href="Remove the feedback, keep the submission">Clear feedback</a>';
+[erase_feedback_link]';
   $handler->display->display_options['fields']['edit_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['edit_node']['text'] = 'Edit';
   /* Sort criterion: Content: Post date */
@@ -1049,6 +934,7 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['filters']['title']['exposed'] = TRUE;
   $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
   $handler->display->display_options['filters']['title']['expose']['label'] = 'Class';
+  $handler->display->display_options['filters']['title']['expose']['description'] = 'Enter one class name. Hint:copy-paste is your friend.';
   $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
   $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
   $handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
@@ -1069,7 +955,19 @@ function cyco_exercises_views_default_views() {
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Manage submissions';
   $handler->display->display_options['menu']['name'] = 'menu-cp-actions';
-  $export['submissions_manage_'] = $view;
+
+  /* Display: Data export */
+  $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'views_data_export_xls';
+  $handler->display->display_options['style_options']['provide_file'] = 1;
+  $handler->display->display_options['style_options']['parent_sort'] = 0;
+  $handler->display->display_options['path'] = 'manage-submissions-export';
+  $handler->display->display_options['displays'] = array(
+    'page' => 'page',
+    'default' => 0,
+  );
+  $export['submissions_manage'] = $view;
 
   $view = new view();
   $view->name = 'submissions_student_report';
