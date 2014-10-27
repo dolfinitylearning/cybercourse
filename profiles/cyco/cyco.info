@@ -112,11 +112,16 @@ dependencies[] = advanced_help
 dependencies[] = captcha
 
 ;**************** Cyco custom modules *******************
+;Order matters, so on the control panel menu, modules can detect where
+;they are to insert their items.
 dependencies[] = swim
 dependencies[] = swim_insert_view
 dependencies[] = swim_limit2role
 dependencies[] = cyco_toggle_sidebar
 dependencies[] = cyco_core
+dependencies[] = cyco_exercises
+dependencies[] = cyco_exercises_services
+dependencies[] = cyco_badges
 dependencies[] = cyco_pseudents
 dependencies[] = cyco_patterns
 dependencies[] = book_rearrange_collapse
@@ -125,8 +130,6 @@ dependencies[] = cyco_add_pages
 dependencies[] = cyco_book_blocks
 dependencies[] = cyco_toc
 dependencies[] = cyco_node_edit_tweaks
-dependencies[] = cyco_exercises
-dependencies[] = cyco_exercises_services
 dependencies[] = cyco_book_mods
 dependencies[] = cyco_collapse_summary
 

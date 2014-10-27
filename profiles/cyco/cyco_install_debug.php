@@ -5,6 +5,8 @@
  */
 
 class CycoInstallDebug {
+  public $debug = FALSE;
+  public $path;
 
   public static function getInstance() {
     static $instance = null;
@@ -14,11 +16,9 @@ class CycoInstallDebug {
     return $instance;
   }
 
-  protected function __construct() {   
+  protected function __construct() {
+    $this->path = dirname(__FILE__) . '/install_log.html';
   }
-
-  public $debug = FALSE;
-  public $path = 'install_log.html';
 
   public function output($message) {
     if ( $this->debug ) {

@@ -15,6 +15,140 @@ define( 'TOO_BAD_SO_SAD',
 );
 
 /**
+ * Implements hook_install().
+ */
+function cyco_exercises_install() {
+  CycoInstallDebug::getInstance()->output('Start cyco_exercises_install');
+  //Add items to CP.
+  $menu_name = 'menu-cp-actions';
+  $language = 'und';
+  $module = 'cyco_exercises';
+  //Get the weight of the item this is to follow.
+  $weight_B_and_K = cyco_install_get_weight_cp_top_item('Blueprints and keywords');
+  if ( is_null($weight_B_and_K) ) {
+    $weight_B_and_K = 0;
+  }
+  CycoInstallDebug::getInstance()->output('cyco_exercises_install: Before tli1');
+  //Make main top-level item.
+  //Compute item weight, to follow Blueprints and Keywords.
+  $weight_E_and_R = $weight_B_and_K + 1;
+  $top_level_E_and_R_params = array(
+    'link_path' => 'exercises',
+    'link_title' => 'Exercises and rubrics',
+    'weight' => $weight_E_and_R,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => 0,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Exercises are tasks that students do. Graders use '
+        . 'rubrics to grade students\' work.',
+      ),
+    ),
+  );
+  $E_and_R_mlid = menu_link_save($item);
+  CycoInstallDebug::getInstance()->output('cyco_exercises_install: after tli1');
+  //Add items that are children of the top-level.
+  //$items only has data the changes for each menu item.
+  $items = array();
+  $items[] = array(
+    'link_path' => 'exercises',
+    'link_title' => 'List exercises',
+    'weight' => 0,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/exercise',
+    'link_title' => 'Add new exercise',
+    'weight' => 10,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/keywords',
+    'link_title' => 'Manage exercise keywords',
+    'weight' => 20,
+  );
+  $items[] = array(
+    'link_path' => 'rubric-items',
+    'link_title' => 'List rubric items',
+    'weight' => 30,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/rubric-item',
+    'link_title' => 'Add new rubric item',
+    'weight' => 40,
+  );
+  $items[] = array(
+    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
+    'link_title' => 'Manage rubric item categories',
+    'weight' => 50,
+  );
+  $items[] = array(
+    'link_path' => 'list-model-solutions',
+    'link_title' => 'List model solutions',
+    'weight' => 60,
+  );
+  $items[] = array(
+    'link_path' => 'node/add/model-exercise-solution',
+    'link_title' => 'Add model solution',
+    'weight' => 70,
+  );
+  $template_item = array(
+    'link_path' => '',
+    'link_title' => '',
+    'weight' => 0,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $E_and_R_mlid,
+    'module' => $module,
+  );
+  CycoInstallDebug::getInstance()->output('cyco_exercises_install: afore loop');
+  foreach ( $items as $item ) {
+    $template_item['link_path'] = $item['link_path'];
+    $template_item['link_title'] = $item['link_title'];
+    $template_item['weight'] = $item['weight'];
+    menu_link_save($template_item);
+  }
+  //Make second top-level item.
+  //Compute item weight, to follow Exercises and Rubrics.
+  $weight_ES = $weight_E_and_R + 1;
+  $top_level_E_and_R_params = array(
+    'link_path' => 'manage-submissions',
+    'link_title' => 'Exercise submissions',
+    'weight' => $weight_ES,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => 0,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'View and manage student\'s submissions to exercsies ',
+      ),
+    ),
+  );
+  $ES_mlid = menu_link_save($item);
+  //Add children.
+  //$items only has data the changes for each menu item.
+  $items = array();
+  $items[] = array(
+    'link_path' => 'manage-submissions',
+    'link_title' => 'Manage submissions',
+    'weight' => 0,
+  );
+  //Adjust the template item.
+  $template_item['plid'] = $ES_mlid;
+  foreach ( $items as $item ) {
+    $template_item['link_path'] = $item['link_path'];
+    $template_item['link_title'] = $item['link_title'];
+    $template_item['weight'] = $item['weight'];
+    menu_link_save($template_item);
+  }  
+  CycoInstallDebug::getInstance()->output('cyco_exercises_install: END');
+}
+
+/**
  * Implements hook_menu.
  */
 function cyco_exercises_menu() {

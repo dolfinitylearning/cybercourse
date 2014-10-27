@@ -387,18 +387,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'search_config',
   );
 
-  // Exported permission: 'search exercise_submission_rubric_item_ content'.
-  $permissions['search exercise_submission_rubric_item_ content'] = array(
-    'name' => 'search exercise_submission_rubric_item_ content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'search_config',
-  );
-
   // Exported permission: 'search model_exercise_solution content'.
   $permissions['search model_exercise_solution content'] = array(
     'name' => 'search model_exercise_solution content',

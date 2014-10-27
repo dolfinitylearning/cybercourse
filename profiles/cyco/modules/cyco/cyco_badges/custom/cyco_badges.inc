@@ -9,6 +9,17 @@ function cyco_badges_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   if (substr($root_path, 0, 6) == 'user/%' ) {
     $data['tabs'][0]['output'][1]['#link']['title'] = 'Badges';
   }
+  if ( $root_path == 'badges' ) {
+    if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
+      // Link to add badge.
+      $item = menu_get_item('node/add/badge');
+      $item['title'] = t('Add badge type');
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
 }
 
 /**

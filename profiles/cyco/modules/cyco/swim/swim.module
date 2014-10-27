@@ -23,10 +23,6 @@ define('SWIM_MATH_JAX_CLASS', 'math');
  * @return string
  */
 function _swim_compute_mathjax_path() {
-//  global $base_url;
-//  $module_path = drupal_get_path('module', 'swim');
-//  $config_path = $base_url . '/' . $module_path . '/js/mathjax_local_config.js';
-//  $mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=' . $config_path;
   $config = 'TeX-AMS-MML_HTMLorMML';
   $mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=' . $config;
   return $mathjax_path;

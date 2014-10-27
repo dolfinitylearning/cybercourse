@@ -81,11 +81,11 @@ function _cyco_finalize_install() {
   _cyco_enable_modules();
 
   // Set the front page.
-  CycoInstallDebug::getInstance()->output('Before set frontpage call');
+//  CycoInstallDebug::getInstance()->output('Before set frontpage call');
   _cyco_set_frontpage();
-  CycoInstallDebug::getInstance()->output('After frontpage call');
-  $doom_dog = variable_get('site_frontpage', '(Not found)');
-  CycoInstallDebug::getInstance()->output('Frontpage: ' . $doom_dog);
+//  CycoInstallDebug::getInstance()->output('After frontpage call');
+//  $doom_dog = variable_get('site_frontpage', '(Not found)');
+//  CycoInstallDebug::getInstance()->output('Frontpage: ' . $doom_dog);
   
   node_access_rebuild();
   cache_clear_all();
@@ -491,12 +491,12 @@ function _cyco_restrict_block2roles( $block_id, $module, $role_names ) {
  * Set the frontpage of the site to the Welcome page.
  */
 function _cyco_set_frontpage() {
-  CycoInstallDebug::getInstance()->output('Start set frontpage');
+//  CycoInstallDebug::getInstance()->output('Start set frontpage');
   $welcome = _cyco_node_load_by_title('Welcome', 'page');
   $welcome_nid = $welcome->nid;
-  CycoInstallDebug::getInstance()->output('$welcome_nid: ' . $welcome_nid);
+//  CycoInstallDebug::getInstance()->output('$welcome_nid: ' . $welcome_nid);
   variable_set('site_frontpage', 'node/' . $welcome_nid);
-  CycoInstallDebug::getInstance()->output('End set frontpage');
+//  CycoInstallDebug::getInstance()->output('End set frontpage');
 }
 
 /**
@@ -672,8 +672,8 @@ function _cyco_add_links_cp_menus() {
   $items = array();
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
-  $module = 'menu';
-  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menus');
+  $module = 'cyco_core';
+//  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menus');
   
   //Create top level items.
   $plid = 0;
@@ -695,7 +695,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'blueprints-and-keywords',
     'link_title' => 'Blueprints and keywords',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -707,26 +707,26 @@ function _cyco_add_links_cp_menus() {
       ),
     ),
   );
-  $items[] = array(
-    'link_path' => 'exercises',
-    'link_title' => 'Exercises and rubrics',
-    'weight' => 2,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $plid,
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Exercises are tasks that students do. Graders use '
-        . 'rubrics to grade students\' work.',
-      ),
-    ),
-  );
+//  $items[] = array(
+//    'link_path' => 'exercises',
+//    'link_title' => 'Exercises and rubrics',
+//    'weight' => 20,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $plid,
+//    'module' => $module,
+//    'options' => array(
+//      'attributes' => array(
+//        'title' => 'Exercises are tasks that students do. Graders use '
+//        . 'rubrics to grade students\' work.',
+//      ),
+//    ),
+//  );
   $items[] = array(
     'link_path' => 'pseudent-poses',
     'link_title' => 'Pseudent poses',
-    'weight' => 3,
+    'weight' => 30,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -741,7 +741,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'patterns',
     'link_title' => 'Patterns',
-    'weight' => 4,
+    'weight' => 40,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -756,7 +756,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'basic-pages',
     'link_title' => 'Basic pages',
-    'weight' => 5,
+    'weight' => 50,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -772,7 +772,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'workflow-tagged',
     'link_title' => 'Content that needs work',
-    'weight' => 6,
+    'weight' => 60,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -787,7 +787,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'classes',
     'link_title' => 'Classes',
-    'weight' => 7,
+    'weight' => 70,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -803,7 +803,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'admin/people',
     'link_title' => 'Users',
-    'weight' => 8,
+    'weight' => 80,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -818,7 +818,7 @@ function _cyco_add_links_cp_menus() {
   $items[] = array(
     'link_path' => 'admin/content',
     'link_title' => 'Other',
-    'weight' => 9,
+    'weight' => 90,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -830,18 +830,18 @@ function _cyco_add_links_cp_menus() {
       ),
     ),
   );
-  $top_level_mlids = array();
+  $_cyco_install_cp_top_level_mlids = array();
   foreach ( $items as $item ) {
-    $top_level_mlids[ $item['link_path'] ] = menu_link_save($item);
+    $_cyco_install_cp_top_level_mlids[ $item['link_path'] ] = menu_link_save($item);
   }
 
-  CycoInstallDebug::getInstance()->output('CP menu items - top-level.');
-  CycoInstallDebug::getInstance()->output(
-      '<pre>$items: '.print_r($items, TRUE).'</pre>'
-  );
-  CycoInstallDebug::getInstance()->output(
-      '<pre>$top_level_mlids: '.print_r($top_level_mlids, TRUE).'</pre>'
-  );
+//  CycoInstallDebug::getInstance()->output('CP menu items - top-level.');
+//  CycoInstallDebug::getInstance()->output(
+//      '<pre>$items: '.print_r($items, TRUE).'</pre>'
+//  );
+//  CycoInstallDebug::getInstance()->output(
+//      '<pre>$top_level_mlids: '.print_r($_cyco_install_cp_top_level_mlids, TRUE).'</pre>'
+//  );
   
   //Courses and keywords submenu
   $items = array();
@@ -852,37 +852,37 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'courses-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'node/add/course-page?book_op=newbook',
     'link_title' => 'Create a new course',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'courses-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/keywords',
     'link_title' => 'Manage keywords',
-    'weight' => 2,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'courses-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
   
-  CycoInstallDebug::getInstance()->output('CP menu items - Courses and keywords submenu.');
-  CycoInstallDebug::getInstance()->output(
-      '<pre>$items: '.print_r($items, TRUE).'</pre>'
-  );
+//  CycoInstallDebug::getInstance()->output('CP menu items - Courses and keywords submenu.');
+//  CycoInstallDebug::getInstance()->output(
+//      '<pre>$items: '.print_r($items, TRUE).'</pre>'
+//  );
 
   //Blueprints and keywords submenu
   $items = array();
@@ -893,27 +893,27 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'blueprints-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'node/add/blueprint-page?book_op=newbook',
     'link_title' => 'Create a new blueprint',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'blueprints-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/blueprint_keywords',
     'link_title' => 'Manage blueprint keywords',
-    'weight' => 2,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'blueprints-and-keywords' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -921,90 +921,90 @@ function _cyco_add_links_cp_menus() {
   }
   
   //Exercises and rubics submenu
-  $items = array();
-  $items[] = array(
-    'link_path' => 'exercises',
-    'link_title' => 'List exercises',
-    'weight' => 0,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'node/add/exercise',
-    'link_title' => 'Add new exercise',
-    'weight' => 1,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'admin/structure/taxonomy/keywords',
-    'link_title' => 'Manage exercise keywords',
-    'weight' => 2,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'rubric-items',
-    'link_title' => 'List rubric items',
-    'weight' => 3,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'node/add/rubric-item',
-    'link_title' => 'Add new rubric item',
-    'weight' => 4,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
-    'link_title' => 'Manage rubric item categories',
-    'weight' => 5,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'list-model-solutions',
-    'link_title' => 'List model solutions',
-    'weight' => 6,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  $items[] = array(
-    'link_path' => 'node/add/model-exercise-solution',
-    'link_title' => 'Add model solution',
-    'weight' => 7,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $top_level_mlids[ 'exercises' ],
-    'module' => $module,
-  );
-  foreach ( $items as $item ) {
-    menu_link_save($item);
-  }
+//  $items = array();
+//  $items[] = array(
+//    'link_path' => 'exercises',
+//    'link_title' => 'List exercises',
+//    'weight' => 0,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'node/add/exercise',
+//    'link_title' => 'Add new exercise',
+//    'weight' => 10,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'admin/structure/taxonomy/keywords',
+//    'link_title' => 'Manage exercise keywords',
+//    'weight' => 20,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'rubric-items',
+//    'link_title' => 'List rubric items',
+//    'weight' => 30,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'node/add/rubric-item',
+//    'link_title' => 'Add new rubric item',
+//    'weight' => 40,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
+//    'link_title' => 'Manage rubric item categories',
+//    'weight' => 50,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'list-model-solutions',
+//    'link_title' => 'List model solutions',
+//    'weight' => 60,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  $items[] = array(
+//    'link_path' => 'node/add/model-exercise-solution',
+//    'link_title' => 'Add model solution',
+//    'weight' => 70,
+//    'expanded' => TRUE,
+//    'menu_name' => $menu_name,
+//    'language' => $language,
+//    'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
+//    'module' => $module,
+//  );
+//  foreach ( $items as $item ) {
+//    menu_link_save($item);
+//  }
   
   //Pseudent poses submenu
   $items = array();
@@ -1015,27 +1015,27 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'pseudent-poses' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'node/add/pseudent-pose',
     'link_title' => 'Add a new pseudent pose.',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'pseudent-poses' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/pseudent_categories',
     'link_title' => 'Manage pseudent categories',
-    'weight' => 2,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'pseudent-poses' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1051,27 +1051,27 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'patterns' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'node/add/pattern',
     'link_title' => 'Add a pattern',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'patterns' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/pattern_categories',
     'link_title' => 'Manage pattern categories',
-    'weight' => 2,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'patterns' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1087,17 +1087,17 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'basic-pages' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'basic-pages' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'basic-pages',
     'link_title' => 'List basic pages',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'basic-pages' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'basic-pages' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1113,17 +1113,17 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'workflow-tagged' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'workflow-tagged' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/workflow_tags',
     'link_title' => 'Manage workflow tags',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'workflow-tagged' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'workflow-tagged' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1139,17 +1139,17 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'classes' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'classes' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'node/add/class',
     'link_title' => 'Add class',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'classes' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'classes' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1165,17 +1165,17 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/people' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/people' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/people/create',
     'link_title' => 'Add user',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/people' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/people' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
@@ -1191,53 +1191,53 @@ function _cyco_add_links_cp_menus() {
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/content' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/token-custom',
     'link_title' => 'Custom tokens',
-    'weight' => 1,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/content' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/config/system/backup_migrate',
     'link_title' => 'Backup',
-    'weight' => 2,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/content' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/structure/block',
     'link_title' => 'Blocks',
-    'weight' => 3,
+    'weight' => 30,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/content' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
   );
   $items[] = array(
     'link_path' => 'admin/appearance',
     'link_title' => 'Appearance',
-    'weight' => 4,
+    'weight' => 40,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
-    'plid' => $top_level_mlids[ 'admin/content' ],
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_cp_menus');
+//  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_cp_menus');
 
 }
 
@@ -1286,18 +1286,18 @@ function _cyco_create_footer_linked_pages() {
  * Add links to the footer menu.
  */
 function _cyco_add_links_footer_menu() {
-  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_footer_menu');
+//  CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_footer_menu');
   //Find the machine name of the footer menu.
   $footer_menu_machine_name = _cyco_find_menu_machine_name('Footer');
   if ( is_null($footer_menu_machine_name) ) {
     drupal_set_message('Could not find footer menu.');
     return;
   }
-  CycoInstallDebug::getInstance()->output('Middle _cyco_add_links_footer_menu');
+//  CycoInstallDebug::getInstance()->output('Middle _cyco_add_links_footer_menu');
   _cyco_add_menu_item('Copyright, you, 20xx', 'page', $footer_menu_machine_name, 0);
   _cyco_add_menu_item('Credits', 'page', $footer_menu_machine_name, 1);
   _cyco_add_menu_item('Terms of use', 'page', $footer_menu_machine_name, 2);
-  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_footer_menu');
+//  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_footer_menu');
 }
 
 /**

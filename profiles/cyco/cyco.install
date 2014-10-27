@@ -8,7 +8,7 @@ require_once 'cyco_install_debug.php';
 
 ini_set('max_execution_time', 180); //180 seconds - 3 minutes. 
 
-CycoInstallDebug::getInstance()->debug = FALSE;
+CycoInstallDebug::getInstance()->debug = TRUE;
 
 /**
  * Implements hook_install().
@@ -18,17 +18,17 @@ CycoInstallDebug::getInstance()->debug = FALSE;
  * @see system_install()
  */
 function cyco_install() {
-  CycoInstallDebug::getInstance()->output('Start');
+//  CycoInstallDebug::getInstance()->output('Start');
   cyco_define_blocks();
   //Set version of jQuery to use.
   cyco_jquery_update();
   //Remove book page content type.
   node_type_delete('book');
-  CycoInstallDebug::getInstance()->output('End');
+//  CycoInstallDebug::getInstance()->output('End');
 }
 
 function cyco_define_blocks() {
-  CycoInstallDebug::getInstance()->output('Start');
+//  CycoInstallDebug::getInstance()->output('Start');
   // Enable some standard blocks.
   $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'seven';
@@ -99,17 +99,39 @@ function cyco_define_blocks() {
     $query->values($block);
   }
   $query->execute();  
-  CycoInstallDebug::getInstance()->output('End');
+//  CycoInstallDebug::getInstance()->output('End');
 }
 
 /**
  * Configure jquery_update module to load the right version of jQuery.
  */
 function cyco_jquery_update() {
-  CycoInstallDebug::getInstance()->output('Start');
+//  CycoInstallDebug::getInstance()->output('Start');
   //Needs to be 1.7 until admin menu bug is fixed.
   variable_set('jquery_update_jquery_version', '1.7');
   variable_set('jquery_update_jquery_cdn', 'google');  
-  CycoInstallDebug::getInstance()->output('End');
+//  CycoInstallDebug::getInstance()->output('End');
 }
 
+/**
+ * Find the weight of a top level item in the control panel actions menu,
+ * given the link's title.
+ * @param string $link_title Text of the menu link.
+ * @return Weight, or NULL if not found.
+ */
+function cyco_install_get_weight_cp_top_item( $link_title ) {
+  $menu_name = 'menu-cp-actions';
+  $sql = 'select weight from {menu_links} '
+      . 'where menu_name = :menu_name '
+      . 'and link_title = :link_title '
+      . 'and plid = 0';
+  $arg_values = array(
+    ':menu_name' => $menu_name,
+    ':link_title' => $link_title,
+  );
+  $result = db_query($sql, $arg_values)->fetchField();
+  if ( ! is_numeric($result) ) {
+    $result = NULL;
+  }
+  return $result;
+}
