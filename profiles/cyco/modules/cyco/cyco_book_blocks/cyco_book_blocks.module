@@ -87,23 +87,6 @@ function _cbb_clear_book_tree_menu_caches( $bid ) {
 }
 
 /**
- * Implements hook_permission().
- */
-function cyco_book_blocks_permission() {
-  return array(
-    'view unpublished cyco course content' => array(
-      'title' => t('View unpublished course content'),
-      'description' => t('User can see course content that has not been published.'),
-    ),
-    'view unpublished cyco blueprint content' => array(
-      'title' => t('View unpublished blueprint content'),
-      'description' => t('User can see blueprint content that has not been published.'),
-    ),
-  );
-}
-
-
-/**
  * Implements hook_block_info().
  */
 function cyco_book_blocks_block_info() {

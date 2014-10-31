@@ -13,6 +13,48 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_blueprint_page';
+  $strongarm->value = 'edit-comment';
+  $export['additional_settings__active_tab_blueprint_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_class';
+  $strongarm->value = 'edit-diff';
+  $export['additional_settings__active_tab_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_class_post';
+  $strongarm->value = 'edit-comment';
+  $export['additional_settings__active_tab_class_post'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_course_page';
+  $strongarm->value = 'edit-diff';
+  $export['additional_settings__active_tab_course_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_page';
+  $strongarm->value = 'edit-diff';
+  $export['additional_settings__active_tab_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'additional_settings__active_tab_rubric_item';
+  $strongarm->value = 'edit-diff';
+  $export['additional_settings__active_tab_rubric_item'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'admin_theme';
   $strongarm->value = '0';
   $export['admin_theme'] = $strongarm;
@@ -39,6 +81,27 @@ function cyco_core_strongarm() {
   $strongarm->name = 'book_top_navbar_content_field_names';
   $strongarm->value = 'body field_body field_notes field_explanation field_description';
   $export['book_top_navbar_content_field_names'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'book_top_navbar_min_content_length';
+  $strongarm->value = 500;
+  $export['book_top_navbar_min_content_length'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'book_top_navbar_show_toc';
+  $strongarm->value = 1;
+  $export['book_top_navbar_show_toc'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'book_top_navbar_suppress_kids';
+  $strongarm->value = 1;
+  $export['book_top_navbar_suppress_kids'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -1017,9 +1080,6 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
   $strongarm->value = array(
-    'swim_format_code' => 1413812845,
-    'hook_post_action' => 1413989032,
-    'views_data_export' => 1414097298,
     'achievements_views' => 1414170741,
     'cyco_badges' => 1414178197,
   );
@@ -1685,6 +1745,41 @@ function cyco_core_strongarm() {
   $strongarm->name = 'theme_default';
   $strongarm->value = 'cybercourse';
   $export['theme_default'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tsb_icon_position';
+  $strongarm->value = 'right';
+  $export['tsb_icon_position'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tsb_main_region_class_when_collapsed';
+  $strongarm->value = 'col-sm-12';
+  $export['tsb_main_region_class_when_collapsed'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tsb_main_region_class_when_expanded';
+  $strongarm->value = 'col-sm-9';
+  $export['tsb_main_region_class_when_expanded'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tsb_main_region_selector';
+  $strongarm->value = '.region-content';
+  $export['tsb_main_region_selector'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'tsb_sidebar_selector';
+  $strongarm->value = '.region-sidebar-second';
+  $export['tsb_sidebar_selector'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

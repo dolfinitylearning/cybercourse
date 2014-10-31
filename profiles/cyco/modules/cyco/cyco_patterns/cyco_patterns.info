@@ -31,7 +31,6 @@ features[field_instance][] = node-pattern-field_explanation
 features[field_instance][] = node-pattern-field_images
 features[field_instance][] = node-pattern-field_pattern_categories
 features[field_instance][] = node-pattern-field_situation
-features[menu_links][] = menu-tools_patterns:patterns-public
 features[node][] = pattern
 features[taxonomy][] = pattern_categories
 features[user_permission][] = create pattern content

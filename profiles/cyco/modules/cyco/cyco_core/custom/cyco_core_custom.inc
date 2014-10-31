@@ -16,6 +16,22 @@ require_once realpath(dirname(__FILE__)) . '/cyco_core_groups.inc';
 define('CYCO_WIKI_MAIN_URL', 'https://wiki.cybercour.se');
 
 /**
+ * Implements hook_permission().
+ */
+function cyco_core_permission() {
+  return array(
+    'view unpublished cyco course content' => array(
+      'title' => t('View unpublished course content'),
+      'description' => t('User can see course content that has not been published.'),
+    ),
+    'view unpublished cyco blueprint content' => array(
+      'title' => t('View unpublished blueprint content'),
+      'description' => t('User can see blueprint content that has not been published.'),
+    ),
+  );
+}
+
+/**
  * Implements hook_menu().
  */
 function cyco_core_menu() {

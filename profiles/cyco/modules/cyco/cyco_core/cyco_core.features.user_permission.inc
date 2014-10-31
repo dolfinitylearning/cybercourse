@@ -1340,25 +1340,5 @@ function cyco_core_user_default_permissions() {
     'module' => 'system',
   );
 
-  // Exported permission: 'view unpublished cyco blueprint content'.
-  $permissions['view unpublished cyco blueprint content'] = array(
-    'name' => 'view unpublished cyco blueprint content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'cyco_book_blocks',
-  );
-
-  // Exported permission: 'view unpublished cyco course content'.
-  $permissions['view unpublished cyco course content'] = array(
-    'name' => 'view unpublished cyco course content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'cyco_book_blocks',
-  );
-
   return $permissions;
 }

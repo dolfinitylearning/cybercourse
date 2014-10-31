@@ -72,23 +72,6 @@ function cyco_badges_menu_default_menu_links() {
     'customized' => 1,
     'parent_identifier' => 'menu-cp-actions_badges:badges',
   );
-  // Exported menu link: menu-tools_badges:badges-public
-  $menu_links['menu-tools_badges:badges-public'] = array(
-    'menu_name' => 'menu-tools',
-    'link_path' => 'badges-public',
-    'router_path' => 'badges-public',
-    'link_title' => 'Badges',
-    'options' => array(
-      'identifier' => 'menu-tools_badges:badges-public',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 0,
-    'customized' => 0,
-  );
   // Translatables
   // Included for use with string extractors like potx.
   t('Add badge type');

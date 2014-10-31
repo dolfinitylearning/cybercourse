@@ -28,30 +28,30 @@ function cyco_install_tasks_alter( &$tasks, $install_state ) {
   //See https://www.drupal.org/node/1022020 for task list.  
   //Grab tasks to be moved to the end.
   $t = get_t();
-//  $install_configure_form = $tasks['install_configure_form'];
-//  unset( $tasks['install_configure_form'] );
+  $install_configure_form = $tasks['install_configure_form'];
+  unset( $tasks['install_configure_form'] );
   $install_import_locales_remaining = $tasks['install_import_locales_remaining'];
   unset( $tasks['install_import_locales_remaining'] );
   $install_finished = $tasks['install_finished'];
   unset( $tasks['install_finished'] );
   //Define new batch task. Adding bunch o' modules.
-  $tasks['_cyco_install_more_modules'] = array(
+  $task['_cyco_install_more_modules'] = array(
     'display_name' => $t('Installing more modules'),
     'display' => TRUE,
     'type' => 'batch',
     'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
   );  
   //Restore configure form task removed earlier.
-//  $tasks['install_configure_form'] = $install_configure_form;
-//  //Custom configuration.
-  $tasks['_cyco_finalize_install'] = array(
+  $tasks['install_configure_form'] = $install_configure_form;
+  //Custom configuration.
+  $task['_cyco_finalize_install'] = array(
     'display_name' => $t('Making it awesome'),
     'display' => TRUE,
     'type' => 'batch',
     'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
   );  
   //Restore tasks removed earlier.
-//  $tasks['install_configure_form'] = $install_configure_form;
+  $tasks['install_configure_form'] = $install_configure_form;
   $tasks['install_import_locales_remaining'] = $install_import_locales_remaining;
   $tasks['install_finished'] = $install_finished;
 }
