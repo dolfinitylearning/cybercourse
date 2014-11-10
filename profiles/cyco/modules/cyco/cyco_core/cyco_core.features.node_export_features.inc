@@ -8,6 +8,8 @@
  * Implements hook_node_export_features_default().
  */
 function cyco_core_node_export_features_default() {
+//KRM
+return;
   $node_export = array(
   'code_string' => 'array(
   (object) array(

@@ -28,38 +28,6 @@ function cyco_core_views_api($module = NULL, $api = NULL) {
  */
 function cyco_core_node_info() {
   $items = array(
-    'blueprint_page' => array(
-      'name' => t('Blueprint page'),
-      'base' => 'node_content',
-      'description' => t('A page about the design of the cybercourse.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'class' => array(
-      'name' => t('Class'),
-      'base' => 'node_content',
-      'description' => t('Class taking a course or courses. Students, graders, and instructors are all part of the class.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'class_post' => array(
-      'name' => t('Class post'),
-      'base' => 'node_content',
-      'description' => t('Post to a class.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'course_page' => array(
-      'name' => t('Course page'),
-      'base' => 'node_content',
-      'description' => t('A page that\'s part of a course.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
     'page' => array(
       'name' => t('Basic page'),
       'base' => 'node_content',

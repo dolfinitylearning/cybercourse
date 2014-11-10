@@ -60,6 +60,8 @@ function _cyco_core_cp_flush_cache() {
  * Implements hook_menu_link_alter().
  */
 function cyco_core_menu_link_alter(&$link) {
+//KRM
+return;
   // Force the control panel link to appear on the top-level of 'user-menu'.
   if ($link['link_path'] == 'user/control-panel') {
     $link['plid'] = 0;

@@ -8,6 +8,8 @@
  * Implements hook_menu_default_menu_links().
  */
 function cyco_exercises_menu_default_menu_links() {
+//KRM
+return;
   $menu_links = array();
 
   // Exported menu link: menu-cp-actions_classes:classes

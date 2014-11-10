@@ -13,27 +13,6 @@ function cyco_exercises_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_exercise';
-  $strongarm->value = 'edit-diff';
-  $export['additional_settings__active_tab_exercise'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_exercise_submission';
-  $strongarm->value = 'edit-diff';
-  $export['additional_settings__active_tab_exercise_submission'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'additional_settings__active_tab_model_exercise_solution';
-  $strongarm->value = 'edit-diff';
-  $export['additional_settings__active_tab_model_exercise_solution'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'auto_entitylabel_node_exercise_submission';
   $strongarm->value = '0';
   $export['auto_entitylabel_node_exercise_submission'] = $strongarm;
@@ -600,6 +579,13 @@ function cyco_exercises_strongarm() {
   $strongarm->name = 'pathauto_taxonomy_term_rubric_item_categories_pattern';
   $strongarm->value = '';
   $export['pathauto_taxonomy_term_rubric_item_categories_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'services_security_update_1';
+  $strongarm->value = TRUE;
+  $export['services_security_update_1'] = $strongarm;
 
   return $export;
 }

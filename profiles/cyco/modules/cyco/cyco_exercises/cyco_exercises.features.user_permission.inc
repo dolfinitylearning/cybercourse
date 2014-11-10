@@ -20,6 +20,15 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'cyco_exercises',
   );
 
+  // Exported permission: 'administer services'.
+  $permissions['administer services'] = array(
+    'name' => 'administer services',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
   // Exported permission: 'create exercise content'.
   $permissions['create exercise content'] = array(
     'name' => 'create exercise content',
@@ -67,6 +76,15 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'create field_rubric_item_ratings'.
+  $permissions['create field_rubric_item_ratings'] = array(
+    'name' => 'create field_rubric_item_ratings',
+    'roles' => array(
+      'administrator' => 'administrator',
     ),
     'module' => 'field_permissions',
   );
@@ -264,6 +282,15 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
+  // Exported permission: 'edit field_rubric_item_ratings'.
+  $permissions['edit field_rubric_item_ratings'] = array(
+    'name' => 'edit field_rubric_item_ratings',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit field_rubric_items'.
   $permissions['edit field_rubric_items'] = array(
     'name' => 'edit field_rubric_items',
@@ -326,6 +353,15 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
+  // Exported permission: 'edit own field_rubric_item_ratings'.
+  $permissions['edit own field_rubric_item_ratings'] = array(
+    'name' => 'edit own field_rubric_item_ratings',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit own field_rubric_items'.
   $permissions['edit own field_rubric_items'] = array(
     'name' => 'edit own field_rubric_items',
@@ -364,6 +400,60 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'taxonomy',
+  );
+
+  // Exported permission: 'get a system variable'.
+  $permissions['get a system variable'] = array(
+    'name' => 'get a system variable',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
+  // Exported permission: 'get any binary files'.
+  $permissions['get any binary files'] = array(
+    'name' => 'get any binary files',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
+  // Exported permission: 'get own binary files'.
+  $permissions['get own binary files'] = array(
+    'name' => 'get own binary files',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
+  // Exported permission: 'perform unlimited index queries'.
+  $permissions['perform unlimited index queries'] = array(
+    'name' => 'perform unlimited index queries',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
+  // Exported permission: 'retrieve definition'.
+  $permissions['retrieve definition'] = array(
+    'name' => 'retrieve definition',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services_definition',
+  );
+
+  // Exported permission: 'save file information'.
+  $permissions['save file information'] = array(
+    'name' => 'save file information',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
   );
 
   // Exported permission: 'search exercise content'.
@@ -412,6 +502,15 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'search_config',
   );
 
+  // Exported permission: 'set a system variable'.
+  $permissions['set a system variable'] = array(
+    'name' => 'set a system variable',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'services',
+  );
+
   // Exported permission: 'view field_exercise_solved'.
   $permissions['view field_exercise_solved'] = array(
     'name' => 'view field_exercise_solved',
@@ -447,6 +546,15 @@ function cyco_exercises_user_default_permissions() {
       'grader' => 'grader',
       'instructor' => 'instructor',
       'reviewer' => 'reviewer',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view field_rubric_item_ratings'.
+  $permissions['view field_rubric_item_ratings'] = array(
+    'name' => 'view field_rubric_item_ratings',
+    'roles' => array(
+      'administrator' => 'administrator',
     ),
     'module' => 'field_permissions',
   );
@@ -493,6 +601,15 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view own field_rubric_item_ratings'.
+  $permissions['view own field_rubric_item_ratings'] = array(
+    'name' => 'view own field_rubric_item_ratings',
+    'roles' => array(
+      'administrator' => 'administrator',
     ),
     'module' => 'field_permissions',
   );

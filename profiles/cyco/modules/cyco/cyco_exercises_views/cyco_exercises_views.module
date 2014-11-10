@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse Exercises Views feature.
+ */
+
+include_once 'cyco_exercises_views.features.inc';

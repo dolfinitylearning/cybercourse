@@ -9,7 +9,8 @@
  */
 function cyco_core_menu_default_menu_links() {
   $menu_links = array();
-
+//KRM
+return;
   // Exported menu link: user-menu_control-panel:user/control-panel
   $menu_links['user-menu_control-panel:user/control-panel'] = array(
     'menu_name' => 'user-menu',

@@ -18,6 +18,7 @@ define( 'TOO_BAD_SO_SAD',
  * Implements hook_install().
  */
 function cyco_exercises_install() {
+return;
   CycoInstallDebug::getInstance()->output('Start cyco_exercises_install');
   //Add items to CP.
   $menu_name = 'menu-cp-actions';

@@ -22,6 +22,12 @@ function cyco_core_menu_default_menu_custom() {
     'title' => 'CP actions',
     'description' => 'Control panel actions menu.',
   );
+  // Exported menu: menu-cp-students.
+  $menus['menu-cp-students'] = array(
+    'menu_name' => 'menu-cp-students',
+    'title' => 'CP students',
+    'description' => 'Control panel menu for students.',
+  );
   // Exported menu: menu-footer.
   $menus['menu-footer'] = array(
     'menu_name' => 'menu-footer',
@@ -43,7 +49,9 @@ function cyco_core_menu_default_menu_custom() {
   // Translatables
   // Included for use with string extractors like potx.
   t('CP actions');
+  t('CP students');
   t('Control panel actions menu.');
+  t('Control panel menu for students.');
   t('Footer');
   t('Main menu');
   t('Menu for the bottom of the page.');

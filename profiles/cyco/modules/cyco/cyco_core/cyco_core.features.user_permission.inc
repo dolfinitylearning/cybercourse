@@ -260,13 +260,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'filter',
   );
 
-  // Exported permission: 'administer group'.
-  $permissions['administer group'] = array(
-    'name' => 'administer group',
-    'roles' => array(),
-    'module' => 'og',
-  );
-
   // Exported permission: 'administer image styles'.
   $permissions['administer image styles'] = array(
     'name' => 'administer image styles',
@@ -367,15 +360,6 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'search',
-  );
-
-  // Exported permission: 'administer services'.
-  $permissions['administer services'] = array(
-    'name' => 'administer services',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
   );
 
   // Exported permission: 'administer shortcuts'.
@@ -519,48 +503,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'clone',
   );
 
-  // Exported permission: 'create blueprint_page content'.
-  $permissions['create blueprint_page content'] = array(
-    'name' => 'create blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create class content'.
-  $permissions['create class content'] = array(
-    'name' => 'create class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create class_post content'.
-  $permissions['create class_post content'] = array(
-    'name' => 'create class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create course_page content'.
-  $permissions['create course_page content'] = array(
-    'name' => 'create course_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'create field_workflow_tags'.
   $permissions['create field_workflow_tags'] = array(
     'name' => 'create field_workflow_tags',
@@ -609,46 +551,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'shortcut',
   );
 
-  // Exported permission: 'delete any blueprint_page content'.
-  $permissions['delete any blueprint_page content'] = array(
-    'name' => 'delete any blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any class content'.
-  $permissions['delete any class content'] = array(
-    'name' => 'delete any class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any class_post content'.
-  $permissions['delete any class_post content'] = array(
-    'name' => 'delete any class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any course_page content'.
-  $permissions['delete any course_page content'] = array(
-    'name' => 'delete any course_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'delete any page content'.
   $permissions['delete any page content'] = array(
     'name' => 'delete any page content',
@@ -669,48 +571,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'backup_migrate',
   );
 
-  // Exported permission: 'delete own blueprint_page content'.
-  $permissions['delete own blueprint_page content'] = array(
-    'name' => 'delete own blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own class content'.
-  $permissions['delete own class content'] = array(
-    'name' => 'delete own class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own class_post content'.
-  $permissions['delete own class_post content'] = array(
-    'name' => 'delete own class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own course_page content'.
-  $permissions['delete own course_page content'] = array(
-    'name' => 'delete own course_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'delete own page content'.
   $permissions['delete own page content'] = array(
     'name' => 'delete own page content',
@@ -729,16 +589,6 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'delete terms in blueprint_keywords'.
-  $permissions['delete terms in blueprint_keywords'] = array(
-    'name' => 'delete terms in blueprint_keywords',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'taxonomy',
   );
 
   // Exported permission: 'delete terms in keywords'.
@@ -770,46 +620,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'admin_menu',
   );
 
-  // Exported permission: 'edit any blueprint_page content'.
-  $permissions['edit any blueprint_page content'] = array(
-    'name' => 'edit any blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any class content'.
-  $permissions['edit any class content'] = array(
-    'name' => 'edit any class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any class_post content'.
-  $permissions['edit any class_post content'] = array(
-    'name' => 'edit any class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any course_page content'.
-  $permissions['edit any course_page content'] = array(
-    'name' => 'edit any course_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'edit any page content'.
   $permissions['edit any page content'] = array(
     'name' => 'edit any page content',
@@ -830,48 +640,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'edit own blueprint_page content'.
-  $permissions['edit own blueprint_page content'] = array(
-    'name' => 'edit own blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own class content'.
-  $permissions['edit own class content'] = array(
-    'name' => 'edit own class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own class_post content'.
-  $permissions['edit own class_post content'] = array(
-    'name' => 'edit own class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own course_page content'.
-  $permissions['edit own course_page content'] = array(
-    'name' => 'edit own course_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'edit own field_workflow_tags'.
   $permissions['edit own field_workflow_tags'] = array(
     'name' => 'edit own field_workflow_tags',
@@ -890,16 +658,6 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'edit terms in blueprint_keywords'.
-  $permissions['edit terms in blueprint_keywords'] = array(
-    'name' => 'edit terms in blueprint_keywords',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'taxonomy',
   );
 
   // Exported permission: 'edit terms in keywords'.
@@ -953,33 +711,6 @@ function cyco_core_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'features',
-  );
-
-  // Exported permission: 'get a system variable'.
-  $permissions['get a system variable'] = array(
-    'name' => 'get a system variable',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
-  );
-
-  // Exported permission: 'get any binary files'.
-  $permissions['get any binary files'] = array(
-    'name' => 'get any binary files',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
-  );
-
-  // Exported permission: 'get own binary files'.
-  $permissions['get own binary files'] = array(
-    'name' => 'get own binary files',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
   );
 
   // Exported permission: 'grant content access'.
@@ -1046,15 +777,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'backup_migrate',
   );
 
-  // Exported permission: 'perform unlimited index queries'.
-  $permissions['perform unlimited index queries'] = array(
-    'name' => 'perform unlimited index queries',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
-  );
-
   // Exported permission: 'rename features'.
   $permissions['rename features'] = array(
     'name' => 'rename features',
@@ -1071,15 +793,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'backup_migrate',
   );
 
-  // Exported permission: 'retrieve definition'.
-  $permissions['retrieve definition'] = array(
-    'name' => 'retrieve definition',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services_definition',
-  );
-
   // Exported permission: 'revert revisions'.
   $permissions['revert revisions'] = array(
     'name' => 'revert revisions',
@@ -1088,15 +801,6 @@ function cyco_core_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'save file information'.
-  $permissions['save file information'] = array(
-    'name' => 'save file information',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
   );
 
   // Exported permission: 'search all content'.
@@ -1119,47 +823,6 @@ function cyco_core_user_default_permissions() {
     'module' => 'search_config',
   );
 
-  // Exported permission: 'search blueprint_page content'.
-  $permissions['search blueprint_page content'] = array(
-    'name' => 'search blueprint_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-    ),
-    'module' => 'search_config',
-  );
-
-  // Exported permission: 'search class content'.
-  $permissions['search class content'] = array(
-    'name' => 'search class content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-      'student' => 'student',
-    ),
-    'module' => 'search_config',
-  );
-
-  // Exported permission: 'search class_post content'.
-  $permissions['search class_post content'] = array(
-    'name' => 'search class_post content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-      'student' => 'student',
-    ),
-    'module' => 'search_config',
-  );
-
   // Exported permission: 'search content'.
   $permissions['search content'] = array(
     'name' => 'search content',
@@ -1169,16 +832,6 @@ function cyco_core_user_default_permissions() {
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'search',
-  );
-
-  // Exported permission: 'search course_page content'.
-  $permissions['search course_page content'] = array(
-    'name' => 'search course_page content',
-    'roles' => array(
-      'anonymous user' => 'anonymous user',
-      'authenticated user' => 'authenticated user',
-    ),
-    'module' => 'search_config',
   );
 
   // Exported permission: 'search page content'.
@@ -1196,15 +849,6 @@ function cyco_core_user_default_permissions() {
     'name' => 'select account cancellation method',
     'roles' => array(),
     'module' => 'user',
-  );
-
-  // Exported permission: 'set a system variable'.
-  $permissions['set a system variable'] = array(
-    'name' => 'set a system variable',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'services',
   );
 
   // Exported permission: 'skip CAPTCHA'.

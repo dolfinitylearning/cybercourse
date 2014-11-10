@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse Install Groups feature.
+ */
+
+include_once 'cyco_install_groups.features.inc';

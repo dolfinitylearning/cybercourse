@@ -50,7 +50,6 @@ features[user_permission][] = edit own field_badge_machine_name
 features[user_permission][] = search badge content
 features[user_permission][] = view field_badge_machine_name
 features[user_permission][] = view own field_badge_machine_name
-features[variable][] = additional_settings__active_tab_badge
 features[variable][] = diff_enable_revisions_page_node_badge
 features[variable][] = diff_show_preview_changes_node_badge
 features[variable][] = diff_view_mode_preview_node_badge
