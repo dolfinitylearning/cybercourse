@@ -8,14 +8,14 @@
  * Add menu item.
  */
 function _cyco_core_cp_add_menu_items( &$items ) {
-  $items['user/control-panel'] = array(
+  $items['control-panel'] = array(
     'title' => 'Control panel',
     'description' => 'CyberCourse control panel.',
     'page callback' => '_cyco_render_control_panel',
     'access callback' => 'cyco_core_current_user_has_role',
     'access arguments' => array('authenticated user'),
     'menu_name' => 'user-menu',
-    'weight' => 0,
+    'weight' => -50,
     'type' => MENU_NORMAL_ITEM,
   );
   $items['clear-all-caches'] = array(
@@ -24,7 +24,6 @@ function _cyco_core_cp_add_menu_items( &$items ) {
     'access callback' => '_cyco_core_cp_flush_cache_access',
     'type' => MENU_NORMAL_ITEM, //MENU_CALLBACK,
   );
-  
 }
 
 /**

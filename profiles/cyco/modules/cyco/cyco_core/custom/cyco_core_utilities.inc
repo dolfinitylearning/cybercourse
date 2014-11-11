@@ -288,7 +288,8 @@ function cyco_core_user_has_role($user, $roles) {
  */
 function cyco_core_current_user_has_role($roles) {
   global $user;
-  return cyco_core_user_has_role($user, $roles);
+  $access = cyco_core_user_has_role($user, $roles);
+  return $access;
 }
 
 /**

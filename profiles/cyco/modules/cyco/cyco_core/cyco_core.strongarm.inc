@@ -29,7 +29,8 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'book_allowed_types';
   $strongarm->value = array(
-    0 => 'book',
+    0 => 'blueprint_page',
+    1 => 'course_page',
   );
   $export['book_allowed_types'] = $strongarm;
 
@@ -37,7 +38,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'book_child_type';
-  $strongarm->value = 'book';
+  $strongarm->value = 'course_page';
   $export['book_child_type'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -760,7 +761,9 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
-  $strongarm->value = array();
+  $strongarm->value = array(
+    'cyco_node_edit_tweaks' => 1415654075,
+  );
   $export['module_filter_recent_modules'] = $strongarm;
 
   $strongarm = new stdClass();

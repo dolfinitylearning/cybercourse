@@ -124,6 +124,7 @@ CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install');
   $operations[] = array( '_cyco_finalize_install_step3', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4_2', array('dog') );
+  $operations[] = array( '_cyco_finalize_install_step4_2a', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4_3', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4_4', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4_5', array('dog') );
@@ -149,14 +150,14 @@ function _cyco_finalize_install_step1($dog, &$context) {
 CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step1');
   $t = get_t();
   // Clean URLs
-  _cyco_clean_urls();
+  //_cyco_clean_urls();
   // Give user 1 the administrator role.
   _cyco_make_user_1_admin_author();
   // Define services.
 //  _cyco_define_services();
   // Add some taxonomy terms.
   _cyco_add_workflow_terms();
-  // Add starting content. Basic pages, course pages, blueprint pages.
+  // Add starting content. Basic pages, course pages, blueprint pages...
   _cyco_add_content();
   // Add workflow terms to content.
   _cyco_add_workflow_terms_to_content();
@@ -228,6 +229,15 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_2
 CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_2');
 }
 
+function _cyco_finalize_install_step4_2a($dog, &$context) {
+CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_2a');
+  $t = get_t();
+  // Add links to control panel menu. I can't make features do it right.
+  _cyco_add_links_cp_menu2a();
+  $context['message'] = $t('Linking up Awesome\'s Revenge.');  
+CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_2a');
+}
+
 function _cyco_finalize_install_step4_3($dog, &$context) {
 CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_3');
   $t = get_t();
@@ -281,8 +291,6 @@ function _cyco_finalize_install_step5($dog, &$context) {
 //  cache_clear_all();
   //Remove all blocks from submission theme, except for content.
   _cyco_remove_submission_blocks();
-  // Add control panel link to user menu.
-  _cyco_add_cp_link();
   cache_clear_all();
   $context['message'] = $t('You won\'t believe how awesome Cyco is.');
 }
@@ -474,15 +482,15 @@ function _cyco_add_content() {
       . 'blueprint_pages.export'
   );
   //Pseudents.
-//  _cyco_import_nodes(
-//      drupal_get_path('module', 'cyco_pseudents') . '/custom/exports/' 
-//      . 'pseudents.export'
-//  );
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_pseudents') . '/custom/exports/' 
+      . 'pseudents.export'
+  );
   //Patterns.
-//  _cyco_import_nodes(
-//      drupal_get_path('module', 'cyco_patterns') . '/custom/exports/' 
-//      . 'patterns.export'
-//  );  
+  _cyco_import_nodes(
+      drupal_get_path('module', 'cyco_patterns') . '/custom/exports/' 
+      . 'patterns.export'
+  );  
 }
 
 /**
@@ -780,23 +788,32 @@ function _cyco_disable_modules() {
 
 /**
  * Turn on Cyco modules. Don't know why this is needed.
+ * If it isn't here, some Cyco modules are not 
+ * enabled.
  */
 function _cyco_enable_modules() {
   $modules = array(
     'cyco_core',
-    'cyco_add_pages',
-    'cyco_book_mods',
-    'cyco_book_blocks',
+    'cyco_install_course_blueprint_types',
+    'cyco_install_groups',
+    'cyco_exercises',
+    'cyco_exercises_services',
+    'cyco_exercises_views',
+    'cyco_badges',
     'cyco_pseudents',
     'cyco_patterns',
+    'cyco_toggle_sidebar',
+    'book_rearrange_collapse',
+    'book_top_navbar',
+    'cyco_add_pages',
+    'cyco_book_blocks',
     'cyco_toc',
-    'cyco_exercises_services',
-    'cyco_exercises',
-    
+    'cyco_node_edit_tweaks',
+    'cyco_book_mods',
+    'cyco_collapse_summary',
   );
   module_enable($modules, TRUE);
 }
-  
 
 /**
  * Theme settings for two themes: cybercourse, and 
@@ -1084,11 +1101,18 @@ function _cyco_add_links_cp_menu2() {
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
+}
   
 //  CycoInstallDebug::getInstance()->output('CP menu items - Courses and keywords submenu.');
 //  CycoInstallDebug::getInstance()->output(
 //      '<pre>$items: '.print_r($items, TRUE).'</pre>'
 //  );
+
+  function _cyco_add_links_cp_menu2a() {
+  global $_cyco_install_cp_top_level_mlids;
+  $menu_name = 'menu-cp-actions';
+  $language = LANGUAGE_NONE;
+  $module = 'cyco_core';
 
   //Blueprints and keywords submenu
   $items = array();
@@ -1476,43 +1500,6 @@ function _cyco_add_links_cp_menu7() {
   }
 //  CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_cp_menu');
 
-}
-
-function _cyco_add_cp_link() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_cp_link');
-  
-//  $item = array(
-//    'menu_name' => 'user-menu',
-//    'link_path' => 'user/control-panel',
-//    'router_path' => 'user/control-panel',
-//    'link_title' => 'Control panel',
-//    'options' => array(
-//      'attributes' => array(
-//        'title' => 'CyberCourse control panel.',
-//      ),
-//      'identifier' => 'user-menu_control-panel:user/control-panel',
-//    ),
-//    'module' => 'system',
-//    'hidden' => 0,
-//    'external' => 0,
-//    'has_children' => 0,
-//    'expanded' => 0,
-//    'weight' => -50,
-//    'customized' => 1,    
-//    'language' => 'und',
-//  );
-  $item = array(
-    'link_path' => 'user/control-panel',
-    'link_title' => 'Control panel',
-    'weight' => -50,
-    'expanded' => TRUE,
-    'menu_name' => 'user-menu',
-    'language' => LANGUAGE_NONE,
-    'plid' => 0,
-    'module' => 'cyco_core',
-  );
-  menu_link_save($item);
-CycoInstallDebug::getInstance()->output('Ending _cyco_add_cp_link');
 }
 
 /**

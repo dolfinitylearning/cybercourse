@@ -6,7 +6,7 @@
 
 function cyco_core_groups_render_basic_list() {
   $name = 'cybercourse_user_groups';
-  $display_id = 'user_groups_for_cp';  
+  $display_id = 'default'; //user_groups_for_cp';  
   $view = views_get_view($name);
   if (!$view || !$view->access($display_id)) {
     return '<p>Not found or access denied</p>';
