@@ -72,25 +72,6 @@ function cyco_pseudents_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_notes'
-  $field_bases['field_notes'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_notes',
-    'field_permissions' => array(
-      'type' => 2,
-    ),
-    'foreign keys' => array(),
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'swim',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'swim_field',
-  );
-
   // Exported field_base: 'field_pseudent_categories'
   $field_bases['field_pseudent_categories'] = array(
     'active' => 1,
@@ -123,6 +104,25 @@ function cyco_pseudents_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
+  );
+
+  // Exported field_base: 'field_pseudent_notes'
+  $field_bases['field_pseudent_notes'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_pseudent_notes',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'foreign keys' => array(),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'swim',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'swim_field',
   );
 
   return $field_bases;

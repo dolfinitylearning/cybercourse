@@ -31,7 +31,7 @@ function cyco_install() {
 
 function cyco_define_blocks() {
 //  CycoInstallDebug::getInstance()->output('Start');
-  // Enable some standard blocks.
+  // Enable some standard blocks for the admin theme.
   $default_theme = variable_get('theme_default', 'bartik');
   $admin_theme = 'seven';
   $blocks = array(

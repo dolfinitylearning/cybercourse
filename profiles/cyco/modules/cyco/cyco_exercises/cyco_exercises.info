@@ -54,6 +54,7 @@ features[field_base][] = field_good_cutoff
 features[field_base][] = field_greetings
 features[field_base][] = field_hidden_attachments
 features[field_base][] = field_needs_work_cutoff
+features[field_base][] = field_notes
 features[field_base][] = field_overall_good
 features[field_base][] = field_overall_needs_work
 features[field_base][] = field_overall_poor
