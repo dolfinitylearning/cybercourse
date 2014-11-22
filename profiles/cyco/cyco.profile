@@ -27,6 +27,16 @@ function cyco_install_tasks_alter( &$tasks, $install_state ) {
 CycoInstallDebug::getInstance()->output('Start cyco_install_tasks_alter');
   //Add new installation tasks before the site configure form in shown.
   //See https://www.drupal.org/node/1022020 for task list.  
+  
+  global $conf;
+  if (empty($conf['theme_settings'])) {
+    $conf['theme_settings'] = array(
+      'default_logo' => 0,
+      'logo_path' => 'profiles/cyco/mica.png',
+    );
+  }
+
+
   //Grab tasks to be moved to the end.
   $t = get_t();
   $install_import_locales_remaining = $tasks['install_import_locales_remaining'];
@@ -205,7 +215,7 @@ CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step3');
   // Theme stuff
   _cyco_theme_stuff();
   // Turn off some modules.
-  _cyco_disable_modules();
+//  _cyco_disable_modules();
   // Set the front page.
 //  CycoInstallDebug::getInstance()->output('Before set frontpage call');
   _cyco_set_frontpage();
@@ -219,6 +229,23 @@ CycoInstallDebug::getInstance()->output('End _cyco_finalize_install_step3');
 function _cyco_finalize_install_step4($dog, &$context) {
 CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4');
   $t = get_t();
+  //Add cp link to user menu.
+  $link_data = array(
+    'link_path' => 'control-panel',
+    'link_title' => 'Control panel',
+    'weight' => -10,
+    'expanded' => TRUE,
+    'menu_name' => 'menu-user',
+    'language' => LANGUAGE_NONE,
+    'plid' => 0,
+    'module' => 'cyco_core',
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Actions',
+      ),
+    ),
+  );
+  menu_link_save($link_data);
   // Add links to control panel menu. I can't make features do it right.
   _cyco_add_links_cp_menu1();
   $context['message'] = $t('Linking up more awesome.');  
@@ -797,13 +824,13 @@ function _cyco_add_classes2block( $module, $block, $classes ) {
 /**
  * Turn off some modules.
  */
-function _cyco_disable_modules() {
-  $modules = array(
-    'node_export',
-    'features_orphans',
-  );
-  module_disable( $modules );
-}
+//function _cyco_disable_modules() {
+//  $modules = array(
+//    'node_export',
+//    'features_orphans',
+//  );
+//  module_disable( $modules );
+//}
 
 /**
  * Turn on Cyco modules. Don't know why this is needed.
@@ -815,11 +842,13 @@ CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
   $modules = array(
     'cyco_core',
     'cyco_install_course_blueprint_types',
+    'cyco_install_course_blueprint_views',
     'cyco_install_groups',
     'cyco_exercises',
     'cyco_exercises_services',
     'cyco_exercises_views',
     'cyco_badges',
+    'cyco_badges_views',
     'cyco_pseudents',
     'cyco_patterns',
     'cyco_toggle_sidebar',
@@ -866,8 +895,9 @@ function _cyco_theme_stuff() {
     ->condition('type', 'theme')
     ->condition('name', 'seven')
     ->execute();
-  variable_set('admin_theme', 'seven');
-  variable_set('node_admin_theme', '1');
+  variable_set('admin_theme', '0'); //Same as default (I hope).
+  //Don't use admin theme for editing nodes.
+  variable_set('node_admin_theme', '0');
 }
 
 /**
@@ -916,10 +946,10 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $plid = 0;
   $items[] = array(
     'link_path' => 'courses-and-keywords',
-    'link_title' => 'Courses and keywords',
+    'link_title' => 'Courses pages and keywords',
     'weight' => 0,
-    'menu_name' => $menu_name,
     'expanded' => TRUE,
+    'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $plid,
     'module' => $module,
@@ -931,7 +961,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   );
   $items[] = array(
     'link_path' => 'blueprints-and-keywords',
-    'link_title' => 'Blueprints and keywords',
+    'link_title' => 'Blueprints pages and keywords',
     'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
@@ -957,6 +987,36 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
       'attributes' => array(
         'title' => 'Exercises are tasks that students do. Graders use '
         . 'rubrics to grade students\' work.',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'manage-submissions',
+    'link_title' => 'Exercise submissions',
+    'weight' => 23,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'View and manage students\' submissions to exercises.',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'badges',
+    'link_title' => 'Badges',
+    'weight' => 27,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Show the badges that students can earn.',
       ),
     ),
   );
@@ -1100,9 +1160,15 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all course pages (including unpublished), and '
+        . 'their keywords.',
+      ),
+    ),
   );
   $items[] = array(
-    'link_path' => 'node/add/course-page?book_op=newbook',
+    'link_path' => 'new-course', // 'node/add/course-page?book_op=newbook',
     'link_title' => 'Create a new course',
     'weight' => 10,
     'expanded' => TRUE,
@@ -1110,6 +1176,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Start a new top-level course. You can add '
+        . 'other pages underneath it.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/keywords',
@@ -1120,6 +1192,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'courses-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit keywords.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1150,9 +1227,15 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all blueprint pages (including unpublished), '
+        . 'and their keywords.',
+      ),
+    ),
   );
   $items[] = array(
-    'link_path' => 'node/add/blueprint-page?book_op=newbook',
+    'link_path' => 'new-blueprint', //node/add/blueprint-page?book_op=newbook',
     'link_title' => 'Create a new blueprint',
     'weight' => 10,
     'expanded' => TRUE,
@@ -1160,6 +1243,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Start a new top-level blueprint. You can add '
+        . 'other pages underneath.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/blueprint_keywords',
@@ -1170,6 +1259,13 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'blueprints-and-keywords' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit blueprint keywords. These '
+        . 'are separate from regular keywords. Students can\'t see '
+        . 'them.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1195,6 +1291,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'List all of the exercises.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/exercise',
@@ -1205,6 +1306,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new exercise.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/keywords',
@@ -1215,6 +1321,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit keywords.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'rubric-items',
@@ -1225,6 +1336,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all rubric items.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/rubric-item',
@@ -1235,6 +1351,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new rubric item for grading exercises.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
@@ -1245,6 +1366,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Group rubric items into categories to make '
+        . 'them easier to work with. Manage the categories here.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'list-model-solutions',
@@ -1255,6 +1382,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Good solutions to exercises.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/model-exercise-solution',
@@ -1265,10 +1397,37 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'exercises' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new model exercise solution.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
+  
+  //Exercise submissions submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'manage-submissions',
+    'link_title' => 'Manage submissions',
+    'weight' => 0,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'manage-submissions' ],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all of the submissions.',
+      ),
+    ),
+  );
+  foreach ( $items as $item ) {
+    menu_link_save($item);
+  }
+  
 CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu3');
 }
 
@@ -1278,6 +1437,43 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
+  
+  //Badges submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'badges',
+    'link_title' => 'List badges',
+    'weight' => 0,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'badges' ],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Show the badges students can earn.',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'node/add/badge',
+    'link_title' => 'Define a new badge',
+    'weight' => 10,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids[ 'badges' ],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new type of badge.',
+      ),
+    ),
+  );
+  foreach ( $items as $item ) {
+    menu_link_save($item);
+  }
+    
   //Pseudent poses submenu
   $items = array();
   $items[] = array(
@@ -1289,6 +1485,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all of the pseudent poses.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/pseudent-pose',
@@ -1299,6 +1500,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new pose to use in content.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/pseudent_categories',
@@ -1309,6 +1515,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'pseudent-poses' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add, delete, and edit pseudent pose categories.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1325,6 +1536,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all of the patterns.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/pattern',
@@ -1335,6 +1551,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new pattern.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/pattern_categories',
@@ -1345,6 +1566,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'patterns' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Group patterns into categories to make them '
+        . 'easier to work with. Manage the categories here.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1361,24 +1588,34 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
   //Basic pages submenu
   $items = array();
   $items[] = array(
-    'link_path' => 'node/add/page',
-    'link_title' => 'Add basic page',
+    'link_path' => 'basic-pages',
+    'link_title' => 'List basic pages',
     'weight' => 0,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'basic-pages' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Show all of the basic pages.',
+      ),
+    ),
   );
   $items[] = array(
-    'link_path' => 'basic-pages',
-    'link_title' => 'List basic pages',
+    'link_path' => 'node/add/page',
+    'link_title' => 'Add basic page',
     'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'basic-pages' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new basic page. ',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1395,6 +1632,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'workflow-tagged' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See items that have a workflow tag attached.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/taxonomy/workflow_tags',
@@ -1405,6 +1647,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'workflow-tagged' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add new tags, delete tags, and change tag wording.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1429,6 +1676,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'classes' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See a list of all the classes.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'node/add/class',
@@ -1439,6 +1691,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'classes' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new class.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1455,6 +1712,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/people' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'List and manage user accounts.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/people/create',
@@ -1465,6 +1727,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/people' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add a new user account.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);
@@ -1489,6 +1756,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'View and manage all content on the site, no '
+        . 'matter what type.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/token-custom',
@@ -1499,6 +1772,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Tokens are replaced by custom text when '
+        . 'pages are shown.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/config/system/backup_migrate',
@@ -1509,6 +1788,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Backup the database.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/structure/block',
@@ -1519,6 +1803,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Add/remove blocks from displays.',
+      ),
+    ),
   );
   $items[] = array(
     'link_path' => 'admin/appearance',
@@ -1529,6 +1818,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
     'language' => $language,
     'plid' => $_cyco_install_cp_top_level_mlids[ 'admin/content' ],
     'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Change the look of the site.',
+      ),
+    ),
   );
   foreach ( $items as $item ) {
     menu_link_save($item);

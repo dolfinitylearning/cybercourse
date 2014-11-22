@@ -51,10 +51,27 @@ function cyco_core_menu() {
     'page arguments' => array('cyco_core_settings_form'),
     'access arguments' => array('administer site configuration'),
   );
+  //Create a new course page book. Redirects.
+  $items['new-course'] = array(
+    'page callback' => '_cyco_new_course',
+  );
+  //Create a new course page book. Redirects.
+  $items['new-blueprint'] = array(
+    'page callback' => '_cyco_new_blueprint',
+  );
+  
   // Let other files add their own menu items.
   _cyco_core_error_add_menu_items($items);
   _cyco_core_cp_add_menu_items($items);
   return $items;
+}
+
+function _cyco_new_course() {
+  drupal_goto('node/add/course-page?book_op=newbook');
+}
+
+function _cyco_new_blueprint() {
+  drupal_goto('node/add/blueprint-page?book_op=newbook');
 }
 
 /**

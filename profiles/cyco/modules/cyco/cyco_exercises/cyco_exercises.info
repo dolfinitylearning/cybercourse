@@ -237,4 +237,5 @@ features_exclude[field_instance][node-class_post-og_group_ref] = node-class_post
 files[] = custom/views/cyco_exercises_handler_submission_status.inc
 files[] = custom/views/cyco_exercises_handler_completion_badge.inc
 files[] = custom/views/cyco_exercises_erase_submission_feedback_link.inc
+mtime = 1416520157
 project path = profiles/cyco/modules/cyco

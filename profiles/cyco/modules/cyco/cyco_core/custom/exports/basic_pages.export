@@ -157,7 +157,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "What would you like help with?\r\n\r\n* [Getting around a course](https://wiki.cybercour.se/getting-around)\r\n* [Doing exercises](https://wiki.cybercour.se/exercises)\r\n* [Grading](https://wiki.cybercour.se/grading)\r\n* [Managing student accounts](https://wiki.cybercour.se/managing-student-accounts)\r\n* [Making a course](https://wiki.cybercour.se/authoring)\r\n\r\nThese questions and many others are answered on \"the CyberCourse wiki\":https://wiki.cybercour.se/.\r\n ",
+            'value' => 'Your site help goes here. You might want a link to the "Cyco wiki":https://wiki.cybercour.se/, but it\'s optional.',
             'summary' => 'Help in using this site.',
           ),
         ),

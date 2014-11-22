@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse Install Course and Blueprints Views feature.
+ */
+
+include_once 'cyco_install_course_blueprint_views.features.inc';

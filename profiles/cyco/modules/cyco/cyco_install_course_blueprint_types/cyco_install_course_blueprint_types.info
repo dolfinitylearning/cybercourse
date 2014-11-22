@@ -73,4 +73,5 @@ features[variable][] = pathauto_node_blueprint_page_pattern
 features[variable][] = pathauto_node_course_page_pattern
 features[variable][] = pathauto_taxonomy_term_blueprint_keywords_pattern
 features_exclude[dependencies][cyco_exercises] = cyco_exercises
+mtime = 1416520225
 project path = profiles/cyco/modules/cyco

@@ -761,9 +761,7 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
-  $strongarm->value = array(
-    'cyco_node_edit_tweaks' => 1415654075,
-  );
+  $strongarm->value = array();
   $export['module_filter_recent_modules'] = $strongarm;
 
   $strongarm = new stdClass();

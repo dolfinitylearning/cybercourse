@@ -32,29 +32,3 @@ function cyco_badges_views_data_alter(&$data) {
   );
 }
 
-/**
- * Implementation of hook_views_default_views().
- * seehttps://api.drupal.org/api/views/views.api.php/function/hook_views_default_views/7
- **/
-//function cyco_badges_views_default_views() {
-//  $files = file_scan_directory(drupal_get_path('module', 'cyco_badges') 
-//      . '/custom/views/imports', '/.*/');
-//  foreach ($files as $filepath => $file) {
-//    require $filepath;
-//    if (isset($view)) {
-//      $views[$view->name] = $view;
-//    }
-//  }
-//  return $views;
-//}    
-//  
-  
-//  $files = file_scan_directory(drupal_get_path('module', 'cyco_badges') 
-//      . '/custom/views/imports', '/.*/');
-//  foreach (glob(dirname(__FILE__) . "/imports/*.inc") as $filename) {
-//    include_once($filename);
-//    $views[$view->name] = $view;
-//  }
-//  return $views;
-//}
-
