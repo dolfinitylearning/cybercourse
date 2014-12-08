@@ -72,16 +72,32 @@ It's misleading.
   vertical-align: middle;
 }
 
-.view-exercises-public- .views-row {
-  margin-bottom: 1em;
-}
-
-
-.view-exercises-public- .views-row .views-field-field-body{
-  margin-left: 2em;
-}
-
 .not-student {
   margin-top: 1em;
   font-style: italic;
+}
+
+/* For view listing exercises for authors. */
+
+.view-exercises .view-content h3 {
+  text-align: left;
+  font-size: 100%;
+}
+
+.view-exercises .view-content .exercise-view-exercise-title {
+  font-size: 150%;
+}
+
+.view-exercises .view-content .exercise-view-summary-content + div {
+  margin-left: 1em;
+}
+
+/* For view listing exercises for everyone. */
+
+.view-exercises-public .views-row {
+  margin-bottom: 1em;
+}
+
+.view-exercises-public .views-field-title {
+  font-size: 120%;
 }

@@ -10,48 +10,6 @@
 function cyco_badges_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-badge-field_badge_machine_name'
-  $field_instances['node-badge-field_badge_machine_name'] = array(
-    'bundle' => 'badge',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'The internal name of the badge, used in processing, e.g., badge_of_doom. ',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 4,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'exclude_cv' => 0,
-    'field_name' => 'field_badge_machine_name',
-    'label' => 'Machine name',
-    'required' => 1,
-    'settings' => array(
-      'exclude_cv' => FALSE,
-      'text_processing' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 1,
-    ),
-  );
-
   // Exported field_instance: 'node-badge-field_body'
   $field_instances['node-badge-field_body'] = array(
     'bundle' => 'badge',
@@ -141,6 +99,48 @@ function cyco_badges_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-badge-field_internal_name'
+  $field_instances['node-badge-field_internal_name'] = array(
+    'bundle' => 'badge',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The machine name of the badge. Lowercase letters, digits, and underscores only, e.g., javascript_level_1. The machine name identifies the badge to outside services, e.g., OpenBadge.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_internal_name',
+    'label' => 'Machine name',
+    'required' => 1,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance: 'node-badge-field_locked_badge_image'
   $field_instances['node-badge-field_locked_badge_image'] = array(
     'bundle' => 'badge',
@@ -173,7 +173,7 @@ function cyco_badges_field_default_field_instances() {
       'alt_field' => 1,
       'default_image' => 38,
       'exclude_cv' => FALSE,
-      'file_directory' => 'badges',
+      'file_directory' => 'cycourse/library/badges',
       'file_extensions' => 'png',
       'max_filesize' => '256kb',
       'max_resolution' => '',
@@ -260,7 +260,7 @@ function cyco_badges_field_default_field_instances() {
       'alt_field' => 1,
       'default_image' => 37,
       'exclude_cv' => FALSE,
-      'file_directory' => 'badges',
+      'file_directory' => 'cycourse/library/badges',
       'file_extensions' => 'png',
       'max_filesize' => '256kb',
       'max_resolution' => '',
@@ -325,7 +325,7 @@ function cyco_badges_field_default_field_instances() {
   t('Image shown when a student has not earned the badge. Must be png, minimum 90x90, maximum file size 256Kb. ');
   t('Locked image');
   t('Machine name');
-  t('The internal name of the badge, used in processing, e.g., badge_of_doom. ');
+  t('The machine name of the badge. Lowercase letters, digits, and underscores only, e.g., javascript_level_1. The machine name identifies the badge to outside services, e.g., OpenBadge.');
   t('Unlocked image');
 
   return $field_instances;

@@ -12,7 +12,8 @@ php = 5.3.0
 ;regions[navigation]     = 'Navigation'
 ;regions[header]         = 'Top Bar'
 ;regions[highlighted]    = 'Highlighted'
-;regions[help]           = 'Help'
+regions[help]           = 'Help'
+;Help region needed: https://www.drupal.org/node/1885992
 regions[content]        = 'Content'
 ;regions[sidebar_first]  = 'Primary'
 ;regions[sidebar_second] = 'Secondary'

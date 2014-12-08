@@ -26,17 +26,17 @@
             + '</div>',
         init: function() {
           //Set up widget data.
-          //Get pseudent id from an attr of the outer div.
+          //Get pseudent internal name from an attr of the outer div.
           //Get the pseudent category the user was selecting from
           //from an attr of the outer div.
-          //Image URL and caption text are derived from the pseudent id,
-          //when the id is used as an array index.
-          var pseudentId = "";
+          //Image URL and caption text are derived from the pseudent internal name,
+          //when the internal name is used as an array index.
+          var pseudentInternalName = "";
           var $element = $(this.element.$);
-          if ( $element.attr("data-pseudent-id") ) {
-            pseudentId = $element.attr("data-pseudent-id");
+          if ( $element.attr("data-pseudent-internal-name") ) {
+            pseudentInternalName = $element.attr("data-pseudent-internal-name");
           }
-          this.setData( "pseudentId", pseudentId );
+          this.setData( "pseudentInternalName", pseudentInternalName );
           var pseudentCategory = "";
           if ( $element.attr("data-pseudent-category") ) {
             pseudentCategory = $element.attr("data-pseudent-category");
@@ -56,20 +56,21 @@
         },
         data: function() {
           //Use widget data to alter HTML.
-          if ( ! this.data.pseudentId ) {
+          if ( ! this.data.pseudentInternalName ) {
             return;
           }
           //Called when the dialog calls the widget's set data function.
           var $element = $(this.element.$);
           //Store pseudent id as an attribute of the outer div.
-          $element.attr( "data-pseudent-id", this.data.pseudentId );
+          $element.attr( "data-pseudent-internal-name", 
+              this.data.pseudentInternalName );
           //Store the URL of the image in the img tag.
           var imageUrl = Drupal.settings.pseudents.posePreviews[ 
-              this.data.pseudentId ].url;
+              this.data.pseudentInternalName ].url;
           $element.find("img").attr( "src", imageUrl );
           //Add the caption text.
           var caption = Drupal.settings.pseudents.posePreviews[ 
-              this.data.pseudentId ].caption;
+              this.data.pseudentInternalName ].caption;
           $element.find(".pseudent-image-caption").html( caption );
           //Store the category the user selected the pseudent from
           //as an attribute of the outer div.
@@ -84,7 +85,7 @@
         allowedContent:
                 'img[!src];'
               + 'br;'
-              + 'div(!pseudent)[!data-pseudent-id];'
+              + 'div(!pseudent)[!data-pseudent-internal-name];'
               + 'div(!pseudent-image-container);'
               + 'div(!pseudent-image);'
               + 'div(!pseudent-image-caption); '
@@ -100,11 +101,6 @@
           return  false;
         }
       });
-
-//      editor.addCommand('insertPseudent', 
-//        new CKEDITOR.dialogCommand( 'pseudentDialog' )
-//      );
-
       //Add stylesheet.
       editor.on("instanceReady", function() {
         this.document.appendStyleSheet( Drupal.settings.pseudents.poseStylesheet );

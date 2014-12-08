@@ -49,53 +49,6 @@ function cyco_install_groups_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_courses'
-  $field_instances['node-class-field_courses'] = array(
-    'bundle' => 'class',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => 'Courses this class has access to.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => 1,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 1,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
-      ),
-    ),
-    'entity_type' => 'node',
-    'exclude_cv' => 0,
-    'field_name' => 'field_courses',
-    'label' => 'Courses',
-    'required' => 1,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
-      'weight' => 2,
-    ),
-  );
-
   // Exported field_instance: 'node-class-field_images'
   $field_instances['node-class-field_images'] = array(
     'bundle' => 'class',
@@ -116,17 +69,18 @@ function cyco_install_groups_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_images',
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/images-bucket',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -141,7 +95,7 @@ function cyco_install_groups_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -481,17 +435,18 @@ function cyco_install_groups_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_images',
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/images-bucket',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -506,7 +461,7 @@ function cyco_install_groups_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -651,14 +606,67 @@ function cyco_install_groups_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-og_user_node'
+  $field_instances['user-user-og_user_node'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'og_ui',
+        'settings' => array(),
+        'type' => 'og_list_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'og_user_node',
+    'label' => 'Group membership',
+    'required' => FALSE,
+    'settings' => array(
+      'behaviors' => array(
+        'og_widget' => array(
+          'admin' => array(
+            'widget_type' => 'entityreference_autocomplete',
+          ),
+          'default' => array(
+            'widget_type' => 'options_select',
+          ),
+          'status' => TRUE,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'custom settings' => FALSE,
+        'label' => 'Full',
+        'type' => 'og_list_default',
+      ),
+      'teaser' => array(
+        'custom settings' => FALSE,
+        'label' => 'Teaser',
+        'type' => 'og_list_default',
+      ),
+    ),
+    'widget' => array(
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 13,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Attachments');
   t('Body');
-  t('Courses');
-  t('Courses this class has access to.');
   t('Determine if this is an OG group.');
   t('Group');
+  t('Group membership');
   t('Group roles and permissions');
   t('Group visibility');
   t('Groups audience');

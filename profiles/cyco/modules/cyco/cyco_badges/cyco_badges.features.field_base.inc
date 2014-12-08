@@ -10,36 +10,50 @@
 function cyco_badges_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_badge_machine_name'
-  $field_bases['field_badge_machine_name'] = array(
+  // Exported field_base: 'field_exercises'
+  $field_bases['field_exercises'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_badge_machine_name',
+    'field_name' => 'field_exercises',
     'field_permissions' => array(
-      'type' => 2,
+      'type' => 0,
     ),
     'foreign keys' => array(
-      'format' => array(
+      'node' => array(
         'columns' => array(
-          'format' => 'format',
+          'target_id' => 'nid',
         ),
-        'table' => 'filter_format',
+        'table' => 'node',
       ),
     ),
     'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'text',
+    'module' => 'entityreference',
     'settings' => array(
-      'max_length' => 255,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'exercise' => 'exercise',
+        ),
+      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'text',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_locked_badge_image'

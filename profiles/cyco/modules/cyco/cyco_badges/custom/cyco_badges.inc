@@ -70,8 +70,8 @@ function cyco_badges_achievements_info() {
     $badge_nids = array_keys($result['node']);
     $badge_nodes = node_load_multiple($badge_nids);
     foreach ($badge_nodes as $nid => $node) {
-      $badge_machine_name 
-          = $node->field_badge_machine_name[$node->language][0]['value'];
+      $badge_nids_name 
+          = $node->field_internal_name[$node->language][0]['value'];
       //Get the node's URL to use as the achievement id.
       $alias = drupal_get_path_alias('node/' . $nid);
       $alias_pieces = explode('/', $alias);
@@ -89,7 +89,7 @@ function cyco_badges_achievements_info() {
           // 'secret' will use the defaults.
         ),
       );
-      $achievements[$badge_machine_name] = $achievement;
+      $achievements[$badge_nids_name] = $achievement;
     }
     return $achievements;
   }  
@@ -172,20 +172,20 @@ function cyco_badges_feedback_given( $feedback_data ){
   foreach ( $actually_completed_badge_nids as $actual_badge_nid ) {
     if ( ! in_array($actual_badge_nid, $recorded_student_achievements) ) {
       //Award achievement.
-      //Get the machine name for the badge.
+      //Get the internal name for the badge.
       $badge_node = node_load( $actual_badge_nid );
-      $badge_machine_name 
-        = $badge_node->field_badge_machine_name[$badge_node->language][0]['value'];
-      achievements_unlocked( $badge_machine_name, $student_uid );
+      $badge_internal_name 
+        = $badge_node->field_internal_name[$badge_node->language][0]['value'];
+      achievements_unlocked( $badge_internal_name, $student_uid );
     }
   }
   //Compute which achievements need to be removed.
   foreach ( $recorded_student_achievements as $recorded_badge_nid => $recorded_student_achievement) {
     if ( ! in_array($recorded_badge_nid, $actually_completed_badge_nids) ) {
       //Remove achievement.
-      //Get the machine name for the badge.
-      $badge_machine_name = $recorded_student_achievement->achievement_id;
-      achievements_locked( $badge_machine_name, $student_uid );
+      //Get the internal name for the badge.
+      $badge_internal_name = $recorded_student_achievement->achievement_id;
+      achievements_locked( $badge_internal_name, $student_uid );
     }
   }
 }
@@ -267,3 +267,19 @@ function cyco_badges_views_api_alter(&$vars) {
 function cyco_badges_clear_cache() {
   achievements_load(NULL, FALSE, TRUE);
 }
+
+/**
+ * Implements hook_form_FORM_alter().
+ * 
+ * Mess with the badge node edit form.
+ */
+function cyco_badges_form_badge_node_form_alter( &$form, $form_state ) {
+  //Add validation of internal name.
+  $form['#validate'][] = '_cyco_badge_form_validate';
+}
+
+function _cyco_badge_form_validate($form, &$form_state) {
+  //Check format of internal name.
+  cyco_core_validate_internal_name_field($form_state);
+}
+

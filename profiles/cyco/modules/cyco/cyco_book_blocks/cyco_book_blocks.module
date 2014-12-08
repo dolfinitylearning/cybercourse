@@ -13,29 +13,26 @@ define('CBB_MAX_CHARS', 50);
  */
 define('CBB_MAX_RECURSION_LEVELS', 20);
 
-
 /**
- * Implements hook_init().
+ * Implements hook_permission().
  * 
- * Load JS and CSS, let it be aggregated.
+ * Create a permission for each book root content type (course_page and
+ * blueprint_page so far) that lets users see entries for unpublished
+ * nodes in the menu tree.
  */
-//function cyco_book_blocks_init() {
-//  drupal_add_js(
-//      drupal_get_path('module', 'cyco_book_blocks') . '/js/cyco_book_blocks.js',
-//      array(
-//        'type' => 'file',
-//        'preprocess' => TRUE,
-//      )
-//  );
-//  drupal_add_css(
-//      drupal_get_path('module', 'cyco_book_blocks') . '/css/cyco_book_blocks.css',
-//      array(
-//        'type' => 'file',
-//        'preprocess' => TRUE,
-//      )
-//  );
-//}
-
+function cyco_book_blocks_permission() {
+  $permissions = array();
+  $book_types = cyco_core_get_book_root_types();
+  foreach ($book_types as $book_type) {
+    $book_type_name = str_replace('_', ' ', $book_type);
+    $permissions["view unpublished cyco $book_type content"] = array(
+      'title' => t("View unpublished $book_type_name content"),
+      'description' => t(
+          "In $book_type_name tree blocks, see entries for unpublished nodes."
+      ),
+    );
+  } return $permissions;
+}
 
 /**
  * Implements hook_menu_link_alter().
@@ -48,7 +45,6 @@ function cyco_book_blocks_menu_link_alter(&$item) {
   if ( isset( $item['bid'] ) ) {
     $bid = $item['bid'];
     $book_root = node_load($bid);
-    //Perm for whether the current user can see unpublished items.
     $book_type = $book_root->type;
     if ( cyco_core_is_book_content_type($book_type) ) {
       _cbb_clear_book_tree_menu_caches($bid);
@@ -204,7 +200,7 @@ function _cbb_get_book_tree( $root_nid ) {
   );
   $root_node = node_load($root_nid);
   //Perm for whether the current user can see unpublished items.
-  $book_type = $root_node->type;     
+  $book_type = $root_node->type;
   $perm_to_check = "view unpublished cyco $book_type content";
   $see_unpublished = user_access($perm_to_check);
   //Use cached menu?

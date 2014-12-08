@@ -478,13 +478,13 @@ function cyco_core_strongarm() {
   $strongarm->name = 'imce_profiles';
   $strongarm->value = array(
     1 => array(
-      'name' => 'Administrator',
+      'name' => 'User-1',
       'usertab' => 1,
       'filesize' => '0',
       'quota' => '0',
       'tuquota' => '0',
       'extensions' => '*',
-      'dimensions' => '1200x1200',
+      'dimensions' => '0',
       'filenum' => '0',
       'directories' => array(
         0 => array(
@@ -510,69 +510,175 @@ function cyco_core_strongarm() {
       'mkdirnum' => '0',
     ),
     2 => array(
-      'name' => 'Author',
+      'name' => 'Author public',
       'usertab' => 1,
-      'filesize' => '1',
+      'filesize' => '20',
       'quota' => '0',
       'tuquota' => '0',
-      'extensions' => 'gif png jpg jpeg',
-      'dimensions' => '',
+      'extensions' => '*',
+      'dimensions' => '1200x1200',
       'filenum' => '1',
       'directories' => array(
         0 => array(
-          'name' => 'php: return \'course/users/\'.$user->name;',
+          'name' => 'cycourse/bucket',
           'subnav' => 1,
           'browse' => 1,
           'upload' => 1,
           'thumb' => 1,
           'delete' => 1,
-          'resize' => 1,
+          'resize' => 0,
           'mkdir' => 1,
           'rmdir' => 1,
         ),
         1 => array(
-          'name' => 'course/image-bucket',
-          'subnav' => 1,
-          'browse' => 1,
-          'upload' => 0,
-          'thumb' => 1,
-          'delete' => 0,
-          'resize' => 0,
-          'mkdir' => 0,
-          'rmdir' => 0,
-        ),
-        2 => array(
-          'name' => 'course/library',
+          'name' => 'cycourse/library',
           'subnav' => 1,
           'browse' => 1,
           'upload' => 1,
           'thumb' => 1,
           'delete' => 1,
-          'resize' => 1,
+          'resize' => 0,
           'mkdir' => 1,
           'rmdir' => 1,
         ),
-        3 => array(
-          'name' => 'course/attachments-bucket',
+      ),
+      'thumbnails' => array(
+        0 => array(
+          'name' => 'Thumb',
+          'dimensions' => '90x90',
+          'prefix' => 'thumb_',
+          'suffix' => '',
+        ),
+      ),
+      'mkdirnum' => '0',
+    ),
+    3 => array(
+      'name' => 'Instructor and grader private',
+      'usertab' => 1,
+      'filesize' => '20',
+      'quota' => '0',
+      'tuquota' => '0',
+      'extensions' => '*',
+      'dimensions' => '1200x1200',
+      'filenum' => '1',
+      'directories' => array(
+        0 => array(
+          'name' => 'cycourse/private',
           'subnav' => 1,
           'browse' => 1,
-          'upload' => 0,
-          'thumb' => 1,
+          'upload' => 1,
+          'thumb' => 0,
           'delete' => 0,
           'resize' => 0,
           'mkdir' => 0,
           'rmdir' => 0,
         ),
-        4 => array(
-          'name' => 'course/hidden-attachments-bucket',
+      ),
+      'thumbnails' => array(
+        0 => array(
+          'name' => 'Thumb',
+          'dimensions' => '90x90',
+          'prefix' => 'thumb_',
+          'suffix' => '',
+        ),
+      ),
+      'mkdirnum' => '0',
+    ),
+    4 => array(
+      'name' => 'Author private',
+      'usertab' => 1,
+      'filesize' => '20',
+      'quota' => '0',
+      'tuquota' => '0',
+      'extensions' => '*',
+      'dimensions' => '1200x1200',
+      'filenum' => '1',
+      'directories' => array(
+        0 => array(
+          'name' => 'cycourse/private/student_uploads',
           'subnav' => 1,
           'browse' => 1,
           'upload' => 0,
-          'thumb' => 1,
+          'thumb' => 0,
           'delete' => 0,
           'resize' => 0,
           'mkdir' => 0,
           'rmdir' => 0,
+        ),
+        1 => array(
+          'name' => 'cycourse/private/hidden_attachments',
+          'subnav' => 1,
+          'browse' => 1,
+          'upload' => 1,
+          'thumb' => 0,
+          'delete' => 1,
+          'resize' => 0,
+          'mkdir' => 1,
+          'rmdir' => 1,
+        ),
+      ),
+      'thumbnails' => array(
+        0 => array(
+          'name' => 'Thumb',
+          'dimensions' => '90x90',
+          'prefix' => 'thumb_',
+          'suffix' => '',
+        ),
+      ),
+      'mkdirnum' => '0',
+    ),
+    5 => array(
+      'name' => 'Admin private',
+      'usertab' => 1,
+      'filesize' => '0',
+      'quota' => '0',
+      'tuquota' => '0',
+      'extensions' => '*',
+      'dimensions' => '1200x1200',
+      'filenum' => '1',
+      'directories' => array(
+        0 => array(
+          'name' => 'cycourse/private',
+          'subnav' => 1,
+          'browse' => 1,
+          'upload' => 1,
+          'thumb' => 0,
+          'delete' => 1,
+          'resize' => 0,
+          'mkdir' => 1,
+          'rmdir' => 1,
+        ),
+      ),
+      'thumbnails' => array(
+        0 => array(
+          'name' => 'Thumb',
+          'dimensions' => '90x90',
+          'prefix' => 'thumb_',
+          'suffix' => '',
+        ),
+      ),
+      'mkdirnum' => '0',
+    ),
+    6 => array(
+      'name' => 'Admin public',
+      'usertab' => 1,
+      'filesize' => '0',
+      'quota' => '0',
+      'tuquota' => '0',
+      'extensions' => '*',
+      'dimensions' => '1200x1200',
+      'filenum' => '1',
+      'directories' => array(
+        0 => array(
+          'name' => '.',
+          'subnav' => 1,
+          'browse' => 1,
+          'upload' => 1,
+          'thumb' => 0,
+          'delete' => 1,
+          'resize' => 0,
+          'mkdir' => 1,
+          'rmdir' => 1,
         ),
       ),
       'thumbnails' => array(
@@ -594,36 +700,44 @@ function cyco_core_strongarm() {
   $strongarm->name = 'imce_roles_profiles';
   $strongarm->value = array(
     3 => array(
-      'weight' => '0',
-      'public_pid' => '1',
+      'weight' => '-10',
+      'public_pid' => '6',
+      'private_pid' => '5',
     ),
     4 => array(
-      'weight' => '1',
+      'weight' => '-5',
       'public_pid' => '2',
-    ),
-    5 => array(
-      'weight' => '3',
-      'public_pid' => 0,
-    ),
-    8 => array(
-      'weight' => '3',
-      'public_pid' => 0,
+      'private_pid' => '4',
     ),
     6 => array(
-      'weight' => '3',
+      'weight' => '0',
       'public_pid' => 0,
+      'private_pid' => '3',
     ),
     7 => array(
-      'weight' => '3',
+      'weight' => '0',
       'public_pid' => 0,
+      'private_pid' => 0,
+    ),
+    5 => array(
+      'weight' => '5',
+      'public_pid' => 0,
+      'private_pid' => 0,
+    ),
+    9 => array(
+      'weight' => '10',
+      'public_pid' => 0,
+      'private_pid' => 0,
     ),
     2 => array(
       'weight' => 11,
       'public_pid' => 0,
+      'private_pid' => 0,
     ),
     1 => array(
       'weight' => 12,
       'public_pid' => 0,
+      'private_pid' => 0,
     ),
   );
   $export['imce_roles_profiles'] = $strongarm;
@@ -761,7 +875,10 @@ function cyco_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
-  $strongarm->value = array();
+  $strongarm->value = array(
+    'node_export_features' => 1417791851,
+    'uuid_features' => 1417791988,
+  );
   $export['module_filter_recent_modules'] = $strongarm;
 
   $strongarm = new stdClass();

@@ -54,15 +54,20 @@ function cyco_core_menu() {
   //Create a new course page book. Redirects.
   $items['new-course'] = array(
     'page callback' => '_cyco_new_course',
+    'access callback' => 'user_access',
+    'access arguments' => array('create course_page content'),
   );
   //Create a new course page book. Redirects.
   $items['new-blueprint'] = array(
     'page callback' => '_cyco_new_blueprint',
+    'access callback' => 'user_access',
+    'access arguments' => array('create blueprint_page content'),
   );
   
   // Let other files add their own menu items.
   _cyco_core_error_add_menu_items($items);
   _cyco_core_cp_add_menu_items($items);
+  _cyco_core_groups_add_menu_items($items);
   return $items;
 }
 
@@ -88,6 +93,7 @@ function cyco_core_menu_alter(&$items) {
  */
 function cyco_core_form_alter(&$form, $form_state, $form_id) {
   _cyco_core_utilities_form_alter($form, $form_state, $form_id);
+  _cyco_core_groups_form_alter($form, $form_state, $form_id);
 }
 
 /**

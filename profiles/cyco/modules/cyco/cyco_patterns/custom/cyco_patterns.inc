@@ -55,13 +55,13 @@ function cyco_patterns_theme() {
  * If the user can edit course pages, then add the id of the pattern
  * to the end of the title. 
  */
-function cyco_patterns_node_view($node, $view_mode, $langcode) {
-  if ( $node->type == 'pattern' && $view_mode == 'full' ) {
-    if ( user_access('edit any pattern content') ) {
-      drupal_set_title( $node->title . ' (' . $node->nid . ')' );
-    }
-  }
-}
+//function cyco_patterns_node_view($node, $view_mode, $langcode) {
+//  if ( $node->type == 'pattern' && $view_mode == 'full' ) {
+//    if ( user_access('edit any pattern content') ) {
+//      drupal_set_title( $node->title . ' (' . $node->nid . ')' );
+//    }
+//  }
+//}
 
 /**
  * Implements hook_menu_local_tasks_alter
@@ -84,15 +84,54 @@ function cyco_patterns_menu_local_tasks_alter(&$data, $router_item, $root_path) 
 
 /**
  * Callback to generate HTML for the pattern.
- * @param int $pattern_nid Pattern node nid.
+ * @param string $pattern_internal_name Pattern internal name.
  * @param string $tag_content Inner tag content. Not used.
  */
-function _cyco_patterns_swim_callback( $pattern_nid, $tag_content ) {
+function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
+  $pattern_nid = cyco_core_nid_for_internal_name( $pattern_internal_name );
+  if ( is_null($pattern_nid) ) {
+    //Error already reported in function. 
+    return '';
+  }
+//  $sql = 'select entity_id from {field_data_field_internal_name} '
+//      . 'where entity_type=\'node\' and bundle=\'pattern\' '
+//      . 'and field_internal_name_value=\'' 
+//      . check_plain($pattern_internal_name) . '\'';
+//  $query_result = db_query($sql);
+//  $nids = array();
+//  foreach( $query_result as $row ) {
+//    $nids[] = $row->entity_id;
+//  }
+//  $num_nids_returned = sizeof($nids);
+//  if ( $num_nids_returned > 1 ) {
+//    //This should never happen.
+//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+//        . ' Duplicates for internal name ' . $pattern_internal_name . '.';
+//    cyco_core_handle_error( $message );
+//    form_set_error(
+//        'field_internal_name', 
+//        t('Internal error: ' . $message . "\n\nPlease tell someone.")
+//    );
+//    return '';
+//  }
+  //Exit if not found.
+  if ( $pattern_nid == 0 ) {
+    $message = t('Not found pattern internal name: @name', 
+        array('@name' => $pattern_internal_name));
+    watchdog('cyco_pattern', $message);
+    return '';
+  }
   $pattern_node = node_load($pattern_nid);
+  if ( ! $pattern_node->status ) {
+    $message = t('Tried to show unpublished pattern: @name (@nid)', 
+        array('@name' => $pattern_internal_name, '@nid' => $pattern_nid)
+        );
+    watchdog('cyco_pattern', $message);
+    return '';    
+  }
   //Make sure that this is the right type of node.
   if (   $pattern_node == FALSE 
       || !node_access('view', $pattern_node) 
-      || !$pattern_node->status
       || $pattern_node->type != 'pattern') {
     $message = t('Invalid pattern id: @id', array('@id' => $pattern_nid) );
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
@@ -165,6 +204,13 @@ function cyco_patterns_form_pattern_node_form_alter( &$form, $form_state ) {
     $form['author']['#access'] = FALSE;
     $form['book']['#access'] = FALSE;
   }
+  //Add validation of internal name.
+  $form['#validate'][] = '_cyco_pattern_form_validate';
+}
+
+function _cyco_pattern_form_validate($form, &$form_state) {
+  //Check format of internal name.
+  cyco_core_validate_internal_name_field($form_state);
 }
 
 /**

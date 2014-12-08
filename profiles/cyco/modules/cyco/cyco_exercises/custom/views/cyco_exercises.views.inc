@@ -4,6 +4,13 @@
  * Adds display fields for Views.
  */
 
+include_once realpath(dirname(__FILE__)) 
+  . '/cyco_exercises_erase_submission_feedback_link.inc';
+include_once realpath(dirname(__FILE__)) 
+  . '/cyco_exercises_handler_completion_badge.inc';
+include_once realpath(dirname(__FILE__)) 
+  . '/cyco_exercises_handler_submission_status.inc';
+
 /**
  * Implements hook_views_data().
  */

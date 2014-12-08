@@ -48,7 +48,7 @@ function cyco_pseudents_field_default_field_instances() {
         'size' => 20,
       ),
       'type' => 'text_textfield',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -80,6 +80,7 @@ function cyco_pseudents_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_image',
     'label' => 'Image',
     'required' => 0,
@@ -87,10 +88,10 @@ function cyco_pseudents_field_default_field_instances() {
       'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'library/pseudent-images',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/library/pseudents',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -105,7 +106,7 @@ function cyco_pseudents_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -114,7 +115,7 @@ function cyco_pseudents_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -138,7 +139,49 @@ function cyco_pseudents_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 3,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-pseudent_pose-field_internal_name'
+  $field_instances['node-pseudent_pose-field_internal_name'] = array(
+    'bundle' => 'pseudent_pose',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The internal name of the pseudent pose. Lowercase letters, digits, and underscores only, e.g., jenny_excited1. Use the internal name to insert the pseudent pose in content.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_internal_name',
+    'label' => 'Internal name',
+    'required' => 1,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
     ),
   );
 
@@ -176,7 +219,7 @@ function cyco_pseudents_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -215,7 +258,7 @@ function cyco_pseudents_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -254,7 +297,7 @@ function cyco_pseudents_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -267,8 +310,10 @@ function cyco_pseudents_field_default_field_instances() {
   t('Categories for this student pose, e.g., Jill, Happy.');
   t('Image');
   t('Image source, copyright...');
+  t('Internal name');
   t('Notes');
   t('Tasks for this item.');
+  t('The internal name of the pseudent pose. Lowercase letters, digits, and underscores only, e.g., jenny_excited1. Use the internal name to insert the pseudent pose in content.');
   t('Workflow tags');
 
   return $field_instances;

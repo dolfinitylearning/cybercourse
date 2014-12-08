@@ -153,5 +153,25 @@ function cyco_install_course_blueprint_types_user_default_permissions() {
     'module' => 'search_config',
   );
 
+  // Exported permission: 'view unpublished cyco blueprint content'.
+  $permissions['view unpublished cyco blueprint content'] = array(
+    'name' => 'view unpublished cyco blueprint content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'cyco_core',
+  );
+
+  // Exported permission: 'view unpublished cyco course content'.
+  $permissions['view unpublished cyco course content'] = array(
+    'name' => 'view unpublished cyco course content',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
+    'module' => 'cyco_core',
+  );
+
   return $permissions;
 }

@@ -117,7 +117,6 @@ function cyco_install_course_blueprint_views_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['order'] = 'DESC';
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';
@@ -139,7 +138,7 @@ function cyco_install_course_blueprint_views_views_default_views() {
 
   $view = new view();
   $view->name = 'courses_and_keywords';
-  $view->description = 'See all blueprint pages and their keywords';
+  $view->description = 'See all course pages and their keywords';
   $view->tag = 'default';
   $view->base_table = 'node';
   $view->human_name = 'Courses and keywords';
@@ -211,9 +210,9 @@ function cyco_install_course_blueprint_views_views_default_views() {
   $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
-  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are all the blueprint pages. You can sort the table by clicking on the column headings. Click on a keyword or tag to show items with that keyword or tag. </p>
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are all the course pages. You can sort the table by clicking on the column headings. Click on a keyword or tag to show items with that keyword or tag. </p>
 
-<p>Note: most blueprint page management is done with the tree menus, and the tabs on blueprint page editing forms. See the wiki for more information.</p>';
+<p>Note: most course page management is done with the tree menus, and the tabs on course page editing forms. See the wiki for more information.</p>';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -245,7 +244,6 @@ function cyco_install_course_blueprint_views_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['order'] = 'DESC';
   /* Filter criterion: Content: Type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'node';

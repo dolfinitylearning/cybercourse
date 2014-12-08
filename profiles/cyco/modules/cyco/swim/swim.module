@@ -4,11 +4,6 @@
  * Server-side SWIM implementation.
  */
 
-//Set these to big, else regex will send back MT string when the
-//content gets too big. 
-ini_set('pcre.backtrack_limit', 10000000);
-ini_set('pcre.recursion_limit', 10000000);
-
 require_once drupal_get_path('module', 'swim') . '/SwimCustomTagParser.php';
 require_once drupal_get_path('module', 'swim') . '/SwimShelf.php';
 
@@ -202,16 +197,26 @@ function swim_field_widget_info() {
   );
   return $info;
 }
-    
+
+
+function swim_form_alter(&$form, $form_state) {
+  $form['#after_build'][] = '_swim_client_loader';
+}
+
+function _swim_client_loader($form, &$form_state) {
+  _swim_add_editor_client_pieces();
+  return $form;
+}
+
 function swim_field_widget_form(
     &$form, &$form_state, $field, $instance, 
     $langcode, $items, $delta, $element) {
   $base = $element;
+  _swim_add_editor_client_pieces();
   if (
          $instance['widget']['type'] == 'swim_widget' 
       || $instance['widget']['type'] == 'swim_with_summary_widget') {
     $with_summary = ( $instance['widget']['type'] == 'swim_with_summary_widget' );
-    _swim_add_editor_client_pieces();
     //Prep content for widget.
     $value = '';
     if ( isset( $items[$delta]['value'] ) ) {
@@ -307,7 +312,7 @@ function swim_libraries_info() {
     'version arguments' => array(
       'file' => 'ckeditor.js',
       // version:"4.4"
-      'pattern' => '/version\:\"(\d+\.+\d+)\"/',
+      'pattern' => '/version\:\"(\d+\.+\d+\.+\d+)\)\"/',
 //      // version:"4.4"
       'lines' => 10,
     ),

@@ -3,7 +3,7 @@ description = A philosophy, method, and software for improving university skills
 version = 7.x-1.0
 core = 7.x
 distribution_name = "CyberCourse"
-;exclusive = TRUE
+exclusive = TRUE
 ; System Requirements.
 ;php_memory_limit = 128M
 
@@ -28,4 +28,4 @@ dependencies[] = shortcut
 dependencies[] = field_ui
 dependencies[] = file
 dependencies[] = rdf
-
+dependencies[] = trigger

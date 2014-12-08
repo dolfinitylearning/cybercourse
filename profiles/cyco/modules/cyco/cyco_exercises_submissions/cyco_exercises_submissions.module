@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse Exercises Submissions feature.
+ */
+
+include_once 'cyco_exercises_submissions.features.inc';

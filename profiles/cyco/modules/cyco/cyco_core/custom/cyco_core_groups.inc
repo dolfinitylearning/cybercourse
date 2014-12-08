@@ -306,3 +306,187 @@ function _cyco_core_update_student_role( $entity_type, $gid, $uid, $current_op, 
     } // End if node type == class
   } // End if entity type == node
 }
+
+/**
+ * Implements hook_form_alter.
+ * 
+ * When adding users, or editing memberships, check the Student role
+ * by default.
+ */
+function _cyco_core_groups_form_alter(&$form, $form_state, $form_id) {
+  if ( $form_id == 'og_ui_add_users' || $form_id == 'og_ui_edit_membership') {
+    //When adding users to a class, select the student OG role
+    //as the default.
+    //Find the index of the student role, to pass to JS.
+    $student_og_role_index = NULL;
+    $og_role_names = $form['og_user']['roles']['#options'];
+    foreach( $og_role_names as $index => $og_role_name ) {
+      if ( $og_role_name == 'student' ) {
+        $student_og_role_index = $index;
+        break;
+      }
+    }
+    if ( is_null($student_og_role_index) ) {
+      drupal_set_message('Hmm, I could not find the student OG role. '
+          . 'That\'s unexpected.', 'warning');
+      return;
+    }
+    //Tell JS what the index of the student role is.
+    $settings = array(
+      'studentOgRoleIndex' => $student_og_role_index,
+    );
+    drupal_add_js(
+        array('cycoGroupsSelectStudentRole' => $settings),
+        'setting'
+    );    
+    drupal_add_js(
+        drupal_get_path('module', 'cyco_core')
+        . '/custom/js/cyco_core_groups_change_roles.js'
+    );
+  }
+}
+
+/**
+ * Add a menu item that should appear in the group admin page.
+ */
+function cyco_core_og_ui_get_group_admin() {
+  $items = array();
+//return $items;
+  // User listing pages.
+  $items['approve_deny_membership_requests'] = array(
+    'title' => 'Approve/deny student membership requests',
+//    'title callback' => '_cyco_core_groups_approve_deny_title',
+//    'title callback' => 'og_ui_menu_title_callback',
+//    'title arguments' => array('Membership requests for group @group', 1, 2),
+    'description' => 'Choose which group membership requests you will accept.',
+    'href' => 'admin/approve-deny-membership-requests',
+//    'page callback' => '_cyco_core_groups_approve_deny_membership_requests',
+//    'page arguments' => array(1, 2),
+//    'access callback' => TRUE,
+//    'access callback' => 'og_ui_user_access_group',
+//    'access arguments' => array('manage members', 1, 2),
+//    'weight' => -12,
+  );  
+
+  return $items;
+}
+
+/**
+ * Called from hook menu items.
+ */
+function _cyco_core_groups_add_menu_items(&$items) {
+  $items['group/%/%/admin/approve-deny-membership-requests'] = array(
+//    'title' => 'thing',
+//    'title callback' => '_cyco_core_groups_approve_deny_title',
+    'title callback' => 'og_ui_menu_title_callback',
+    'title arguments' => array('Membership requests for group @group', 1, 2),
+    'description' => 'Approve/deny group membership requests.',
+    'page callback' => '_cyco_core_groups_approve_deny_membership_requests',
+    'page arguments' => array(1, 2),
+//    'access callback' => TRUE,
+    'access callback' => 'og_ui_user_access_group',
+    'access arguments' => array('manage members', 1, 2),
+    'weight' => -12,
+  );
+}
+
+//See og_ui_menu_title_callback.
+function _cyco_core_groups_approve_deny_title($title, $entity_type, $etid) {
+  $wrapper = entity_metadata_wrapper($entity_type, $etid);
+  return str_replace('@group', $wrapper->label(), $title);
+}
+
+/**
+ * Form builder; approve/deny request page.
+ * Based on og_ui_admin_account in og_ui.admin.inc.
+ */
+function _cyco_core_groups_approve_deny_membership_requests($group_type, $gid) {
+  //KRM - next right?
+  //og_set_breadcrumb($group_type, $gid, array(l(t('Group'), "$group_type/$gid/group")));
+  // $view = explode(':', variable_get)
+//  list($view_name, $display) = explode(':', variable_get('og_ui_admin_people_view', 'og_members_admin:default'));
+  // We can't use views_embed_view() as we have exposed filter, and we need to
+  // make sure the path is overriden to the current URL.
+  // @see http://drupal.org/node/525592#comment-1968604
+  $view = views_get_view('group_approve_membership_requests');
+//  $view = views_get_view($view_name, $display);
+  $view->set_arguments(array($group_type, $gid));
+  $view->override_url = $_GET['q'];
+  return $view->preview();
+}
+
+/**
+ * Implements hook_og_user_operations().
+ */
+//function cyco_core_og_user_operations($form = array(), $form_state = array()) {
+//  drupal_set_message('dogs');
+//  return;
+//  $operations = array();
+//  if (og_user_access($gid, 'update group') && !og_user_access($gid, 'administer group')) {
+//    $operations = array(
+//      'group_lead_grant' => array(
+//        'label' => t('Grant group lead role to user'),
+//        'callback' => 'group_leader_grant',
+//      ),
+//    );
+//  }  
+//  
+//  return $operations;
+//}
+
+/**
+ * Implements hook_action_info().
+ */
+function cyco_core_action_info() {
+  //Define two actions - approve student membership, deny student membership.
+  return array(
+    '_cyco_core_approve_student_membership_action' => array(
+      'type' => 'og_membership',
+      'label' => t('Approve student membership'),
+      'configurable' => FALSE,
+    ),
+    '_cyco_core_deny_student_membership_action' => array(
+      'type' => 'og_membership',
+      'label' => t('Deny student membership'),
+      'configurable' => FALSE,
+    ),
+  );
+}
+
+/**
+ * Called by VBO to approve student requests to join a group.
+ * Changes state to active, and gives the student role.
+ */
+function _cyco_core_approve_student_membership_action($og_membership, $context) {
+  // Don't process the group manager, if exists.
+  $group = entity_load_single($og_membership->group_type, $og_membership->gid);
+  if (!empty($group->uid) && $group->uid == $og_membership->etid && $og_membership->entity_type == 'user') {
+    return;
+  }
+  //Make membership active from pending.
+  $og_membership->state = OG_STATE_ACTIVE;
+  $og_membership->save();
+  //Give student OG role.
+  $group_type = $og_membership->group_type;
+  $gid = $og_membership->gid;
+  $bundle = $group->type;
+  //Load OG roles.
+  $og_roles = og_roles($group_type, $bundle);
+  $student_rid = array_keys($og_roles, 'student')[0];
+  og_role_grant($group_type, $gid, $og_membership->etid, $student_rid);
+}
+
+/**
+ * Called by VBO to delete a group membership request.
+ */
+function _cyco_core_deny_student_membership_action($og_membership, $context) {
+  $group_type = $og_membership->group_type;
+  $gid = $og_membership->gid;
+  // Don't process the group manager, if exists.
+  $group = entity_load_single($group_type, $gid);
+  if (!empty($group->uid) && $group->uid == $og_membership->etid && $og_membership->entity_type == 'user') {
+    return;
+  }
+  $og_membership->delete();
+}
+

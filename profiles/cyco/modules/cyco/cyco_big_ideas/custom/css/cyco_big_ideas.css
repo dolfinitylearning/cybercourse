@@ -1,0 +1,55 @@
+/*
+Styles for patterns.
+*/
+
+fieldset.cyco-big-idea-insert {
+  padding: 1em;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  background-color: transparent;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+fieldset.cyco-big-idea-insert legend.cyco-big-idea-insert-legend {
+  border-bottom: none;
+  margin-bottom: 0;
+  width: auto;
+}
+
+fieldset.cyco-big-idea-insert legend.cyco-big-idea-insert-legend span {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  padding: 0.2em;
+  background-color: white;
+}
+
+.cyco-big-idea-insert-title {
+  font-size: 120%;
+  /*margin-top: 1em;*/
+  margin-bottom: 1em;
+}
+
+.cyco-big-idea-insert-summary {
+  margin-bottom: 1em;
+}
+
+/*
+.cyco-big-idea-insert-summary .summary-label {
+  font-weight: bold;
+}
+*/
+
+.cyco-big-idea-insert-summary .summary-description {
+  margin-left: 2em;
+}
+
+.cyco-big-idea-insert-keywords-container .keywords-label {
+  font-weight: bold;
+}
+
+.cyco-big-idea-insert-more-link {
+  
+}

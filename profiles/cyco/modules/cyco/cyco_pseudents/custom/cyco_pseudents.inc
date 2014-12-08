@@ -127,10 +127,6 @@ function _cyco_pseudents_generate_ck_pseudent_table() {
     foreach ( $query_result['node'] as $nid => $value ) {
       $node = node_load($nid);
       $title = $node->title;
-      $renderable_array = field_view_field(
-          'node', $node, 'field_notes', 'swim_summary_or_trimmed_formatter'
-      );
-      $notes = drupal_render( $renderable_array );
       //Caption is not a required field.
       if ( isset($node->field_caption[LANGUAGE_NONE][0]['safe_value']) ) {
         $caption = $node->field_caption[LANGUAGE_NONE][0]['safe_value'];
@@ -144,16 +140,23 @@ function _cyco_pseudents_generate_ck_pseudent_table() {
           $categories[ $term['tid'] ] = $term_names[ $term['tid'] ];
         }
       }
-      $usable_url = cyco_core_uri2path(
-          $node->field_image[LANGUAGE_NONE][0]['uri']
-      );
-      $pseudents[$nid] = array(
-        'nid' => $nid,
-        'title' => $title,
-        'url' => $usable_url,
-        'caption' => $caption,
-        'categories' => $categories,
-      );
+      $usable_url = NULL;
+      if ( isset( $node->field_image[LANGUAGE_NONE][0]['uri'] ) ) {
+        $usable_url = cyco_core_uri2path(
+            $node->field_image[LANGUAGE_NONE][0]['uri']
+        );
+      }
+      $internal_name = $node->field_internal_name[LANGUAGE_NONE][0]['value'];
+      if ( !is_null($usable_url) ) {
+        $pseudents[$internal_name] = array(
+          'nid' => $nid,
+          'internal_name' => $internal_name,
+          'title' => $title,
+          'url' => $usable_url,
+          'caption' => $caption,
+          'categories' => $categories,
+        );
+      }
     } // end for
   }
   if ( $pseudents == '' ) {
@@ -203,6 +206,9 @@ function _cyco_pseudents_set_dirty_flag( $node ) {
   }  
 }
 
+/** 
+ * Implements hook_form_alter().
+ */
 function cyco_pseudents_form_alter(&$form, &$form_state, $form_id) {
   // @todo Instead of checking form_id, check for a field
   //having the SWIM format? Cache the results of the check 
@@ -212,25 +218,14 @@ function cyco_pseudents_form_alter(&$form, &$form_state, $form_id) {
     _cyco_pseudents_load_client_side_stuff();
   }
   if ( $form_id == 'pseudent_pose_node_form' ) {
-    $form['pseudent_pose_link'] = array(
-        '#type' => 'markup',
-        '#markup' => _cyco_pseudents_make_link2list(),
-        '#weight' => ( $form['field_notes']['#weight'] + 1 ),
-    );    
+    //Add validation of internal name.
+    $form['#validate'][] = '_cyco_pseudents_form_validate';    
   }
 }
 
-/**
- * Make a link back to the pseudent list page.
- */
-function _cyco_pseudents_make_link2list() {
-  return 
-        '<div class="pseudents-back-link">'
-      .   l(
-            '<< Back to pseudents list', 
-            'pseudent-poses'
-          )
-      . '</div>';  
+function _cyco_pseudents_form_validate($form, &$form_state) {
+  //Check format of internal name.
+  cyco_core_validate_internal_name_field($form_state);
 }
 
 /**
@@ -266,32 +261,6 @@ function _cyco_pseudents_load_client_side_stuff() {
  */
 function cyco_pseudents_swim_add_client_stuff() {
   _cyco_pseudents_load_client_side_stuff();
-}
-
-/**
- * Implements hook_node_view().
- */
-function cyco_pseudents_node_view($node, $view_mode, $langcode) {
-  global $base_url;
-  if ( $node->type == 'pseudent_pose' ) {
-    //Add links - "Add another" and "Back to list."
-    if ( $view_mode == 'full' ) {
-          $weight = cyco_core_highest_content_weight( 
-              $node->content, 
-              array( 
-                'field_caption',
-                'field_image',
-                'field_notes',
-                'field_pseudent_categories',
-                'field_workflow_tags',
-              ) 
-          );
-//          $node->content['pseudent_pose_link'] = array(
-//              '#markup' => _cyco_pseudents_make_link2list(),
-//              '#weight' => ( $weight + 2 ),
-//          );
-    }
-  }
 }
 
 /**
@@ -380,15 +349,26 @@ function cyco_pseudents_swim_custom_tag_view_info() {
  * @param int $pseudent_nid Exercise node nid.
  * @param string $tag_content Inner tag content. Not used.
  */
-function _cyco_pseudents_swim_view_callback( $pseudent_nid, $tag_content ) {
+function _cyco_pseudents_swim_view_callback( $pseudent_internal_name, $tag_content ) {
   $template = 
-'<div class="pseudent" data-pseudent-id="**NID**">
+'<div class="pseudent" data-pseudent-internal-name="**INTERNAL_NAME**">
   <div class="pseudent-image-container">
     <img class="pseudent-image" src="**IMAGE_PATH**"" alt="**CAPTION**">
     <div class="pseudent-image-caption">**CAPTION**</div>
   </div>
   <div class="pseudent-content">**CONTENT**</div>
 </div>';
+  $pseudent_nid = cyco_core_nid_for_internal_name( $pseudent_internal_name );
+  if ( is_null($pseudent_nid) ) {
+    //Error already reported in function. 
+    return '';
+  }
+  if ( $pseudent_nid == 0 ) {
+    $message = t('Not found pseudent internal name: @name', 
+        array('@name' => $pseudent_internal_name));
+    watchdog('cyco_pseudent', $message);
+    return '';
+  }
   $pseudent_node = node_load($pseudent_nid);
   if ( isset( $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'] ) ) {
     $caption = $pseudent_node->field_caption[LANGUAGE_NONE][0]['value'];
@@ -400,8 +380,9 @@ function _cyco_pseudents_swim_view_callback( $pseudent_nid, $tag_content ) {
   $usable_url = cyco_core_uri2path(
       $pseudent_node->field_image[LANGUAGE_NONE][0]['uri']
   );
+  $internal_name = $pseudent_node->field_internal_name[LANGUAGE_NONE][0]['value'];
   //Use template.
-  $replacement = str_replace('**NID**', $pseudent_nid, $template);
+  $replacement = str_replace('**INTERNAL_NAME**', $internal_name, $template);
   $replacement = str_replace('**CAPTION**', $caption, $replacement);
   $replacement = str_replace('**CONTENT**', $tag_content, $replacement);
   $replacement = str_replace('**IMAGE_PATH**', $usable_url, $replacement);
@@ -413,16 +394,29 @@ function _cyco_pseudents_swim_view_callback( $pseudent_nid, $tag_content ) {
  * Implements hook_swim_custom_tag_edit_info().
  */
 function cyco_pseudents_swim_custom_tag_edit_info() {
-  return array(
+  $definition = array(
     'tag' => 'pseudent',
     'callback' => '_cyco_pseudents_swim_edit_callback',
   );
+  return $definition;
 }
 
 /**
  * Implements hook_swim_textile2ckhtml.
  */
-function _cyco_pseudents_swim_edit_callback( $pseudent_nid, $content ) {
+function _cyco_pseudents_swim_edit_callback( $pseudent_internal_name, $content ) {
+  $pseudent_nid = cyco_core_nid_for_internal_name( $pseudent_internal_name );
+  if ( is_null($pseudent_nid) ) {
+    //Error already reported in function. 
+    return '';
+  }
+  //Exit if not found.
+  if ( $pseudent_nid == 0 ) {
+    $message = t('Not found pseudent internal name: @name', 
+        array('@name' => $pseudent_internal_name));
+    watchdog('cyco_pseudents', $message);
+    return '';
+  }
   //Load pseudent data.
   $node = node_load($pseudent_nid);
   if ( !$node ) {
@@ -441,7 +435,8 @@ function _cyco_pseudents_swim_edit_callback( $pseudent_nid, $content ) {
   $usable_url = cyco_core_uri2path(
      $node->field_image[LANGUAGE_NONE][0]['uri']
   );
-  $html =   '<div class="pseudent" data-pseudent-id="' . $pseudent_nid . '" >'
+  $html =   '<div class="pseudent" data-pseudent-internal-name="' 
+          .       $pseudent_internal_name . '" >'
           .   '<div class="pseudent-image-container">'
           .     '<img class="pseudent-image" '
           .         'src="' . $usable_url . '" '
@@ -461,7 +456,7 @@ function _cyco_pseudents_swim_edit_callback( $pseudent_nid, $content ) {
  */
 function cyco_pseudents_swim_ckhtml2textile_alter( &$content ) {
   $regex = 
-      '/\<div class\=\"pseudent\".*?data\-pseudent\-id\=\"(.*?)\"*.\>\s*'
+      '/\<div class\=\"pseudent\".*?data\-pseudent\-internal\-name\=\"(.*?)\"*.\>\s*'
       .  '\<div class\=\"pseudent\-image\-container\"\>\s*'
       .    '\<img.*?\>\s*'
       .    '\<div class\=\"pseudent-image-caption\"\>.*?\<\/div\>\s*'
@@ -476,11 +471,11 @@ function cyco_pseudents_swim_ckhtml2textile_alter( &$content ) {
 }
 
 function _cyco_pseudents_make_textile_replacements($matches) {
-  $nid = $matches[1];
+  $internal_name = $matches[1];
   $content = $matches[2];
   $replacement = 
-    SwimCustomTagParser::START_CUSTOM_TAG . ' pseudent ' . $nid . "\n"
+    SwimCustomTagParser::START_CUSTOM_TAG . ' pseudent ' . $internal_name . "\n"
       . $content . "\n"
-      . SwimCustomTagParser::END_CUSTOM_TAG . ' pseudent ' . $nid;
+      . SwimCustomTagParser::END_CUSTOM_TAG . ' pseudent ' . $internal_name;
   return $replacement;
 }

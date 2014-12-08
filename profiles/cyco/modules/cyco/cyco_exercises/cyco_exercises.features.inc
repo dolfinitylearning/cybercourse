@@ -11,9 +11,6 @@ function cyco_exercises_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "field_group" && $api == "field_group") {
     return array("version" => "1");
   }
-  if ($module == "services" && $api == "services") {
-    return array("version" => "3");
-  }
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -35,22 +32,6 @@ function cyco_exercises_node_info() {
       'name' => t('Exercise'),
       'base' => 'node_content',
       'description' => t('Something for students to do.'),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'exercise_submission' => array(
-      'name' => t('Exercise submission'),
-      'base' => 'node_content',
-      'description' => t('A submission for one exercise from one student. '),
-      'has_title' => '1',
-      'title_label' => t('Title'),
-      'help' => '',
-    ),
-    'model_exercise_solution' => array(
-      'name' => t('Model exercise solution'),
-      'base' => 'node_content',
-      'description' => t('A solution to an exercise. Created by an author or instructor, as a model to be used in grading.'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

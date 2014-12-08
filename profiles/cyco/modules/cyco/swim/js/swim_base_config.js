@@ -43,13 +43,13 @@ Drupal.swimCkConfig = {
     + "About,Source",
     //@todo Figure out how to get pseudent rules into pseudents only.
     //Removing them from here makes the button vanish.
-  allowedContent:
-    'br;'
-    + 'img[!src];'
-    + 'div(!pseudent)[!data-pseudent-id];'
-    + 'div(!pseudent-image-container);'
-    + 'div(!pseudent-content);'
-    + 'div(!pseudent-image-caption);'
+//  allowedContent:
+//    'br;'
+//    + 'img[!src];'
+//    + 'div(!pseudent)[!data-pseudent-internal-name];'
+//    + 'div(!pseudent-image-container);'
+//    + 'div(!pseudent-content);'
+//    + 'div(!pseudent-image-caption);'
 };
   }
 };

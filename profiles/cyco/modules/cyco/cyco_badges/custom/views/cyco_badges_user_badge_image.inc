@@ -42,7 +42,7 @@ class cyco_badges_user_badge_image extends views_handler_field {
     }
     else {
       $achievement_machine_name 
-          = $badge_node->field_badge_machine_name[$badge_node->language][0]['value'];
+          = $badge_node->field_internal_name[$badge_node->language][0]['value'];
       $earned_badge 
           = in_array($achievement_machine_name, $this->current_users_badge_ids);
     }

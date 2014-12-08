@@ -402,7 +402,7 @@ function cyco_core_is_book_content_type($node) {
  * @return array Names of content types.
  */
 function cyco_core_get_book_root_types() {
-  return array('course_page', 'blueprint_page', 'learning_map');
+  return array('course_page', 'blueprint_page',);
 }
 
 /**
@@ -430,3 +430,132 @@ function cyco_core_get_role_id_by_name($name) {
   return array_search($name, $roles);
 }
 
+/**
+ * Report an error if a form field has an invalid internal name.
+ * @param array $form_state Form state array passed to form validate function.
+ * @param string $field_name Name of the field to check. Defaults to
+ *   field_internal_name.
+ */
+function cyco_core_validate_internal_name_field(
+    &$form_state, $field_name = 'field_internal_name') {
+  //Trim spaces and convert to lowercase.
+  $internal_name 
+      = $form_state['values'][$field_name][LANGUAGE_NONE][0]['value'];
+  $internal_name = strtolower( trim( $internal_name ) );
+  $form_state['values'][$field_name][LANGUAGE_NONE][0]['value']
+      = $internal_name;
+  if ( ! cyco_core_internal_name_valid( $internal_name ) ) {
+    form_set_error(
+        $field_name, 
+        t('Sorry, the name isn\'t valid. Use lowercase letters, digits, '
+          . 'and underscores only, e.g., bury_evidence_exercise.')
+    );
+    return;
+  }
+  //Make sure the name is not already in use.
+  $node = $form_state['node'];
+  $name_in_use = NULL;
+  $efq = new EntityFieldQuery;
+  $efq
+    ->entityCondition('entity_type', 'node')
+//    ->entityCondition('bundle', $node->type)
+    ->fieldCondition($field_name, 'value', $internal_name, '=');
+  $query_result = $efq->execute();
+  $nids_using_internal_name = array();
+  if ( isset($query_result['node']) ) {
+    foreach ( $query_result['node'] as $nid => $ignore ) {
+      $nids_using_internal_name[] = $nid;
+    }
+  }
+  $num_nodes_returned = sizeof($nids_using_internal_name);
+  if ( $num_nodes_returned > 1 ) {
+    //This should never happen.
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Druplicates for internal name ' . $internal_name . '.';
+    cyco_core_handle_error( $message );
+    form_set_error(
+        $field_name, 
+        t('Internal error: ' . $message . "\n\nPlease tell someone.")
+    );
+  }
+  if ( $num_nodes_returned == 0 ) {
+//  if ( ! isset( $query_result['node'] ) ) {
+    //No nodes returned - name not in use.
+    $name_in_use = FALSE;
+  }
+  else {
+    //Name is being used, one time. 
+    //If user is creating a new node, can't use the internal name.
+    $is_new_node = !isset($node->nid) || isset($node->is_new);
+    if ( $is_new_node ) {
+      $name_in_use = TRUE;
+    }
+    else {
+      //User is editing an existing node. 
+      //Internal name is OK if the node the user is editing is the same one
+      //returned by the EFQ.
+      $nid_node_being_edited = $form_state['node']->nid;
+      $name_in_use = ( $nids_using_internal_name[0] != $nid_node_being_edited );
+    }
+  }
+//  $sql = 'select count(*) from {field_data_' . $field_name . '} '
+//      . 'where ' . $field_name . '_value = \'' 
+//      . check_plain($internal_name) . '\'';
+//  $count = db_query($sql)->fetchField();
+//  if ( $count != 0 ) {
+  if ( $name_in_use ) {
+    form_set_error(
+        $field_name, 
+        t('Sorry, that internal name is already being used. Names must be '
+        . 'unique, to avoid confusion. The world is confused enough. '
+        . 'We don\'t need any more. Confusion, that is.')
+    );
+  }
+}
+
+/**
+ * Find the nid of the node with a given internal name.
+ * @param string $internal_name Name to find.
+ * @return int nid of node, 0 if not found, NULL if error.
+ */
+function cyco_core_nid_for_internal_name( $internal_name ) {
+  $sql = 'select entity_id from {field_data_field_internal_name} '
+      . 'where ' //entity_type=\'node\' '
+//      . 'where entity_type=\'node\' and bundle=\'exercise\' '
+//      . 'and field_internal_name_value=\'' 
+      . 'field_internal_name_value=\'' 
+      . check_plain($internal_name) . '\'';
+  $query_result = db_query($sql);
+  $nids = array();
+  foreach( $query_result as $row ) {
+    $nids[] = $row->entity_id;
+  }
+  $num_nids_returned = sizeof($nids);
+  if ( $num_nids_returned > 1 ) {
+    //This should never happen.
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' Duplicates for internal name ' . $internal_name . '.';
+    cyco_core_handle_error( $message );
+    form_set_error(
+        'field_internal_name', 
+        t('Internal error: ' . $message . "\n\nPlease tell someone.")
+    );
+    return NULL;
+  }
+  //Exit if not found.
+  if ( $num_nids_returned == 0 ) {
+    return 0;
+  }
+  //Return nid of node with that internal name.
+  return $nids[0];  
+}
+
+/**
+ * Check whether a string contains a valid internal name.
+ * @param string $name_to_check Name to check.
+ * @return boolean True if valid, else false.
+ */
+function cyco_core_internal_name_valid( $name_to_check ) {
+  $result = ( preg_match('/[^a-z0-9_]/', $name_to_check) === 0 );
+  return $result;
+}

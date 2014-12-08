@@ -31,15 +31,16 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_attachments',
     'label' => 'Attachments',
     'required' => 0,
     'settings' => array(
-      'description_field' => 0,
+      'description_field' => 1,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/attachments-bucket',
+      'file_directory' => 'cycourse/bucket',
       'file_extensions' => '',
-      'max_filesize' => '',
+      'max_filesize' => '20Mb',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -52,7 +53,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -61,7 +62,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -191,17 +192,18 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_images',
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/images-bucket',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -216,7 +218,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -225,7 +227,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -293,6 +295,49 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-blueprint_page-field_show_table_of_contents'
+  $field_instances['node-blueprint_page-field_show_table_of_contents'] = array(
+    'bundle' => 'blueprint_page',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Do you want to show a table of contents on this page?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 6,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_show_table_of_contents',
+    'label' => 'Show table of contents',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance: 'node-blueprint_page-field_workflow_tags'
   $field_instances['node-blueprint_page-field_workflow_tags'] = array(
     'bundle' => 'blueprint_page',
@@ -352,15 +397,16 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_attachments',
     'label' => 'Attachments',
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/attachments-bucket',
+      'file_directory' => 'cycourse/bucket',
       'file_extensions' => '',
-      'max_filesize' => '',
+      'max_filesize' => '20mb',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -373,7 +419,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -514,17 +560,18 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_images',
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/images-bucket',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -539,7 +586,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -658,6 +705,49 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-course_page-field_show_table_of_contents'
+  $field_instances['node-course_page-field_show_table_of_contents'] = array(
+    'bundle' => 'course_page',
+    'default_value' => array(
+      0 => array(
+        'value' => 1,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Do you want to show a table of contents on this page?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_show_table_of_contents',
+    'label' => 'Show table of contents',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 0,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'node-course_page-field_workflow_tags'
   $field_instances['node-course_page-field_workflow_tags'] = array(
     'bundle' => 'course_page',
@@ -701,6 +791,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Attachments');
   t('Blueprint keywords');
   t('Body');
+  t('Do you want to show a table of contents on this page?');
   t('Exercises');
   t('Exercises this page includes. Internal use only.');
   t('Files attached to this page.');
@@ -712,6 +803,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Keywords describing this page.');
   t('Keywords relevant to course design. Shown in the blueprint only.');
   t('Short title');
+  t('Show table of contents');
   t('Tasks for this page.');
   t('Title used in tree menus. If blank, the full title will be used.');
   t('What work needs to be done on this page?');

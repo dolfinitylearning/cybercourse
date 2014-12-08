@@ -22,7 +22,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -44,7 +44,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -69,15 +69,16 @@ function cyco_patterns_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_attachments',
     'label' => 'Attachments',
     'required' => 0,
     'settings' => array(
       'description_field' => 1,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/attachments-bucket',
+      'file_directory' => 'cycourse/bucket',
       'file_extensions' => '',
-      'max_filesize' => '',
+      'max_filesize' => '20Mb',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -90,7 +91,7 @@ function cyco_patterns_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -99,7 +100,7 @@ function cyco_patterns_field_default_field_instances() {
             'path' => 'file_attach',
           ),
           'source_imce' => array(
-            'imce_mode' => 0,
+            'imce_mode' => 1,
           ),
           'source_reference' => array(
             'autocomplete' => 0,
@@ -122,7 +123,7 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -138,7 +139,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -160,7 +161,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -174,7 +175,7 @@ function cyco_patterns_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 4,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -184,17 +185,18 @@ function cyco_patterns_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_images',
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 0,
+      'alt_field' => 1,
       'default_image' => 0,
       'exclude_cv' => FALSE,
-      'file_directory' => 'course/images-bucket',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5Mb',
+      'max_resolution' => '1200x1200',
       'min_resolution' => '',
       'title_field' => 0,
       'user_register_form' => FALSE,
@@ -209,7 +211,7 @@ function cyco_patterns_field_default_field_instances() {
             'clipboard' => 0,
             'imce' => 'imce',
             'reference' => 0,
-            'remote' => 'remote',
+            'remote' => 0,
             'upload' => 'upload',
           ),
           'source_attach' => array(
@@ -242,7 +244,49 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 5,
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-pattern-field_internal_name'
+  $field_instances['node-pattern-field_internal_name'] = array(
+    'bundle' => 'pattern',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The internal name of the pattern. Lowercase letters, digits, and underscores only, e.g., post_tested_loop1. Use the internal name to insert the pattern in content.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_internal_name',
+    'label' => 'Internal name',
+    'required' => 1,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
     ),
   );
 
@@ -258,7 +302,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'taxonomy',
         'settings' => array(),
         'type' => 'taxonomy_term_reference_link',
-        'weight' => 0,
+        'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -280,7 +324,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -296,7 +340,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 1,
+        'weight' => 2,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -318,7 +362,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -330,8 +374,10 @@ function cyco_patterns_field_default_field_instances() {
   t('Explanation');
   t('Images');
   t('Images for your content.');
+  t('Internal name');
   t('Pattern categories');
   t('Situation');
+  t('The internal name of the pattern. Lowercase letters, digits, and underscores only, e.g., post_tested_loop1. Use the internal name to insert the pattern in content.');
   t('What categories is this pattern in?');
   t('What is observed.');
   t('What to do when the situation occurs.');

@@ -81,36 +81,6 @@ footer ul.nav li {
   margin-bottom: 1em;
 }
 
-.view-exercises table caption {
-  text-align: left;
-}
-
-.view-exercises table caption p.exercise-view-exercise-title {
-  font-size: 150%;
-  font-weight: bold;
-  margin-bottom: 0;
-  margin-top: 1em;
-}
-
-.view-exercises table caption p.exercise-view-terms,
-.view-exercises table caption p.exercise-view-status,
-.view-exercises table caption .exercise-view-body,
-.view-exercises table caption .exercise-view-course-pages {
-  margin-left: 2em;
-  font-size: 90%;
-}
-
-.view-exercises table caption p.exercise-view-rubric-label {
-}
-
-.view-exercises-public .views-row {
-  margin-bottom: 1em;
-}
-
-.view-exercises-public .views-field-title {
-  font-size: 120%;
-}
-
 .form-item.form-group {
   margin-bottom: 2em;
   border: 1px solid #F4F4F4;
@@ -145,4 +115,10 @@ For view for managing student submissions.
   display: inline-block;
   /*width: 200px;*/
   margin-bottom: 4em;
+}
+
+/* Fix revisions form. */
+
+#diff-node-revisions .radio label {
+  margin-bottom: 15px;
 }

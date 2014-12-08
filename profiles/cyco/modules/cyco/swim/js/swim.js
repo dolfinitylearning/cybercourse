@@ -266,8 +266,8 @@
             )
             .dialog( "option", "title", 
                 (editor.selectedPeek == 'phone')
-                ? "Peek (iPhone 1 to 4S, landscape)"
-                : "Peek (iPad 1 and 2, portrait)"
+                ? "Peek (phone)"
+                : "Peek (tablet)"
         );
       }
       else {

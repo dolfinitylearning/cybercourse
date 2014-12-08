@@ -24,21 +24,23 @@ function cyco_form_install_configure_form_alter(&$form, $form_state) {
  * Implements hook_install_tasks_alter()
  */
 function cyco_install_tasks_alter( &$tasks, $install_state ) {
-CycoInstallDebug::getInstance()->output('Start cyco_install_tasks_alter');
+//CycoInstallDebug::getInstance()->output('Start cyco_install_tasks_alter');
   //Add new installation tasks before the site configure form in shown.
   //See https://www.drupal.org/node/1022020 for task list.  
-  
+  $t = get_t();
   global $conf;
   if (empty($conf['theme_settings'])) {
     $conf['theme_settings'] = array(
       'default_logo' => 0,
-      'logo_path' => 'profiles/cyco/mica.png',
+      'logo_path' => 'profiles/cyco/install_logo.png',
     );
   }
+  $tasks['install_select_locale']['display_name'] 
+       = $t('Installing CyberCourse: Please choose your language' );
 
+//CycoInstallDebug::getInstance()->output('<pre>' . print_r($conf, TRUE) . '</pre>');
 
   //Grab tasks to be moved to the end.
-  $t = get_t();
   $install_import_locales_remaining = $tasks['install_import_locales_remaining'];
   unset( $tasks['install_import_locales_remaining'] );
   $install_finished = $tasks['install_finished'];
@@ -60,7 +62,7 @@ CycoInstallDebug::getInstance()->output('Start cyco_install_tasks_alter');
   //Restore tasks removed earlier.
   $tasks['install_import_locales_remaining'] = $install_import_locales_remaining;
   $tasks['install_finished'] = $install_finished;
-CycoInstallDebug::getInstance()->output('End cyco_install_tasks_alter');
+//CycoInstallDebug::getInstance()->output('End cyco_install_tasks_alter');
 }
 
 /**
@@ -109,6 +111,7 @@ CycoInstallDebug::getInstance()->output(
   module_enable(array($module_name), FALSE);
   $context['message'] = $t('Installing %module.', array('%module' => $module_name));
 CycoInstallDebug::getInstance()->output('End _cyco_install_one_module');
+  $context['finished'] = TRUE;
 }
 
 /**
@@ -135,13 +138,6 @@ CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install');
   $operations[] = array( '_cyco_finalize_install_step2', array('dog')  );
   $operations[] = array( '_cyco_finalize_install_step3', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step4', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_2', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_2a', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_3', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_4', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_5', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_6', array('dog') );
-  $operations[] = array( '_cyco_finalize_install_step4_7', array('dog') );
   $operations[] = array( '_cyco_finalize_install_step5', array('dog') );
   $batch_def = array(
     'operations' => $operations,
@@ -252,72 +248,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4')
 CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4');
 }
 
-function _cyco_finalize_install_step4_2($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_2');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu2();
-  $context['message'] = $t('Linking up Return of Awesome.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_2');
-}
-
-function _cyco_finalize_install_step4_2a($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_2a');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu2a();
-  $context['message'] = $t('Linking up Awesome\'s Revenge.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_2a');
-}
-
-function _cyco_finalize_install_step4_3($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_3');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu3();
-  $context['message'] = $t('Linking up Awesome Rides Again.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_3');
-}
-
-function _cyco_finalize_install_step4_4($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_4');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu4();
-  $context['message'] = $t('Linking up Awesome: This Time, It\'s Personal');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_4');
-}
-
-function _cyco_finalize_install_step4_5($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_5');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu5();
-  $context['message'] = $t('Linking up Revenge of Awesome.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_5');
-}
-
-function _cyco_finalize_install_step4_6($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_6');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu6();
-  $context['message'] = $t('Linking up Awesome: The Next Generation.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_6');
-}
-
-function _cyco_finalize_install_step4_7($dog, &$context) {
-CycoInstallDebug::getInstance()->output('Starting _cyco_finalize_install_step4_7');
-  $t = get_t();
-  // Add links to control panel menu. I can't make features do it right.
-  _cyco_add_links_cp_menu7();
-  $context['message'] = $t('Linking up Deep Space Awesome.');  
-CycoInstallDebug::getInstance()->output('Ending _cyco_finalize_install_step4_7');
-}
-
 function _cyco_finalize_install_step5($dog, &$context) {
 CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step5');
   $t = get_t();
+  //Turn on JS and CSS aggregation.
+  _cyco_turn_on_aggregation();
   node_access_rebuild();
 //  cache_clear_all();
   //Remove all blocks from submission theme, except for content.
@@ -325,6 +260,16 @@ CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step5');
   cache_clear_all();
   $context['message'] = $t('You won\'t believe how awesome Cyco is.');
 CycoInstallDebug::getInstance()->output('End _cyco_finalize_install_step5');
+}
+
+/**
+ * Turn on JS and CSS aggregation.
+ */
+function _cyco_turn_on_aggregation() {
+  variable_set('preprocess_js', 1) ;
+  drupal_clear_js_cache();
+  variable_get('preprocess_css', 1);
+  drupal_clear_css_cache();
 }
 
 /**
@@ -373,15 +318,6 @@ CycoInstallDebug::getInstance()->output('Start _cyco_set_block_role_visibility')
 CycoInstallDebug::getInstance()->output('End _cyco_set_block_role_visibility');
 }
 
-/**
- * Define services, using an export.
- */
-//function _cyco_define_services() {
-//  $path = drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
-//      . 'services.export'; 
-//  require_once $path;
-//}
-//
 function _cyco_add_workflow_terms() {
 CycoInstallDebug::getInstance()->output('Start _cyco_add_workflow_terms');
   //See http://www.phase2technology.com/blog/taxonomy-terms-in-code/
@@ -518,16 +454,6 @@ CycoInstallDebug::getInstance()->output('Start _cyco_add_content');
       drupal_get_path('module', 'cyco_core') . '/custom/exports/' 
       . 'blueprint_pages.export'
   );
-//  //Pseudents.
-//  _cyco_import_nodes(
-//      drupal_get_path('module', 'cyco_pseudents') . '/custom/exports/' 
-//      . 'pseudents.export'
-//  );
-//  //Patterns.
-//  _cyco_import_nodes(
-//      drupal_get_path('module', 'cyco_patterns') . '/custom/exports/' 
-//      . 'patterns.export'
-//  );  
 CycoInstallDebug::getInstance()->output('Start _cyco_add_content');
 }
 
@@ -826,8 +752,11 @@ function _cyco_add_classes2block( $module, $block, $classes ) {
  */
 //function _cyco_disable_modules() {
 //  $modules = array(
+//    'node_export_features',
 //    'node_export',
 //    'features_orphans',
+//    'cyco_pseudents_import',
+//    'views_ui',
 //  );
 //  module_disable( $modules );
 //}
@@ -838,6 +767,7 @@ function _cyco_add_classes2block( $module, $block, $classes ) {
  * enabled.
  */
 function _cyco_enable_modules() {
+  return;
 CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
   $modules = array(
     'cyco_core',
@@ -845,6 +775,8 @@ CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
     'cyco_install_course_blueprint_views',
     'cyco_install_groups',
     'cyco_exercises',
+    'cyco_exercises_submissions',
+    'cyco_exercises_model_solutions',
     'cyco_exercises_services',
     'cyco_exercises_views',
     'cyco_badges',
@@ -943,26 +875,11 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $module = 'cyco_core';
   
   //Create top level items.
-  $plid = 0;
-  $items[] = array(
-    'link_path' => 'courses-and-keywords',
-    'link_title' => 'Courses pages and keywords',
-    'weight' => 0,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $plid,
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Manage course pages and keywords.',
-      ),
-    ),
-  );
+  $plid = -30;
   $items[] = array(
     'link_path' => 'blueprints-and-keywords',
     'link_title' => 'Blueprints pages and keywords',
-    'weight' => 10,
+    'weight' => 0,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -975,9 +892,24 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
     ),
   );
   $items[] = array(
+    'link_path' => 'courses-and-keywords',
+    'link_title' => 'Courses pages and keywords',
+    'weight' => -25,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Manage course pages and keywords.',
+      ),
+    ),
+  );
+  $items[] = array(
     'link_path' => 'exercises',
     'link_title' => 'Exercises and rubrics',
-    'weight' => 20,
+    'weight' => -20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -993,7 +925,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'manage-submissions',
     'link_title' => 'Exercise submissions',
-    'weight' => 23,
+    'weight' => -15,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1008,7 +940,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'badges',
     'link_title' => 'Badges',
-    'weight' => 27,
+    'weight' => -10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1023,7 +955,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'pseudent-poses',
     'link_title' => 'Pseudent poses',
-    'weight' => 30,
+    'weight' => -5,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1038,7 +970,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'patterns',
     'link_title' => 'Patterns',
-    'weight' => 40,
+    'weight' => 0,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1053,7 +985,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'basic-pages',
     'link_title' => 'Basic pages',
-    'weight' => 50,
+    'weight' => 5,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1069,7 +1001,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'workflow-tagged',
     'link_title' => 'Content that needs work',
-    'weight' => 60,
+    'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1084,7 +1016,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'classes',
     'link_title' => 'Classes',
-    'weight' => 70,
+    'weight' => 15,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1100,7 +1032,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'admin/people',
     'link_title' => 'Users',
-    'weight' => 80,
+    'weight' => 20,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1115,7 +1047,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
   $items[] = array(
     'link_path' => 'admin/content',
     'link_title' => 'Other',
-    'weight' => 90,
+    'weight' => 25,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1127,25 +1059,30 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu1');
       ),
     ),
   );
-  global $_cyco_install_cp_top_level_mlids;
+//  global $_cyco_install_cp_top_level_mlids;
   $_cyco_install_cp_top_level_mlids = array();
   foreach ( $items as $item ) {
     $_cyco_install_cp_top_level_mlids[ $item['link_path'] ] = menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu1');
-  return $_cyco_install_cp_top_level_mlids;
-}
-
-//  CycoInstallDebug::getInstance()->output('CP menu items - top-level.');
-//  CycoInstallDebug::getInstance()->output(
-//      '<pre>$items: '.print_r($items, TRUE).'</pre>'
-//  );
-//  CycoInstallDebug::getInstance()->output(
-//      '<pre>$top_level_mlids: '.print_r($_cyco_install_cp_top_level_mlids, TRUE).'</pre>'
-//  );
-function _cyco_add_links_cp_menu2() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
-  global $_cyco_install_cp_top_level_mlids;
+  CycoInstallDebug::getInstance()->output(
+    'Top level mlids: <pre>' 
+      . print_r($_cyco_install_cp_top_level_mlids, TRUE)
+      . '</pre>'
+  );
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu1');
+//  return $_cyco_install_cp_top_level_mlids;
+//}
+//
+////  CycoInstallDebug::getInstance()->output('CP menu items - top-level.');
+////  CycoInstallDebug::getInstance()->output(
+////      '<pre>$items: '.print_r($items, TRUE).'</pre>'
+////  );
+////  CycoInstallDebug::getInstance()->output(
+////      '<pre>$top_level_mlids: '.print_r($_cyco_install_cp_top_level_mlids, TRUE).'</pre>'
+////  );
+//function _cyco_add_links_cp_menu2() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
@@ -1201,21 +1138,20 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2');
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu2');
-}
-  
-//  CycoInstallDebug::getInstance()->output('CP menu items - Courses and keywords submenu.');
-//  CycoInstallDebug::getInstance()->output(
-//      '<pre>$items: '.print_r($items, TRUE).'</pre>'
-//  );
-
-  function _cyco_add_links_cp_menu2a() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
-  global $_cyco_install_cp_top_level_mlids;
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu2');
+//}
+//  
+////  CycoInstallDebug::getInstance()->output('CP menu items - Courses and keywords submenu.');
+////  CycoInstallDebug::getInstance()->output(
+////      '<pre>$items: '.print_r($items, TRUE).'</pre>'
+////  );
+//
+//  function _cyco_add_links_cp_menu2a() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
-
   //Blueprints and keywords submenu
   $items = array();
   $items[] = array(
@@ -1270,12 +1206,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu2a');
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu2a');
-}
-
-function _cyco_add_links_cp_menu3() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
-  global $_cyco_install_cp_top_level_mlids;
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu2a');
+//}
+//
+//function _cyco_add_links_cp_menu3() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
@@ -1428,12 +1364,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu3');
     menu_link_save($item);
   }
   
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu3');
-}
-
-function _cyco_add_links_cp_menu4() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
-  global $_cyco_install_cp_top_level_mlids;
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu3');
+//}
+//
+//function _cyco_add_links_cp_menu4() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
@@ -1457,7 +1393,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
   );
   $items[] = array(
     'link_path' => 'node/add/badge',
-    'link_title' => 'Define a new badge',
+    'link_title' => 'Add a new badge type',
     'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
@@ -1576,12 +1512,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
-}
-
-function _cyco_add_links_cp_menu5() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
-  global $_cyco_install_cp_top_level_mlids;
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu4');
+//}
+//
+//function _cyco_add_links_cp_menu5() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
@@ -1656,15 +1592,14 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu5');
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu5');
-}
-
-function _cyco_add_links_cp_menu6() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu5');
+//}
+//
+//function _cyco_add_links_cp_menu6() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
-  global $_cyco_install_cp_top_level_mlids;
   //Classes submenu
   $items = array();
   $items[] = array(
@@ -1684,7 +1619,7 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
   );
   $items[] = array(
     'link_path' => 'node/add/class',
-    'link_title' => 'Add class',
+    'link_title' => 'Add a class',
     'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
@@ -1736,12 +1671,12 @@ CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu6');
   foreach ( $items as $item ) {
     menu_link_save($item);
   }
-CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu6');
-}
-
-function _cyco_add_links_cp_menu7() {
-CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
-  global $_cyco_install_cp_top_level_mlids;
+//CycoInstallDebug::getInstance()->output('End _cyco_add_links_cp_menu6');
+//}
+//
+//function _cyco_add_links_cp_menu7() {
+//CycoInstallDebug::getInstance()->output('Starting _cyco_add_links_cp_menu7');
+//  global $_cyco_install_cp_top_level_mlids;
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';

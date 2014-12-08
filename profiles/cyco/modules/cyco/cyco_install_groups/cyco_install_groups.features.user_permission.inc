@@ -123,6 +123,83 @@ function cyco_install_groups_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'execute _cyco_core_approve_student_membership_action'.
+  $permissions['execute _cyco_core_approve_student_membership_action'] = array(
+    'name' => 'execute _cyco_core_approve_student_membership_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute _cyco_core_deny_student_membership_action'.
+  $permissions['execute _cyco_core_deny_student_membership_action'] = array(
+    'name' => 'execute _cyco_core_deny_student_membership_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute og_membership_delete_action'.
+  $permissions['execute og_membership_delete_action'] = array(
+    'name' => 'execute og_membership_delete_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute og_set_state_action'.
+  $permissions['execute og_set_state_action'] = array(
+    'name' => 'execute og_set_state_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute og_user_roles_action'.
+  $permissions['execute og_user_roles_action'] = array(
+    'name' => 'execute og_user_roles_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute system_message_action'.
+  $permissions['execute system_message_action'] = array(
+    'name' => 'execute system_message_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
+  // Exported permission: 'execute system_send_email_action'.
+  $permissions['execute system_send_email_action'] = array(
+    'name' => 'execute system_send_email_action',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'actions_permissions',
+  );
+
   // Exported permission: 'search class content'.
   $permissions['search class content'] = array(
     'name' => 'search class content',

@@ -10,16 +10,6 @@
 function cyco_exercises_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'administer exercises settings'.
-  $permissions['administer exercises settings'] = array(
-    'name' => 'administer exercises settings',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'cyco_exercises',
-  );
-
   // Exported permission: 'administer services'.
   $permissions['administer services'] = array(
     'name' => 'administer services',
@@ -37,27 +27,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'create exercise_submission content'.
-  $permissions['create exercise_submission content'] = array(
-    'name' => 'create exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create field_exercise_solved'.
-  $permissions['create field_exercise_solved'] = array(
-    'name' => 'create field_exercise_solved',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
   );
 
   // Exported permission: 'create field_hidden_attachments'.
@@ -80,15 +49,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'create field_rubric_item_ratings'.
-  $permissions['create field_rubric_item_ratings'] = array(
-    'name' => 'create field_rubric_item_ratings',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'create field_rubric_items'.
   $permissions['create field_rubric_items'] = array(
     'name' => 'create field_rubric_items',
@@ -97,15 +57,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'create model_exercise_solution content'.
-  $permissions['create model_exercise_solution content'] = array(
-    'name' => 'create model_exercise_solution content',
-    'roles' => array(
-      'author' => 'author',
-    ),
-    'module' => 'node',
   );
 
   // Exported permission: 'create rubric_item content'.
@@ -128,27 +79,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'delete any exercise_submission content'.
-  $permissions['delete any exercise_submission content'] = array(
-    'name' => 'delete any exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any model_exercise_solution content'.
-  $permissions['delete any model_exercise_solution content'] = array(
-    'name' => 'delete any model_exercise_solution content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'delete any rubric_item content'.
   $permissions['delete any rubric_item content'] = array(
     'name' => 'delete any rubric_item content',
@@ -162,28 +92,6 @@ function cyco_exercises_user_default_permissions() {
   // Exported permission: 'delete own exercise content'.
   $permissions['delete own exercise content'] = array(
     'name' => 'delete own exercise content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own exercise_submission content'.
-  $permissions['delete own exercise_submission content'] = array(
-    'name' => 'delete own exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-      'student' => 'student',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own model_exercise_solution content'.
-  $permissions['delete own model_exercise_solution content'] = array(
-    'name' => 'delete own model_exercise_solution content',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
@@ -221,27 +129,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'edit any exercise_submission content'.
-  $permissions['edit any exercise_submission content'] = array(
-    'name' => 'edit any exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit any model_exercise_solution content'.
-  $permissions['edit any model_exercise_solution content'] = array(
-    'name' => 'edit any model_exercise_solution content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
-  );
-
   // Exported permission: 'edit any rubric_item content'.
   $permissions['edit any rubric_item content'] = array(
     'name' => 'edit any rubric_item content',
@@ -250,16 +137,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'edit field_exercise_solved'.
-  $permissions['edit field_exercise_solved'] = array(
-    'name' => 'edit field_exercise_solved',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
   );
 
   // Exported permission: 'edit field_hidden_attachments'.
@@ -278,15 +155,6 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'edit field_rubric_item_ratings'.
-  $permissions['edit field_rubric_item_ratings'] = array(
-    'name' => 'edit field_rubric_item_ratings',
-    'roles' => array(
-      'administrator' => 'administrator',
     ),
     'module' => 'field_permissions',
   );
@@ -311,28 +179,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'edit own exercise_submission content'.
-  $permissions['edit own exercise_submission content'] = array(
-    'name' => 'edit own exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'instructor' => 'instructor',
-      'student' => 'student',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own field_exercise_solved'.
-  $permissions['edit own field_exercise_solved'] = array(
-    'name' => 'edit own field_exercise_solved',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'edit own field_hidden_attachments'.
   $permissions['edit own field_hidden_attachments'] = array(
     'name' => 'edit own field_hidden_attachments',
@@ -353,15 +199,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'edit own field_rubric_item_ratings'.
-  $permissions['edit own field_rubric_item_ratings'] = array(
-    'name' => 'edit own field_rubric_item_ratings',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'edit own field_rubric_items'.
   $permissions['edit own field_rubric_items'] = array(
     'name' => 'edit own field_rubric_items',
@@ -370,16 +207,6 @@ function cyco_exercises_user_default_permissions() {
       'author' => 'author',
     ),
     'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'edit own model_exercise_solution content'.
-  $permissions['edit own model_exercise_solution content'] = array(
-    'name' => 'edit own model_exercise_solution content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'node',
   );
 
   // Exported permission: 'edit own rubric_item content'.
@@ -466,29 +293,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'search_config',
   );
 
-  // Exported permission: 'search exercise_submission content'.
-  $permissions['search exercise_submission content'] = array(
-    'name' => 'search exercise_submission content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'search_config',
-  );
-
-  // Exported permission: 'search model_exercise_solution content'.
-  $permissions['search model_exercise_solution content'] = array(
-    'name' => 'search model_exercise_solution content',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-    ),
-    'module' => 'search_config',
-  );
-
   // Exported permission: 'search rubric_item content'.
   $permissions['search rubric_item content'] = array(
     'name' => 'search rubric_item content',
@@ -509,19 +313,6 @@ function cyco_exercises_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'services',
-  );
-
-  // Exported permission: 'view field_exercise_solved'.
-  $permissions['view field_exercise_solved'] = array(
-    'name' => 'view field_exercise_solved',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
-    ),
-    'module' => 'field_permissions',
   );
 
   // Exported permission: 'view field_hidden_attachments'.
@@ -550,15 +341,6 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'view field_rubric_item_ratings'.
-  $permissions['view field_rubric_item_ratings'] = array(
-    'name' => 'view field_rubric_item_ratings',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'view field_rubric_items'.
   $permissions['view field_rubric_items'] = array(
     'name' => 'view field_rubric_items',
@@ -572,25 +354,12 @@ function cyco_exercises_user_default_permissions() {
     'module' => 'field_permissions',
   );
 
-  // Exported permission: 'view own field_exercise_solved'.
-  $permissions['view own field_exercise_solved'] = array(
-    'name' => 'view own field_exercise_solved',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'view own field_hidden_attachments'.
   $permissions['view own field_hidden_attachments'] = array(
     'name' => 'view own field_hidden_attachments',
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
-      'grader' => 'grader',
-      'instructor' => 'instructor',
-      'reviewer' => 'reviewer',
     ),
     'module' => 'field_permissions',
   );
@@ -601,15 +370,6 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'view own field_rubric_item_ratings'.
-  $permissions['view own field_rubric_item_ratings'] = array(
-    'name' => 'view own field_rubric_item_ratings',
-    'roles' => array(
-      'administrator' => 'administrator',
     ),
     'module' => 'field_permissions',
   );

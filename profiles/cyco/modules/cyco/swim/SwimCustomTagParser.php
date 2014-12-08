@@ -4,6 +4,12 @@
  *
  * @author mathieso
  */
+
+//Set these to big, else regex will send back MT string when the
+//content gets too big. 
+ini_set('pcre.backtrack_limit', 10000000);
+ini_set('pcre.recursion_limit', 10000000);
+
 class SwimCustomTagParser {
 
   const START_CUSTOM_TAG = '@@cyco';
@@ -35,7 +41,7 @@ class SwimCustomTagParser {
       $this->current_tag_def = $def;
       //Create the regex to look for.
       $this->current_regex = '/^' . SwimCustomTagParser::START_CUSTOM_TAG_REGEX_ESCAPED 
-          . '\s+' . $def['tag'] . '\s+(.*)\s*\n'
+          . '\s+' . $def['tag'] . '\s+(.*?)\s*\n'
           . '(.*?)'
           . SwimCustomTagParser::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*' . $def['tag'] 
           . '\s*?\1\s*?\n?'

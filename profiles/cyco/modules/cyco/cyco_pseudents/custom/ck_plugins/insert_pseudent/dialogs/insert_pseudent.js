@@ -3,13 +3,23 @@
  * Manage a dialog that lets the user choose a pseudent. The HTML for
  * the image display is a set of floated divs (let's call it a cell).
  * 
- * Each cell is a pseudent. Each cell has an id of pseudent-cell-nid, 
- * where nid is the nid of a pseudent entity.
+ * Each cell is a pseudent. Each cell has an id of pseudent-cell-INTERNAL_NAME.
  * 
- * Each cell also has an attribute data-pseudent-nid with the same nid.
+ * Each cell also has an attribute data-pseudent-internal-name with the same name.
  */
 
 (function($) {
+  //Make the dialog scroll correctly. See
+  // http://theholyjava.wordpress.com/2011/03/31/ckeditor-scroll-dialogs-with-page/
+  //Written for CK 3, dinna work w/ 4, but mayhap there's a clue.
+  CKEDITOR.on('dialogDefinition', function(e) {
+    var dialogName = e.data.name;
+    var dialogDefinition = e.data.definition;
+    dialogDefinition.dialog.parts.dialog.setStyles(
+        {
+            position : 'absolute'
+        });
+  });
   CKEDITOR.dialog.add('insert_pseudent', function(editor) {
     //Drupal.settings.pseudents.currentSelection = '';
     return {
@@ -17,6 +27,9 @@
       width: $(window).width() * 0.75,
       height: $(window).height() * 0.75,
       resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
+//      onShow: function() {
+//        var x = this;
+//      },
       contents: [
         {
           id: 'info',
@@ -93,8 +106,8 @@
               ),
               setup: function( widget ) {
                 //Show the selected cell, if there is one.
-                if ( widget.data.pseudentId ) {
-                  $("#pseudent-cell-" + widget.data.pseudentId)
+                if ( widget.data.pseudentInternalName ) {
+                  $("#pseudent-cell-" + widget.data.pseudentInternalName)
                           .addClass('selected');
                 }
                 else {
@@ -108,7 +121,7 @@
                 $(".pseudent-cell").unbind('click');
               },
               commit: function( widget ) {
-                widget.setData( "pseudentId", this.selectedPseudentId );
+                widget.setData( "pseudentInternalName", this.selectedPseudentInternalName );
               },
               setupClickEvents: function( widget ) {
                 $(".pseudent-cell")
@@ -121,9 +134,9 @@
                       var cell = $(target).closest("div.pseudent-cell");
                           //Could have clicked on any element in the cell.
                       cell.addClass('selected');
-                      var pseudentId
-                              = parseInt(cell.attr("data-pseudent-nid"));
-                      widget.setData( "pseudentId", pseudentId );
+                      var pseudentInternalName
+                              = cell.attr("data-pseudent-internal-name");
+                      widget.setData( "pseudentInternalName", pseudentInternalName );
                       //Stop other processing.
                       return false;
                     })
@@ -152,8 +165,8 @@
     var html = '<div id="pseudent-grid-container">';
     $.each(pseudents, function(index, pseudent) {
       html +=
-              '<div class="pseudent-cell" id="pseudent-cell-' + pseudent.nid
-              + '" data-pseudent-nid="' + pseudent.nid + '" ';
+              '<div class="pseudent-cell" id="pseudent-cell-' + pseudent.internal_name
+              + '" data-pseudent-internal-name="' + pseudent.internal_name + '" ';
       //Add student category term ids, as string of ids separated by 
       //spaces, with spaces at the beginning and end.
       if (Object.keys(pseudent.categories).length > 0) {

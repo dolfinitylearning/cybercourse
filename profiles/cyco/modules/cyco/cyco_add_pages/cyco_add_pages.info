@@ -1,4 +1,4 @@
-name = Add create page links
+name = CyberCourse add create page links
 description = Adds links to let authors create new pages.
 package = CyberCourse
 version = 7.x-1.0

@@ -41,16 +41,6 @@ function cyco_badges_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'create field_badge_machine_name'.
-  $permissions['create field_badge_machine_name'] = array(
-    'name' => 'create field_badge_machine_name',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'delete any badge content'.
   $permissions['delete any badge content'] = array(
     'name' => 'delete any badge content',
@@ -81,16 +71,6 @@ function cyco_badges_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'edit field_badge_machine_name'.
-  $permissions['edit field_badge_machine_name'] = array(
-    'name' => 'edit field_badge_machine_name',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'edit own badge content'.
   $permissions['edit own badge content'] = array(
     'name' => 'edit own badge content',
@@ -98,41 +78,11 @@ function cyco_badges_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'edit own field_badge_machine_name'.
-  $permissions['edit own field_badge_machine_name'] = array(
-    'name' => 'edit own field_badge_machine_name',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
   // Exported permission: 'search badge content'.
   $permissions['search badge content'] = array(
     'name' => 'search badge content',
     'roles' => array(),
     'module' => 'search_config',
-  );
-
-  // Exported permission: 'view field_badge_machine_name'.
-  $permissions['view field_badge_machine_name'] = array(
-    'name' => 'view field_badge_machine_name',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
-  );
-
-  // Exported permission: 'view own field_badge_machine_name'.
-  $permissions['view own field_badge_machine_name'] = array(
-    'name' => 'view own field_badge_machine_name',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'author' => 'author',
-    ),
-    'module' => 'field_permissions',
   );
 
   return $permissions;

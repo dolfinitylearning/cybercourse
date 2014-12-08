@@ -330,6 +330,7 @@ function cyco_core_user_default_permissions() {
     'name' => 'administer permissions',
     'roles' => array(
       'administrator' => 'administrator',
+      'author' => 'author',
     ),
     'module' => 'user',
   );
@@ -683,14 +684,18 @@ function cyco_core_user_default_permissions() {
   // Exported permission: 'export nodes'.
   $permissions['export nodes'] = array(
     'name' => 'export nodes',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node_export',
   );
 
   // Exported permission: 'export own nodes'.
   $permissions['export own nodes'] = array(
     'name' => 'export own nodes',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node_export',
   );
 
@@ -877,7 +882,9 @@ function cyco_core_user_default_permissions() {
   // Exported permission: 'use PHP to import nodes'.
   $permissions['use PHP to import nodes'] = array(
     'name' => 'use PHP to import nodes',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node_export',
   );
 

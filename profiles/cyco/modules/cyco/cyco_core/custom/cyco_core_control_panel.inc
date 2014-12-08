@@ -58,14 +58,12 @@ function _cyco_core_cp_flush_cache() {
 /**
  * Implements hook_menu_link_alter().
  */
-function cyco_core_menu_link_alter(&$link) {
-//KRM
-return;
-  // Force the control panel link to appear on the top-level of 'user-menu'.
-  if ($link['link_path'] == 'user/control-panel') {
-    $link['plid'] = 0;
-  }
-}
+//function cyco_core_menu_link_alter(&$link) {
+//  // Force the control panel link to appear on the top-level of 'user-menu'.
+//  if ($link['link_path'] == 'user/control-panel') {
+//    $link['plid'] = 0;
+//  }
+//}
 
 /**
  * Generate HTML for the control panel.
@@ -96,12 +94,9 @@ function _cyco_render_control_panel() {
     ),
   );
   // Add intro elements.
-  $wiki_link = l( t('The CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
-  $message = $wiki_link . ' ' 
-      . t('explains how to use the control panel.' ) . ' ';
-  if ( cyco_core_current_user_has_role('author') ) {
-    $message .= 'For complete control, log in as an administrator.';
-  }
+  $wiki_link = l( t('CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
+  $message = t('The') . $wiki_link . ' ' 
+      . t('explains how to use the control panel.' );
   $result['all_content']['introduction'] = array(
     '#type' => 'markup',
     '#markup' => $message,
@@ -254,7 +249,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
   $message = '';
   $link = '';
   if ( $num_submissions == 0 ) {
-    $message = t('You have no submissions to grade.');
+    $message = t('You have no submissions to grade. ');
   }
   else {
     if ( $num_submissions == 1 ) {
@@ -262,7 +257,7 @@ function theme_cyco_control_panel_submissions_waiting_grading( $variables ) {
     }
     else {
       $message 
-          = t('You have ' . $num_submissions . ' submissions to grade.');
+          = t('You have ' . $num_submissions . ' submissions to grade. ');
     }
     $link = l( 
       'Give feedback', 

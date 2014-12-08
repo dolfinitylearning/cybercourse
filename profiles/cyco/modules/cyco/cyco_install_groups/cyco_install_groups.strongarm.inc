@@ -207,6 +207,13 @@ function cyco_install_groups_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'node_submitted_class';
+  $strongarm->value = 0;
+  $export['node_submitted_class'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_submitted_class_post';
   $strongarm->value = 1;
   $export['node_submitted_class_post'] = $strongarm;

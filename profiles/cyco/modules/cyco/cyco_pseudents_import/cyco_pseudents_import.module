@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse Pseudents Import feature.
+ */
+
+include_once 'cyco_pseudents_import.features.inc';

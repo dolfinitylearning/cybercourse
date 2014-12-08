@@ -30,7 +30,7 @@ array(
       'field_body' => array(
         'und' => array(
           array(
-            'value' => "This is the welcome page for your site. Here you explain why it's *wicked awesome!*\r\n\r\nIf you see a menu with a bazillion options, don't worry, it's because you're logged in as an administrator. Most of the time you'll use an author account.\r\n ",
+            'value' => "This is the welcome page for your site. Here you explain why it's *wicked awesome!*\r\n\r\nIf you see a menu with a bazillion options, don't worry, it's because you're logged in as an administrator. Most of the time you'll use an author account.\r\n See the \"wiki\":https://wiki.cybercour.se for help.",
             'summary' => 'Welcome to the awesomeness that is this CyCo!',
           ),
         ),

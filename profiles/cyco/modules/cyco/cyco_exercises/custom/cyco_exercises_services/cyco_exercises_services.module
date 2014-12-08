@@ -967,9 +967,9 @@ function _cycoex_get_sub_rendered( $data ) {
   //Replace line feeds with <br>s.
   $solution_rendered = str_replace("\n", '<br>', $solution);
   //Are there attachments?
-  if ( isset( $submission->field_attachments[LANGUAGE_NONE][0] ) ) {
+  if ( isset( $submission->field_submitted_files‎[LANGUAGE_NONE][0] ) ) {
     $attached_files = _cyco_exercises_package_attachment_data(
-        $submission->field_attachments
+        $submission->field_submitted_files‎
     );
   }
   $result = array(

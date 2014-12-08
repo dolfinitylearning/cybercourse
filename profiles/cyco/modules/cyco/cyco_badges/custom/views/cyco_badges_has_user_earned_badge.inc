@@ -39,7 +39,7 @@ class cyco_badges_handler_has_user_earned_badge extends views_handler_field {
     $badge_nid = $values->nid;
     $badge = node_load($badge_nid);
     $achievement_machine_name 
-        = $badge->field_badge_machine_name[$badge->language][0]['value'];
+        = $badge->field_internal_name[$badge->language][0]['value'];
     if (in_array($achievement_machine_name, $this->current_users_badge_ids) ) {
       $result = t('Yes');
     }

@@ -67,6 +67,13 @@ function cyco_badges_views_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* Header: Global: Unfiltered text */
+  $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are badges that students can earn. Each badge is a group of exercises. When students complete all of the exercises, they earn the badge.</p>
+
+<p>Students can send their badges into their <a href="http://openbadges.org/">OpenBadge</a> backpack. Other people can verify that they have earned the badges.</p>';
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
@@ -82,18 +89,28 @@ function cyco_badges_views_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Internal name */
+  $handler->display->display_options['fields']['field_internal_name']['id'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['table'] = 'field_data_field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['field'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['label'] = '';
+  $handler->display->display_options['fields']['field_internal_name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_internal_name']['element_label_colon'] = FALSE;
   /* Field: Content: Body */
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
   $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['label'] = 'Badge';
   $handler->display->display_options['fields']['field_body']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_body']['alter']['text'] = '[title]<br>
+  $handler->display->display_options['fields']['field_body']['alter']['text'] = '<strong>[title]</strong><br>
+<br>
+[field_internal_name]<br>
+<br>
 [field_body]';
   $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_body']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '200',
   );
   /* Field: Content: Exercises */
   $handler->display->display_options['fields']['field_exercises']['id'] = 'field_exercises';
