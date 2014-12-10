@@ -350,25 +350,15 @@ function _cyco_core_groups_form_alter(&$form, $form_state, $form_id) {
  * Add a menu item that should appear in the group admin page.
  */
 function cyco_core_og_ui_get_group_admin() {
-  $items = array();
-//return $items;
-  // User listing pages.
-  $items['approve_deny_membership_requests'] = array(
-    'title' => 'Approve/deny student membership requests',
-//    'title callback' => '_cyco_core_groups_approve_deny_title',
-//    'title callback' => 'og_ui_menu_title_callback',
-//    'title arguments' => array('Membership requests for group @group', 1, 2),
-    'description' => 'Choose which group membership requests you will accept.',
-    'href' => 'admin/approve-deny-membership-requests',
-//    'page callback' => '_cyco_core_groups_approve_deny_membership_requests',
-//    'page arguments' => array(1, 2),
-//    'access callback' => TRUE,
-//    'access callback' => 'og_ui_user_access_group',
-//    'access arguments' => array('manage members', 1, 2),
-//    'weight' => -12,
-  );  
-
-  return $items;
+  if ( cyco_core_current_user_has_role( array('instructor', 'administrator') ) ) {
+    $items = array();
+    $items['approve_deny_membership_requests'] = array(
+      'title' => 'Approve/deny student membership requests',
+      'description' => 'Choose which group membership requests you will accept.',
+      'href' => 'admin/approve-deny-membership-requests',
+    );  
+    return $items;
+  }
 }
 
 /**

@@ -1,5 +1,5 @@
-name = CyberCourse Badges
-description = Adds badges, with OpenBadges integration
+name = CyberCourse badges
+description = Adds badges, with OpenBadges integration.
 core = 7.x
 package = CyberCourse
 version = 7.x-1.0
@@ -58,5 +58,5 @@ features[variable][] = pathauto_node_badge_pattern
 features[variable][] = save_continue_badge
 files[] = custom/views/cyco_badges_handler_has_user_earned_badge.inc
 files[] = custom/views/cyco_badges_user_badge_image.inc
-mtime = 1417808689
+mtime = 1418158263
 project path = profiles/cyco/modules/cyco

@@ -1,4 +1,4 @@
-name = CyberCourse Exercises Model Solutions
+name = CyberCourse exercises model solutions
 description = Manage model solutions for exercises.
 core = 7.x
 package = CyberCourse
@@ -55,5 +55,5 @@ features_exclude[field_base][field_notes] = field_notes
 features_exclude[field_base][field_attachments] = field_attachments
 features_exclude[field_base][field_body] = field_body
 features_exclude[field_base][field_images] = field_images
-mtime = 1417898853
+mtime = 1418155908
 project path = profiles/cyco/modules/cyco

@@ -127,6 +127,11 @@ function cyco_pseudents_views_default_views() {
     'image_style' => 'thumbnail',
     'image_link' => 'content',
   );
+  /* Field: Content: Categories */
+  $handler->display->display_options['fields']['field_pseudent_categories']['id'] = 'field_pseudent_categories';
+  $handler->display->display_options['fields']['field_pseudent_categories']['table'] = 'field_data_field_pseudent_categories';
+  $handler->display->display_options['fields']['field_pseudent_categories']['field'] = 'field_pseudent_categories';
+  $handler->display->display_options['fields']['field_pseudent_categories']['delta_offset'] = '0';
   /* Field: Content: Workflow tags */
   $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
   $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';
@@ -152,7 +157,6 @@ function cyco_pseudents_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  $handler->display->display_options['sorts']['title']['order'] = 'DESC';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';

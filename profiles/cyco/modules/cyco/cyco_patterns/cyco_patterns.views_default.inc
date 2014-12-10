@@ -84,6 +84,12 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'A pattern is a common way of doing things. Here are the patterns on this site.';
   $handler->display->display_options['header']['area']['format'] = 'plain_text';
+  /* No results behavior: Global: Unfiltered text */
+  $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area_text_custom']['content'] = 'Sorry, no patterns have been defined.';
   /* Field: Content: Pattern categories */
   $handler->display->display_options['fields']['field_pattern_categories']['id'] = 'field_pattern_categories';
   $handler->display->display_options['fields']['field_pattern_categories']['table'] = 'field_data_field_pattern_categories';
@@ -93,12 +99,18 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_pattern_categories']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_pattern_categories']['delta_offset'] = '0';
   /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+  $handler->display->display_options['fields']['title_1']['table'] = 'node';
+  $handler->display->display_options['fields']['title_1']['field'] = 'title';
+  $handler->display->display_options['fields']['title_1']['label'] = 'Title linked excluded';
+  $handler->display->display_options['fields']['title_1']['exclude'] = TRUE;
+  /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['text'] = '[title]<br>
+  $handler->display->display_options['fields']['title']['alter']['text'] = '[title_1]<br>
 <div class="categories">[field_pattern_categories]</div>';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
@@ -230,6 +242,12 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['header']['area']['field'] = 'area';
   $handler->display->display_options['header']['area']['content'] = 'A pattern is a common way of doing things. Here are the patterns used in the course.';
   $handler->display->display_options['header']['area']['format'] = 'plain_text';
+  /* No results behavior: Global: Unfiltered text */
+  $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area_text_custom']['content'] = 'Sorry, no patterns have been created. See the <a href="https://wiki.cybercour.se">wiki</a> for help.';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -247,13 +265,31 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['title']['label'] = 'Linked excluded title';
+  $handler->display->display_options['fields']['title']['exclude'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['text'] = '[title] ([nid])<br>
 [field_pattern_categories]';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Internal name */
+  $handler->display->display_options['fields']['field_internal_name']['id'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['table'] = 'field_data_field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['field'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['label'] = '';
+  $handler->display->display_options['fields']['field_internal_name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_internal_name']['element_label_colon'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+  $handler->display->display_options['fields']['title_1']['table'] = 'node';
+  $handler->display->display_options['fields']['title_1']['field'] = 'title';
+  $handler->display->display_options['fields']['title_1']['label'] = '';
+  $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['title_1']['alter']['text'] = '[title]<br>
+[field_internal_name]<br>
+[field_pattern_categories]';
+  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title_1']['link_to_node'] = FALSE;
   /* Field: Content: Situation */
   $handler->display->display_options['fields']['field_situation']['id'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['table'] = 'field_data_field_situation';

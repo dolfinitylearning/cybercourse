@@ -108,5 +108,5 @@ features[views_view][] = classes_public
 features[views_view][] = cybercourse_user_groups
 features[views_view][] = group_members_admin
 features_exclude[dependencies][cyco_exercises] = cyco_exercises
-mtime = 1417810108
+mtime = 1418058665
 project path = profiles/cyco/modules/cyco

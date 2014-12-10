@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * cyco_pseudents_import_terms.features.uuid_term.inc
+ * cyco_pseudents.features.uuid_term.inc
  */
 
 /**
  * Implements hook_uuid_features_default_terms().
  */
-function cyco_pseudents_import_terms_uuid_features_default_terms() {
+function cyco_pseudents_uuid_features_default_terms() {
   $terms = array();
 
   $terms[] = array(

@@ -877,7 +877,23 @@ function cyco_core_strongarm() {
   $strongarm->name = 'module_filter_recent_modules';
   $strongarm->value = array(
     'node_export_features' => 1417791851,
-    'uuid_features' => 1417791988,
+    'uuid_features' => 1418055291,
+    'cyco_big_ideas' => 1418055291,
+    'og_access' => 1418054258,
+    'cyco_badges' => 1418055291,
+    'cyco_patterns' => 1418055291,
+    'cyco_pseudents' => 1418055291,
+    'cyco_node_edit_tweaks' => 1418055291,
+    'cyco_book_blocks' => 1418055291,
+    'cyco_badges_views' => 1418055291,
+    'cyco_exercises_model_solutions' => 1418055291,
+    'cyco_exercises_submissions' => 1418055291,
+    'cyco_exercises_views' => 1418055291,
+    'cyco_install_course_blueprint_types' => 1418055291,
+    'cyco_install_course_blueprint_views' => 1418055291,
+    'cyco_install_groups' => 1418055291,
+    'cyco_pseudents_import' => 1418055291,
+    'cyco_pseudents_import_terms' => 1418055291,
   );
   $export['module_filter_recent_modules'] = $strongarm;
 

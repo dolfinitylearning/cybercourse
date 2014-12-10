@@ -1,4 +1,4 @@
-name = CyberCourse Patterns
+name = CyberCourse patterns
 description = Patterns are common ways of doing things.
 core = 7.x
 package = CyberCourse
@@ -55,5 +55,7 @@ features[variable][] = node_preview_pattern
 features[variable][] = node_submitted_pattern
 features[variable][] = pathauto_node_pattern_pattern
 features[variable][] = pathauto_taxonomy_term_pattern_categories_pattern
-mtime = 1417810217
+features[views_view][] = patterns
+features[views_view][] = patterns_privilaged
+mtime = 1418080591
 project path = profiles/cyco/modules/cyco
