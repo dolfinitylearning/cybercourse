@@ -71,12 +71,28 @@ function cyco_core_menu() {
   return $items;
 }
 
+/**
+ * Redirect to a page that will create a new course.
+ */
 function _cyco_new_course() {
-  drupal_goto('node/add/course-page?book_op=newbook');
+//  drupal_goto('node/add/course-page?book_op=newbook');
+  drupal_goto('node/add/course-page', 
+      array('query' => 
+        array('book_op' => 'newbook',)
+      )
+  );
 }
 
+/**
+ * Redirect to a page that will create a new blueprint.
+ */
 function _cyco_new_blueprint() {
-  drupal_goto('node/add/blueprint-page?book_op=newbook');
+//  drupal_goto('node/add/blueprint-page?book_op=newbook');
+  drupal_goto('node/add/blueprint-page', 
+      array('query' => 
+        array('book_op' => 'newbook',)
+      )
+  );
 }
 
 /**

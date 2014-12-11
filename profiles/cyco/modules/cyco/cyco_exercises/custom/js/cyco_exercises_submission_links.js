@@ -195,7 +195,7 @@
         window.windowObjectReference = window.open(
                 $(this).attr("href"),
                 "Exercise: " + exerciseNid,
-                "resizable,scrollbars,height=640,width=700"
+                "resizable,scrollbars,height=700,width=700"
                 );
         return false; //Cancel standard action.
       });
@@ -207,7 +207,7 @@
       window.windowObjectReference = window.open(
       $(this).attr("href"),
       "Exercise: " + exerciseNid,
-      "resizable,scrollbars,height=640,width=700"
+      "resizable,scrollbars,height=700,width=700"
       );
       return false; //Cancel standard action.
     },

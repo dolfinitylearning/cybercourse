@@ -62,6 +62,7 @@
 ?>
 <div class="main-container container-fluid">
   <div class="row">
+    <h1><?php print $title; ?></h1>
     <?php print render($page['content']); ?>
   </div>
 </div>

@@ -399,10 +399,16 @@ function _cyco_core_groups_approve_deny_membership_requests($group_type, $gid) {
   // make sure the path is overriden to the current URL.
   // @see http://drupal.org/node/525592#comment-1968604
   $view = views_get_view('group_approve_membership_requests');
-//  $view = views_get_view($view_name, $display);
-  $view->set_arguments(array($group_type, $gid));
-  $view->override_url = $_GET['q'];
-  return $view->preview();
+  if ( ! $view ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' Bad operation: ' . $current_op;
+    cyco_core_handle_error( $message );
+  }
+  else {
+    $view->set_arguments(array($group_type, $gid));
+    $view->override_url = $_GET['q'];
+    return $view->preview();
+  }
 }
 
 /**

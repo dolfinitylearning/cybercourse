@@ -95,7 +95,7 @@ function _cyco_render_control_panel() {
   );
   // Add intro elements.
   $wiki_link = l( t('CyberCourse wiki'), CYCO_WIKI_MAIN_URL );
-  $message = t('The') . $wiki_link . ' ' 
+  $message = t('The') . ' ' . $wiki_link . ' ' 
       . t('explains how to use the control panel.' );
   $result['all_content']['introduction'] = array(
     '#type' => 'markup',

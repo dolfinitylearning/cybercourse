@@ -13,6 +13,8 @@ define( 'TOO_BAD_SO_SAD',
       '(If you were logged in as a student, '
     . 'you could submit an exercise solution, and get some feedback.)'
 );
+//Change value (caption) of submission submit value to this.
+define( 'SUBMIT_BUTTON_CAPTION', t('Save and submit') );
 
 /**
  * Implements hook_install().
@@ -180,6 +182,20 @@ function cyco_exercises_menu() {
   );
   return $items;
 }
+
+
+//function cyco_exercises_menu_alter( &$items ) {
+//  $items['node/add/exercise-submission']['access callback']
+//      = '_cyco_exercises_check_create_exer_submission_access';
+//  
+//}
+//
+//
+//function _cyco_exercises_check_create_exer_submission_access() {
+//  $access = cyco_core_current_user_has_role( array('instructor, administrator') );
+//  return $access;
+//}
+
 
 /**
  * Implements hook_menu_local_tasks_alter
@@ -574,13 +590,13 @@ function _cyco_exercises_get_submission_theme() {
  * 
  * Also does some token replacement.
  */
-function cyco_exercises_node_view($node, $view_mode, $langcode) {
-  if ($node->type == 'exercise' && $view_mode == 'full') {
-    if ( user_access('edit any course_page content') ) {
-      drupal_set_title($node->title . ' (' . $node->nid . ')');
-    }
-  }
-}
+//function cyco_exercises_node_view($node, $view_mode, $langcode) {
+//  if ($node->type == 'exercise' && $view_mode == 'full') {
+//    if ( user_access('edit any course_page content') ) {
+//      drupal_set_title($node->title . ' (' . $node->nid . ')');
+//    }
+//  }
+//}
 
 /**
  * Implements hook_form_alter().
@@ -764,8 +780,12 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     $operation = $parsed_url['query']['op'];
   }
   // If there is no op, this is a normal edit, not through a popup. 
-  // Don't need to do any of the other processing here.
   if (is_null($operation) ) {
+    //Only admins and instructors allowed
+    $access = cyco_core_current_user_has_role( array('instructor, administrator') );
+    if ( ! $access ) { 
+      drupal_access_denied();
+    }
     return;
   }
   global $base_url;
@@ -783,6 +803,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' exercise id not passed for add';
       cyco_core_handle_error( $message );
+      drupal_access_denied();
       return;
      }
     $exercise_id = $parsed_url['query']['field_exercise'];
@@ -791,6 +812,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' bad exercise_id: ' . $exercise_id;
       cyco_core_handle_error( $message );
+      drupal_access_denied();
       return;
     }
     //Save the exercise id in the form.
@@ -804,6 +826,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
         $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
             . ' bad version: ' . $version;
         cyco_core_handle_error( $message );
+        drupal_access_denied();
         return;
       }
     }
@@ -816,12 +839,12 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   else {
     // Bad operation.
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-        . ' unknown operation: ' + $op;
+        . ' unknown operation: ' + $operation;
     cyco_core_handle_error( $message );
+    drupal_access_denied();
     return;
   }
   $form['title']['#access'] = FALSE;
-  
   //Hide the exercise field.
   $form['field_exercise']['#access'] = false;
   //Hide the version field.
@@ -889,32 +912,45 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     unset( $form['field_rubric_item_ratings'] );
     unset( $form['field_complete'] );    
   }
-  //Add Submit checkbox.
+  //Add Save draft.
   $submit_button_weight = $form['actions']['submit']['#weight'];
-  $form['submit_solution'] = array(
-    '#type' => 'checkbox',
-    '#title' => 'Submit for feedback',
-    '#default_value' => $has_been_submitted,
+  $form['save_draft'] = array(
+    '#id' => 'cyco_save_draft',
+    '#type' => 'button',
+    '#value' => t('Save draft'),
     '#weight' => $submit_button_weight,
+    '#description' => t('Save your work, but do not submit it for grading.'),
+    '#prefix' => '<div class="form-actions form-wrapper form-group">',
+    '#suffix' => '</div>',
+//    //Add validation processor.
+//    '#validate' => array('_cyco_exercises_submission_form_validate'),
+//    //Add submission processor.
+//    '#submit' => array('_cyco_exercises_submission_form_submission'),
+  );
+  $form['save_draft_clicked'] = array(
+    '#type' => 'hidden',
+    '#default_value' => 'no',
   );
   $form['actions']['submit']['#weight']++;
-  //Add feedback reminder element for JS to use.
-  $reminder = theme(
-        'cyco_reminder', 
-        array(
-          'reminder' => t('Check Submit when your solution is ready. '
-              . 'Graders only see submitted solutions.'),
-          'hide_at_start' => TRUE,
-        )
-    );
-  $form['reminder'] = array(
-    '#type' => 'markup',
-    '#markup' => $reminder,
-    '#weight' => $submit_button_weight + 1,
-  );
-  $form['actions']['submit']['#weight']++;
+  $form['actions']['submit']['#value'] = SUBMIT_BUTTON_CAPTION;
+  $form['actions']['submit']['#description'] 
+      = t('Save your work, and submit it for grading.');
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
+  if ( ! $exercise_node ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' node not found: ' . $exercise_id;
+    cyco_core_handle_error( $message );
+    drupal_access_denied();
+    return;
+  }
+  if ( $exercise_node->type != 'exercise' ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' node not exercise: ' . $exercise_id;
+    cyco_core_handle_error( $message );
+    drupal_access_denied();
+    return;
+  }
   drupal_set_title( $exercise_node->title );
   //Add validation processor.
   $form['#validate'][] = '_cyco_exercises_submission_form_validate';
@@ -966,22 +1002,17 @@ function _cyco_exercises_submission_form_validate($form, &$form_state) {
  * @param type $form_state
  */
 function _cyco_exercises_submission_form_submission($form, &$form_state) {
-  // Record whether it has been submitted.
-  $submit_checked = ($form_state['values']['submit_solution'] == 1);
-  if ( $submit_checked ) {
+  // Did the user want to submit?
+  $submitted = ($form_state['values']['save_draft_clicked'] == 'no');
+//  $submitted = ($form_state['values']['op'] == SUBMIT_BUTTON_CAPTION);
+  if ( $submitted ) {
       //Record current date/time as the submission date/time.
       $now = cyco_core_get_now_utc();
       $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = $now;
   }
   else {
-    // Submit not checked.
-    if ( ! isset($form_state['values']['field_when_submitted'][LANGUAGE_NONE][0]['value'] ) ) {
-      // Nothing to change.
-    }
-    else {
-      // There is a date. Clear it.
-      $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = '';
-    }
+    // Not submited. Clear submission date.
+    $form_state['values']['field_when_submitted'][LANGUAGE_NONE][0] = '';
   }
   // Set the submission title.
   $language = $form_state['node']->language;

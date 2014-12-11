@@ -173,6 +173,8 @@ function _cyco_finalize_install_step1($dog, &$context) {
   _cyco_add_pseudent_category_terms();
   //Add links to the main menu.
   _cyco_add_links_main_menu();
+  //Add links to the tools menu.
+  _cyco_add_links_tools_menu();
   $context['message'] = $t('Just added some awesome stuff.');
   CycoInstallDebug::getInstance()->output('End _cyco_finalize_install_step1');
 }
@@ -777,6 +779,21 @@ function _cyco_add_links_main_menu() {
   _cyco_add_menu_item('Help', 'page', 'main-menu', 2);
   CycoInstallDebug::getInstance()->output('End _cyco_add_links_main_menu');
 }
+/**
+ * Add links to the tools menu.
+ */
+function _cyco_add_links_tools_menu() {
+  _cyco_add_menu_item('Your submissions', 'submissions-student-report', 
+      'menu-tools', -20, 'Your exercise submissions.');  
+  _cyco_add_menu_item('Exercises', 'exercises-public', 'menu-tools', -10, 
+      'Exercises are tasks that help you learn.');  
+  _cyco_add_menu_item('Big ideas', 'big-ideas', 'menu-tools', 0, 
+      'Big ideas explain why things happen.');
+  _cyco_add_menu_item('Patterns', 'patterns-public', 'menu-tools', 10, 
+      'Patterns are useful ways of doing things.');  
+  _cyco_add_menu_item('Badges', 'badges-public', 'menu-tools', 20, 
+      'Badges are awards for completing exercises.');  
+}
 
 /**
  * Create a menu item.
@@ -784,8 +801,10 @@ function _cyco_add_links_main_menu() {
  * @param string $node_type Node content type.
  * @param string $menu Menu machine name, e.g., main-menu.
  * @param int $weight Menu item weight.
+ * @param string $description Optional description.
  */
-function _cyco_add_menu_item($node_title, $node_type, $menu, $weight) {
+function _cyco_add_menu_item($node_title, $node_type, $menu, $weight, 
+    $description = FALSE) {
   $node = _cyco_node_load_by_title($node_title, $node_type);
   $item = array(
     'link_path' => 'node/' . $node->nid,
@@ -796,6 +815,12 @@ function _cyco_add_menu_item($node_title, $node_type, $menu, $weight) {
     'plid' => 0, // Parent menu item, 0 if menu item is on top level
     'module' => 'menu',
   );
+  if ( $description ) {
+    $item['options'] = 
+        array('attributes' => 
+          array('title' => $description)
+        );
+  }
   menu_link_save($item);
 }
 
@@ -1329,7 +1354,7 @@ function _cyco_add_links_cp_menu1() {
     'module' => $module,
     'options' => array(
       'attributes' => array(
-        'title' => 'See all big-ideas (including unpublished).',
+        'title' => 'See all big ideas (including unpublished).',
       ),
     ),
   );

@@ -1,5 +1,5 @@
 jQuery(function($) {
-    var height = 104, margin = 10, timeout,
+    var height = 400, margin = 10, timeout,
       notifications = $('.achievement-notification').dialog({
         dialogClass:    'achievement-notification-dialog',
         autoOpen:       false,
@@ -10,12 +10,13 @@ jQuery(function($) {
         resizable:      false,
         height:         height,
         width:          500,
-        position:       ['right', 'bottom'],
+        position:       ['center', 'center'],
         closeText:      '',
         close:          onClose
       });
 
     function showDialogs() {
+      alert('dog');
       var length = notifications.length;
 
       notifications.eq(length - 1).bind('dialogopen', function() {

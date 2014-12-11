@@ -20,10 +20,10 @@
           = $("#" + uiNamespace.solutionWidgetId).val();
 //      $(".field-name-field-attachments .file-widget input.form-text")
       //Set up the submission reminder.
-      uiNamespace.showHideReminder();
-      $("#edit-submit-solution").click(
-        uiNamespace.showHideReminder
-      );
+//      uiNamespace.showHideReminder();
+//      $("#edit-submit-solution").click(
+//        uiNamespace.showHideReminder
+//      );
       window.onbeforeunload = function (event) {
         if ( ! uiNamespace.saving ) {
           //Has the content in the editor changed?
@@ -42,7 +42,12 @@
         var exerciseNid = Drupal.settings.cyco_exercises.exerciseNid;
         opener.Drupal.behaviors.cycoExerSubLinks.refreshLinksForExercise( exerciseNid );
       };
-      //Save button clicked - tell code that the user is saving.
+      //Save draft button clicked.
+      $("#cyco_save_draft").click(function() {
+        $("input[name=save_draft_clicked").val("yes");
+        $("#edit-submit").click();
+      });
+      //Save and submit button clicked - tell code that the user is saving.
       $("#edit-submit").click(function() {
         uiNamespace.saving = true;
       });
@@ -75,15 +80,15 @@
       $(".tabs-primary").remove();
       $(".tabs--primary").remove();
     },
-    showHideReminder: function() {
-      //Show/hide reminder depending on state of feedback checkbox.
-      if ( $("#edit-submit-solution").attr("checked") ) {
-        $(".cyco_reminder").hide("fast");
-      }
-      else {
-        $(".cyco_reminder").show("fast");
-      }
-    },
+//    showHideReminder: function() {
+//      //Show/hide reminder depending on state of feedback checkbox.
+//      if ( $("#edit-submit-solution").attr("checked") ) {
+//        $(".cyco_reminder").hide("fast");
+//      }
+//      else {
+//        $(".cyco_reminder").show("fast");
+//      }
+//    },
     /**
      * A file operation was performed.
      */
