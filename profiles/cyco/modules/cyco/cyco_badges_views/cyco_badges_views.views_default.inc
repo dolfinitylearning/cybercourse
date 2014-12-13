@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * cyco_badges.views_default.inc
+ * cyco_badges_views.views_default.inc
  */
 
 /**
  * Implements hook_views_default_views().
  */
-function cyco_badges_views_default_views() {
+function cyco_badges_views_views_default_views() {
   $export = array();
 
   $view = new view();
@@ -245,7 +245,6 @@ function cyco_badges_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'badges-public';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Badges';
   $handler->display->display_options['menu']['description'] = 'Show the badges students can earn.';
   $handler->display->display_options['menu']['weight'] = '0';

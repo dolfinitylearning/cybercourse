@@ -12,8 +12,6 @@ ini_set('max_execution_time', 180); //180 seconds - 3 minutes.
 
 CycoInstallDebug::getInstance()->debug = TRUE;
 
-CycoInstallDebug::getInstance()->inifile();
-
 /**
  * Implements hook_install().
  *
@@ -22,13 +20,23 @@ CycoInstallDebug::getInstance()->inifile();
  * @see system_install()
  */
 function cyco_install() {
-//  CycoInstallDebug::getInstance()->output('Start');
+  CycoInstallDebug::getInstance()->output('Start cyco_install');
+  //Set private file path.
+  //See http://drupal.aspcode.net/ppst/63547274810018958077152/how-to-programmatically-submit-the-file-system-settings-form
+  $private_path = 'sites/default/files/cycourse/private';
+  if (is_dir($private_path) && is_writable($private_path)){
+    CycoInstallDebug::getInstance()->output('cyco_install: is dir and writable.');
+  }
+  file_create_htaccess($private_path); 
+    //for private dir. Use file_create_htaccess($path, FALSE); for public dir.
+  variable_set('file_private_path', $private_path);
+  //Doc: public file path: sites/default/files
   cyco_define_blocks();
   //Set version of jQuery to use.
   cyco_jquery_update();
   //Remove book page content type.
   node_type_delete('book');
-//  CycoInstallDebug::getInstance()->output('End');
+  CycoInstallDebug::getInstance()->output('End cyco_install');
 }
 
 function cyco_define_blocks() {

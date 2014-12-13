@@ -37,21 +37,30 @@ function cyco_badges_user_default_permissions() {
   // Exported permission: 'create badge content'.
   $permissions['create badge content'] = array(
     'name' => 'create badge content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete any badge content'.
   $permissions['delete any badge content'] = array(
     'name' => 'delete any badge content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete own badge content'.
   $permissions['delete own badge content'] = array(
     'name' => 'delete own badge content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'node',
   );
 
@@ -67,14 +76,20 @@ function cyco_badges_user_default_permissions() {
   // Exported permission: 'edit any badge content'.
   $permissions['edit any badge content'] = array(
     'name' => 'edit any badge content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'edit own badge content'.
   $permissions['edit own badge content'] = array(
     'name' => 'edit own badge content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+      'author' => 'author',
+    ),
     'module' => 'node',
   );
 

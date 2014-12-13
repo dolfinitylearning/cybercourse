@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CyberCourse badges views feature.
+ */
+
+include_once 'cyco_badges_views.features.inc';

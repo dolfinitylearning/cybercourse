@@ -1,0 +1,14 @@
+name = CyberCourse badges views
+description = Install views for CyberCourse badges
+core = 7.x
+package = CyberCourse
+version = 7.x-1.0
+project = cyco_badges_views
+dependencies[] = cyco_badges
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = badges
+features[views_view][] = badges_public
+features_exclude[dependencies][ctools] = ctools
+project path = profiles/cyco/modules/cyco

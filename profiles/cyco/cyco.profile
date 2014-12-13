@@ -108,6 +108,9 @@ function _cyco_install_one_module($module_name, &$context) {
   $t = get_t();
   module_enable(array($module_name), FALSE);
   $context['message'] = $t('Installing %module.', array('%module' => $module_name));
+  //Erase status messages. 
+  //See http://dropbucket.org/node/547
+  unset($_SESSION['messages']['status']);
   CycoInstallDebug::getInstance()->output('End _cyco_install_one_module');
   $context['finished'] = TRUE;
 }
@@ -201,7 +204,7 @@ function _cyco_finalize_install_step3($dog, &$context) {
   CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step3');
   $t = get_t();
   //Turn on modules.
-  _cyco_enable_modules();
+//  _cyco_enable_modules();
   // Put course and blueprint blocks in sidebar, footer menu 
   // in (gasp!) the footer.
   _cyco_place_blocks();
@@ -774,38 +777,46 @@ function _cyco_set_frontpage() {
  */
 function _cyco_add_links_main_menu() {
   CycoInstallDebug::getInstance()->output('Start _cyco_add_links_main_menu');
-  _cyco_add_menu_item('Welcome', 'page', 'main-menu', 0);
-  _cyco_add_menu_item('About', 'page', 'main-menu', 1);
-  _cyco_add_menu_item('Help', 'page', 'main-menu', 2);
+  _cyco_add_menu_item_for_node('Welcome', 'page', 'main-menu', 0);
+  _cyco_add_menu_item_for_node('About', 'page', 'main-menu', 1);
+  _cyco_add_menu_item_for_node('Help', 'page', 'main-menu', 2);
   CycoInstallDebug::getInstance()->output('End _cyco_add_links_main_menu');
 }
 /**
  * Add links to the tools menu.
  */
 function _cyco_add_links_tools_menu() {
-  _cyco_add_menu_item('Your submissions', 'submissions-student-report', 
+  CycoInstallDebug::getInstance()->output('Start _cyco_add_links_tools_menu');
+  _cyco_add_menu_item_for_nonnode('Your submissions', 'submissions-student-report', 
       'menu-tools', -20, 'Your exercise submissions.');  
-  _cyco_add_menu_item('Exercises', 'exercises-public', 'menu-tools', -10, 
-      'Exercises are tasks that help you learn.');  
-  _cyco_add_menu_item('Big ideas', 'big-ideas', 'menu-tools', 0, 
+  _cyco_add_menu_item_for_nonnode('Exercises', 'exercises-public', 
+      'menu-tools', -10, 'Exercises are tasks that help you learn.');  
+  _cyco_add_menu_item_for_nonnode('Big ideas', 'big-ideas', 'menu-tools', 0, 
       'Big ideas explain why things happen.');
-  _cyco_add_menu_item('Patterns', 'patterns-public', 'menu-tools', 10, 
-      'Patterns are useful ways of doing things.');  
-  _cyco_add_menu_item('Badges', 'badges-public', 'menu-tools', 20, 
+  _cyco_add_menu_item_for_nonnode('Patterns', 'patterns-public', 
+      'menu-tools', 10, 'Patterns are useful ways of doing things.');  
+  _cyco_add_menu_item_for_nonnode('Badges', 'badges-public', 'menu-tools', 20, 
       'Badges are awards for completing exercises.');  
+  CycoInstallDebug::getInstance()->output('End _cyco_add_links_tools_menu');
 }
 
 /**
- * Create a menu item.
+ * Create a menu item for a node.
  * @param string $node_title Node title.
  * @param string $node_type Node content type.
  * @param string $menu Menu machine name, e.g., main-menu.
  * @param int $weight Menu item weight.
  * @param string $description Optional description.
  */
-function _cyco_add_menu_item($node_title, $node_type, $menu, $weight, 
+function _cyco_add_menu_item_for_node($node_title, $node_type, $menu, $weight, 
     $description = FALSE) {
+  CycoInstallDebug::getInstance()->output('Start _cyco_add_menu_item_for_node');
   $node = _cyco_node_load_by_title($node_title, $node_type);
+  if ( ! $node ) {
+    CycoInstallDebug::getInstance()->output(
+        '_cyco_add_menu_item_for_node: could not find node with title: ' . $node_title
+    );
+  }
   $item = array(
     'link_path' => 'node/' . $node->nid,
     'link_title' => $node->title,
@@ -822,6 +833,39 @@ function _cyco_add_menu_item($node_title, $node_type, $menu, $weight,
         );
   }
   menu_link_save($item);
+  CycoInstallDebug::getInstance()->output('End _cyco_add_menu_item_for_node');
+}
+
+/**
+ * Create a menu item for a non-node.
+ * @param string $link_title Link title.
+ * @param string $link_path Link path.
+ * @param string $menu Menu machine name, e.g., main-menu.
+ * @param int $weight Menu item weight.
+ * @param string $description Optional description.
+ */
+function _cyco_add_menu_item_for_nonnode($link_title, $link_path, $menu, $weight, 
+    $description = FALSE) {
+  CycoInstallDebug::getInstance()->output(
+      'Start _cyco_add_menu_item_for_nonnode. Title: ' . $link_title
+  );
+  $item = array(
+    'link_path' => $link_path,
+    'link_title' => $link_title,
+    'menu_name' => $menu, // Menu machine name, for example: main-menu
+    'weight' => $weight,
+    'language' => LANGUAGE_NONE,
+    'plid' => 0, // Parent menu item, 0 if menu item is on top level
+    'module' => 'menu',
+  );
+  if ( $description ) {
+    $item['options'] = 
+        array('attributes' => 
+          array('title' => $description)
+        );
+  }
+  menu_link_save($item);
+  CycoInstallDebug::getInstance()->output('End _cyco_add_menu_item_for_nonnode');
 }
 
 /**
@@ -882,36 +926,36 @@ function _cyco_add_classes2block($module, $block, $classes) {
  * If it isn't here, some Cyco modules are not 
  * enabled.
  */
-function _cyco_enable_modules() {
-  return;
-  CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
-  $modules = array(
-    'cyco_core',
-    'cyco_install_course_blueprint_types',
-    'cyco_install_course_blueprint_views',
-    'cyco_install_groups',
-    'cyco_exercises',
-    'cyco_exercises_submissions',
-    'cyco_exercises_model_solutions',
-    'cyco_exercises_services',
-    'cyco_exercises_views',
-    'cyco_badges',
-    'cyco_badges_views',
-    'cyco_pseudents',
-    'cyco_patterns',
-    'cyco_toggle_sidebar',
-    'book_rearrange_collapse',
-    'book_top_navbar',
-    'cyco_add_pages',
-    'cyco_book_blocks',
-    'cyco_toc',
-    'cyco_node_edit_tweaks',
-    'cyco_book_mods',
-    'cyco_collapse_summary',
-  );
-  module_enable($modules, TRUE);
-  CycoInstallDebug::getInstance()->output('End _cyco_enable_modules');
-}
+//function _cyco_enable_modules() {
+//  return;
+//  CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
+//  $modules = array(
+//    'cyco_core',
+//    'cyco_install_course_blueprint_types',
+//    'cyco_install_course_blueprint_views',
+//    'cyco_install_groups',
+//    'cyco_exercises',
+//    'cyco_exercises_submissions',
+//    'cyco_exercises_model_solutions',
+//    'cyco_exercises_services',
+//    'cyco_exercises_views',
+//    'cyco_badges',
+//    'cyco_badges_views',
+//    'cyco_pseudents',
+//    'cyco_patterns',
+//    'cyco_toggle_sidebar',
+//    'book_rearrange_collapse',
+//    'book_top_navbar',
+//    'cyco_add_pages',
+//    'cyco_book_blocks',
+//    'cyco_toc',
+//    'cyco_node_edit_tweaks',
+//    'cyco_book_mods',
+//    'cyco_collapse_summary',
+//  );
+//  module_enable($modules, TRUE);
+//  CycoInstallDebug::getInstance()->output('End _cyco_enable_modules');
+//}
 
 /**
  * Theme settings for two themes: cybercourse, and 
@@ -1940,9 +1984,9 @@ function _cyco_add_links_footer_menu() {
     return;
   }
   CycoInstallDebug::getInstance()->output('Middle _cyco_add_links_footer_menu');
-  _cyco_add_menu_item('Copyright, you, 20xx', 'page', $footer_menu_machine_name, 0);
-  _cyco_add_menu_item('Credits', 'page', $footer_menu_machine_name, 1);
-  _cyco_add_menu_item('Terms of use', 'page', $footer_menu_machine_name, 2);
+  _cyco_add_menu_item_for_node('Copyright, you, 20xx', 'page', $footer_menu_machine_name, 0);
+  _cyco_add_menu_item_for_node('Credits', 'page', $footer_menu_machine_name, 1);
+  _cyco_add_menu_item_for_node('Terms of use', 'page', $footer_menu_machine_name, 2);
   CycoInstallDebug::getInstance()->output('Ending _cyco_add_links_footer_menu');
 }
 

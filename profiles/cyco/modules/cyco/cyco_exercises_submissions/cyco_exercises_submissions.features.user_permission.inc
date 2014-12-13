@@ -17,6 +17,7 @@ function cyco_exercises_submissions_user_default_permissions() {
       'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
       'instructor' => 'instructor',
+      'student' => 'student',
     ),
     'module' => 'node',
   );

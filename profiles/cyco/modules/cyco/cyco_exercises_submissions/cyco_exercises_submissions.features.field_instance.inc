@@ -330,7 +330,7 @@ function cyco_exercises_submissions_field_default_field_instances() {
       'description_field' => 1,
       'exclude_cv' => FALSE,
       'file_directory' => 'student_uploads',
-      'file_extensions' => 'txt',
+      'file_extensions' => '',
       'max_filesize' => '20Mb',
       'user_register_form' => FALSE,
     ),

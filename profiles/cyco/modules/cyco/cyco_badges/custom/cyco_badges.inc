@@ -28,17 +28,17 @@ function cyco_badges_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  * 
  * If there are no badges defined, suppress the Badges entry in the main menu.
  */
-function cyco_badges_menu_alter( &$links ) {
-  if ( isset($links['badges-public']) ) {
-    $query = "SELECT COUNT(*) amount FROM {node} n ".
-             "WHERE n.type = :type and n.status = 1";
-    $result = db_query($query, array(':type' => 'badge'))->fetch();
-    $num_entities = $result->amount;
-    if ( $num_entities == 0 ) {
-      $links['badges-public']['access callback'] = FALSE;
-    }
-  }
-}
+//function cyco_badges_menu_alter( &$links ) {
+//  if ( isset($links['badges-public']) ) {
+//    $query = "SELECT COUNT(*) amount FROM {node} n ".
+//             "WHERE n.type = :type and n.status = 1";
+//    $result = db_query($query, array(':type' => 'badge'))->fetch();
+//    $num_entities = $result->amount;
+//    if ( $num_entities == 0 ) {
+//      $links['badges-public']['access callback'] = FALSE;
+//    }
+//  }
+//}
 
 /**
  * Implements hook_module_implements_alter().

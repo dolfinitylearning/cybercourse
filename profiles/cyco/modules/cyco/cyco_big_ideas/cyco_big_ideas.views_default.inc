@@ -184,7 +184,6 @@ function cyco_big_ideas_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'big-ideas';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'List big ideas';
   $handler->display->display_options['menu']['description'] = 'See all of the big ideas.';
   $handler->display->display_options['menu']['weight'] = '0';
@@ -330,7 +329,6 @@ function cyco_big_ideas_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'big-ideas-public';
-  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Big ideas';
   $handler->display->display_options['menu']['description'] = 'See all of the big ideas used in the course';
   $handler->display->display_options['menu']['weight'] = '0';

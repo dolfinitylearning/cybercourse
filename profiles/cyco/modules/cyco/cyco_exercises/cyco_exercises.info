@@ -128,5 +128,5 @@ files[] = custom/views/cyco_exercises.views.inc
 files[] = custom/views/cyco_exercises_erase_submission_feedback_link.inc
 files[] = custom/views/cyco_exercises_handler_completion_badge.inc
 files[] = custom/views/cyco_exercises_handler_submission_status.inc
-mtime = 1418155713
+mtime = 1418160395
 project path = profiles/cyco/modules/cyco
