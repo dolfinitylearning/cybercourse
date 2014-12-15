@@ -16,7 +16,6 @@ jQuery(function($) {
       });
 
     function showDialogs() {
-      alert('dog');
       var length = notifications.length;
 
       notifications.eq(length - 1).bind('dialogopen', function() {

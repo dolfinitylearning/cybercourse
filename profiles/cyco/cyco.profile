@@ -791,7 +791,7 @@ function _cyco_add_links_tools_menu() {
       'menu-tools', -20, 'Your exercise submissions.');  
   _cyco_add_menu_item_for_nonnode('Exercises', 'exercises-public', 
       'menu-tools', -10, 'Exercises are tasks that help you learn.');  
-  _cyco_add_menu_item_for_nonnode('Big ideas', 'big-ideas', 'menu-tools', 0, 
+  _cyco_add_menu_item_for_nonnode('Big ideas', 'big-ideas-public', 'menu-tools', 0, 
       'Big ideas explain why things happen.');
   _cyco_add_menu_item_for_nonnode('Patterns', 'patterns-public', 
       'menu-tools', 10, 'Patterns are useful ways of doing things.');  

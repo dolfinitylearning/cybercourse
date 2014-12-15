@@ -22,11 +22,10 @@ CycoInstallDebug::getInstance()->debug = TRUE;
 function cyco_install() {
   CycoInstallDebug::getInstance()->output('Start cyco_install');
   //Set private file path.
-  //See http://drupal.aspcode.net/ppst/63547274810018958077152/how-to-programmatically-submit-the-file-system-settings-form
-  $private_path = 'sites/default/files/cycourse/private';
-  if (is_dir($private_path) && is_writable($private_path)){
-    CycoInstallDebug::getInstance()->output('cyco_install: is dir and writable.');
-  }
+  $private_path = DRUPAL_ROOT . '/sites/default/files/cycourse';
+  $result = mkdir( $private_path, 0755 );
+  $private_path = DRUPAL_ROOT . '/sites/default/files/cycourse/private';
+  $result = mkdir( $private_path, 0755 );
   file_create_htaccess($private_path); 
     //for private dir. Use file_create_htaccess($path, FALSE); for public dir.
   variable_set('file_private_path', $private_path);

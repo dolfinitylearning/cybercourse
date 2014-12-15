@@ -22,6 +22,18 @@ function cyco_exercises_submissions_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'create field_submitted_files'.
+  $permissions['create field_submitted_files'] = array(
+    'name' => 'create field_submitted_files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'student' => 'student',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'delete any exercise_submission content'.
   $permissions['delete any exercise_submission content'] = array(
     'name' => 'delete any exercise_submission content',
@@ -56,6 +68,17 @@ function cyco_exercises_submissions_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit field_submitted_files'.
+  $permissions['edit field_submitted_files'] = array(
+    'name' => 'edit field_submitted_files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'edit own exercise_submission content'.
   $permissions['edit own exercise_submission content'] = array(
     'name' => 'edit own exercise_submission content',
@@ -68,6 +91,16 @@ function cyco_exercises_submissions_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit own field_submitted_files'.
+  $permissions['edit own field_submitted_files'] = array(
+    'name' => 'edit own field_submitted_files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'student' => 'student',
+    ),
+    'module' => 'field_permissions',
+  );
+
   // Exported permission: 'search exercise_submission content'.
   $permissions['search exercise_submission content'] = array(
     'name' => 'search exercise_submission content',
@@ -77,6 +110,27 @@ function cyco_exercises_submissions_user_default_permissions() {
       'instructor' => 'instructor',
     ),
     'module' => 'search_config',
+  );
+
+  // Exported permission: 'view field_submitted_files'.
+  $permissions['view field_submitted_files'] = array(
+    'name' => 'view field_submitted_files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+    ),
+    'module' => 'field_permissions',
+  );
+
+  // Exported permission: 'view own field_submitted_files'.
+  $permissions['view own field_submitted_files'] = array(
+    'name' => 'view own field_submitted_files',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'student' => 'student',
+    ),
+    'module' => 'field_permissions',
   );
 
   return $permissions;
