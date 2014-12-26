@@ -7,7 +7,8 @@
   Drupal.behaviors.xkcdComic = {
     attach: function() {
       $.ajax({
-          url: "http://dynamic.xkcd.com/api-0/jsonp/comic?callback=?",
+          url: "//dynamic.xkcd.com/api-0/jsonp/comic?callback=?",
+//          url: "http://dynamic.xkcd.com/api-0/jsonp/comic?callback=?",
           dataType: "json",
           jsonpCallback: "xkcddata",
           success: function(data) {

@@ -322,8 +322,8 @@ function _exri_retrieve( $nid ) {
   $rubric_item->title = $node->title;
   //Put notes in result, if there are any.
   $rubric_item->notes = '';
-  if ( isset( $node->field_body[LANGUAGE_NONE][0]['value'] ) ) {
-    $rubric_item->notes = $node->field_body[LANGUAGE_NONE][0]['value'];
+  if ( isset( $node->field_notes[LANGUAGE_NONE][0]['value'] ) ) {
+    $rubric_item->notes = $node->field_notes[LANGUAGE_NONE][0]['value'];
   }
   //Put the categories (a vocab) into the results.
   $rubric_item->termsChecked = array();
@@ -411,10 +411,10 @@ function _exri_update($nid, $data) {
   $node = node_load( $nid );
   $node->title = $data['title'];
   if ( $data['notes'] ) {
-    $node->field_body[LANGUAGE_NONE][0]['value'] = $data['notes'];
+    $node->field_notes[LANGUAGE_NONE][0]['value'] = $data['notes'];
   }
   else {
-    $node->field_body = array();
+    $node->field_notes = array();
   }
   $node->field_categories = 
        _cyco_exer_move_arr_into_node( $data['termsChecked'], 'tid');
@@ -481,10 +481,15 @@ function _exri_titles_cats() {
         $categories[] = intval($tid['tid']);
       }
     }
+    $notes = '';
+    if ( isset($node->field_notes[LANGUAGE_NONE][0]['value']) ) {
+      $notes = $node->field_notes[LANGUAGE_NONE][0]['value'];
+    }
     $result[] = array(
       'nid' => $nid,
       'title' => $title,
       'categories' => $categories,
+      'notes' => $notes,
     );
   }
   return $result;

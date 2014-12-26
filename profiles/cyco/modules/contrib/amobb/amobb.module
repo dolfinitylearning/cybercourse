@@ -203,7 +203,8 @@ function amobb_page_build(&$page) {
   if ($account && $user->uid == $account->uid && current_path() == 'user/' . $account->uid . '/achievements') {
     // Add all our necessary javascript settings and files.
     //Patch https://www.drupal.org/node/2193525
-    drupal_add_js('http://backpack.openbadges.org/issuer.js', 'external');
+    drupal_add_js('//backpack.openbadges.org/issuer.js', 'external');
+//KRM    drupal_add_js('http://backpack.openbadges.org/issuer.js', 'external');
     //drupal_add_js('http://beta.openbadges.org/issuer.js', 'external');
     global $base_root;
     drupal_add_js(array('uid' => $user->uid, 'baseRoot' => $base_root), 'setting');

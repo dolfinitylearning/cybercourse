@@ -89,6 +89,11 @@ footer ul.nav li {
   padding: 0.5em;
 }
 
+input.form-item.form-group,
+textarea.form-item.form-group{
+  background-color: white;
+}
+
 .region-footer {
   border-top: none;
 }

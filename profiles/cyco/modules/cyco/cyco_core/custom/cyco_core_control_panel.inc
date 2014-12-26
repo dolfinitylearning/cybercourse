@@ -77,6 +77,14 @@ function _cyco_render_control_panel() {
   );
   drupal_add_js(
       drupal_get_path('module', 'cyco_core')
+        . '/custom/js/cyco_control_panel.js'
+  );
+  drupal_add_css(
+      drupal_get_path('module', 'cyco_core')
+      . '/custom/css/cyco_control_panel.css'
+  );
+  drupal_add_js(
+      drupal_get_path('module', 'cyco_core')
         . '/custom/js/cyco_core_xkcd.js'
   );
   drupal_add_js(

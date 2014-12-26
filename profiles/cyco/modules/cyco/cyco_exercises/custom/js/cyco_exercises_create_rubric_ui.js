@@ -175,7 +175,7 @@
     changedPhrase: function(event) {
         //Was an input field involved?
         var $target = $(event.target);
-        if ( $target.prop("tagName") == "INPUT" ) {
+        if ( $target.prop("tagName") == "INPUT" || $target.prop("tagName") == "TEXTAREA") {
           //Remember that the data has changed
           uiNamespace.dataHasChanged(true);
         }

@@ -473,6 +473,11 @@ function cyco_pseudents_swim_ckhtml2textile_alter( &$content ) {
 function _cyco_pseudents_make_textile_replacements($matches) {
   $internal_name = $matches[1];
   $content = $matches[2];
+  //May have extra <p></p> wrapped around content.
+  $content = trim($content);
+  if ( substr($content, 0, 3) == '<p>' && substr($content, -4, 4) == '</p>' ) {
+    $content = substr($content, 3, strlen($content) - 7 );
+  }
   $replacement = 
     SwimCustomTagParser::START_CUSTOM_TAG . ' pseudent ' . $internal_name . "\n"
       . $content . "\n"

@@ -99,10 +99,23 @@
       //Show the rubric items already associated with the exercise.
       uiNamespace.showExistingItems();
       //Set up events for Edit and Unlink buttons for existing items.
-      $(".rubric-select-current-item-edit").click(function(evt){
-        var container = $(this).closest("[data-nid]");
-        var nid = $(container).attr("data-nid");
-        Drupal.behaviors.cycoCreateRubricUi.showCreateItemUi(nid);
+      $("#rubric-select-current-items-ui").click(function(event) {
+        var $target = $(event.target);
+        if ( $target.prop("tagName") == "BUTTON" ) {
+          //User clicked on a button.
+          //Is there an nid?
+          var nid = $target.parent().attr("data-nid");
+          if ( nid ) {
+            //There is an nid, so it's either the Edit or Unlink button.
+            var caption = $target.text();
+            if ( caption == "Unlink" ){
+              uiNamespace.unlinkItem( nid );
+            }
+            else if ( caption == "Edit" ){
+              Drupal.behaviors.cycoCreateRubricUi.showCreateItemUi(210);
+            }
+          }//End there is a nid
+        }
       });
       //Set up the Create button.
       $("#rubric-select-create").click(function() {
@@ -251,7 +264,7 @@
           //Trigger selected instead.
           treeData.node.toggleSelected();
           return false;
-        }
+        },
       });
     },
     /*
@@ -382,8 +395,7 @@
     returnFromAddItemUi: function( item ) {
       var itemNid = item.nid;
       var itemTitle = item.title;
-      //Loop across list of unlinked items. If find item with same nid, 
-      //update title.
+      //Loop across item list. If find item with same nid, update title.
       //If not, add a new entry to the list.
       var elementNid;
       var foundIt = false;
@@ -403,14 +415,6 @@
         $("#filtered-terms").append("<li data-nid='" + itemNid + "'>" 
             + itemTitle + "</li>");
       }
-      //Loop across list of linked items. If find item with same nid, 
-      //update title.
-      $(".rubric-select-current-item-container").each(function(index, element){
-        elementNid = $(element).attr("data-nid");
-        if ( elementNid == itemNid ) {
-          $(element).find(".rubric-select-current-item-title").text( itemTitle );
-        }
-      });
     },
     /*
      * User checked a term in the tree.
