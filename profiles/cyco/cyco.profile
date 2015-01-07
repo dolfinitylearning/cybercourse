@@ -1905,6 +1905,21 @@ function _cyco_add_links_cp_menu1() {
     ),
   );
   $items[] = array(
+    'link_path' => 'admin/structure/menu',
+    'link_title' => 'Menus',
+    'weight' => 5,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['admin/content'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Edit the menus',
+      ),
+    ),
+  );
+  $items[] = array(
     'link_path' => 'admin/structure/token-custom',
     'link_title' => 'Custom tokens',
     'weight' => 10,
