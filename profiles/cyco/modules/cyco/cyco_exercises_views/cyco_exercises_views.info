@@ -19,5 +19,5 @@ features[views_view][] = submission_metadata_for_student_exercise
 features[views_view][] = submissions_manage
 features[views_view][] = submissions_student_report
 features[views_view][] = users_no_anonymous
-mtime = 1418494432
+mtime = 1418500270
 project path = profiles/cyco/modules/cyco
