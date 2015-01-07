@@ -144,12 +144,12 @@ function _cyco_render_control_panel() {
 //    $result['all_content']['grader_menu'] = 
 //        _cyco_control_panel_show_menu_block( 'menu-cp-graders' );
   }
-  if ( cyco_core_current_user_has_role( array('student') ) ) {
-    $result['all_content']['student_title'] = 
-      _cyco_control_panel_show_title( 'Your stuff' );
-    $result['all_content']['student_menu'] = 
-      _cyco_control_panel_show_menu_block( 'menu-cp-students' );
-  }
+//  if ( cyco_core_current_user_has_role( array('student') ) ) {
+//    $result['all_content']['student_title'] = 
+//      _cyco_control_panel_show_title( 'Your stuff' );
+//    $result['all_content']['student_menu'] = 
+//      _cyco_control_panel_show_menu_block( 'menu-cp-students' );
+//  }
 //  else {
     $result['all_content']['actions_title'] = 
         _cyco_control_panel_show_title( 'Actions' );
