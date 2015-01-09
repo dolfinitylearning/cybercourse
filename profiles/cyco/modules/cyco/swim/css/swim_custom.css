@@ -35,8 +35,28 @@ This is for custom styles the user wants to use in authoring SWIM content.
   font-weight: bold;
 }
 
-.swim .indent {
+.swim .indent, .swim .indent1 {
   margin-left: 5em;
+}
+
+.swim .indent2 {
+  margin-left: 10em;
+}
+
+.swim .indent3 {
+  margin-left: 15em;
+}
+
+.swim .indent4 {
+  margin-left: 20em;
+}
+
+.swim .indent5 {
+  margin-left: 25em;
+}
+
+.swim .indent6 {
+  margin-left: 30em;
 }
 
 .swim .figure {
