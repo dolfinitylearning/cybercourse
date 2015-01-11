@@ -79,6 +79,27 @@ function cyco_patterns_menu_local_tasks_alter(&$data, $router_item, $root_path) 
         );
       }
       break;
+    case 'node/%':
+      $path = $router_item['href'];
+      list( $ignore, $nid ) = explode('/', $path);
+      $node = node_load($nid);
+      if ( $node->type == 'pattern' ) {
+          // Link to add rubric item.
+          $item = menu_get_item('node/add/pattern');
+          $item['title'] = t('Add pattern');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          //Link to list rubric items.
+          $item = menu_get_item('patterns');
+          $item['title'] = t('List patterns');
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $item,
+          );
+          break;
+      }
   }
 }
 
