@@ -68,3 +68,8 @@ This is for custom styles the user wants to use in authoring SWIM content.
   font-weight: bold;
   font-size: 120%;
 }
+
+.swim .question {
+  margin-left: 5em;
+  font-size: 140%;
+}
