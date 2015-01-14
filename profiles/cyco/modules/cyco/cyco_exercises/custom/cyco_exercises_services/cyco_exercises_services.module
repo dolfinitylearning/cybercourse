@@ -1132,7 +1132,7 @@ function _cycoex_get_rubric_items( $rubric_item_nids ) {
     $rubric_item_jsony['nid'] = $rubric_item_nid;
     $rubric_item_jsony['title'] = $rubric_item_node->title;
     if ( isset( $rubric_item_node->field_notes[LANGUAGE_NONE][0] ) ) {
-      $rubric_item_jsony = $rubric_item_node->field_notes[LANGUAGE_NONE][0]['value'];
+      $rubric_item_jsony['notes'] = $rubric_item_node->field_notes[LANGUAGE_NONE][0]['value'];
     }
     if ( isset( $rubric_item_node->field_feedback_good[LANGUAGE_NONE][0] ) ) {
       $rubric_item_jsony['good'] = array();
