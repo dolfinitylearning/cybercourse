@@ -24,6 +24,20 @@
     <?php print $body; ?>
   </div>
   <?php
+  if ( isset($attached_file_links[0]) ) {
+    ?>
+  <fieldset class="cyco-inserted-exercise-attachments">
+    <legend>Attachments</legend>
+    <?php
+    foreach( $attached_file_links as $link ) {
+      print '<p>' . $link . '</p>';
+    }
+    ?>
+  </fieldset>
+    <?php
+  }
+  ?>
+  <?php
   if ( $too_bad_so_sad_message ) {
     ?>
     <div class="cyco-inserted-exercise-too-bad">

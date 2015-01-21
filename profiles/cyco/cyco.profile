@@ -9,6 +9,10 @@ CycoInstallDebug::getInstance()->debug = TRUE;
 
 //File with list of extra modules to install.
 define('MODULE_LIST_FILE_NAME', 'more_modules.ini');
+//Titles of book root pages.
+define('COURSE_ROOT_PAGE_TITLE', 'Course content');
+define('BLUEPRINT_ROOT_PAGE_TITLE', 'Blueprint content');
+
 
 /**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
@@ -588,12 +592,12 @@ function _cyco_make_books() {
     'Topic 1',
     'Topic 2',
   );
-  _cyco_make_book('course_page', 'Your course', $children);
+  _cyco_make_book('course_page', COURSE_ROOT_PAGE_TITLE, $children);
   $children = array(
     'Outcomes',
     'Context',
   );
-  _cyco_make_book('blueprint_page', 'Your blueprint', $children);
+  _cyco_make_book('blueprint_page', BLUEPRINT_ROOT_PAGE_TITLE, $children);
   CycoInstallDebug::getInstance()->output('End _cyco_make_books');
 }
 
@@ -689,12 +693,12 @@ function _cyco_place_blocks() {
   CycoInstallDebug::getInstance()->output('Start _cyco_place_blocks');
   _cyco_activate_block('system', 'user-menu', 'sidebar_second', 'cybercourse', '', 0, -1, '<none>');
   _cyco_activate_block('menu', 'menu-footer', 'footer', 'cybercourse', '', 0, 0, '<none>');
-  $course_node = _cyco_node_load_by_title('Your course', 'course_page');
+  $course_node = _cyco_node_load_by_title(COURSE_ROOT_PAGE_TITLE, 'course_page');
   //Cache the menu tree for this block.
   $rendered = _cbb_get_book_tree($course_node->nid);
   $course_block_id = 'cbb_' . $course_node->nid;
   _cyco_activate_block('cyco_book_blocks', $course_block_id, 'sidebar_second', 'cybercourse', '', 0, 0);
-  $blueprint_node = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
+  $blueprint_node = _cyco_node_load_by_title(BLUEPRINT_ROOT_PAGE_TITLE, 'blueprint_page');
   $rendered = _cbb_get_book_tree($blueprint_node->nid);
   $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
   _cyco_activate_block('cyco_book_blocks', $blueprint_block_id, 'sidebar_second', 'cybercourse', '', 0, 1);
@@ -883,11 +887,11 @@ function _cyco_add_classes2blocks() {
   //Login block
   _cyco_add_classes2block('user', 'login', 'well well-sm');
   //Course block.
-  $course_node = _cyco_node_load_by_title('Your course', 'course_page');
+  $course_node = _cyco_node_load_by_title(COURSE_ROOT_PAGE_TITLE, 'course_page');
   $course_block_id = 'cbb_' . $course_node->nid;
   _cyco_add_classes2block('cyco_book_blocks', $course_block_id, 'well well-sm');
   //Blueprint block.
-  $blueprint_node = _cyco_node_load_by_title('Your blueprint', 'blueprint_page');
+  $blueprint_node = _cyco_node_load_by_title(BLUEPRINT_ROOT_PAGE_TITLE, 'blueprint_page');
   $blueprint_block_id = 'cbb_' . $blueprint_node->nid;
   _cyco_add_classes2block('cyco_book_blocks', $blueprint_block_id, 'well well-sm');
   CycoInstallDebug::getInstance()->output('End _cyco_add_classes2blocks');
@@ -1175,7 +1179,7 @@ function _cyco_add_links_cp_menu1() {
   );
   $items[] = array(
     'link_path' => 'workflow-tagged',
-    'link_title' => 'Content that needs work',
+    'link_title' => 'Needs work',
     'weight' => 10,
     'expanded' => TRUE,
     'menu_name' => $menu_name,

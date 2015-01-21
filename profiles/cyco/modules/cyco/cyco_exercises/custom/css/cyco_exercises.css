@@ -23,6 +23,17 @@ Styles for exercises.
   font-size: 90%;
 }
 
+fieldset.cyco-inserted-exercise-attachments {
+  padding: 1em;
+  border: thin solid #DDD;
+  border-radius: 6px;
+}
+
+fieldset.cyco-inserted-exercise-attachments legend {
+  border-bottom: none;
+  margin-bottom: 0;
+}  
+
 /* 
   Styles for exercise submission links.
 */

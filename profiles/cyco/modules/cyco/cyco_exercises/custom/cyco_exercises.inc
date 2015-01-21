@@ -1726,11 +1726,25 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
       TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
            //to avoid Certain Things.
   );
+  //If there are attached files, add links to them, so the student can download.
+  if ( isset($exercise_node->field_attachments[LANGUAGE_NONE][0]['uri']) ) {
+    $num_attachments = sizeof( $exercise_node->field_attachments[LANGUAGE_NONE] );
+    $attached_file_links = array();
+    for( $i = 0; $i < $num_attachments; $i++ ) {
+      $uri = $exercise_node->field_attachments[LANGUAGE_NONE][$i]['uri'];
+      $filename = $exercise_node->field_attachments[LANGUAGE_NONE][$i]['filename'];
+      $url = file_create_url($uri);
+      $link = l($filename, $url);
+      $attached_file_links[] = $link;
+    }
+  }
+  
   $result = theme('cyco_embedded_exercise', array(
     'exercise_nid' => $exercise_nid,
     'title' => $exercise_node->title,
     'body' => $body_content,
     'labeled_links' => $labeled_links,
+    'attached_file_links' => $attached_file_links,
     'too_bad_so_sad_message' => $too_bad_so_sad_message,
   ));  
   return $result;
