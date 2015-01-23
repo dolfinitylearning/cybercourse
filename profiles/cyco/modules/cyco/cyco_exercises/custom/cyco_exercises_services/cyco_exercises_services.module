@@ -1036,7 +1036,19 @@ function _cycoex_get_exercise_rendered( $data ) {
   if ( isset( $exercise->field_rubric_items[LANGUAGE_NONE][0] ) ) {
     $rubric_items = array();
     foreach ( $exercise->field_rubric_items[LANGUAGE_NONE] as $index => $item ) {
-      $rubric_items[] = $item['target_id'];
+      //Make sure referenced entity exists.
+      $efq = new EntityFieldQuery;
+      $efq
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'rubric_item')
+        ->entityCondition('entity_id', $item['target_id'])
+        ->propertyCondition('status', 1);
+      $result = $efq->execute();
+      if (!empty($result['node'])) {
+        //Referenced item exists.
+        //Add to array of rubric item ids to pass.
+        $rubric_items[] = $item['target_id'];
+      }
     }
   }
   //Get the model solutions, if there are any.
