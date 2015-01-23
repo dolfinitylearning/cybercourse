@@ -613,7 +613,11 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   $rubric_items = array();
   if (isset($form_state['node']->field_rubric_items[LANGUAGE_NONE])) {
     foreach ($form_state['node']->field_rubric_items[LANGUAGE_NONE] as $key => $value) {
-      $rubric_items[] = intval($value['target_id']);
+      //Check that the rubric item exists. 
+      $rubric_item_nid = intval($value['target_id']);
+      if ( _cyco_exercises_check_rubric_item_exists($rubric_item_nid) ) {
+        $rubric_items[] = $rubric_item_nid;
+      }
     }
   }
   $form['cyco_current_items'] = array(
@@ -1872,4 +1876,20 @@ function cyco_exercises_package_submission_node_feedback( $submission ) {
     'message' => $message,
   );
   return $feedback_data;
+}
+
+/**
+ * Check whether a rubric item exists and is published.
+ * @param integer $nid Node id.
+ * @return boolean True if exists, else false.
+ */
+function _cyco_exercises_check_rubric_item_exists( $nid ) {
+  $efq = new EntityFieldQuery;
+  $efq
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'rubric_item')
+    ->entityCondition('entity_id', $nid)
+    ->propertyCondition('status', 1);
+  $result = $efq->execute();
+  return isset($result['node']);
 }

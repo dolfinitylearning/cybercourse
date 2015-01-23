@@ -1044,7 +1044,7 @@ function _cycoex_get_exercise_rendered( $data ) {
         ->entityCondition('entity_id', $item['target_id'])
         ->propertyCondition('status', 1);
       $result = $efq->execute();
-      if (!empty($result['node'])) {
+      if (isset($result['node'])) {
         //Referenced item exists.
         //Add to array of rubric item ids to pass.
         $rubric_items[] = $item['target_id'];
