@@ -939,6 +939,13 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   $form['actions']['submit']['#value'] = SUBMIT_BUTTON_CAPTION;
   $form['actions']['submit']['#description'] 
       = t('Save your work, and submit it for grading.');
+  //Warn user to press Upload button.
+  $form['field_submitted_files'][LANGUAGE_NONE]['#title'] .= 
+      '<br><span style="color:red"><strong>'
+      . t('You must click the Upload button for every file, otherwise '
+          . 'it will not be saved!')
+      . '</strong></span>';
+  
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
   if ( ! $exercise_node ) {
