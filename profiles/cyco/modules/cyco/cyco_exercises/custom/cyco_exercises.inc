@@ -1731,9 +1731,9 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
            //to avoid Certain Things.
   );
   //If there are attached files, add links to them, so the student can download.
+  $attached_file_links = array();
   if ( isset($exercise_node->field_attachments[LANGUAGE_NONE][0]['uri']) ) {
     $num_attachments = sizeof( $exercise_node->field_attachments[LANGUAGE_NONE] );
-    $attached_file_links = array();
     for( $i = 0; $i < $num_attachments; $i++ ) {
       $uri = $exercise_node->field_attachments[LANGUAGE_NONE][$i]['uri'];
       $filename = $exercise_node->field_attachments[LANGUAGE_NONE][$i]['filename'];
@@ -1742,7 +1742,6 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
       $attached_file_links[] = $link;
     }
   }
-  
   $result = theme('cyco_embedded_exercise', array(
     'exercise_nid' => $exercise_nid,
     'title' => $exercise_node->title,
