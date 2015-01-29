@@ -60,7 +60,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
 }
 
 .swim .figure {
-  margin-left: 5em;
+  margin-left: 2em;
 }
 
 .swim .warning {
@@ -81,7 +81,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
 
 .swim .troubleshoot {
   margin-left: 5em;
-  padding: 1em 0 1em 3em;
+  padding: 1em 0 1em 2em;
   background-image: url(images/troubleshoot.png);
   background-position: 1em 1em;
   background-repeat: no-repeat;
