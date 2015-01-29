@@ -78,3 +78,15 @@ This is for custom styles the user wants to use in authoring SWIM content.
   margin-left: 5em;
   font-size: 120%;
 }
+
+.swim .troubleshoot {
+  margin-left: 5em;
+  padding: 1em 0 1em 3em;
+  background-image: url(images/troubleshoot.png);
+  background-position: 1em 1em;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-color: #FFFFCC;
+  box-shadow: 0px 0px 15px 0px rgba(200,200,200,0.75);
+  border-radius: 0.5em
+}
