@@ -98,11 +98,17 @@
     prepareUi: function() {
       //Show the rubric items already associated with the exercise.
       uiNamespace.showExistingItems();
-      //Set up events for Edit and Unlink buttons for existing items.
+      //Set up events for Edit button for existing items.
       $(".rubric-select-current-item-edit").click(function(evt){
         var container = $(this).closest("[data-nid]");
         var nid = $(container).attr("data-nid");
         Drupal.behaviors.cycoCreateRubricUi.showCreateItemUi(nid);
+      });
+      //Set up events for Unlink button for existing items.
+      $(".rubric-select-current-item-unlink").click(function(evt){
+        var container = $(this).closest("[data-nid]");
+        var nid = $(container).attr("data-nid");
+        uiNamespace.unlinkItem(nid);
       });
       //Set up the Create button.
       $("#rubric-select-create").click(function() {
