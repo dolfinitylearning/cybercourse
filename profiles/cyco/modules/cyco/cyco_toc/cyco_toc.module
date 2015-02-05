@@ -26,7 +26,25 @@ function cyco_toc_help($path, $arg) {
 //  if ( isset($build['#node']->field_show_table_of_contents[LANGUAGE_NONE][0]['value']) ) {
 //    if ( $build['#node']->field_show_table_of_contents[LANGUAGE_NONE][0]['value'] == 1 ) {
 //      drupal_add_js(drupal_get_path('module', 'cyco_toc') 
-//          . '/custom/js/cyco_toc.js', 'file');
+//          . '/js/cyco_toc.js', 
+//      array('type' => 'file', 'every_page' => TRUE, //'weight' => 10,
+//          'preprocess' => TRUE,)          );
 //    }
 //  }
 //}
+
+/**
+ * Implement hook_init().
+ * Add toc handling to all pages.
+ */
+function cyco_toc_init() {
+  drupal_add_js(drupal_get_path('module', 'cyco_toc') . '/js/cyco_toc.js', 
+      array('type' => 'file', 'every_page' => TRUE, //'weight' => 10,
+          'preprocess' => TRUE,)
+  );
+  drupal_add_css(drupal_get_path('module', 'cyco_toc') . '/css/cyco_toc.css', 
+      array('type' => 'file', 'every_page' => TRUE, //'weight' => 10,
+          'preprocess' => TRUE,)
+  );
+}
+
