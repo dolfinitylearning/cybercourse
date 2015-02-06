@@ -983,42 +983,39 @@ function swim_textile2ckhtml( $content ) {
  */
 function _swim_textile2ckhtml_images( $content ) {
   //This regex of Doom comes from php-textile. I don't know how it works.
-  $opt_attrs = "(?:(?:\([^)
-  ]+\))(?:(?:\[[^]
-  ]+\])(?:(?:\{[^}
-  ]+\}))?|(?:\{[^}
-  ]+\})(?:(?:\[[^]
-  ]+\]))?)?|(?:\[[^]
-  ]+\])(?:(?:\([^)
-  ]+\))(?:(?:\{[^}
-  ]+\}))?|(?:\{[^}
-  ]+\})(?:(?:\([^)
-  ]+\)))?)?|(?:\{[^}
-  ]+\})(?:(?:\([^)
-  ]+\))(?:(?:\[[^]
-  ]+\]))?|(?:\[[^]
-  ]+\])(?:(?:\([^)
-  ]+\)))?)?)?";
-
-  $regex='/
-              (?:[[{])?                       # pre
-              \!                              # opening !
-              (?P<align>\<|\=|\>|&lt;|&gt;)?  # optional alignment              $algn
-              (?P<atts>'.$opt_attrs.')        # optional style,class atts       $atts
-              (?:\.\s)?                       # optional dot-space
-              (?P<url>[^\s(!]+)               # presume this is the src         $url
-              \s?                             # optional space
-              (?:\((?P<title>[^\)]+)\))?      # optional title                  $title
-              \!                              # closing
-              (?::(?P<href>\S+)(?<![\]).,]))? # optional href sans final punct. $href
-              (?:[\]}]|(?=[.,\s)|]|$))        # lookahead: space,.)| or end of string ("|" needed if image in table cell)
-              /x'.'u';
-  $regex = '/\!\(?(?:[a-zA-Z0-9\-_\s]*)?\)?([^\(]*)?(\(.*\))?\!/';
+  $regex = '/
+(?:[[{])?                       # pre
+\!                              # opening !
+(?P<align>\<|\=|\>|&lt;|&gt;)?  # optional alignment              $algn
+(?P<atts>(?:(?:\([^)
+]+\))(?:(?:\[[^]
+]+\])(?:(?:\{[^}
+]+\}))?|(?:\{[^}
+]+\})(?:(?:\[[^]
+]+\]))?)?|(?:\[[^]
+]+\])(?:(?:\([^)
+]+\))(?:(?:\{[^}
+]+\}))?|(?:\{[^}
+]+\})(?:(?:\([^)
+]+\)))?)?|(?:\{[^}
+]+\})(?:(?:\([^)
+]+\))(?:(?:\[[^]
+]+\]))?|(?:\[[^]
+]+\])(?:(?:\([^)
+]+\)))?)?)?)        # optional style,class atts       $atts
+(?:\.\s)?                       # optional dot-space
+(?P<url>[^\s(!]+)               # presume this is the src         $url
+\s?                             # optional space
+(?:\((?P<title>[^\)]+)\))?      # optional title                  $title
+\!                              # closing
+(?::(?P<href>\S+)(?<![\]).,]))? # optional href sans final punct. $href
+(?:[\]}]|(?=[.,\s)|]|$))        # lookahead: space,.)| or end of string ("|" needed if image in table cell)
+/xu';
   $matches = array();
   preg_match_all($regex, $content, $matches);
-  if ( isset($matches[1]) ) {
+  if ( isset($matches[3]) ) {
     //Remove duplicates, otherwise the replacement breaks.
-    $urls = array_unique($matches[1]);
+    $urls = array_unique($matches[3]);
     foreach( $urls as $url ) {
       $tag = '<img src="' . $url . '">';
       $content = str_replace(
