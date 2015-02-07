@@ -17,8 +17,12 @@
   font-weight: bold;
 }
 
+#cyco_toc_label {
+  font-size: 150%;
+}
+
 #cyco_toc p {
-  margin-bottom: 0;
+  margin-bottom: 10px;
 }
 
 #cyco_toc p.cyco_toc_h1 {
