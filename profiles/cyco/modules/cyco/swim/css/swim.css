@@ -15,6 +15,11 @@ code {
   max-width: 100%;
 }
 
+.swim p {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .swim-plugin-error {
   font-weight: bold;
   font-size: 120%;
