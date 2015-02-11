@@ -40,7 +40,7 @@ body {
 
 
 .submission-graded,
-.submission-graded:hover {
+#submission-list-pane table tr.submission-graded:hover {
   text-decoration: line-through;
 }
 
