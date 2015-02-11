@@ -50,3 +50,8 @@
 .groups-section, .grading-section {
   margin-left: 15px;
 }
+
+.cyco-control-panel .groups-section .views-row {
+  margin-bottom: 0.5em;
+  background-color: #eeeeee;
+}
