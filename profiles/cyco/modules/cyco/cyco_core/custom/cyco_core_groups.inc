@@ -29,8 +29,19 @@ function cyco_core_groups_get_groups_for_user(
     $user_to_check = $user;
   }
   //Find groups the user is in.
-  $user_group_gids = og_get_groups_by_user($user_to_check, $group_type);
-  return $user_group_gids;
+  $user_group_gids = og_get_groups_by_user();
+  $gids_of_type = array();
+  foreach ($user_group_gids as $entity_type => $items_array) {
+    if ( $entity_type == 'node' ) {
+      foreach ( $items_array as $gid ) {
+        $node = node_load($gid);
+        if ( $node->type == $group_type ) {
+          $gids_of_type[] = $gid;
+        }
+      }
+    }
+  }
+  return $gids_of_type;
 }
 
 /**
@@ -83,7 +94,12 @@ function cyco_core_groups_get_group_users($gid) {
     ->condition('u.status', 1, '=')
     ->fields('u', array('uid', 'name'))
     ->join('og_membership', 'ogm', "ogm.gid = :gid AND u.uid = ogm.etid AND ogm.entity_type = 'user'", array(':gid' => $gid));
-  return $query->execute();
+  $result = $query->execute();
+  $uids = array();
+  foreach ($result as $row) {
+    $uids[] = $row->uid;
+  }
+  return $uids;
 }
 
 /**

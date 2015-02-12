@@ -787,7 +787,7 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   global $user;
   if (is_null($operation) ) {
     //Only admins and instructors allowed
-    $access = cyco_core_current_user_has_role( array('instructor, administrator') );
+    $access = cyco_core_current_user_has_role( array('grader','instructor', 'administrator') );
     if ( ! $access && $user->uid != 1) { 
       drupal_access_denied();
     }
