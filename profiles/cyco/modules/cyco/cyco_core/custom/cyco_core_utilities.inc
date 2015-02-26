@@ -38,6 +38,8 @@ function cyco_core_client_error() {
   );
 }
 
+
+
 /**
  * Called from hook_form_alter() in cyco_core_custom.
  * 
@@ -193,6 +195,7 @@ function cyco_core_tokens_alter( &$replacements, $context) {
 function cyco_core_form_user_profile_form_alter(&$form, $form_state) {
   $form['field_first_name']['#weight'] = $form['field_last_name']['#weight'];
   $form['#validate'][] = '_cyco_core_user_profile_form_validate';
+  $form['#submit'][] = '_cyco_core_user_profile_form_submit';
 }
 
 /**
@@ -213,6 +216,21 @@ function _cyco_core_user_profile_form_validate($form, &$form_state) {
           'You didn\'t give your last name. Your instructor might want you to.'
       ) );
     }
+  }
+}
+
+/**
+ * User profile form has been submitted.
+ */
+function _cyco_core_user_profile_form_submit($form, &$form_state) {
+  //Trim first and last name so they appear correctly when used in tokens.
+  if ( isset($form_state['values']['field_first_name'][LANGUAGE_NONE][0]['value']) ) {
+    $form_state['values']['field_first_name'][LANGUAGE_NONE][0]['value']
+        = trim($form_state['values']['field_first_name'][LANGUAGE_NONE][0]['value']);
+  }
+  if ( isset($form_state['values']['field_last_name'][LANGUAGE_NONE][0]['value']) ) {
+    $form_state['values']['field_last_name'][LANGUAGE_NONE][0]['value']
+        = trim($form_state['values']['field_last_name'][LANGUAGE_NONE][0]['value']);
   }
 }
 
