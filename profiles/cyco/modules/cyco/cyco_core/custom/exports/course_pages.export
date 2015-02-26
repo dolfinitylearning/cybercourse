@@ -226,7 +226,7 @@ array(
   (object) array(
       'vid' => '45',
       'uid' => '1',
-      'title' => 'Your course',
+      'title' => 'Course content',
       'log' => '',
       'status' => '1',
       'comment' => '1',
