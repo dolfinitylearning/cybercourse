@@ -226,7 +226,7 @@ array(
   (object) array(
       'vid' => '39',
       'uid' => '1',
-      'title' => 'Your blueprint',
+      'title' => 'Course blueprint',
       'log' => '',
       'status' => '1',
       'comment' => '1',

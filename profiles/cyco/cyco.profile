@@ -11,7 +11,7 @@ CycoInstallDebug::getInstance()->debug = TRUE;
 define('MODULE_LIST_FILE_NAME', 'more_modules.ini');
 //Titles of book root pages.
 define('COURSE_ROOT_PAGE_TITLE', 'Course content');
-define('BLUEPRINT_ROOT_PAGE_TITLE', 'Blueprint content');
+define('BLUEPRINT_ROOT_PAGE_TITLE', 'Course blueprint');
 
 
 /**
