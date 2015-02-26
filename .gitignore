@@ -6,7 +6,7 @@ sites/*/private
 
 nbproject/
 /sites/default/files/
-/sites/default/
+/sites/default/settings.php
 /error_log
 
 # Ignore .htaccess, so subdomain-specific edits aren't killed.
