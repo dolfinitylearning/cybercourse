@@ -12,3 +12,4 @@ nbproject/
 # Ignore .htaccess, so subdomain-specific edits aren't killed.
 .htaccess
 !/sites/default/default.settings.php
+/sites/default/files backup/
