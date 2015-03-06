@@ -11,28 +11,54 @@
     userChangedFiles: false,
     initialSolutionText: '',
     solutionWidgetId: "edit-field-solution-und-0-value",
-    //Flag to show whether in the process of saving.
+    //Flag to show whether in the process of saving to the server.
     saving: false,
     attach: function(context, settings) {
       uiNamespace = Drupal.behaviors.cycoExerPrepSubmissionForm;
       //Grab the solution content for later comparison.
       uiNamespace.initialSolutionText 
           = $("#" + uiNamespace.solutionWidgetId).val();
-//      $(".field-name-field-attachments .file-widget input.form-text")
-      //Set up the submission reminder.
-//      uiNamespace.showHideReminder();
-//      $("#edit-submit-solution").click(
-//        uiNamespace.showHideReminder
-//      );
       window.onbeforeunload = function (event) {
-        if ( ! uiNamespace.saving ) {
+        if ( uiNamespace.saving ) {
+          //Show AJAX throbber.
+          console.log("dog");
+          $("#edit-actions").after(
+             "<div class='ajax-progress ajax-progress-throbber'>"
+            +  "Saving..."
+            +  "<div class='throbber'>&nbsp;</div>"
+            + "</div>"
+          );
+        }
+        else {
+          //Flag to show whether the close should be confirmed with the user.
+          //Cases:
+          //1. There is new text in the text field.
+          //2. A file has been selected but not uploaded.
+          //3. There is no text and no file selected or uploaded.
+          var confirmClose = false;
+          var confirmMessage = "";
           //Has the content in the editor changed?
           var currentContent = $("#" + uiNamespace.solutionWidgetId).val();
-          if ( currentContent != uiNamespace.initialSolutionText
-               || uiNamespace.userChangedFiles ) {
+          if ( currentContent != uiNamespace.initialSolutionText ) {
             //Ask user to confirm.
-            event.returnValue = 
-                "There are unsaved changes. Are you sure you want to close?";
+            confirmClose = true;
+            confirmMessage += "You've changed your solution. ";
+          }
+          //Have there been changes in the files?
+          if ( uiNamespace.userChangedFiles ) {
+            //Ask user to confirm.
+            confirmClose = true;
+            confirmMessage += "You've changed the files. ";
+          }
+          //Is there a file that has been selected but not uploaded?
+//          uiNamespace.filesSelectedNotUploaded = false;
+          if ( uiNamespace.selectedFileNotUploaded() ) {
+            confirmClose = true;
+            confirmMessage += "You've selected a file, but not uploaded it. ";
+          }          
+          if ( confirmClose ) {
+            event.returnValue = confirmMessage
+              + "Are you sure you want to close?";
           }
         }
       };
@@ -48,8 +74,20 @@
         $("#edit-submit").click();
       });
       //Save and submit button clicked - tell code that the user is saving.
-      $("#edit-submit").click(function() {
-        uiNamespace.saving = true;
+      $("#edit-submit").click(function(evt) {
+          //Is there a file that has been selected but not uploaded?
+          if ( uiNamespace.selectedFileNotUploaded() ) {
+            if ( ! confirm("You've selected a file, but not uploaded it. "
+                + "Are you sure you want to close?") ) {
+              evt.preventDefault();
+              return;
+            }
+          }
+          uiNamespace.saving = true;
+      });
+      //Cancel button clicked.
+      $("#cyco_cancel").click(function() {
+        window.close();
       });
       //User did something to a file.
       $("button[value=Remove]").click(function() {
@@ -93,7 +131,18 @@
      * A file operation was performed.
      */
     fileOpDone: function() {
-      uiNamespace.saving = true;
+      uiNamespace.userChangedFiles = true;
+    },
+    selectedFileNotUploaded: function() {
+      //Is there a file that has been selected but not uploaded?
+      uiNamespace.filesSelectedNotUploaded = false;
+      $("input:file").each(function( index ) {
+        if ( $(this).val() != "" ) {
+          uiNamespace.filesSelectedNotUploaded = true;
+        }
+      });
+      return uiNamespace.filesSelectedNotUploaded;
     }
+    
   };
 }(jQuery));

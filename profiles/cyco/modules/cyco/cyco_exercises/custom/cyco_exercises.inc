@@ -919,18 +919,14 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   }
   //Add Save draft.
   $submit_button_weight = $form['actions']['submit']['#weight'];
-  $form['save_draft'] = array(
+  $form['actions']['save_draft'] = array(
     '#id' => 'cyco_save_draft',
     '#type' => 'button',
     '#value' => t('Save draft'),
     '#weight' => $submit_button_weight,
     '#description' => t('Save your work, but do not submit it for grading.'),
-    '#prefix' => '<div class="form-actions form-wrapper form-group">',
-    '#suffix' => '</div>',
-//    //Add validation processor.
-//    '#validate' => array('_cyco_exercises_submission_form_validate'),
-//    //Add submission processor.
-//    '#submit' => array('_cyco_exercises_submission_form_submission'),
+//    '#prefix' => '<div class="form-actions form-wrapper form-group">',
+//    '#suffix' => '</div>',
   );
   $form['save_draft_clicked'] = array(
     '#type' => 'hidden',
@@ -940,12 +936,19 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   $form['actions']['submit']['#value'] = SUBMIT_BUTTON_CAPTION;
   $form['actions']['submit']['#description'] 
       = t('Save your work, and submit it for grading.');
+  //Add a cancel button.
+  $form['actions']['cancel'] = array(
+    '#id' => 'cyco_cancel',
+    '#type' => 'button',
+    '#value' => t('Cancel'),
+    '#weight' => $submit_button_weight + 2,
+    '#description' => t('Close, do not save.'),
+  );  
   //Warn user to press Upload button.
   $form['field_submitted_files'][LANGUAGE_NONE]['#title'] .= 
-      '<br><span style="color:red"><strong>'
-      . t('You must click the Upload button for every file, otherwise '
-          . 'it will not be saved!')
-      . '</strong></span>';
+      '<br>'
+      . t('Click the Upload button for every file, otherwise '
+          . 'it will not be saved.');
   
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
