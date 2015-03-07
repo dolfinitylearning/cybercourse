@@ -6,16 +6,23 @@
 (function($) {
   var uiNamespace; //Convenient ref to a namespacey thing.
   Drupal.behaviors.cycoSelectRubricUi = {
-    //Id of the selected rubric item.
-    selectedItemNid: null,
-    //Term ids the user has checked in the tree.
-    checkedTermIds: new Array(),
-    //Nids of the rubric items shown in the filtered list.
-    filteredNids: new Array(),
-    //CSS class attached to selected item.
-    selectedItemClass: "rubric-select-selected-item",
     attach: function(context, settings) {
       uiNamespace = Drupal.behaviors.cycoSelectRubricUi;
+      //Don't want this done more than once. Drupal file ops can call it again
+      //when they are updating the page after a file upload, removal, etc.
+//      var doneOnce;
+      if ( uiNamespace.doneOnce == "y" ) {
+        return;
+      }
+      uiNamespace.doneOnce = "y";
+      //Id of the selected rubric item.
+      uiNamespace.selectedItemNid = null,
+      //Term ids the user has checked in the tree.
+      uiNamespace.checkedTermIds = new Array(),
+      //Nids of the rubric items shown in the filtered list.
+      uiNamespace.filteredNids = new Array(),
+      //CSS class attached to selected item.
+      uiNamespace.selectedItemClass = "rubric-select-selected-item",
       //Hide the templates for the interfaces that Drupal added to the page.
       $("#rubric-select-current-items-ui").hide();
       $("#rubric-select-ui").hide();
@@ -278,7 +285,16 @@
      */
     setupAddItemUiButtons: function() {
       //Set up click event for rubric items. (Attached to parent UL rather than LIs.
-      $("#filtered-terms").click( this.rubricItemSelected );
+      $("#filtered-terms")
+          .click( this.rubricItemSelected )
+          .dblclick( function(evnt){
+            //Select the item.
+            uiNamespace.rubricItemSelected(evnt);
+            //Link the selected item.
+            if ( uiNamespace.selectedItemNid ) {
+              uiNamespace.linkItem( uiNamespace.selectedItemNid );
+            }
+          } );
       //Buttons states
       $("#rubric-select-edit").attr("disabled", "disabled");
       $("#rubric-select-link")
@@ -388,6 +404,18 @@
     returnFromAddItemUi: function( item ) {
       var itemNid = item.nid;
       var itemTitle = item.title;
+      //Update server data cache with new title.
+      for (var i = 0; i < uiNamespace.rubricsServerData.length; i++) {
+        if ( uiNamespace.rubricsServerData[i].nid == itemNid ) {
+          uiNamespace.rubricsServerData[i].title = itemTitle;
+          break;
+        }
+      }
+//      $(uiNamespace.rubricsServerData).each(function(index, rubricItem){
+//        if ( rubricItem.nid == itemNid ) {
+//          rubricItem.title = itemTitle;
+//        }
+//      });
       //Loop across list of unlinked items. If find item with same nid, 
       //update title.
       //If not, add a new entry to the list.
@@ -563,7 +591,7 @@
       var clickedNid = parseInt( $(clickedItem).attr("data-nid") );
       //Remove existing highlight.
       $("." + uiNamespace.selectedItemClass )
-        .removeClass(uiNamespace.selectedItemClass)
+        .removeClass(uiNamespace.selectedItemClass);
       //Save nid of selected item.
       uiNamespace.selectedItemNid = clickedNid;
       //Add highlight class.

@@ -90,6 +90,7 @@
      * @param boolean changed Whether the data has changed.
      */
     dataHasChanged: function( changed ) {
+      return;
       uiNamespace.changed = changed;
       //Is Save button available?
       if ( changed ) {
@@ -292,9 +293,13 @@
       //Clear the notes widget.
       $("#rubric-create-notes").val("");
       //Set up new phrase widgets.
+      //Remove the X (delete) button. Can't remove the only element.
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-good-list") );
+      $("#rubric-create-phrases-good-list button").remove();
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-needs-work-list") );
+      $("#rubric-create-phrases-needs-work-list button").remove();
       uiNamespace.mtPhraseContainer( $("#rubric-create-phrases-poor-list") );
+      $("#rubric-create-phrases-poor-list button").remove();
       uiNamespace.hideSaveThrobber();
     },
     mtPhraseContainer: function( container ) {
