@@ -90,18 +90,24 @@ It's misleading.
 
 /* For view listing exercises for authors. */
 
-.view-exercises .view-content h3 {
+.view-exercises .views-field-title-3 {
   text-align: left;
-  font-size: 100%;
-}
-
-.view-exercises .view-content .exercise-view-exercise-title {
   font-size: 150%;
 }
 
-.view-exercises .view-content .exercise-view-summary-content + div {
+.view-exercises .views-field-field-body .field-content {
   margin-left: 1em;
 }
+
+.view-exercises .views-field-field-body .field-content p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.view-exercises .views-row {
+  margin-bottom: 2em;  
+}
+
 
 /* For view listing exercises for everyone. */
 

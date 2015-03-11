@@ -17,141 +17,6 @@ define( 'TOO_BAD_SO_SAD',
 define( 'SUBMIT_BUTTON_CAPTION', t('Save and submit') );
 
 /**
- * Implements hook_install().
- */
-//function cyco_exercises_install() {
-//return;
-//  CycoInstallDebug::getInstance()->output('Start cyco_exercises_install');
-//  //Add items to CP.
-//  $menu_name = 'menu-cp-actions';
-//  $language = 'und';
-//  $module = 'cyco_exercises';
-//  //Get the weight of the item this is to follow.
-//  $weight_B_and_K = cyco_install_get_weight_cp_top_item('Blueprints and keywords');
-//  if ( is_null($weight_B_and_K) ) {
-//    $weight_B_and_K = 0;
-//  }
-//  CycoInstallDebug::getInstance()->output('cyco_exercises_install: Before tli1');
-//  //Make main top-level item.
-//  //Compute item weight, to follow Blueprints and Keywords.
-//  $weight_E_and_R = $weight_B_and_K + 1;
-//  $top_level_E_and_R_params = array(
-//    'link_path' => 'exercises',
-//    'link_title' => 'Exercises and rubrics',
-//    'weight' => $weight_E_and_R,
-//    'expanded' => TRUE,
-//    'menu_name' => $menu_name,
-//    'language' => $language,
-//    'plid' => 0,
-//    'module' => $module,
-//    'options' => array(
-//      'attributes' => array(
-//        'title' => 'Exercises are tasks that students do. Graders use '
-//        . 'rubrics to grade students\' work.',
-//      ),
-//    ),
-//  );
-//  $E_and_R_mlid = menu_link_save($item);
-//  CycoInstallDebug::getInstance()->output('cyco_exercises_install: after tli1');
-//  //Add items that are children of the top-level.
-//  //$items only has data the changes for each menu item.
-//  $items = array();
-//  $items[] = array(
-//    'link_path' => 'exercises',
-//    'link_title' => 'List exercises',
-//    'weight' => 0,
-//  );
-//  $items[] = array(
-//    'link_path' => 'node/add/exercise',
-//    'link_title' => 'Add new exercise',
-//    'weight' => 10,
-//  );
-//  $items[] = array(
-//    'link_path' => 'admin/structure/taxonomy/keywords',
-//    'link_title' => 'Manage exercise keywords',
-//    'weight' => 20,
-//  );
-//  $items[] = array(
-//    'link_path' => 'rubric-items',
-//    'link_title' => 'List rubric items',
-//    'weight' => 30,
-//  );
-//  $items[] = array(
-//    'link_path' => 'node/add/rubric-item',
-//    'link_title' => 'Add new rubric item',
-//    'weight' => 40,
-//  );
-//  $items[] = array(
-//    'link_path' => 'admin/structure/taxonomy/rubric_item_categories',
-//    'link_title' => 'Manage rubric item categories',
-//    'weight' => 50,
-//  );
-//  $items[] = array(
-//    'link_path' => 'list-model-solutions',
-//    'link_title' => 'List model solutions',
-//    'weight' => 60,
-//  );
-//  $items[] = array(
-//    'link_path' => 'node/add/model-exercise-solution',
-//    'link_title' => 'Add model solution',
-//    'weight' => 70,
-//  );
-//  $template_item = array(
-//    'link_path' => '',
-//    'link_title' => '',
-//    'weight' => 0,
-//    'expanded' => TRUE,
-//    'menu_name' => $menu_name,
-//    'language' => $language,
-//    'plid' => $E_and_R_mlid,
-//    'module' => $module,
-//  );
-//  CycoInstallDebug::getInstance()->output('cyco_exercises_install: afore loop');
-//  foreach ( $items as $item ) {
-//    $template_item['link_path'] = $item['link_path'];
-//    $template_item['link_title'] = $item['link_title'];
-//    $template_item['weight'] = $item['weight'];
-//    menu_link_save($template_item);
-//  }
-//  //Make second top-level item.
-//  //Compute item weight, to follow Exercises and Rubrics.
-//  $weight_ES = $weight_E_and_R + 1;
-//  $top_level_E_and_R_params = array(
-//    'link_path' => 'manage-submissions',
-//    'link_title' => 'Exercise submissions',
-//    'weight' => $weight_ES,
-//    'expanded' => TRUE,
-//    'menu_name' => $menu_name,
-//    'language' => $language,
-//    'plid' => 0,
-//    'module' => $module,
-//    'options' => array(
-//      'attributes' => array(
-//        'title' => 'View and manage student\'s submissions to exercsies ',
-//      ),
-//    ),
-//  );
-//  $ES_mlid = menu_link_save($item);
-//  //Add children.
-//  //$items only has data the changes for each menu item.
-//  $items = array();
-//  $items[] = array(
-//    'link_path' => 'manage-submissions',
-//    'link_title' => 'Manage submissions',
-//    'weight' => 0,
-//  );
-//  //Adjust the template item.
-//  $template_item['plid'] = $ES_mlid;
-//  foreach ( $items as $item ) {
-//    $template_item['link_path'] = $item['link_path'];
-//    $template_item['link_title'] = $item['link_title'];
-//    $template_item['weight'] = $item['weight'];
-//    menu_link_save($template_item);
-//  }  
-//  CycoInstallDebug::getInstance()->output('cyco_exercises_install: END');
-//}
-
-/**
  * Implements hook_menu.
  */
 function cyco_exercises_menu() {
@@ -182,20 +47,6 @@ function cyco_exercises_menu() {
   );
   return $items;
 }
-
-
-//function cyco_exercises_menu_alter( &$items ) {
-//  $items['node/add/exercise-submission']['access callback']
-//      = '_cyco_exercises_check_create_exer_submission_access';
-//  
-//}
-//
-//
-//function _cyco_exercises_check_create_exer_submission_access() {
-//  $access = cyco_core_current_user_has_role( array('instructor, administrator') );
-//  return $access;
-//}
-
 
 /**
  * Implements hook_menu_local_tasks_alter
@@ -606,7 +457,7 @@ function _cyco_exercises_get_submission_theme() {
  */
 function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   $form['#validate'][] = '_cyco_exercise_form_validate';
-  $form['#submit'][] = '_cyco_exercises_form_submit';
+  $form['#submit'][] = '_cyco_exercises_exercise_form_submit';
   //Hide the standard field for rubric item creation.
   $form['field_rubric_items']['#type'] = 'hidden';
   //Pass nids of current rubric items to client in a hidden form field.
@@ -698,9 +549,10 @@ function _cyco_exercise_form_validate($form, &$form_state) {
   cyco_core_validate_internal_name_field($form_state);
 }
 
-function _cyco_exercises_form_submit($form, &$form_state) {
-//  $form_state['values']['field_rubric_items'][LANGUAGE_NONE][0]['target_id'] = $nid;
-//  $form_state['values']['field_rubric_items'][LANGUAGE_NONE][1]['target_id'] = $nid;
+/**
+ * Exercise form submitted.
+ */
+function _cyco_exercises_exercise_form_submit($form, &$form_state) {
   $linked_items = $_POST['cyco_current_items'];
   $linked_items = json_decode($linked_items);
   $form_state['values']['field_rubric_items'][LANGUAGE_NONE] = array();
@@ -709,7 +561,9 @@ function _cyco_exercises_form_submit($form, &$form_state) {
   }
 }
 
-
+/**
+ * Alter the course page edit form.
+ */
 function cyco_exercises_form_course_page_node_form_alter(&$form, $form_state) {
   //Hide the exercise field. 
   if ( ! cyco_core_current_user_has_role('administrator') ) {
@@ -726,15 +580,26 @@ function _cyco_exercises_store_exercise_refs($form, &$form_state) {
   $body_content = 
       $form_state['values']['field_body'][LANGUAGE_NONE][0]['value'];
   preg_match_all(
-      '/\.\.\s+exercise\:\:\s+(\d+)/i', 
+      '/^\/\@\@cyco\s+exercise\s+(.+)\s*$/mi', 
       $body_content,
       $matches
   );
   if ( sizeof( $matches ) > 0 ) {
-    $form_state['values']['field_exercises'][LANGUAGE_NONE] = array();
-    foreach ( $matches[1] as $index => $exercise_nid ) {
-      $form_state['values']['field_exercises'][LANGUAGE_NONE][$index]
-          = array('target_id' => $exercise_nid);
+    $form_state['values']['field_exercises_inserted'][LANGUAGE_NONE] = array();
+    foreach ( $matches[1] as $index => $exercise_internal_name ) {
+      //Get nid of exercise with given machine name.
+      $models_efq = new EntityFieldQuery;
+      $models_efq
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'exercise')
+        ->fieldCondition('field_internal_name', 'value', 
+            trim($exercise_internal_name) );
+      $query_result = $models_efq->execute();
+      if ( isset( $query_result['node'] ) ) {
+        $nids = array_keys($query_result['node']);
+        $form_state['values']['field_exercises_inserted'][LANGUAGE_NONE][$index]
+            = array('target_id' => $nids[0]);
+      }
     }
   }
 }
