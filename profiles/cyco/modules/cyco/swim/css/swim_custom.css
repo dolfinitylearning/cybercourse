@@ -91,7 +91,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-repeat: no-repeat;
   background-origin: border-box;
   background-color: #FFFFDD;
-  box-shadow: 0px 0px 15px 0px rgba(200,200,200,0.75);
+  border: 1px solid #EEE;
   border-radius: 0.5em
 }
 
@@ -103,6 +103,6 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-repeat: no-repeat;
   background-origin: border-box;
   background-color: #FFFFDD;
-  box-shadow: 0px 0px 15px 0px rgba(200,200,200,0.75);
+  border: 1px solid #EEE;
   border-radius: 0.5em
 }
