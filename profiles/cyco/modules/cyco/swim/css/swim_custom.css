@@ -28,12 +28,6 @@ This is for custom styles the user wants to use in authoring SWIM content.
   margin-bottom: 1em;
 }
 
-.swim .author-note {
-  border: 1px solid #EEE;
-  background-color: #FFFFDD;
-  padding: 1em;
-}
-
 .swim .caption {
   margin-left: 5em;
   font-weight: bold;
@@ -84,21 +78,22 @@ This is for custom styles the user wants to use in authoring SWIM content.
 }
 
 .swim .troubleshoot {
-  margin-left: 2em;
-  padding: 40px 0 1em 1em;
   background-image: url(images/troubleshoot.png);
-  background-position: 4px 4px;
-  background-repeat: no-repeat;
-  background-origin: border-box;
-  background-color: #FFFFDD;
-  border: 1px solid #EEE;
-  border-radius: 0.5em
 }
 
 .swim .optional {
+  background-image: url(images/optional.png);
+}
+
+.swim .note {
+  background-image: url(images/note.png);
+}
+
+.swim .optional,
+.swim .troubleshoot, 
+.swim .note {
   margin-left: 2em;
   padding: 40px 0 1em 1em;
-  background-image: url(images/optional.png);
   background-position: 4px 4px;
   background-repeat: no-repeat;
   background-origin: border-box;
