@@ -4,7 +4,7 @@ Template for displaying a big idea inside a node
  */
 ?>
 <fieldset class="cyco-big-idea-insert">
-  <legend class="cyco-big-idea-insert-legend"><span><?php print t('Big idea'); ?></span></legend>
+  <legend class="cyco-big-idea-insert-legend"><span><?php print t('Big Idea'); ?></span></legend>
   <p class="cyco-big-idea-insert-title">
     <?php print $title; ?>
   </p>
@@ -24,7 +24,7 @@ Template for displaying a big idea inside a node
   <?php if ( $more_link_destination ) { ?>
     <p class="cyco-big-idea-insert-more-link">
       <a href="<?php print $more_link_destination; ?>" 
-        title="<?php print t('Big idea details'); ?>"><?php print t('More...'); ?></a>
+        title="<?php print t('Big Idea details'); ?>"><?php print t('More...'); ?></a>
     </p>
   <?php } ?>
 </fieldset>

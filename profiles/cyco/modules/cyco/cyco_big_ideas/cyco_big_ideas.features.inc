@@ -26,7 +26,7 @@ function cyco_big_ideas_views_api($module = NULL, $api = NULL) {
 function cyco_big_ideas_node_info() {
   $items = array(
     'big_idea' => array(
-      'name' => t('Big idea'),
+      'name' => t('Big Idea'),
       'base' => 'node_content',
       'description' => t('A central concept that helps students understand patterns and their use.'),
       'has_title' => '1',
