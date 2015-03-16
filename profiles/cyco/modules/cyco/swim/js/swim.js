@@ -34,25 +34,6 @@
         nameSpaceyThing.swimSetup(editor);
         //Add a class for customization of the body.
         editor.document.getBody().addClass('swim_body')
-        
-        //Magic incantation from http://plantuml.sourceforge.net/qa/?qa=210/ckeditor-plugin-sometimes-doesnt-update-image-text-changes
-        //Hoping it fixes the problem where non-pseudent images don't show correctly
-        //in pseudent widgets.
-        var dataProcessor = editor.dataProcessor;
-        var htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-        htmlFilter.addRules({
-          elements: {
-            $: function (element) {
-              if (element.name == 'img') {
-                var imgsrc = element.attributes.src;
-
-                element.attributes.src = imgsrc;
-                element.attributes['data-cke-saved-src'] = imgsrc;
-              }
-            }
-          }
-        });
-        
         //Flag the editor as initialized.
         $( "#" + editor.id ).attr("data-swim-init", "yes");
       });
