@@ -82,15 +82,14 @@
             selector: '.pseudent-content'
           }
         },
-        allowedContent: true,
-//        allowedContent:
-//                'img[!src];'
-//              + 'br;'
-//              + 'div(!pseudent)[!data-pseudent-internal-name];'
-//              + 'div(!pseudent-image-container);'
-//              + 'div(!pseudent-image);'
-//              + 'div(!pseudent-image-caption); '
-//              + 'div(!pseudent-content);',
+        allowedContent:
+                'img[!src];'
+              + 'br;'
+              + 'div(!pseudent)[!data-pseudent-internal-name];'
+              + 'div(!pseudent-image-container);'
+              + 'div(!pseudent-image);'
+              + 'div(!pseudent-image-caption); '
+              + 'div(!pseudent-content);',
         requiredContent: 
               'div(pseudent)',
         upcast: function(element) {
