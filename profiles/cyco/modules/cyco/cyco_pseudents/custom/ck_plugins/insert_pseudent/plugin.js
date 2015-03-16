@@ -109,20 +109,20 @@
         //Magic incantation from http://plantuml.sourceforge.net/qa/?qa=210/ckeditor-plugin-sometimes-doesnt-update-image-text-changes
         //Hoping it fixes the problem where non-pseudent images don't show correctly
         //in pseudent widgets.
-        var dataProcessor = this.dataProcessor;
-        var htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-        htmlFilter.addRules({
-          elements: {
-            $: function (element) {
-              if (element.name == 'img') {
-                var imgsrc = element.attributes.src;
-
-                element.attributes.src = imgsrc;
-                element.attributes['data-cke-saved-src'] = imgsrc;
-              }
-            }
-          }
-        });
+//        var dataProcessor = this.dataProcessor;
+//        var htmlFilter = dataProcessor && dataProcessor.htmlFilter;
+//        htmlFilter.addRules({
+//          elements: {
+//            $: function (element) {
+//              if (element.name == 'img') {
+//                var imgsrc = element.attributes.src;
+//
+//                element.attributes.src = imgsrc;
+//                element.attributes['data-cke-saved-src'] = imgsrc;
+//              }
+//            }
+//          }
+//        });
         
         
         
