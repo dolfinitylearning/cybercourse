@@ -53,6 +53,19 @@
             }
           }
           this.setData( "pseudentCategory", pseudentCategory );
+          //Slimy hack to make sure that CK shows the right image when
+          //images are embeddded in what a pseudent says.
+          this.on('data', function(evnt) {
+            $(this.element.$).find('.pseudent-content')
+              .each(function(pseudentContentIndex, pseudentContent){
+                $(pseudentContent).find('img').each(function(imgIndex, imgElement){
+                  var realSrc = $(imgElement).attr('data-cke-saved-src');
+                  if ( realSrc ) {
+                    $(imgElement).attr("src", realSrc);
+                  }
+                });
+              });
+            });
         },
         data: function() {
           //Use widget data to alter HTML.
@@ -80,6 +93,7 @@
         editables: {
           content: {
             selector: '.pseudent-content'
+//            allowedContent: 'img[*]{*}(*); br'
           }
         },
         allowedContent:
@@ -92,6 +106,7 @@
               + 'div(!pseudent-content);',
         requiredContent: 
               'div(pseudent)',
+//        extraAllowedContent: 'img[*]{*}(*)',
         upcast: function(element) {
           if ( element.name == 'div' ) {
             if ( element.hasClass('pseudent') ) {
@@ -105,27 +120,6 @@
       editor.on("instanceReady", function() {
         this.document.appendStyleSheet( Drupal.settings.pseudents.poseStylesheet );
         this.document.appendStyleSheet( Drupal.settings.pseudents.poseStylesheetEdit );
-        
-        //Magic incantation from http://plantuml.sourceforge.net/qa/?qa=210/ckeditor-plugin-sometimes-doesnt-update-image-text-changes
-        //Hoping it fixes the problem where non-pseudent images don't show correctly
-        //in pseudent widgets.
-//        var dataProcessor = this.dataProcessor;
-//        var htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-//        htmlFilter.addRules({
-//          elements: {
-//            $: function (element) {
-//              if (element.name == 'img') {
-//                var imgsrc = element.attributes.src;
-//
-//                element.attributes.src = imgsrc;
-//                element.attributes['data-cke-saved-src'] = imgsrc;
-//              }
-//            }
-//          }
-//        });
-        
-        
-        
       });
 
       editor.ui.addButton( 'insert_pseudent', {

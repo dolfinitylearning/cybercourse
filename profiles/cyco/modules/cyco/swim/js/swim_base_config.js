@@ -41,6 +41,7 @@ Drupal.swimCkConfig = {
     + "ShowBlocks,Save,NewPage,DocProps,Preview,Print,Templates,"
 //    + "About",
     + "About,Source",
+  allowedContent: true
     //@todo Figure out how to get pseudent rules into pseudents only.
     //Removing them from here makes the button vanish.
 //  allowedContent:

@@ -23,13 +23,18 @@
   CKEDITOR.dialog.add('insert_pseudent', function(editor) {
     //Drupal.settings.pseudents.currentSelection = '';
     return {
+//      allowedContent: 
+//                'img[*]{*}(*);'
+//              + 'br;'
+//              + 'div(!pseudent)[!data-pseudent-internal-name];'
+//              + 'div(!pseudent-image-container);'
+//              + 'div(!pseudent-image);'
+//              + 'div(!pseudent-image-caption); '
+//              + 'div(!pseudent-content);',
       title: 'Add a pseudent',
       width: $(window).width() * 0.75,
       height: $(window).height() * 0.75,
       resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
-//      onShow: function() {
-//        var x = this;
-//      },
       contents: [
         {
           id: 'info',
