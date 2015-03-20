@@ -1,0 +1,39 @@
+/*
+CSS for the Cyco expand thingy.
+*/
+/* 
+    Created on : Mar 20, 2015, 12:08:48 PM
+    Author     : mathieso
+*/
+
+[data-cyco-expand] {
+  padding: 0.5em;
+  background-color: #FFFFDD;
+  border: 1px solid #EEE;
+  border-radius: 0.5em;  
+}
+
+.cyco-expand-title {
+  cursor: pointer;
+}
+
+.cyco-expand-content {
+  display: none;
+}
+
+.cyco-expand-toggle {
+  font-weight: bold;
+  margin-right: 0.5em;
+  display: inline-block;
+  width: 1.5em;
+  text-align: center;
+  background-color: black;
+  color: white;
+  border-radius: 2em;
+}
+
+/* Selector specificity needed. */
+.swim div[data-cyco-expand] .cyco-expand-title {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}

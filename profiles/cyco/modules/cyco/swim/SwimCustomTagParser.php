@@ -50,6 +50,15 @@ class SwimCustomTagParser {
           function($matches) {
             //Call the custom tag callback registered earlier.
             $tag_param = $matches[1];
+            //Check for collapsed flag and message.
+            $collapse_title = '';
+            preg_replace_callback('/collapse\s+(.*)/i', 
+                function($collapse_match) use ($collapse_title) {
+                  $collapse_title = $collapse_match[1];
+                  return '';
+                }, 
+                $tag_param
+            );
             $tag_content = $matches[2];
             //Any matches in the inner tag content?
             $matches = preg_match($this->current_regex, $tag_content);
@@ -63,6 +72,13 @@ class SwimCustomTagParser {
                 $tag_param,
                 $tag_content
             );
+            if ( $collapse_title ) {
+              //Wrap in collapse div.
+              $result = '<div data-collapse>'
+                  . '<p>' . $collapse_title . '</p>'
+                  . $result 
+              . '</div>';
+            }
             return $result;
           }, 
           $text); //End preg_replace_callback call.

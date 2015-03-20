@@ -33,29 +33,15 @@ function swim_init() {
       _swim_compute_mathjax_path(), 
       array('preprocess' => FALSE)
   ); //?config=TeX-AMS-MML_HTMLorMML-full
-  //@todo Should this be loaded locally to get aggregation?
-  //MathJax
-//  $library = libraries_load('mathjax');
-//  drupal_add_js(
-//      $module_path . '/js/swim_mathjax_config.js',
-//      array(
-//        'type' => 'file',
-//        'preprocess' => FALSE,
-//      )
-//  );
-//  //Styles
-//  drupal_add_css( 
-//      $module_path . '/css/swim.css',
-//      $options_file_preprocess
-//  );
-//  drupal_add_css( 
-//      $module_path . '/css/textile.css',
-//      $options_file_preprocess
-//  );
-//  drupal_add_css( 
-//      $module_path . '/css/swim_custom.css',
-//      $options_file_preprocess
-//  );
+  //Add the collapse thing.
+  $cyco_expand_files = libraries_load('cyco_expand');
+  $num_files_loaded = libraries_load_files($cyco_expand_files);
+  if ( $num_files_loaded <= 0 ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: no Cyco expand files loaded. Is it installed?';
+    cyco_core_handle_error( $message );
+    return;
+  }
 }
 
 /**
@@ -305,6 +291,25 @@ function _swim_field_widget_value($element, $input = FALSE, $form_state = array(
  */
 function swim_libraries_info() {
   $libraries = array();
+  $libraries['cyco_expand'] = array(
+    'name' => 'Simple expand',
+    'vendor url' => 'http://sylvain-hamel.github.io/simple-expand/',
+    'download url' => 'http://sylvain-hamel.github.io/simple-expand/',
+    'version arguments' => array(
+      'file' => 'cyco_expand.js',
+      'pattern' => '/version\:\s(\d+\.+\d+)/i',
+      //  * Version: 1.0
+      'lines' => 10,
+    ),
+    'files' => array(
+      'js' => array(
+        'cyco_expand.js',
+      ),
+      'css' => array(
+        'cyco_expand.css',
+      ),
+    ),
+  );
   $libraries['ckeditor'] = array(
     'name' => 'CKEditor',
     'vendor url' => 'http://ckeditor.com/',
@@ -341,22 +346,12 @@ function swim_libraries_info() {
       ),
     ),
   );
-//  $libraries['mathjax'] = array(
-//    'name' => 'MathJax',
-//    'vendor url' => 'https://github.com/mathjax/MathJax/',
-//    'download url' => 'https://github.com/mathjax/MathJax/',
-//    'version arguments' => array(
-//      'file' => 'unpacked/MathJax.js',
-//      // Sample: MathJax.version="2.4.0";
-//      'pattern' => '/version\=\"([\d\.]*)\"/',
-//    ),
-//    'files' => array(
-//      'js' => array(
-//        'unpacked/MathJax.js?config\=TeX\-AMS\-MML\_HTMLorMML',
-//      ),
-//    ),
-//  );
   return $libraries;
+}
+
+
+function _swim_cyco_expand_js_version() {
+  return TRUE;
 }
 
 /**
