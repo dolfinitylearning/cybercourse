@@ -952,9 +952,7 @@ class TruncateQuery extends Query {
       return $comments . 'DELETE FROM {' . $this->connection->escapeTable($this->table) . '}';
     }
     else {
-      //KRM
-      return $comments . 'DELETE FROM {' . $this->connection->escapeTable($this->table) . '} ';
-//      return $comments . 'TRUNCATE {' . $this->connection->escapeTable($this->table) . '} ';
+      return $comments . 'TRUNCATE {' . $this->connection->escapeTable($this->table) . '} ';
     }
   }
 }
