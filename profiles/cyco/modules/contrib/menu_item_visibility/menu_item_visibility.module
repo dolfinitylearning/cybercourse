@@ -134,3 +134,18 @@ function menu_item_visibility_form_menu_edit_item_alter(&$form, &$form_state) {
     '#description' => t('Show this menu link only for the selected role(s). If you select no roles, the menu link will be visible to all users.'),
   );
 }
+
+
+/**
+ * Implements hook_features_api().
+ */
+function menu_item_visibility_features_api() {
+  return array(
+      'menu_item_visibility' => array(
+          'name' => t('Menu Item Visibility'),
+          'feature_source' => TRUE,
+          'default_hook' => 'menu_item_visibility_export_fields',
+          'file' => drupal_get_path('module', 'menu_item_visibility') .'/menu_item_visibility.features.inc',
+      )
+  );
+}
