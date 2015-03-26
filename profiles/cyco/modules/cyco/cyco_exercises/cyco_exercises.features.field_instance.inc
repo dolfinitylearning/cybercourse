@@ -234,7 +234,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 1,
+      'alt_field' => 0,
       'default_image' => 0,
       'exclude_cv' => FALSE,
       'file_directory' => 'cycourse/bucket',
@@ -417,6 +417,7 @@ function cyco_exercises_field_default_field_instances() {
   $field_instances['node-exercise-field_rubric_items'] = array(
     'bundle' => 'exercise',
     'default_value' => NULL,
+    'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Choose the rubric items used to grade exercise submissions.',
     'display' => array(
@@ -437,10 +438,16 @@ function cyco_exercises_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'exclude_cv' => 0,
     'field_name' => 'field_rubric_items',
     'label' => 'Rubric items',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
       'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
@@ -760,7 +767,7 @@ function cyco_exercises_field_default_field_instances() {
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 1,
+      'alt_field' => 0,
       'default_image' => 0,
       'exclude_cv' => FALSE,
       'file_directory' => 'cycourse/bucket',

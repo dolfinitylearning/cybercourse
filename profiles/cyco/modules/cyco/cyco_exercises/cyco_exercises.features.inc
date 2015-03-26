@@ -27,6 +27,20 @@ function cyco_exercises_views_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_menu_item_visibility_export_fields().
+ */
+function cyco_exercises_menu_item_visibility_export_fields() {
+  $items = array(
+    'menu-tools_your-submissions:submissions-student-report' => array(
+      0 => array(
+        'rid' => 9,
+      ),
+    ),
+  );
+  return $items;
+}
+
+/**
  * Implements hook_node_info().
  */
 function cyco_exercises_node_info() {
