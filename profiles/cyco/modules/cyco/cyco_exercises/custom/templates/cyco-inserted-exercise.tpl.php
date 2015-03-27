@@ -9,10 +9,6 @@
  * - $exercise_nid: Nid of the exercise. Used by JS code.
  * - $title: The title of the exercise.
  * - $body: Exercise details.
- * - $labeled_links: array of data about link to show. Format of each entry:
- *    'version_label' => Which version. Usually MT.
- *    'status_message' => Whether submitted, has feedback, etc. Often MT.
- *    'link' => Rendered link.
  * - $too_bad_so_sad_message: Message telling user s/he can't do stuff.
  */
 ?>

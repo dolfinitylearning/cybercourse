@@ -297,14 +297,17 @@ function _cyco_exercises_make_submit_links() {
     // If there is an existing submission:
     //   If there is no feedback yet, there is only an edit link.
     //   If there is feedback, there is a Review link, and a new version link.
+    //If there is no submission, there is only a link to create a new one.
+    //If there is an existing submission:
+    //  If there is no feedback yet, there is only an edit link.
+    //  If there is feedback, there is a Review link, and a new version link.
     global $base_url;
-    // Create submission links for this exercise.
-    // JS loaded in .info.
-//    drupal_add_js(
-//        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-//        . '/custom/js/cyco_exercises_submission_links.js'
-//    );
-    // Send current user uid to client.
+    //Create submission links for this exercise.
+    drupal_add_js(
+        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+        . '/custom/js/cyco_exercises_submission_links.js'
+    );
+    //Send current user uid to client.
     drupal_add_js(
         array('cyco_exercises' => 
           array(
@@ -332,7 +335,7 @@ function cyco_exercises_theme() {
       'variables' => array(
         'title' => '(no title)',
         'body' => '(MT)',
-        'labeled_links' => array(),
+//        'labeled_links' => array(),
         'too_bad_so_sad_message' => '',
       ),
     ),
@@ -922,8 +925,8 @@ function _cyco_exercises_submission_form_validate($form, &$form_state) {
   }
   if ( ! $content_given ) {
     //Check the attached files.
-    if ( isset( $form_state['values']['field_submitted_files‎'][ $language ][0]['fid'] ) ) {
-      $fid = $form_state['values']['field_submitted_files‎'][ $language ][0]['fid'];
+    if ( isset( $form_state['values']['field_submitted_files'][ $language ][0]['fid'] ) ) {
+      $fid = $form_state['values']['field_submitted_files'][ $language ][0]['fid'];
       if ( $fid > 0 ) {
         $content_given = TRUE;
       }
@@ -1635,33 +1638,34 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
     return '<p>' . $message . '</p>';
   }
   //Make the submission links.
-  global $user;
-  $labeled_links = '';
-  $too_bad_so_sad_message = '';
-  if ( ! cyco_core_user_has_role($user, 'student') ) {
-    $too_bad_so_sad_message = '<p>' . t( TOO_BAD_SO_SAD ) . '</p>';
-  }
-  else {
-    //If there is no submission, there is only a link to create a new one.
-    //If there is an existing submission:
-    //  If there is no feedback yet, there is only an edit link.
-    //  If there is feedback, there is a Review link, and a new version link.
-    global $base_url;
-    //Create submission links for this exercise.
-    drupal_add_js(
-        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-        . '/custom/js/cyco_exercises_submission_links.js'
-    );
-    //Send current user uid to client.
-    drupal_add_js(
-        array('cyco_exercises' => 
-          array(
-            'uid' => $user->uid,
-          ),
-        ),
-        'setting'
-    );
-  }
+  $too_bad_so_sad_message = _cyco_exercises_make_submit_links();
+//  global $user;
+//  $labeled_links = '';
+//  $too_bad_so_sad_message = '';
+//  if ( ! cyco_core_user_has_role($user, 'student') ) {
+//    $too_bad_so_sad_message = '<p>' . t( TOO_BAD_SO_SAD ) . '</p>';
+//  }
+//  else {
+//    //If there is no submission, there is only a link to create a new one.
+//    //If there is an existing submission:
+//    //  If there is no feedback yet, there is only an edit link.
+//    //  If there is feedback, there is a Review link, and a new version link.
+//    global $base_url;
+//    //Create submission links for this exercise.
+//    drupal_add_js(
+//        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
+//        . '/custom/js/cyco_exercises_submission_links.js'
+//    );
+//    //Send current user uid to client.
+//    drupal_add_js(
+//        array('cyco_exercises' => 
+//          array(
+//            'uid' => $user->uid,
+//          ),
+//        ),
+//        'setting'
+//    );
+//  }
   $body_content = swim_textile2html(
       $exercise_node->field_body[LANGUAGE_NONE][0]['value'],
       TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
@@ -1683,7 +1687,7 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
     'exercise_nid' => $exercise_nid,
     'title' => $exercise_node->title,
     'body' => $body_content,
-    'labeled_links' => $labeled_links,
+//    'labeled_links' => $labeled_links,
     'attached_file_links' => $attached_file_links,
     'too_bad_so_sad_message' => $too_bad_so_sad_message,
   ));  

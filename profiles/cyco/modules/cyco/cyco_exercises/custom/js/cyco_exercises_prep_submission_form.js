@@ -50,12 +50,11 @@
             confirmClose = true;
             confirmMessage += "You've changed the files. ";
           }
-          //Is there a file that has been selected but not uploaded?
-//          uiNamespace.filesSelectedNotUploaded = false;
-          if ( uiNamespace.selectedFileNotUploaded() ) {
-            confirmClose = true;
-            confirmMessage += "You've selected a file, but not uploaded it. ";
-          }          
+//          //Is there a file that has been selected but not uploaded?
+//          if ( uiNamespace.selectedFileNotUploaded() ) {
+//            confirmClose = true;
+//            confirmMessage += "You've selected a file, but not uploaded it. ";
+//          }          
           if ( confirmClose ) {
             event.returnValue = confirmMessage
               + "Are you sure you want to close?";
@@ -133,16 +132,16 @@
     fileOpDone: function() {
       uiNamespace.userChangedFiles = true;
     },
-    selectedFileNotUploaded: function() {
-      //Is there a file that has been selected but not uploaded?
-      uiNamespace.filesSelectedNotUploaded = false;
-      $("input:file").each(function( index ) {
-        if ( $(this).val() != "" ) {
-          uiNamespace.filesSelectedNotUploaded = true;
-        }
-      });
-      return uiNamespace.filesSelectedNotUploaded;
-    }
+//    selectedFileNotUploaded: function() {
+//      //Is there a file that has been selected but not uploaded?
+//      uiNamespace.filesSelectedNotUploaded = false;
+//      $("input:file").each(function( index ) {
+//        if ( $(this).val() != "" ) {
+//          uiNamespace.filesSelectedNotUploaded = true;
+//        }
+//      });
+//      return uiNamespace.filesSelectedNotUploaded;
+//    }
     
   };
 }(jQuery));
