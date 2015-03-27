@@ -574,8 +574,11 @@ function cyco_exercises_form_course_page_node_form_alter(&$form, $form_state) {
 
 /**
  * Store references to exercises in the course page.
+ * Erase references to exercises that are no longer referenced.
+ * Called on form submit.
  */
 function _cyco_exercises_store_exercise_refs($form, &$form_state) {
+  global $base_url;
   $matches = array();
   $body_content = 
       $form_state['values']['field_body'][LANGUAGE_NONE][0]['value'];
@@ -585,23 +588,81 @@ function _cyco_exercises_store_exercise_refs($form, &$form_state) {
       $matches
   );
   if ( sizeof( $matches ) > 0 ) {
-    $form_state['values']['field_exercises_inserted'][LANGUAGE_NONE] = array();
+    $course_page_nid = $form['nid']['#value'];
+    //Make an array of exercise ids inserted in the page.
+    $exercise_nids_referenced = array();
     foreach ( $matches[1] as $index => $exercise_internal_name ) {
       //Get nid of exercise with given machine name.
-      $models_efq = new EntityFieldQuery;
-      $models_efq
+      $exer_efq = new EntityFieldQuery;
+      $exer_efq
         ->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'exercise')
         ->fieldCondition('field_internal_name', 'value', 
             trim($exercise_internal_name) );
-      $query_result = $models_efq->execute();
+      $query_result = $exer_efq->execute();
       if ( isset( $query_result['node'] ) ) {
         $nids = array_keys($query_result['node']);
-        $form_state['values']['field_exercises_inserted'][LANGUAGE_NONE][$index]
-            = array('target_id' => $nids[0]);
+        //Remember the exer's nid.
+        $exercise_nids_referenced[] = $nids[0];
       }
     }
-  }
+    //Update exer node to link to this course page.
+    //Array to contain nids of pages that were being pointed to by
+    //an exer, and are now being taken over to point to the current pages.
+    //Warn user to check them for duplicate references the an exercise.
+    $course_page_nids_with_duplicate_embeds = array();
+    foreach ($exercise_nids_referenced as $exer_nid) {
+      $exer_node = node_load($exer_nid);
+      $update = TRUE;
+      if ( ! isset($exer_node->field_course_page[LANGUAGE_NONE][0]['target_id']) ) {
+        //Nothing is set.
+        $update = TRUE;
+      }
+      else {
+        $existing_course_page_nid = $exer_node->field_course_page[LANGUAGE_NONE][0]['target_id'];
+        if ( $existing_course_page_nid != $course_page_nid ) {
+          $course_page_nids_with_duplicate_embeds[$exer_nid] = $existing_course_page_nid;
+          $update = TRUE;
+        }
+      }
+      if ( $update ) {
+        $exer_node->field_course_page[LANGUAGE_NONE][0]['target_id'] = $course_page_nid;
+        node_save($exer_node);
+      }
+    }
+    //User may have deleted an exercise from the course page.
+    $exer_efq = new EntityFieldQuery;
+    $exer_efq
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'exercise')
+      ->fieldCondition('field_course_page', 'target_id', $course_page_nid );
+    $query_result = $exer_efq->execute();
+    foreach ( $query_result['node'] as $prior_exer_nid => $stuff) {
+      if ( ! in_array($prior_exer_nid, $exercise_nids_referenced) ) {
+        //Exer no longer embedded in page.
+        //Clear the reference.
+        $exer_node = node_load($prior_exer_nid);
+        $exer_node['field_course_page'] = array();
+        node_save($exer_node);
+      }
+    } //End foreach 
+    //Warn user if there might be duplicate references to an exer, on the 
+    //current page, and another.
+    foreach( $course_page_nids_with_duplicate_embeds as $exer_nid => $page_nid ) {
+      $exer_node = node_load($exer_nid);
+      $page_node = node_load($page_nid);
+      $message = t('Warning! The course page') 
+          . ' <a href="' . $base_url . '/node/' . $page_nid . '" target="_blank">' 
+          .   $page_node->title
+          . '</a> ' . t('also has the exercise')
+          . ' <a href="' . $base_url . '/node/' . $exer_nid . '" target="_blank">' 
+          .   $exer_node->title
+          . '</a> ' 
+          . t('in it. Each exercise should only be inserted in one page. '
+          .   'Please remove the exercise from one of the pages.'); 
+      drupal_set_message($message, 'warning');
+    }
+  } //End there were exercise insertions into the course page.
 }
 
 /**

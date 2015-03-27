@@ -116,5 +116,19 @@ It's misleading.
 }
 
 .view-exercises-public .views-field-title {
-  font-size: 120%;
+  font-size: 150%;
+  font-weight: bold;
+}
+
+.view-exercises-public .views-field-field-body,
+.view-exercises-public .views-field-title-1 {
+  margin-left: 2em;
+}
+
+.view-exercises-public .views-field-title-1 {
+  margin-top: 1em;
+}
+
+.view-exercises-public .views-label-title-1 {
+  font-weight: bold;
 }
