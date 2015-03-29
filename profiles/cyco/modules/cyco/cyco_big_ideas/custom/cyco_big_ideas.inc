@@ -44,7 +44,10 @@ function cyco_big_ideas_theme() {
 }
 
 /**
- * Implements hook_menu_local_tasks_alter
+ * Implements hook_menu_local_tasks_alter.
+ * 
+ * Add local menu buttons to Big Idea list and for creating Big Ideas.
+ * Convenience for authors.
  */
 function cyco_big_ideas_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   switch ($root_path) {
@@ -59,7 +62,36 @@ function cyco_big_ideas_menu_local_tasks_alter(&$data, $router_item, $root_path)
         );
       }
       break;
-  }
+    case 'node/%':
+      $path = $router_item['href'];
+      list( $ignore, $nid ) = explode('/', $path);
+      $node = node_load($nid);
+      switch ( $node->type ) {
+        case 'big_idea':
+          if ( cyco_core_current_user_has_role( 
+                array('author', 'administrator', 'grader', 'reviewer') 
+              ) ) {
+            //List Big Ideas.
+            $item = menu_get_item('big-ideas');
+            $item['title'] = t('List Big Ideas');
+            $data['actions']['output'][] = array(
+              '#theme' => 'menu_local_action',
+              '#link' => $item,
+            );
+          }
+          if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
+            //Link to add Big Idea.
+            $item = menu_get_item('node/add/big-idea');
+            $item['title'] = t('Add Big Idea');
+            $data['actions']['output'][] = array(
+              '#theme' => 'menu_local_action',
+              '#link' => $item,
+            );
+          }
+          break;
+      }
+      break;
+    }
 }
 
 /**
