@@ -640,15 +640,17 @@ function _cyco_exercises_store_exercise_refs($form, &$form_state) {
       ->entityCondition('bundle', 'exercise')
       ->fieldCondition('field_course_page', 'target_id', $course_page_nid );
     $query_result = $exer_efq->execute();
-    foreach ( $query_result['node'] as $prior_exer_nid => $stuff) {
-      if ( ! in_array($prior_exer_nid, $exercise_nids_referenced) ) {
-        //Exer no longer embedded in page.
-        //Clear the reference.
-        $exer_node = node_load($prior_exer_nid);
-        $exer_node['field_course_page'] = array();
-        node_save($exer_node);
-      }
-    } //End foreach 
+    if ( isset($query_result['node']) ) {
+      foreach ( $query_result['node'] as $prior_exer_nid => $stuff) {
+        if ( ! in_array($prior_exer_nid, $exercise_nids_referenced) ) {
+          //Exer no longer embedded in page.
+          //Clear the reference.
+          $exer_node = node_load($prior_exer_nid);
+          $exer_node['field_course_page'] = array();
+          node_save($exer_node);
+        }
+      } //End foreach 
+    }
     //Warn user if there might be duplicate references to an exer, on the 
     //current page, and another.
     foreach( $course_page_nids_with_duplicate_embeds as $exer_nid => $page_nid ) {
