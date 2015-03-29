@@ -252,6 +252,9 @@ function _cyco_pseudents_load_client_side_stuff() {
       array('pseudents' => $settings),
       'setting'
   );
+  //Add slimy hack to remove extra <br> afore pseudents.
+  $module_path = drupal_get_path('module', 'cyco_pseudents');
+  drupal_add_js( $module_path . '/custom/js/extra_br_slimy_hack.js');
 }
 
 /**

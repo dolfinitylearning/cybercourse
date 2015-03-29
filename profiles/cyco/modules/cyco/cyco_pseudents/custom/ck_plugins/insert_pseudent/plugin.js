@@ -10,7 +10,8 @@
       //Get all the pseudent category terms in use.
       Drupal.settings.pseudents.catTerms = listCategoryTerms();
       //Add a dialog to the plugin.
-      CKEDITOR.dialog.add( 'insert_pseudent', this.path + 'dialogs/insert_pseudent.js' );    
+      CKEDITOR.dialog.add( 'insert_pseudent', 
+          this.path + 'dialogs/insert_pseudent.js' );
       //Define a widget.
       editor.widgets.add('insert_pseudent', {
         dialog: "insert_pseudent",
@@ -127,7 +128,15 @@
           command: 'insert_pseudent',
           state: CKEDITOR.TRISTATE_ENABLED,
           icon : this.path + 'insert_pseudent.png',
-          toolbar: 'others'
+          toolbar: 'others',
+          extraAllowedContent:
+                'img[!src];'
+              + 'br;'
+              + 'div(!pseudent)[!data-pseudent-internal-name];'
+              + 'div(!pseudent-image-container);'
+              + 'div(!pseudent-image);'
+              + 'div(!pseudent-image-caption); '
+              + 'div(!pseudent-content);',
       });
     }
   });

@@ -374,28 +374,7 @@ function _swim_add_editor_client_pieces( $add_plugins = TRUE ) {
       $path,
       array('preprocess' => FALSE)
   );
-  //$ck_library_info = libraries_load('ckeditor');
-//  $num_files_loaded = libraries_load_files($ck_library_info);
-//  if ( $num_files_loaded <= 0 ) {
-//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-//        . 'SWIM error: no CKEditor files loaded. Is CK installed?';
-//    cyco_core_handle_error( $message );
-//    return;
-//  }
-//  //Load MathJax.
-//  $mj_library_info = libraries_load('mathjax');
-//  $num_files_loaded = libraries_load_files($mj_library_info);
-//  if ( $num_files_loaded <= 0 ) {
-//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-//        . 'SWIM error: no MathJax files loaded. Is it installed?';
-//    cyco_core_handle_error( $message );
-//    return;
-//  }
   $module_path = drupal_get_path('module', 'swim');
-//  drupal_add_css( 
-//      $module_path . '/css/swim_custom.css',
-//      $options_file_preprocess
-//  );
   //Add services library.
   _swim_add_client_services_lib();
   //Obscurer code.

@@ -12,6 +12,7 @@ Drupal.behaviors.addMathJaxConfig = {
 Drupal.swimCkConfig = {
   autoParagraph: false,
   fillEmptyBlocks: false,
+  forceEnterMode: true,
   disableObjectResizing : true,
   basicEntities : true, //Entity encode <, >.
   forcePasteAsPlainText : false,
@@ -41,16 +42,16 @@ Drupal.swimCkConfig = {
     + "ShowBlocks,Save,NewPage,DocProps,Preview,Print,Templates,"
 //    + "About",
     + "About,Source",
-  allowedContent: true
+  allowedContent: 'img[!src] br',
     //@todo Figure out how to get pseudent rules into pseudents only.
     //Removing them from here makes the button vanish.
-//  allowedContent:
-//    'br;'
-//    + 'img[!src];'
-//    + 'div(!pseudent)[!data-pseudent-internal-name];'
-//    + 'div(!pseudent-image-container);'
-//    + 'div(!pseudent-content);'
-//    + 'div(!pseudent-image-caption);'
+  extraAllowedContent:
+    'br;'
+    + 'img[!src];'
+    + 'div(!pseudent)[!data-pseudent-internal-name];'
+    + 'div(!pseudent-image-container);'
+    + 'div(!pseudent-content);'
+    + 'div(!pseudent-image-caption);'
 };
   }
 };

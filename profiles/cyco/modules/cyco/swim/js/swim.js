@@ -1,4 +1,5 @@
 "use strict";
+
 (function ($) {
   //Convenience scoping variable.
   var nameSpaceyThing;
