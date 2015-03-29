@@ -920,10 +920,10 @@ function swim_textile2html( $textile, $nested_call = FALSE ) {
 function swim_textile2ckhtml( $content ) {
   //Remove \rs. They are evil.
   $content = str_replace("\r", '', $content);
-  //Make sure there is a \n at the end.
-  $last_char = substr($content, strlen( $content ) - 1, 1);
-  if ( $last_char != "\n" ) {
-    //$content .= "\n";
+  //Make sure there is two \ns at the end.
+  $last_char = substr($content, strlen( $content ) - 2, 2);
+  if ( $last_char != "\n\n" ) {
+    $content .= "\n\n";
   }
   //Trigger other module's translators.
   //Encode everything the user typed.
