@@ -34,27 +34,27 @@ This is for custom styles the user wants to use in authoring SWIM content.
 }
 
 .swim .indent, .swim .indent1 {
-  margin-left: 5em;
+  margin-left: 4em;
 }
 
 .swim .indent2 {
-  margin-left: 10em;
+  margin-left: 8em;
 }
 
 .swim .indent3 {
-  margin-left: 15em;
+  margin-left: 12em;
 }
 
 .swim .indent4 {
-  margin-left: 20em;
+  margin-left: 16em;
 }
 
 .swim .indent5 {
-  margin-left: 25em;
+  margin-left: 20em;
 }
 
 .swim .indent6 {
-  margin-left: 30em;
+  margin-left: 24em;
 }
 
 .swim .figure {
@@ -81,20 +81,20 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-image: url(images/troubleshoot.png);
 }
 
-.swim .optional {
-  background-image: url(images/optional.png);
+.swim .extra {
+  background-image: url(images/extra.png);
 }
 
 .swim .note {
   background-image: url(images/note.png);
 }
 
-.swim .optional,
+.swim .extra,
 .swim .troubleshoot, 
 .swim .note {
   margin-left: 2em;
-  padding: 40px 0 1em 1em;
-  background-position: 4px 4px;
+  padding: 60px 0 1em 60px;
+  background-position: 8px 8px;
   background-repeat: no-repeat;
   background-origin: border-box;
   background-color: #FFFFDD;
