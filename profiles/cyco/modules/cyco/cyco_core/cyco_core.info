@@ -356,5 +356,4 @@ features_exclude[dependencies][contact] = contact
 features_exclude[dependencies][cyco_exercises] = cyco_exercises
 features_exclude[dependencies][og] = og
 features_exclude[dependencies][node_export] = node_export
-mtime = 1419269319
 project path = profiles/cyco/modules/cyco

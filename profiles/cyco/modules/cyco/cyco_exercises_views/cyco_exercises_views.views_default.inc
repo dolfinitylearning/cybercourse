@@ -38,16 +38,7 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '20';
-  $handler->display->display_options['style_plugin'] = 'list';
-  $handler->display->display_options['style_options']['grouping'] = array(
-    0 => array(
-      'field' => 'title',
-      'rendered' => 1,
-      'rendered_strip' => 0,
-    ),
-  );
-  $handler->display->display_options['style_options']['default_row_class'] = FALSE;
-  $handler->display->display_options['style_options']['row_class_special'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
   /* Header: Global: Unfiltered text */
   $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
@@ -62,13 +53,9 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['empty']['area_text_custom']['content'] = '<p>No exercises have been created yet. See the <a href="https://wiki.cybercour.se">wiki</a> for help.</p>';
   /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_rubric_items_target_id']['id'] = 'field_rubric_items_target_id';
-  $handler->display->display_options['relationships']['field_rubric_items_target_id']['table'] = 'field_data_field_rubric_items';
-  $handler->display->display_options['relationships']['field_rubric_items_target_id']['field'] = 'field_rubric_items_target_id';
-  /* Relationship: Entity Reference: Referencing entity */
-  $handler->display->display_options['relationships']['reverse_field_exercises_node']['id'] = 'reverse_field_exercises_node';
-  $handler->display->display_options['relationships']['reverse_field_exercises_node']['table'] = 'node';
-  $handler->display->display_options['relationships']['reverse_field_exercises_node']['field'] = 'reverse_field_exercises_node';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['id'] = 'field_course_page_target_id';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['table'] = 'field_data_field_course_page';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['field'] = 'field_course_page_target_id';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -76,24 +63,23 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  /* Field: Content: Internal name */
-  $handler->display->display_options['fields']['field_internal_name']['id'] = 'field_internal_name';
-  $handler->display->display_options['fields']['field_internal_name']['table'] = 'field_data_field_internal_name';
-  $handler->display->display_options['fields']['field_internal_name']['field'] = 'field_internal_name';
-  $handler->display->display_options['fields']['field_internal_name']['exclude'] = TRUE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title_3']['id'] = 'title_3';
   $handler->display->display_options['fields']['title_3']['table'] = 'node';
   $handler->display->display_options['fields']['title_3']['field'] = 'title';
-  $handler->display->display_options['fields']['title_3']['label'] = 'Exercise title linked';
-  $handler->display->display_options['fields']['title_3']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['title_3']['label'] = '';
+  $handler->display->display_options['fields']['title_3']['element_label_colon'] = FALSE;
+  /* Field: Content: Internal name */
+  $handler->display->display_options['fields']['field_internal_name']['id'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['table'] = 'field_data_field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['field'] = 'field_internal_name';
+  $handler->display->display_options['fields']['field_internal_name']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_internal_name']['element_label_type'] = '0';
   /* Field: Content: Body */
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
   $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
-  $handler->display->display_options['fields']['field_body']['label'] = '';
-  $handler->display->display_options['fields']['field_body']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_body']['label'] = 'Summary';
   $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_body']['settings'] = array(
     'trim_length' => '300',
@@ -102,66 +88,42 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
   $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
   $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
-  $handler->display->display_options['fields']['field_keywords']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_keywords']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_keywords']['element_label_type'] = '0';
+  $handler->display->display_options['fields']['field_keywords']['empty'] = '(none)';
   $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
   /* Field: Content: Workflow tags */
   $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
   $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';
   $handler->display->display_options['fields']['field_workflow_tags']['field'] = 'field_workflow_tags';
-  $handler->display->display_options['fields']['field_workflow_tags']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_workflow_tags']['element_type'] = '0';
+  $handler->display->display_options['fields']['field_workflow_tags']['element_label_type'] = '0';
+  $handler->display->display_options['fields']['field_workflow_tags']['empty'] = '(none)';
   $handler->display->display_options['fields']['field_workflow_tags']['delta_offset'] = '0';
   /* Field: Content: Published */
   $handler->display->display_options['fields']['status']['id'] = 'status';
   $handler->display->display_options['fields']['status']['table'] = 'node';
   $handler->display->display_options['fields']['status']['field'] = 'status';
-  $handler->display->display_options['fields']['status']['label'] = '';
-  $handler->display->display_options['fields']['status']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['status']['label'] = 'Published?';
   $handler->display->display_options['fields']['status']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['status']['type'] = 'published-notpublished';
   $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title_2']['id'] = 'title_2';
-  $handler->display->display_options['fields']['title_2']['table'] = 'node';
-  $handler->display->display_options['fields']['title_2']['field'] = 'title';
-  $handler->display->display_options['fields']['title_2']['relationship'] = 'reverse_field_exercises_node';
-  $handler->display->display_options['fields']['title_2']['label'] = 'title from course pages referencing exercise';
-  $handler->display->display_options['fields']['title_2']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['title_2']['element_label_colon'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['text'] = '<p class="exercise-view-exercise-title">[title_3]</p>
-
-<p class="exercise-view-internal-name">Internal name: [field_internal_name]</p>
-
-<p class="exercise-view-summary-label">Summary:</p> 
-
-<p class="exercise-view-summary-content">[field_body]</p>
-
-<p class="exercise-view-course-pages">Inserted in pages: [title_2]</p>
-
-<p class="exercise-view-workflow-tags">Workflow tags: [field_workflow_tags]</p>
-
-<p class="exercise-view-keywords">Keywords: [field_keywords]</p>
-
-<p class="exercise-view-status">[status]</p>
-
-<p class="exercise-view-rubric-label">Rubrics:</p>';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
-  $handler->display->display_options['fields']['title_1']['table'] = 'node';
-  $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['relationship'] = 'field_rubric_items_target_id';
-  $handler->display->display_options['fields']['title_1']['label'] = '';
-  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['relationship'] = 'field_course_page_target_id';
+  $handler->display->display_options['fields']['title']['label'] = 'Inserted in page';
+  $handler->display->display_options['fields']['title']['empty'] = '(None)';
+  /* Field: Content: Rubric items */
+  $handler->display->display_options['fields']['field_rubric_items']['id'] = 'field_rubric_items';
+  $handler->display->display_options['fields']['field_rubric_items']['table'] = 'field_data_field_rubric_items';
+  $handler->display->display_options['fields']['field_rubric_items']['field'] = 'field_rubric_items';
+  $handler->display->display_options['fields']['field_rubric_items']['empty'] = '(none)';
+  $handler->display->display_options['fields']['field_rubric_items']['settings'] = array(
+    'link' => 1,
+  );
+  $handler->display->display_options['fields']['field_rubric_items']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_rubric_items']['multi_type'] = 'ul';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
@@ -172,6 +134,27 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'exercise' => 'exercise',
+  );
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 'All';
+  $handler->display->display_options['filters']['status']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['status']['expose']['operator_id'] = '';
+  $handler->display->display_options['filters']['status']['expose']['label'] = 'Published?';
+  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
+  $handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
+  $handler->display->display_options['filters']['status']['expose']['remember_roles'] = array(
+    2 => 0,
+    5 => '5',
+    6 => '6',
+    7 => '7',
+    4 => '4',
+    3 => '3',
+    1 => 0,
+    9 => 0,
   );
 
   /* Display: Page */
@@ -217,13 +200,23 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
-  $handler->display->display_options['header']['area_text_custom']['content'] = 'You have to practice to learn. Here are the exercises on this site.';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<p>Here are the exercises on this site.</p>
+
+<p><strong>STOP!</strong> You need to read the content first, so you will know what to do. These exercises are embedded in the content at the appropriate place. Go to the Course Content box, click on the top link, and start reading. Work your way down.</p>
+
+<p>If you already know what exercise you\'re looking for, you can jump directly to it on this page.</p>
+';
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['empty']['area_text_custom']['content'] = 'Sorry, no exercises have been created.';
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_course_page_target_id']['id'] = 'field_course_page_target_id';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['table'] = 'field_data_field_course_page';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['field'] = 'field_course_page_target_id';
+  $handler->display->display_options['relationships']['field_course_page_target_id']['required'] = TRUE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -241,6 +234,12 @@ function cyco_exercises_views_views_default_views() {
   $handler->display->display_options['fields']['field_body']['settings'] = array(
     'trim_length' => '600',
   );
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+  $handler->display->display_options['fields']['title_1']['table'] = 'node';
+  $handler->display->display_options['fields']['title_1']['field'] = 'title';
+  $handler->display->display_options['fields']['title_1']['relationship'] = 'field_course_page_target_id';
+  $handler->display->display_options['fields']['title_1']['label'] = 'Used in page';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';

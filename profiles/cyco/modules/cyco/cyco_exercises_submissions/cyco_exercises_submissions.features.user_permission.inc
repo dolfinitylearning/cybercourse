@@ -16,6 +16,7 @@ function cyco_exercises_submissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
+      'grader' => 'grader',
       'instructor' => 'instructor',
       'student' => 'student',
     ),
@@ -40,6 +41,7 @@ function cyco_exercises_submissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+      'grader' => 'grader',
       'instructor' => 'instructor',
     ),
     'module' => 'node',
@@ -51,6 +53,7 @@ function cyco_exercises_submissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+      'grader' => 'grader',
       'instructor' => 'instructor',
       'student' => 'student',
     ),
@@ -63,6 +66,7 @@ function cyco_exercises_submissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+      'grader' => 'grader',
       'instructor' => 'instructor',
     ),
     'module' => 'node',
@@ -85,6 +89,7 @@ function cyco_exercises_submissions_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+      'grader' => 'grader',
       'instructor' => 'instructor',
       'student' => 'student',
     ),

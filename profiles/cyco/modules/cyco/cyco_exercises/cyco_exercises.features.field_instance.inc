@@ -85,7 +85,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -127,6 +127,53 @@ function cyco_exercises_field_default_field_instances() {
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
       'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-exercise-field_course_page'
+  $field_instances['node-exercise-field_course_page'] = array(
+    'bundle' => 'exercise',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => 0,
+    'description' => 'Course page this exercise is inserted in.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 9,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_course_page',
+    'label' => 'Course page',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 5,
     ),
   );
 
@@ -205,7 +252,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -288,7 +335,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -409,7 +456,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -456,7 +503,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -871,6 +918,8 @@ function cyco_exercises_field_default_field_instances() {
   t('Categories');
   t('Categories this rubric item belongs to, e.g., code, formatting, output.');
   t('Choose the rubric items used to grade exercise submissions.');
+  t('Course page');
+  t('Course page this exercise is inserted in.');
   t('Feedback (good)');
   t('Feedback (needs work)');
   t('Feedback (poor)');

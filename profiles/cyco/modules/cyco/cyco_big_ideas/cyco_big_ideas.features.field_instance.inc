@@ -156,7 +156,7 @@ function cyco_big_ideas_field_default_field_instances() {
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 1,
+      'alt_field' => 0,
       'default_image' => 0,
       'exclude_cv' => FALSE,
       'file_directory' => 'cycourse/bucket',

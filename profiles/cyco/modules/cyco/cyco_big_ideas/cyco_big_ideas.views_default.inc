@@ -12,17 +12,17 @@ function cyco_big_ideas_views_default_views() {
 
   $view = new view();
   $view->name = 'big_ideas';
-  $view->description = 'Big Ideas list that anyone can see.';
+  $view->description = 'Pattern list that anyone can see.';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'Big Ideas';
+  $view->human_name = 'Big ideas';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Big Ideas';
+  $handler->display->display_options['title'] = 'Big ideas';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'role';
   $handler->display->display_options['access']['role'] = array(
@@ -88,7 +88,7 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'Big Ideas help explain why things are done the way they are. ';
+  $handler->display->display_options['header']['area']['content'] = 'Big ideas help explain why things are done the way they are. ';
   $handler->display->display_options['header']['area']['format'] = 'plain_text';
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
@@ -197,14 +197,14 @@ function cyco_big_ideas_views_default_views() {
   $view->description = 'Pattern list that anyone can see.';
   $view->tag = 'default';
   $view->base_table = 'node';
-  $view->human_name = 'Big Ideas public';
+  $view->human_name = 'Big ideas public';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Big Ideas';
+  $handler->display->display_options['title'] = 'Big ideas';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -264,7 +264,7 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'Big Ideas explain why things are done the way they are.';
+  $handler->display->display_options['header']['area']['content'] = 'Big ideas explain why things are done the way they are.';
   $handler->display->display_options['header']['area']['format'] = 'plain_text';
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
@@ -329,7 +329,7 @@ function cyco_big_ideas_views_default_views() {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'big-ideas-public';
-  $handler->display->display_options['menu']['title'] = 'Big Ideas';
+  $handler->display->display_options['menu']['title'] = 'Big ideas';
   $handler->display->display_options['menu']['description'] = 'See all of the big ideas used in the course';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'menu-tools';

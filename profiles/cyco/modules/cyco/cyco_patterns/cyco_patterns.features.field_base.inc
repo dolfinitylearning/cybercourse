@@ -45,10 +45,13 @@ function cyco_patterns_field_default_field_bases() {
   // Exported field_base: 'field_pattern_categories'
   $field_bases['field_pattern_categories'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_pattern_categories',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'foreign keys' => array(
       'tid' => array(
         'columns' => array(

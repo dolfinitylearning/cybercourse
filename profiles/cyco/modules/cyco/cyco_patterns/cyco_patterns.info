@@ -57,5 +57,4 @@ features[variable][] = pathauto_node_pattern_pattern
 features[variable][] = pathauto_taxonomy_term_pattern_categories_pattern
 features[views_view][] = patterns
 features[views_view][] = patterns_privilaged
-mtime = 1418500381
 project path = profiles/cyco/modules/cyco

@@ -197,7 +197,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 1,
+      'alt_field' => 0,
       'default_image' => 0,
       'exclude_cv' => FALSE,
       'file_directory' => 'cycourse/bucket',
@@ -451,7 +451,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -496,18 +496,21 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-course_page-field_exercises'
-  $field_instances['node-course_page-field_exercises'] = array(
+  // Exported field_instance: 'node-course_page-field_course_page'
+  $field_instances['node-course_page-field_course_page'] = array(
     'bundle' => 'course_page',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Exercises this page includes. Internal use only.',
+    'description' => 'Which page the exercise appears on.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
         'weight' => 7,
       ),
       'teaser' => array(
@@ -519,8 +522,8 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'exclude_cv' => 0,
-    'field_name' => 'field_exercises',
-    'label' => 'Exercises',
+    'field_name' => 'field_course_page',
+    'label' => 'Course page',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -536,7 +539,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 8,
+      'weight' => 10,
     ),
   );
 
@@ -565,7 +568,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     'label' => 'Images',
     'required' => 0,
     'settings' => array(
-      'alt_field' => 1,
+      'alt_field' => 0,
       'default_image' => 0,
       'exclude_cv' => FALSE,
       'file_directory' => 'cycourse/bucket',
@@ -791,9 +794,8 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Attachments');
   t('Blueprint keywords');
   t('Body');
+  t('Course page');
   t('Do you want to show a table of contents on this page?');
-  t('Exercises');
-  t('Exercises this page includes. Internal use only.');
   t('Files attached to this page.');
   t('Files for this page.');
   t('Images');
@@ -807,6 +809,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Tasks for this page.');
   t('Title used in tree menus. If blank, the full title will be used.');
   t('What work needs to be done on this page?');
+  t('Which page the exercise appears on.');
   t('Workflow tags');
 
   return $field_instances;
