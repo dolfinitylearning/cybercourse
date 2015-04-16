@@ -17,7 +17,6 @@ function cyco_patterns_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_actions',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'swim',
@@ -33,7 +32,6 @@ function cyco_patterns_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_explanation',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'swim',
@@ -51,14 +49,6 @@ function cyco_patterns_field_default_field_bases() {
     'field_name' => 'field_pattern_categories',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'tid' => array(
-        'columns' => array(
-          'tid' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'tid' => array(
@@ -86,7 +76,6 @@ function cyco_patterns_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_situation',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'swim',

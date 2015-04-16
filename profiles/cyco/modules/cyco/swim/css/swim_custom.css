@@ -99,5 +99,36 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-origin: border-box;
   background-color: #FFFFDD;
   border: 1px solid #EEE;
-  border-radius: 0.5em
+  border-radius: 0.5em;
+}
+
+.swim .float-right {
+  float: right;
+  margin-left: 2em;
+}
+
+.swim .float-right-block {
+  float: right;
+  margin-left: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: right;
+  border: 1px solid #e3e3e3;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  background-color: #F5F5F5;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.swim .float-left-block {
+  float: left;
+  margin-right: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: left;
+  border: 1px solid #e3e3e3;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  background-color: #F5F5F5;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
 }

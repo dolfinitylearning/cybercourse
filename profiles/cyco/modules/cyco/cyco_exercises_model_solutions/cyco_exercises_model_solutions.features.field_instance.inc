@@ -130,7 +130,8 @@ function cyco_exercises_model_solutions_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-model_exercise_solution-field_exercise_solved'
+  // Exported field_instance:
+  // 'node-model_exercise_solution-field_exercise_solved'
   $field_instances['node-model_exercise_solution-field_exercise_solved'] = array(
     'bundle' => 'model_exercise_solution',
     'default_value' => NULL,

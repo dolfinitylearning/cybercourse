@@ -572,7 +572,8 @@ function cyco_install_groups_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'og_membership-og_membership_type_default-og_membership_request'
+  // Exported field_instance:
+  // 'og_membership-og_membership_type_default-og_membership_request'
   $field_instances['og_membership-og_membership_type_default-og_membership_request'] = array(
     'bundle' => 'og_membership_type_default',
     'default_value' => NULL,

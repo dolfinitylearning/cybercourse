@@ -218,7 +218,8 @@ function cyco_exercises_submissions_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-exercise_submission-field_rubric_item_ratings'
+  // Exported field_instance:
+  // 'node-exercise_submission-field_rubric_item_ratings'
   $field_instances['node-exercise_submission-field_rubric_item_ratings'] = array(
     'bundle' => 'exercise_submission',
     'default_value' => NULL,
@@ -427,7 +428,8 @@ function cyco_exercises_submissions_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-exercise_submission-field_when_feedback_given'
+  // Exported field_instance:
+  // 'node-exercise_submission-field_when_feedback_given'
   $field_instances['node-exercise_submission-field_when_feedback_given'] = array(
     'bundle' => 'exercise_submission',
     'deleted' => 0,
