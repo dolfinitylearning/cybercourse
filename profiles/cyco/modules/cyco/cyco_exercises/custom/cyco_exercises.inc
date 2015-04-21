@@ -646,7 +646,7 @@ function _cyco_exercises_store_exercise_refs($form, &$form_state) {
           //Exer no longer embedded in page.
           //Clear the reference.
           $exer_node = node_load($prior_exer_nid);
-          $exer_node['field_course_page'] = array();
+          $exer_node->field_course_page = array();
           node_save($exer_node);
         }
       } //End foreach 
