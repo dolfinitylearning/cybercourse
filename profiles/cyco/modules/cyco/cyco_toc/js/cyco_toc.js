@@ -14,10 +14,18 @@
         headingTagList.each(function(index) {
           var elementHeading = $(this).text();
           var elementTag = this.tagName.toLowerCase();
-          $(this).attr('id', 'cyco_toc' + elementCount);
-          html += '<p class="cyco_toc_' + elementTag + '"><a href="#cyco_toc' 
-                  + elementCount + '">' + elementHeading + '</a></p>';
-          elementCount ++;
+          //Use existing id if the element has one, or create a new one.
+          var idToUse;
+          if ( $(this).attr('id') ) {
+            idToUse = $(this).attr('id');
+          } 
+          else {
+            idToUse = 'cyco_toc' + elementCount;
+            elementCount ++;
+            $(this).attr('id', idToUse);
+          }
+          html += '<p class="cyco_toc_' + elementTag + '"><a href="#' 
+                  + idToUse + '">' + elementHeading + '</a></p>';
         }); // end each
         html += '</div>';
         //Only add the ToC to the first instance of a body.
