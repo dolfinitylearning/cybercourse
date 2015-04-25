@@ -345,13 +345,13 @@ function cyco_exercises_theme() {
         'phrases_groups' => array(),
       )
     ),
-    'cyco_exercises_model_solutions' => array(
-      'template' => 'custom/templates/cyco-exercises-model-solutions',
-      'variables' => array(
-        'exer_nid' => NULL,
-        'models' => array(),
-      )
-    )
+//    'cyco_exercises_model_solutions' => array(
+//      'template' => 'custom/templates/cyco-exercises-model-solutions',
+//      'variables' => array(
+//        'exer_nid' => NULL,
+//        'models' => array(),
+//      )
+//    )
   );
   return $result;
 }
@@ -456,7 +456,6 @@ function _cyco_exercises_get_submission_theme() {
  * Implements hook_form_alter().
  * 
  * Hide the rubric items field, and add the replacement UI.
- * Add info on model solutions.
  */
 function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   $form['#validate'][] = '_cyco_exercise_form_validate';
@@ -514,6 +513,7 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
   );
   //Model solutions.
   //When creating an exercise, there is no nid.
+  /*
   if ( isset( $form['#entity']->nid ) ) {
     $exer_nid = $form['#entity']->nid;
     $models = array();
@@ -545,6 +545,7 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
       '#weight' => $form['field_rubric_items']['#weight'],
     );
   }
+  */
 }
 
 function _cyco_exercise_form_validate($form, &$form_state) {

@@ -52,21 +52,21 @@ app.NewRubricComment = function() {
 /**
  * Constructor.
  */
-app.ModelSolution = function() {
-  this.modelSolutionNid = null;
-  //Exercise this is for.
-  this.exerciseNid = null;
-  //HTML for the solution, including links to files.
-  this.renderedSolution = null;
-  this.notes = null;
-};
+//app.ModelSolution = function() {
+//  this.modelSolutionNid = null;
+//  //Exercise this is for.
+//  this.exerciseNid = null;
+//  //HTML for the solution, including links to files.
+//  this.renderedSolution = null;
+//  this.notes = null;
+//};
 
 /**
  * Contains all model solutions fetched during grading. Used as cache.
  * Index is nid.
  * @type Array
  */
-app.allModelSolutions = new Array();
+//app.allModelSolutions = new Array();
 
 /**
  * Constructor.
@@ -79,7 +79,7 @@ app.Exercise = function() {
   //Array of nids of rubric items used to assess this exercise.
   this.rubricItems = new Array();
   //Array of nids for model solution.
-  this.modelSolutions = new Array();
+//  this.modelSolutions = new Array();
   //Notes for authors, instructors, and graders.
   this.notes = null;
 };

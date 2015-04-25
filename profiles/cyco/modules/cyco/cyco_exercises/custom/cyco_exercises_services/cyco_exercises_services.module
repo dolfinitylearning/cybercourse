@@ -873,7 +873,7 @@ function _cyco_exercises_def_feedback_services() {
         ), // End getSubmissionRendered
         'getExerciseRendered' => array(
           'help' => 
-            t('Returns an exercise and its model solution, ready for display.'),
+            t('Returns an exercise, ready for display.'),
           'access arguments' => array('access content'),
           'callback' => '_cycoex_get_exercise_rendered',
           'args' => array(
@@ -992,7 +992,6 @@ function _cycoex_get_sub_rendered( $data ) {
 
 /**
  * Get rendered body of exercise, plus file attachment data.
- * Same for the model solutions.
  * @param array $data Parameters passed from client.
  * @return array Da goods.
  * @todo Move to exercises services section.
@@ -1055,36 +1054,36 @@ function _cycoex_get_exercise_rendered( $data ) {
     }
   }
   //Get the model solutions, if there are any.
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'model_exercise_solution')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('field_exercise_solved', 'target_id', $exer_nid);
-  $result = $query->execute();
-  if (isset($result['node'])) {
-    $models = array();
-    $model_nids = array_keys($result['node']); 
-    foreach ( $model_nids as $model_nid ) {
-      $model = array();
-      $model['model_nid'] = $model_nid;
-      $model_node = node_load( $model_nid );
-      if ( isset( $model_node->field_exercise_solved[LANGUAGE_NONE][0] ) ) {
-        $model['exercise_nid'] = $model_node->field_exercise_solved[LANGUAGE_NONE][0]['target_id'];
-      }
-      if ( isset( $model_node->field_body[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['rendered'] = swim_textile2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
-      }
-      if ( isset( $model_node->field_notes[LANGUAGE_NONE][0]['value'] ) ) {
-        $model['notes'] = swim_textile2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
-      }
-      if ( isset( $model_node->field_attachments[LANGUAGE_NONE][0] ) ) {
-        $model['attachments'] = _cyco_exercises_package_attachment_data(
-          $model_node->field_attachments
-        );
-      }
-      $models[] = $model;
-    } //End foreach.
-  }
+//  $query = new EntityFieldQuery();
+//  $query->entityCondition('entity_type', 'node')
+//    ->entityCondition('bundle', 'model_exercise_solution')
+//    ->propertyCondition('status', 1)
+//    ->fieldCondition('field_exercise_solved', 'target_id', $exer_nid);
+//  $result = $query->execute();
+//  if (isset($result['node'])) {
+//    $models = array();
+//    $model_nids = array_keys($result['node']); 
+//    foreach ( $model_nids as $model_nid ) {
+//      $model = array();
+//      $model['model_nid'] = $model_nid;
+//      $model_node = node_load( $model_nid );
+//      if ( isset( $model_node->field_exercise_solved[LANGUAGE_NONE][0] ) ) {
+//        $model['exercise_nid'] = $model_node->field_exercise_solved[LANGUAGE_NONE][0]['target_id'];
+//      }
+//      if ( isset( $model_node->field_body[LANGUAGE_NONE][0]['value'] ) ) {
+//        $model['rendered'] = swim_textile2html( $model_node->field_body[LANGUAGE_NONE][0]['value'] );
+//      }
+//      if ( isset( $model_node->field_notes[LANGUAGE_NONE][0]['value'] ) ) {
+//        $model['notes'] = swim_textile2html( $model_node->field_notes[LANGUAGE_NONE][0]['value'] );
+//      }
+//      if ( isset( $model_node->field_attachments[LANGUAGE_NONE][0] ) ) {
+//        $model['attachments'] = _cyco_exercises_package_attachment_data(
+//          $model_node->field_attachments
+//        );
+//      }
+//      $models[] = $model;
+//    } //End foreach.
+//  }
   //Package output for the client.
   $result = array(
     'status' => 'ok',
@@ -1102,9 +1101,9 @@ function _cycoex_get_exercise_rendered( $data ) {
   if ( isset( $rubric_items ) ) {
     $result['rubric_items'] = $rubric_items;
   }
-  if ( isset( $models ) ) {
-    $result['models'] = $models;
-  }
+//  if ( isset( $models ) ) {
+//    $result['models'] = $models;
+//  }
   return $result;
 }
 

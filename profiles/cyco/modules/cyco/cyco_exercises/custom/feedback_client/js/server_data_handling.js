@@ -215,10 +215,10 @@ app.loadExerciseFromServer = function( exerciseNid ) {
       //Load any missing rubric definitions from the server.
       app.loadRubricItemsFromServer( app.allExercises[ exerciseNid ].rubricItems );
       //Is there a model solution?
-      if ( result.models ) {
-        //Extract it from the server data.
-        app.loadModelSolutionsFromExercise( exerciseNid, result.models );
-      }
+//      if ( result.models ) {
+//        //Extract it from the server data.
+//        app.loadModelSolutionsFromExercise( exerciseNid, result.models );
+//      }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
       Drupal.behaviors.cycoErrorHandler.reportError(
@@ -236,26 +236,26 @@ app.loadExerciseFromServer = function( exerciseNid ) {
  * @param {int} exerciseNid Exercise this is a model for.
  * @param {Array} dataFromServer Model solution data from server.
  */
-app.loadModelSolutionsFromExercise = function( exerciseNid, dataFromServer ) {
-  dataFromServer.forEach(function (record) {
-    var model = new app.ModelSolution();
-    model.modelSolutionNid = record.model_nid;
-    model.exerciseNid = exerciseNid;
-    //Add ref to model in exercise object.
-    app.allExercises[ exerciseNid ].modelSolutions.push( model.modelSolutionNid );
-    model.renderedSolution = '(MT)';
-    if ( record.rendered ) {
-      model.renderedSolution = record.rendered;
-    }
-    if ( record.notes ) {
-      model.notes = record.notes;
-    }
-    if ( record.attachments ) {
-      model.renderedSolution += app.makeLinksForAttachments(record.attachments);
-    }
-    app.allModelSolutions[ model.modelSolutionNid ] = model;
-  });
-};
+//app.loadModelSolutionsFromExercise = function( exerciseNid, dataFromServer ) {
+//  dataFromServer.forEach(function (record) {
+//    var model = new app.ModelSolution();
+//    model.modelSolutionNid = record.model_nid;
+//    model.exerciseNid = exerciseNid;
+//    //Add ref to model in exercise object.
+//    app.allExercises[ exerciseNid ].modelSolutions.push( model.modelSolutionNid );
+//    model.renderedSolution = '(MT)';
+//    if ( record.rendered ) {
+//      model.renderedSolution = record.rendered;
+//    }
+//    if ( record.notes ) {
+//      model.notes = record.notes;
+//    }
+//    if ( record.attachments ) {
+//      model.renderedSolution += app.makeLinksForAttachments(record.attachments);
+//    }
+//    app.allModelSolutions[ model.modelSolutionNid ] = model;
+//  });
+//};
 
 /**
  * Find out which rubric items have not been loaded yet.

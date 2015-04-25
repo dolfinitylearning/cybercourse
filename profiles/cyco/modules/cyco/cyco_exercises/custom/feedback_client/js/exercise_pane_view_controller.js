@@ -1,6 +1,6 @@
 /**
  * @file
- * View/controller for the pane that shows the model solution.
+ * View/controller for the pane that shows the exercise solution.
  */
 
 var app = app || {};
