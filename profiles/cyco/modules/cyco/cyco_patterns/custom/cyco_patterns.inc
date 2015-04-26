@@ -181,6 +181,7 @@ function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
                //to avoid Certain Things.
         )
       : '';
+/*
   //Make pattern category links.
   $pattern_category_links = array();
   $pattern_category_links_rendered = '';
@@ -200,11 +201,12 @@ function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
       $pattern_category_links_rendered .= $link_html;
     }
   }
+ */
   $result = theme('pattern_inserted', 
       array(
         'title' => $pattern_node->title,
-        'category_links' => $pattern_category_links,
-        'category_links_rendered' => $pattern_category_links_rendered,
+//        'category_links' => $pattern_category_links,
+//        'category_links_rendered' => $pattern_category_links_rendered,
         'situation' => $situation,
         'actions' => $actions,
         'more_link_destination' => '/node/' . $pattern_nid,

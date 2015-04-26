@@ -24,12 +24,6 @@ Template for displaying a pattern inside a node
       </div>
     </div>
   <?php } ?>
-  <?php if ( $category_links_rendered ) { ?>
-    <p class="cyco-pattern-insert-categories-container">
-      <span class="categories-label"><?php print t('Categories: '); ?></span>
-      <?php print $category_links_rendered; ?>
-    </p>
-  <?php } ?>
   <?php if ( $more_link_destination ) { ?>
     <p class="cyco-pattern-insert-more-link">
       <a href="<?php print $more_link_destination; ?>" 
