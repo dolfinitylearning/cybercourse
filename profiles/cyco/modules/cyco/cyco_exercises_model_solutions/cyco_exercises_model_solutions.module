@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the CyberCourse Exercises Model Solutions feature.
- */
-
-include_once 'cyco_exercises_model_solutions.features.inc';

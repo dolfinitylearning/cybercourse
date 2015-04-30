@@ -795,6 +795,8 @@ function _cyco_add_links_tools_menu() {
       'menu-tools', -20, 'Your exercise submissions.');  
   _cyco_add_menu_item_for_nonnode('Exercises', 'exercises-public', 
       'menu-tools', -10, 'Exercises are tasks that help you learn.');  
+  _cyco_add_menu_item_for_nonnode('Activities', 'activities-public', 
+      'menu-tools', -5, 'Things to do, but not turn in.');  
   _cyco_add_menu_item_for_nonnode('Big ideas', 'big-ideas-public', 'menu-tools', 0, 
       'Big ideas explain why things happen.');
   _cyco_add_menu_item_for_nonnode('Patterns', 'patterns-public', 
@@ -912,56 +914,6 @@ function _cyco_add_classes2block($module, $block, $classes) {
 }
 
 /**
- * Turn off some modules.
- */
-//function _cyco_disable_modules() {
-//  $modules = array(
-//    'node_export_features',
-//    'node_export',
-//    'features_orphans',
-//    'cyco_pseudents_import',
-//    'views_ui',
-//  );
-//  module_disable( $modules );
-//}
-
-/**
- * Turn on Cyco modules. Don't know why this is needed.
- * If it isn't here, some Cyco modules are not 
- * enabled.
- */
-//function _cyco_enable_modules() {
-//  return;
-//  CycoInstallDebug::getInstance()->output('Start _cyco_enable_modules');
-//  $modules = array(
-//    'cyco_core',
-//    'cyco_install_course_blueprint_types',
-//    'cyco_install_course_blueprint_views',
-//    'cyco_install_groups',
-//    'cyco_exercises',
-//    'cyco_exercises_submissions',
-//    'cyco_exercises_model_solutions',
-//    'cyco_exercises_services',
-//    'cyco_exercises_views',
-//    'cyco_badges',
-//    'cyco_badges_views',
-//    'cyco_pseudents',
-//    'cyco_patterns',
-//    'cyco_toggle_sidebar',
-//    'book_rearrange_collapse',
-//    'book_top_navbar',
-//    'cyco_add_pages',
-//    'cyco_book_blocks',
-//    'cyco_toc',
-//    'cyco_node_edit_tweaks',
-//    'cyco_book_mods',
-//    'cyco_collapse_summary',
-//  );
-//  module_enable($modules, TRUE);
-//  CycoInstallDebug::getInstance()->output('End _cyco_enable_modules');
-//}
-
-/**
  * Theme settings for two themes: cybercourse, and 
  * cybercourse_submission.
  */
@@ -1073,7 +1025,7 @@ function _cyco_add_links_cp_menu1() {
   $items[] = array(
     'link_path' => 'big-ideas',
     'link_title' => 'Big ideas',
-    'weight' => -23,
+    'weight' => -24,
     'expanded' => TRUE,
     'menu_name' => $menu_name,
     'language' => $language,
@@ -1082,6 +1034,21 @@ function _cyco_add_links_cp_menu1() {
     'options' => array(
       'attributes' => array(
         'title' => 'Manage big ideas.',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'activities',
+    'link_title' => 'Activities',
+    'weight' => -22,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Manage activities.',
       ),
     ),
   );
@@ -1417,8 +1384,42 @@ function _cyco_add_links_cp_menu1() {
     'module' => $module,
     'options' => array(
       'attributes' => array(
-        'title' => 'Start a new top-level blueprint. You can add '
-        . 'other pages underneath.',
+        'title' => 'Create a new big idea.',
+      ),
+    ),
+  );
+  foreach ($items as $item) {
+    menu_link_save($item);
+  }
+
+  //Activities.
+  $items[] = array(
+    'link_path' => 'activities',
+    'link_title' => 'List activities',
+    'weight' => 0,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['activities'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'See all activities (including unpublished).',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'node/add/activity',
+    'link_title' => 'Create a new activity',
+    'weight' => 10,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['activities'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new activity.',
       ),
     ),
   );

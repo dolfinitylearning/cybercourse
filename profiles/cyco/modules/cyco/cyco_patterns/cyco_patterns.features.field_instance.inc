@@ -22,7 +22,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -44,7 +44,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -59,7 +59,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -123,7 +123,7 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -139,7 +139,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -161,7 +161,7 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -175,7 +175,7 @@ function cyco_patterns_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -244,7 +244,7 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -290,12 +290,12 @@ function cyco_patterns_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-pattern-field_pattern_categories'
-  $field_instances['node-pattern-field_pattern_categories'] = array(
+  // Exported field_instance: 'node-pattern-field_keywords'
+  $field_instances['node-pattern-field_keywords'] = array(
     'bundle' => 'pattern',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'What categories is this pattern in?',
+    'description' => 'Keywords describing the pattern.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -313,18 +313,21 @@ function cyco_patterns_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'exclude_cv' => 0,
-    'field_name' => 'field_pattern_categories',
-    'label' => 'Pattern categories',
+    'field_name' => 'field_keywords',
+    'label' => 'Keywords',
     'required' => 0,
     'settings' => array(
       'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
+      'active' => 0,
+      'module' => 'taxonomy',
+      'settings' => array(
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'taxonomy_autocomplete',
       'weight' => 2,
     ),
   );
@@ -341,7 +344,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -363,6 +366,45 @@ function cyco_patterns_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-pattern-field_workflow_tags'
+  $field_instances['node-pattern-field_workflow_tags'] = array(
+    'bundle' => 'pattern',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'What work needs to be done on this pattern?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_workflow_tags',
+    'label' => 'Workflow tags',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
       'weight' => 3,
     ),
   );
@@ -376,13 +418,15 @@ function cyco_patterns_field_default_field_instances() {
   t('Images');
   t('Images for your content.');
   t('Internal name');
-  t('Pattern categories');
+  t('Keywords');
+  t('Keywords describing the pattern.');
   t('Situation');
   t('The internal name of the pattern. Lowercase letters, digits, and underscores only, e.g., post_tested_loop1. Use the internal name to insert the pattern in content.');
-  t('What categories is this pattern in?');
   t('What is observed.');
   t('What to do when the situation occurs.');
+  t('What work needs to be done on this pattern?');
   t('Why the pattern makes sense.');
+  t('Workflow tags');
 
   return $field_instances;
 }

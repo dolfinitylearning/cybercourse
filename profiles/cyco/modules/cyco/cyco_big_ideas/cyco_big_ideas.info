@@ -28,6 +28,7 @@ features[field_instance][] = node-big_idea-field_images
 features[field_instance][] = node-big_idea-field_internal_name
 features[field_instance][] = node-big_idea-field_keywords
 features[field_instance][] = node-big_idea-field_show_table_of_contents
+features[field_instance][] = node-big_idea-field_workflow_tags
 features[node][] = big_idea
 features[user_permission][] = create big_idea content
 features[user_permission][] = delete any big_idea content

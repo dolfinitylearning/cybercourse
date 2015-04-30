@@ -21,7 +21,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 5,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -85,7 +85,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -101,7 +101,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -127,7 +127,7 @@ function cyco_big_ideas_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_with_summary_widget',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -141,7 +141,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 3,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -210,7 +210,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -314,7 +314,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 4,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -339,7 +339,46 @@ function cyco_big_ideas_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 4,
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-big_idea-field_workflow_tags'
+  $field_instances['node-big_idea-field_workflow_tags'] = array(
+    'bundle' => 'big_idea',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'What work needs to be done on this Big Idea?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_workflow_tags',
+    'label' => 'Workflow tags',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 3,
     ),
   );
 
@@ -357,6 +396,8 @@ function cyco_big_ideas_field_default_field_instances() {
   t('Keywords describing this big idea.');
   t('Show table of contents');
   t('The internal name of the big idea. Lowercase letters, digits, and underscores only, e.g., write_for_audience. Use the internal name to insert the big idea summary in content.');
+  t('What work needs to be done on this Big Idea?');
+  t('Workflow tags');
 
   return $field_instances;
 }

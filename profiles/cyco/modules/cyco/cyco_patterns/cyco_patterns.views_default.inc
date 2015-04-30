@@ -90,46 +90,35 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['empty']['area_text_custom']['content'] = 'Sorry, no patterns have been defined.';
-  /* Field: Content: Pattern categories */
-  $handler->display->display_options['fields']['field_pattern_categories']['id'] = 'field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['table'] = 'field_data_field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['field'] = 'field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['label'] = '';
-  $handler->display->display_options['fields']['field_pattern_categories']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_pattern_categories']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_pattern_categories']['delta_offset'] = '0';
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
-  $handler->display->display_options['fields']['title_1']['table'] = 'node';
-  $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['label'] = 'Title linked excluded';
-  $handler->display->display_options['fields']['title_1']['exclude'] = TRUE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['title']['label'] = 'Pattern';
   $handler->display->display_options['fields']['title']['alter']['text'] = '[title_1]<br>
 <div class="categories">[field_pattern_categories]</div>';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Keywords */
+  $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
   /* Field: Content: Situation */
   $handler->display->display_options['fields']['field_situation']['id'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['table'] = 'field_data_field_situation';
   $handler->display->display_options['fields']['field_situation']['field'] = 'field_situation';
-  $handler->display->display_options['fields']['field_situation']['click_sort_column'] = 'pure_rest';
+  $handler->display->display_options['fields']['field_situation']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_situation']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '300',
   );
   /* Field: Content: Actions */
   $handler->display->display_options['fields']['field_actions']['id'] = 'field_actions';
   $handler->display->display_options['fields']['field_actions']['table'] = 'field_data_field_actions';
   $handler->display->display_options['fields']['field_actions']['field'] = 'field_actions';
-  $handler->display->display_options['fields']['field_actions']['click_sort_column'] = 'pure_rest';
+  $handler->display->display_options['fields']['field_actions']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_actions']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '300',
   );
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
@@ -252,14 +241,6 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
-  /* Field: Content: Pattern categories */
-  $handler->display->display_options['fields']['field_pattern_categories']['id'] = 'field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['table'] = 'field_data_field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['field'] = 'field_pattern_categories';
-  $handler->display->display_options['fields']['field_pattern_categories']['label'] = '';
-  $handler->display->display_options['fields']['field_pattern_categories']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_pattern_categories']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_pattern_categories']['delta_offset'] = '0';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -282,20 +263,28 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
   $handler->display->display_options['fields']['title_1']['table'] = 'node';
   $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['label'] = '';
+  $handler->display->display_options['fields']['title_1']['label'] = 'Pattern';
   $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title_1']['alter']['text'] = '[title]<br>
-[field_internal_name]<br>
-[field_pattern_categories]';
-  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+[field_internal_name]';
   $handler->display->display_options['fields']['title_1']['link_to_node'] = FALSE;
+  /* Field: Content: Keywords */
+  $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
+  /* Field: Content: Workflow tags */
+  $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['field'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['delta_offset'] = '0';
   /* Field: Content: Situation */
   $handler->display->display_options['fields']['field_situation']['id'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['table'] = 'field_data_field_situation';
   $handler->display->display_options['fields']['field_situation']['field'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_situation']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '300',
   );
   /* Field: Content: Actions */
   $handler->display->display_options['fields']['field_actions']['id'] = 'field_actions';
@@ -303,7 +292,7 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_actions']['field'] = 'field_actions';
   $handler->display->display_options['fields']['field_actions']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_actions']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '300',
   );
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';

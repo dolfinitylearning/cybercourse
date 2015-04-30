@@ -75,7 +75,7 @@ function cyco_big_ideas_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '7',
+          'weight' => '8',
         ),
       ),
       'display' => array(),

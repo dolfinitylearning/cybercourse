@@ -113,13 +113,6 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  /* Field: Content: Keywords */
-  $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
-  $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
-  $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
-  $handler->display->display_options['fields']['field_keywords']['label'] = 'Keywords excluded';
-  $handler->display->display_options['fields']['field_keywords']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
   /* Field: Content: Internal name */
   $handler->display->display_options['fields']['field_internal_name']['id'] = 'field_internal_name';
   $handler->display->display_options['fields']['field_internal_name']['table'] = 'field_data_field_internal_name';
@@ -131,13 +124,21 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
   $handler->display->display_options['fields']['title_1']['table'] = 'node';
   $handler->display->display_options['fields']['title_1']['field'] = 'title';
-  $handler->display->display_options['fields']['title_1']['label'] = '';
+  $handler->display->display_options['fields']['title_1']['label'] = 'Big Idea';
   $handler->display->display_options['fields']['title_1']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title_1']['alter']['text'] = '[title]<br>
-[field_internal_name]<br>
-[field_keywords]';
-  $handler->display->display_options['fields']['title_1']['element_label_colon'] = FALSE;
+[field_internal_name]';
   $handler->display->display_options['fields']['title_1']['link_to_node'] = FALSE;
+  /* Field: Content: Keywords */
+  $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
+  /* Field: Content: Workflow tags */
+  $handler->display->display_options['fields']['field_workflow_tags']['id'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['table'] = 'field_data_field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['field'] = 'field_workflow_tags';
+  $handler->display->display_options['fields']['field_workflow_tags']['delta_offset'] = '0';
   /* Field: Content: Body */
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
