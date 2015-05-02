@@ -52,11 +52,13 @@ function swim_format_code_help($path, $arg) {
   switch ($path) {
     case 'admin/help#swim_format_code':
       return '<p>' . t('Format code (HTML, PHP... Syntax:') . '</p>'
-          . '<p><code>@@cyco format-code STARTING_LINE_NUMBER</code></p>'
+          . '<p><code>@@cyco format-code STARTING_LINE_NUMBER [LANG-name]</code></p>'
 //          . '<p>' . t('STARTING LINE NUMBER defaults to 1.') . '</p>'
           . '<p>' . t('Examples:') . '</p>' 
           . '<p><code>@@cyco format-code 1</code></p>'
           . '<p><code>@@cyco format-code 23</code></p>'
+          . '<p><code>@@cyco format-code 1 lang-vb</code></p>'
+          . '<p>More at <a href="https://code.google.com/p/google-code-prettify/">https://code.google.com/p/google-code-prettify/</a>.</p>'
           ;
   }
 }
@@ -78,11 +80,28 @@ function swim_format_code_swim_custom_tag_view_info() {
  */
 function _swim_format_code_swim_callback( $param_string, $tag_content ) {
   $param_string = trim($param_string);
-  //If content starts with a \n, remove it. Otherwise, the JS library will
-  //have a blank first line.
-  $output = '<xmp class="prettyprint linenums'
-      . ( is_numeric($param_string) ? (':' . $param_string) : '') 
-      . '">'
+  $line_num_given = FALSE;
+  if ( $param_string ) {
+    $params = explode(' ', $param_string);
+    foreach( $params as $param ) {
+      if (is_numeric($param) ) {
+        $line_num_given = TRUE;
+      }
+      if ( substr($param, 0, 5) == 'lang-') {
+        //Language was specified. Load the lang definition file.
+        $lang_file = $param;
+        $path = libraries_get_path('google-code-prettify') 
+            . '/' . $lang_file . '.js';
+        drupal_add_js(
+          $path,
+          array('preprocess' => FALSE)
+        );
+      }// End there is a lang.
+    }
+  }
+  //Compute the classes string.
+  $classes = 'prettyprint ' . ($line_num_given ? 'linenums ' : '') . $param_string;
+  $output = '<xmp class="' . $classes . '">'
       .$tag_content
       . '</xmp>';
   //Shelve it, so Textile doesn't know about it.

@@ -44,8 +44,10 @@ class SwimCustomTagParser {
           . '\s+' . $def['tag'] . '\s+(.*?)\s*\n'
           . '(.*?)'
           . SwimCustomTagParser::END_CUSTOM_TAG_REGEX_ESCAPED . '\s*' . $def['tag'] 
-          . '\s*?\1\s*?\n?'
+          . '\s*?(\1)+\s*?\n?'
           . '/ism';
+      //BAD THING. The regex won't pick up tags with no params. It works in 
+      //testing at https://www.myregextester.com/index.php, though.
       $text = preg_replace_callback($this->current_regex, 
           function($matches) {
             //Call the custom tag callback registered earlier.
