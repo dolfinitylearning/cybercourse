@@ -120,7 +120,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
 }
 
-.swim .float-right {
+.swim .float-left {
   float: left;
   margin-right: 2em;
 }
