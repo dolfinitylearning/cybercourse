@@ -35,6 +35,15 @@ function cyco_book_blocks_permission() {
 }
 
 /**
+ * When user saves gook rearrange form, flush the tree caches.
+ * @param array $form
+ * @param type $form_state
+ */
+function cyco_book_blocks_form_book_admin_edit_alter(&$form, $form_state) {
+  $form['#submit'][] = 'cyco_book_blocks_flush_all_tree_menu_caches';
+}
+
+/**
  * Implements hook_menu_link_alter().
  * 
  * Clears book menu caches for book containing item.
