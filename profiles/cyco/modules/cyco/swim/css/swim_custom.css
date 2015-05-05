@@ -61,12 +61,6 @@ This is for custom styles the user wants to use in authoring SWIM content.
   margin-left: 2em;
 }
 
-.swim .warning {
-  color: red;
-  font-weight: bold;
-  font-size: 120%;
-}
-
 .swim .question {
   margin-left: 5em;
   font-size: 120%;
@@ -89,9 +83,14 @@ This is for custom styles the user wants to use in authoring SWIM content.
   background-image: url(images/note.png);
 }
 
+.swim .warning {
+  background-image: url(images/warning.png);
+}
+
 .swim .extra,
 .swim .troubleshoot, 
-.swim .note {
+.swim .note,
+.swim .warning {
   margin-left: 2em;
   padding: 60px 0 1em 60px;
   background-position: 8px 8px;
