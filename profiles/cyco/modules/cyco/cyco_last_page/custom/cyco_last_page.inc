@@ -7,7 +7,7 @@
 function cyco_last_page_node_view($node, $view_mode, $langcode) {
   global $user;
   //Is the user looking at a course page?
-  if ( $user->uid != 0 && $node->type == 'course_page') {
+  if ( $user->uid != 0 && $node->type == 'course_page' && $view_mode == 'full') {
     //Store as the last course page seen.
     $uid = $user->uid;
     $user_all_data = entity_load('user', array($uid) );
