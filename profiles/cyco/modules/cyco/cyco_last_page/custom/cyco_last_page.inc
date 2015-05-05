@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Show the last course page a user looked at.
+ * Show the last course page a user looked at. 
  */
 
 function cyco_last_page_node_view($node, $view_mode, $langcode) {
