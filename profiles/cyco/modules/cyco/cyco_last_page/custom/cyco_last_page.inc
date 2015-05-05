@@ -8,7 +8,7 @@ function cyco_last_page_node_view($node, $view_mode, $langcode) {
   global $user;
   //Is the user looking at a course page?
   if ( $user->uid != 0 && $node->type == 'course_page' && $view_mode == 'full') {
-    //Store as the last course page seen.
+    //Store nid as the last course page seen.
     $uid = $user->uid;
     $user_all_data = entity_load('user', array($uid) );
     $user_all_data = $user_all_data[ $uid ];
@@ -16,7 +16,7 @@ function cyco_last_page_node_view($node, $view_mode, $langcode) {
         array( 
           LANGUAGE_NONE => array(
             0 => array(
-              'value' =>current_path()
+              'value' =>$node->nid,
             )
           ) 
         );
@@ -31,15 +31,13 @@ function cyco_last_page_node_view($node, $view_mode, $langcode) {
       $user_all_data = $user_all_data[ $uid ];
       //Is there a last page stored?
       if ( isset($user_all_data->field_last_course_page_seen[LANGUAGE_NONE][0]['value']) ) {
-        //Get nonaliased URL.
-        $url = $user_all_data->field_last_course_page_seen[LANGUAGE_NONE][0]['value'];
-        $url_pieces = explode('/', $url);
-        if ( isset($url_pieces[1]) && is_numeric($url_pieces[1])) {
-          $nid = $url_pieces[1];
-          $node = node_load($nid);
+        //Get nid.
+        $nid = $user_all_data->field_last_course_page_seen[LANGUAGE_NONE][0]['value'];
+        $node = node_load($nid);
+        if ( $node->status == 1 ) {
           drupal_set_message(
               t('The last course page you looked at was ')
-              . l($node->title, base_path() . $url) 
+              . l($node->title, base_path() . 'node/' . $nid) 
               . '.'
           );
         }
