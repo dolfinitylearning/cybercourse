@@ -12,6 +12,8 @@ define('SWIM_DEFAULT_HEIGHT', '15');
 define('SWIM_DEFAULT_SUMMARY_HEIGHT', '5');
 //Class MathJax uses to detect what content it should mess with.
 define('SWIM_MATH_JAX_CLASS', 'math');
+//Default path to injector files.
+define('SWIM_DEFAULT_INJECTOR_PATH', '/sites/default/files/inject');
 
 /**
  * Compute path to MathJax library, including config.
@@ -658,7 +660,7 @@ function _swim_client_peek( $data ) {
   $content = token_replace($content);
   //Convert the ReST content to HTML.
   $html = swim_textile2html($content);
-  $complete_module_path = //$base_url . base_path() 
+  $complete_module_path = 
     $base_url . '/' . drupal_get_path('module', 'swim') . '/';
   //Let other modules add their own stuff.
   $css_files = module_invoke_all('swim_peek_load_css');

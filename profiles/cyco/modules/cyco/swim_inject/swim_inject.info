@@ -1,0 +1,6 @@
+name = SWIM plugin: inject file
+description = SWIM plugin to inject file contents into HTML. For JS simulations, etc.
+core = 7.x
+version = 7.x-1.0
+package = CyberCourse
+dependencies[] = swim

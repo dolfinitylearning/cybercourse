@@ -12,7 +12,8 @@ define('MODULE_LIST_FILE_NAME', 'more_modules.ini');
 //Titles of book root pages.
 define('COURSE_ROOT_PAGE_TITLE', 'Course content');
 define('BLUEPRINT_ROOT_PAGE_TITLE', 'Course blueprint');
-
+//Default injector path.
+define('DEFAULT_INJECTOR_PATH', '/sites/default/files/inject');
 
 /**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
@@ -262,6 +263,8 @@ function _cyco_finalize_install_step4($dog, &$context) {
 function _cyco_finalize_install_step5($dog, &$context) {
   CycoInstallDebug::getInstance()->output('Start _cyco_finalize_install_step5');
   $t = get_t();
+  //Set injector path.
+  variable_set( 'swim_base_injector_path', DEFAULT_INJECTOR_PATH );
   //Turn on JS and CSS aggregation.
   _cyco_turn_on_aggregation();
   node_access_rebuild();

@@ -516,11 +516,6 @@ function cyco_core_validate_internal_name_field(
       $name_in_use = ( $nids_using_internal_name[0] != $nid_node_being_edited );
     }
   }
-//  $sql = 'select count(*) from {field_data_' . $field_name . '} '
-//      . 'where ' . $field_name . '_value = \'' 
-//      . check_plain($internal_name) . '\'';
-//  $count = db_query($sql)->fetchField();
-//  if ( $count != 0 ) {
   if ( $name_in_use ) {
     form_set_error(
         $field_name, 

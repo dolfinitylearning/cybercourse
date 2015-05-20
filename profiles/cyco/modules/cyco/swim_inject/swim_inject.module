@@ -1,0 +1,61 @@
+<?php
+/**
+ * @file
+ * SWIM plugin to inject file into HTML. 
+ * Params: file path.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function swim_inject_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#swim_inject':
+      return 
+            '<p>' 
+          .   t('Inject content into page. Syntax:') 
+          . '</p>'
+          . '<p><code>@@cyco inject PATH</code></p>'
+          . '<p>PATH is from the base path defined in SWIM configuration.'
+          . '<p>' . t('Examples:') . '</p>' 
+          . '<p><code>@@cyco inject simulations/fornext.html</code></p>'
+          ;
+  }
+}
+
+/**
+ * Implements hook_swim_custom_tag_view_info().
+ */
+function swim_inject_swim_custom_tag_view_info() {
+  return array(
+    'tag' => 'inject',
+    'callback' => '_swim_inject_swim_callback',
+  );
+}
+
+/**
+ * Callback to show content only when the current user has a given role.
+ * @param string $param_string Parameters passed to the tag.
+ * @param string $tag_content Inner tag content.
+ */
+function _swim_inject_swim_callback( $param_string, $tag_content ) {
+  $path = variable_get('swim_injector_path', SWIM_DEFAULT_INJECTOR_PATH);
+  //Make sure there's a /.
+  if ( substr($param_string, 0, 1) != '/' 
+      && substr($path, strlen($path)- 1, 1) != '/' ) {
+    $path .= '/';
+  }
+  $path = DRUPAL_ROOT . $path . $param_string;
+  if ( ! file_exists($path) ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: invalid injector path: ' . $path;
+    cyco_core_handle_error( $message );
+    return;
+  }
+  //Read the file and return it.
+  $content = file_get_contents($path);
+  //Shelve it, so Textile doesn't know about it.
+  $marker = swim_shelve($content);
+  return $marker;
+}
+

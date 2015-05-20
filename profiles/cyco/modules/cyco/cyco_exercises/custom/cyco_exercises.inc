@@ -437,20 +437,28 @@ function _cyco_exercises_get_submission_theme() {
 
 /**
  * Implements hook_node_view().
- * 
- * If the user can edit course pages, then add the id of the exercise
- * to the end of the title. Helps when inserting exercise 
- * references in a course page.
- * 
- * Also does some token replacement.
  */
-//function cyco_exercises_node_view($node, $view_mode, $langcode) {
-//  if ($node->type == 'exercise' && $view_mode == 'full') {
-//    if ( user_access('edit any course_page content') ) {
-//      drupal_set_title($node->title . ' (' . $node->nid . ')');
-//    }
-//  }
-//}
+function cyco_exercises_node_view($node, $view_mode, $langcode) {
+  global $user;
+  if (
+         $node->type == 'exercise_submission' 
+      && $view_mode == 'full'
+      && cyco_core_current_user_has_role('student') 
+      && isset( $_GET['op'] )
+      && $_GET['op'] === 'review'
+      && variable_get('cyco_event_logging', 'off') === 'on'
+      ) {
+    //Log it.
+    $exercise_nid = $node->field_exercise[LANGUAGE_NONE][0]['target_id'];
+    $version = $node->field_version[LANGUAGE_NONE][0]['value'];
+    _cyco_exercises_log_submission_event(
+        'view feedback', 
+        $exercise_nid, 
+        $version,
+        $node->nid
+    );
+  }
+}
 
 /**
  * Implements hook_form_alter().
@@ -876,12 +884,6 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
     '#weight' => $submit_button_weight + 2,
     '#description' => t('Close, do not save.'),
   );  
-  //Warn user to press Upload button.
-  $form['field_submitted_files'][LANGUAGE_NONE]['#title'] .= 
-      '<br>'
-      . t('Click the Upload button for every file, otherwise '
-          . 'it will not be saved.');
-  
   //Set the page title.
   $exercise_node = node_load( $exercise_id );
   if ( ! $exercise_node ) {
@@ -900,47 +902,188 @@ function cyco_exercises_form_exercise_submission_node_form_alter(&$form, $form_s
   }
   drupal_set_title( $exercise_node->title );
   //Add validation processor.
-  $form['#validate'][] = '_cyco_exercises_submission_form_validate';
+//  $form['#validate'][] = '_cyco_exercises_submission_form_validate';
   //Add submission processor.
   $form['#submit'][] = '_cyco_exercises_submission_form_submission';
-  
   //Check whether this is a new-window submission.
   if (_cyco_exercises_is_submission_page_in_popup() ) {
     //Aye.
     module_invoke('admin_menu', 'suppress');
   }
+  //Log the event.
+  if (    ! $form_state['rebuild']
+       && variable_get('cyco_event_logging', 'off') === 'on' 
+       && cyco_core_current_user_has_role('student')  ) {
+    //Log it.
+    $submission_id = ( $operation == 'add' ) ? NULL : $form['#node']->nid;
+    _cyco_exercises_log_submission_event(
+        'open submission window', 
+        $exercise_id, 
+        $version,
+        $submission_id
+    );
+  }
 }
+
+/**
+ * Log a submission event.
+ * @param string $activity_type Type of activity.
+ * @param node $exercise_nid Exercise.
+ * @param integer $version Submission version.
+ * @param node $submission_nid Submission or null.
+ */
+function _cyco_exercises_log_submission_event(
+    $activity_type, 
+    $exercise_nid,
+    $version,
+    $submission_nid
+    ) {
+  global $user;
+  global $base_url;
+  //Check params.
+  if ( ! $activity_type ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' missing activity type';
+    cyco_core_handle_error( $message );
+    return;
+  }
+  if ( ! isset($exercise_nid) || ! $exercise_nid ) {
+    //Missing exercise id.
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' missing exerise id';
+    cyco_core_handle_error( $message );
+    return;
+  }  
+  $exercise = node_load($exercise_nid);
+  if ( ! $exercise ) {
+    //Missing exercise id.
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' unknown exerise id: ' . $exercise_nid;
+    cyco_core_handle_error( $message );
+    return;
+  }
+  if ( is_nan($version) || $version < 1 ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' bad version: ' . isset($version) ? $version : 'not set';
+    cyco_core_handle_error( $message );
+    return;    
+  }
+  $entity_type = 'cyco_event';
+  $entity = entity_create($entity_type, array('type' => 'exercise_submission'));
+  $wrapper = entity_metadata_wrapper($entity_type, $entity);
+  $wrapper->uid = $user->uid;
+  $user_link = '<a href="' . $base_url .'/users/' . $user->name 
+        . '">' . $user->name . '</a>';
+  $exercise_link = '<a href="' . $base_url .'/node/' . $exercise_nid 
+        . '">' . $exercise->title . '</a>';
+  $message = t('Submission event: ') . t( $activity_type ) 
+      . t(', by ') . $user_link
+      . t(' for exercise ') . $exercise_link
+      . '.';
+  $wrapper->field_summary->set( 
+      array('value' => $message,
+        'format'=>'limited_html',
+      )
+  );
+  $wrapper->field_submission_activity_type->set( $activity_type );
+  $wrapper->field_version->set( $version );
+  $wrapper->field_exercise->set( $exercise_nid );
+  if ( !is_null($submission_nid) ) {
+    $submission = node_load($submission_nid);
+    if ( ! $submission ) {
+      //Missing $submission id.
+      $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+          . ' unknows $submission id: ' . $submission_nid;
+      cyco_core_handle_error( $message );
+      return;
+    }
+    //Save the current text message.
+    if ( isset( $submission->field_solution[LANGUAGE_NONE][0]['value'] ) ) {
+      $wrapper->field_submission_text->set( 
+        $submission->field_solution[LANGUAGE_NONE][0]['value']
+      );
+    }
+    //Copy files submitted.
+    $submitted_files = field_get_items('node', $submission, 
+        'field_submitted_files');
+    if ( $submitted_files ) {
+      //Get path to event files.
+      $copys_field_info = field_info_field('field_submission_files');
+      $copys_field_instance_info = field_info_instance(
+          'cyco_event', 'field_submission_files', 'exercise_submission');
+      $copys_file_field_uri = file_field_widget_uri($copys_field_info, $copys_field_instance_info);
+      //Make the dir if it does not exist.
+      if ( ! file_prepare_directory($copys_file_field_uri) ) {
+        $result = drupal_mkdir($copys_file_field_uri);
+        if ( ! $result ) {
+          $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+              . ' could not create dir: ' . $copys_file_field_uri;
+          cyco_core_handle_error( $message );
+          return;
+        }
+      }
+      //Array to hold refs to copied file objects.
+      $submission_file_objects = array();
+      foreach( $submitted_files as $submitted_file ) {
+        //Construct copy's file name.
+        $copys_file_name = 'u' . $user->uid . 'e' . $exercise_nid . 'v' . $version
+            . 't' . time() . $submitted_file['filename'];
+        //Construct uri for copy.
+        $copys_uri = $copys_file_field_uri . '/' . $copys_file_name;
+        //Copy the file to where event files are stored.
+        $source_file_object = file_load($submitted_file['fid']);
+        $copys_field_value = file_copy($source_file_object, $copys_uri);
+        //Create file field ref to it in event file entity.
+        if ( ! $copys_field_value ) {
+          $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+              . ' copy failed: ' . $copys_file_name;
+          cyco_core_handle_error( $message );
+          return;
+        }
+        $copys_field_value->display = 0;
+        $copys_field_value->description = 0;
+//        $copys_field_value_as_array = (array)$copys_field_value;
+        $submission_file_objects[] = (array)$copys_field_value;
+      } //End for each submitted file.
+      $wrapper->field_submission_files->set( $submission_file_objects );
+    }
+  }
+  $wrapper->save();
+  
+}
+
 
 /**
  * Validate exercise submission form. Make sure that there is content.
  * @param type $form You know what it is.
  * @param type $form_state You know what it is.
  */
-function _cyco_exercises_submission_form_validate($form, &$form_state) {
-  $content_given = FALSE;
-  $language = $form_state['node']->language;
-  //Check the solution text.
-  if ( isset( $form_state['values']['field_solution'][ $language ][0]['value'] ) ) {
-    $value = $form_state['values']['field_solution'][ $language ][0]['value'];
-    if ( strlen(trim($value)) > 0 ) {
-      $content_given = TRUE;
-    }
-  }
-  if ( ! $content_given ) {
-    //Check the attached files.
-    if ( isset( $form_state['values']['field_submitted_files'][ $language ][0]['fid'] ) ) {
-      $fid = $form_state['values']['field_submitted_files'][ $language ][0]['fid'];
-      if ( $fid > 0 ) {
-        $content_given = TRUE;
-      }
-    }
-  }
-  if ( ! $content_given ) {
-    form_set_error( 'field_solution', 
-        t('Sorry, you must give a solution and/or attachment before saving.')
-    );
-  }
-}
+//function _cyco_exercises_submission_form_validate($form, &$form_state) {
+//  return;
+//  $content_given = FALSE;
+//  $language = $form_state['node']->language;
+//  //Check the solution text.
+//  if ( isset( $form_state['values']['field_solution'][ $language ][0]['value'] ) ) {
+//    $value = $form_state['values']['field_solution'][ $language ][0]['value'];
+//    if ( strlen(trim($value)) > 0 ) {
+//      $content_given = TRUE;
+//    }
+//  }
+//  if ( ! $content_given ) {
+//    //Check the attached files.
+//    if ( isset( $form_state['values']['field_submitted_files'][ $language ][0]['fid'] ) ) {
+//      $fid = $form_state['values']['field_submitted_files'][ $language ][0]['fid'];
+//      if ( $fid > 0 ) {
+//        $content_given = TRUE;
+//      }
+//    }
+//  }
+//  if ( ! $content_given ) {
+//    form_set_error( 'field_solution', 
+//        t('Sorry, you must give a solution and/or attachment before saving.')
+//    );
+//  }
+//}
 
 /**
  * Exercise submission form has been submitted.
@@ -984,6 +1127,20 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
   $title = 'Sub by ' . $full_name . ' for ' . $exercise_title 
       . ' (ver ' . $version . ')';
   $form_state['values']['title'] = $title;
+  //Log the event.
+  if (    ! $form_state['rebuild']
+       && variable_get('cyco_event_logging', 'off') === 'on' 
+       && cyco_core_current_user_has_role('student')  ) {
+    //Log it.
+    $event = $submitted ? 'save and submit' : 'save draft';
+    $submission_id = ( isset( $form['#node']->nid ) ) ? $form['#node']->nid : NULL;
+    _cyco_exercises_log_submission_event(
+        $event, 
+        $exercise_nid, 
+        $version,
+        $submission_id
+    );
+  }
 }
 
 /**

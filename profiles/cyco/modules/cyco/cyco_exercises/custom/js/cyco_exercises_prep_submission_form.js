@@ -21,7 +21,7 @@
       window.onbeforeunload = function (event) {
         if ( uiNamespace.saving ) {
           //Show AJAX throbber.
-          console.log("dog");
+//          console.log("dog");
           $("#edit-actions").after(
              "<div class='ajax-progress ajax-progress-throbber'>"
             +  "Saving..."
@@ -50,11 +50,6 @@
             confirmClose = true;
             confirmMessage += "You've changed the files. ";
           }
-//          //Is there a file that has been selected but not uploaded?
-//          if ( uiNamespace.selectedFileNotUploaded() ) {
-//            confirmClose = true;
-//            confirmMessage += "You've selected a file, but not uploaded it. ";
-//          }          
           if ( confirmClose ) {
             event.returnValue = confirmMessage
               + "Are you sure you want to close?";
@@ -74,15 +69,7 @@
       });
       //Save and submit button clicked - tell code that the user is saving.
       $("#edit-submit").click(function(evt) {
-          //Is there a file that has been selected but not uploaded?
-          if ( uiNamespace.selectedFileNotUploaded() ) {
-            if ( ! confirm("You've selected a file, but not uploaded it. "
-                + "Are you sure you want to close?") ) {
-              evt.preventDefault();
-              return;
-            }
-          }
-          uiNamespace.saving = true;
+        uiNamespace.saving = true;
       });
       //Cancel button clicked.
       $("#cyco_cancel").click(function() {
@@ -117,31 +104,11 @@
       $(".tabs-primary").remove();
       $(".tabs--primary").remove();
     },
-//    showHideReminder: function() {
-//      //Show/hide reminder depending on state of feedback checkbox.
-//      if ( $("#edit-submit-solution").attr("checked") ) {
-//        $(".cyco_reminder").hide("fast");
-//      }
-//      else {
-//        $(".cyco_reminder").show("fast");
-//      }
-//    },
     /**
      * A file operation was performed.
      */
     fileOpDone: function() {
       uiNamespace.userChangedFiles = true;
-    },
-//    selectedFileNotUploaded: function() {
-//      //Is there a file that has been selected but not uploaded?
-//      uiNamespace.filesSelectedNotUploaded = false;
-//      $("input:file").each(function( index ) {
-//        if ( $(this).val() != "" ) {
-//          uiNamespace.filesSelectedNotUploaded = true;
-//        }
-//      });
-//      return uiNamespace.filesSelectedNotUploaded;
-//    }
-    
+    }
   };
 }(jQuery));

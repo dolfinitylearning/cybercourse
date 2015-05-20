@@ -176,9 +176,9 @@ function cyco_core_groups_get_group_members( $gids ) {
 }
 
 /**
- * Implements hook_node_view().
+ * hook_node_view(), called from cyco_core_custom.inc.
  */
-function cyco_core_node_view($node, $view_mode, $langcode) {
+function _cyco_core_groups_node_view($node, $view_mode, $langcode) {
   if ( $node->type == 'class' && $view_mode == 'full' ) {
     // Attach list of class posts to the page.
     $name = 'class_nodes_for_class';

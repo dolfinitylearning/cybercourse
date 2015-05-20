@@ -10,7 +10,6 @@
       uiNamespace = Drupal.behaviors.cycoSelectRubricUi;
       //Don't want this done more than once. Drupal file ops can call it again
       //when they are updating the page after a file upload, removal, etc.
-//      var doneOnce;
       if ( uiNamespace.doneOnce == "y" ) {
         return;
       }
@@ -48,11 +47,11 @@
           uiNamespace.hideAjaxThrobber();
         })
         .fail(function() {
-          alert("The voles died.");
+          alert("Exercise fetchTerms fetchRubrics died.");
         });
       })
       .fail(function() {
-        alert("The gerbils died.");
+        alert("Exercise getCsrfToken died.");
       });
     },
     /**

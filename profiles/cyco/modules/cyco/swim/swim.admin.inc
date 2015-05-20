@@ -51,7 +51,16 @@ function _swim_settings_form() {
     '#default_value' => variable_get('swim_default_summary_height', 
         SWIM_DEFAULT_SUMMARY_HEIGHT),
   );
-  
+  $form['swim_base_injector_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Base injector path'),
+    '#description' => t(
+        'Path to directory of stuff to be injected, from site root. '
+        . 'E.g., /sites/default/files/inject'
+    ),
+    '#default_value' => variable_get('swim_injector_path', 
+        SWIM_DEFAULT_INJECTOR_PATH),
+  );  
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Save',
@@ -66,6 +75,7 @@ function _swim_validate_settings( $form, &$form_state ) {
       SWIM_DEFAULT_HEIGHT);
   _swim_check_settings_height_field($form_state, 'swim_default_summary_height', 
       SWIM_DEFAULT_SUMMARY_HEIGHT);  
+  _swim_check_settings_injector_path_field($form_state);
 }
 
 /**
@@ -89,6 +99,23 @@ function _swim_check_settings_height_field( &$form_state, $field_name, $default 
 }
 
 /**
+ * Check the base injector path.
+ * @param type $form_state Data entered into form.
+ */
+function _swim_check_settings_injector_path_field(&$form_state) {
+  $path = $form_state['values']['swim_base_injector_path'];
+  //Make sure first character is /.
+  if ( substr($path, 0, 1) != '/' ) {
+    $path = '/' . $path;
+    $form_state['values']['swim_base_injector_path'] = $path;
+  }
+  if ( ! is_dir(DRUPAL_ROOT . $path) ) {
+    form_set_error('swim_base_injector_path', 
+        'Sorry, enter a valid path to an existing directory.');
+  }
+}
+
+/**
  * Settings form submit function. 
  * Save the message (Markdown), and a rendered version of it.
  */
@@ -104,5 +131,8 @@ function _swim_save_settings( $form, $form_state ) {
   //Editor summary height.
   $editor_summary_height = $form_state['values']['swim_default_summary_height'];
   variable_set( 'swim_default_summary_height', $editor_summary_height );
+  //Base injector path.
+  $path = $form_state['values']['swim_base_injector_path'];
+  variable_set( 'swim_base_injector_path', $path );
   drupal_set_message('Settings saved.');
 }
