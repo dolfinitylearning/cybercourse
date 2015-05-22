@@ -34,7 +34,7 @@ function cyco_last_page_node_view($node, $view_mode, $langcode) {
         //Get nid.
         $nid = $user_all_data->field_last_course_page_seen[LANGUAGE_NONE][0]['value'];
         $node = node_load($nid);
-        if ( $node->status == 1 ) {
+        if ( $node && $node->status == 1 ) {
           drupal_set_message(
               t('The last course page you looked at was ')
               . l($node->title, base_path() . 'node/' . $nid) 
