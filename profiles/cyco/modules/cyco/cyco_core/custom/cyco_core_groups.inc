@@ -330,35 +330,42 @@ function _cyco_core_update_student_role( $entity_type, $gid, $uid, $current_op, 
  * by default.
  */
 function _cyco_core_groups_form_alter(&$form, $form_state, $form_id) {
+  if ( $form_id == 'class_node_form' ) {
+    //If log event module not installed, hide the log events checkbox.
+    if ( ! module_exists('cyco_events_log') ) {
+      $form['field_log_events']['#disabled'] = TRUE;
+    }
+    
+  }
   if ( $form_id == 'og_ui_add_users' || $form_id == 'og_ui_edit_membership') {
     //When adding users to a class, select the student OG role
     //as the default.
     //Find the index of the student role, to pass to JS.
-    $student_og_role_index = NULL;
-    $og_role_names = $form['og_user']['roles']['#options'];
-    foreach( $og_role_names as $index => $og_role_name ) {
-      if ( $og_role_name == 'student' ) {
-        $student_og_role_index = $index;
-        break;
-      }
-    }
-    if ( is_null($student_og_role_index) ) {
-      drupal_set_message('Hmm, I could not find the student OG role. '
-          . 'That\'s unexpected.', 'warning');
-      return;
-    }
-    //Tell JS what the index of the student role is.
-    $settings = array(
-      'studentOgRoleIndex' => $student_og_role_index,
-    );
-    drupal_add_js(
-        array('cycoGroupsSelectStudentRole' => $settings),
-        'setting'
-    );    
-    drupal_add_js(
-        drupal_get_path('module', 'cyco_core')
-        . '/custom/js/cyco_core_groups_change_roles.js'
-    );
+//    $student_og_role_index = NULL;
+//    $og_role_names = $form['og_user']['roles']['#options'];
+//    foreach( $og_role_names as $index => $og_role_name ) {
+//      if ( $og_role_name == 'student' ) {
+//        $student_og_role_index = $index;
+//        break;
+//      }
+//    }
+//    if ( is_null($student_og_role_index) ) {
+//      drupal_set_message('Hmm, I could not find the student OG role. '
+//          . 'That\'s unexpected.', 'warning');
+//      return;
+//    }
+//    //Tell JS what the index of the student role is.
+//    $settings = array(
+//      'studentOgRoleIndex' => $student_og_role_index,
+//    );
+//    drupal_add_js(
+//        array('cycoGroupsSelectStudentRole' => $settings),
+//        'setting'
+//    );    
+//    drupal_add_js(
+//        drupal_get_path('module', 'cyco_core')
+//        . '/custom/js/cyco_core_groups_change_roles.js'
+//    );
   }
 }
 

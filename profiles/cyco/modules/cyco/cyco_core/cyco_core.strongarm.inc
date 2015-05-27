@@ -198,6 +198,13 @@ function cyco_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'cyco_event_logging';
+  $strongarm->value = 'on';
+  $export['cyco_event_logging'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'date_format_long';
   $strongarm->value = 'l, F j, Y - g:ia';
   $export['date_format_long'] = $strongarm;
@@ -249,6 +256,14 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'entityreference:base-tables';
   $strongarm->value = array(
+    'comment' => array(
+      0 => 'comment',
+      1 => 'cid',
+    ),
+    'cyco_event' => array(
+      0 => 'eck_cyco_event',
+      1 => 'id',
+    ),
     'node' => array(
       0 => 'node',
       1 => 'nid',
@@ -817,7 +832,9 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'module_filter_recent_modules';
   $strongarm->value = array(
-    'menu_item_visibility' => 1427400415,
+    'message' => 1431801264,
+    'message_example' => 1431801209,
+    'swim_inject' => 1432126869,
   );
   $export['module_filter_recent_modules'] = $strongarm;
 
@@ -1031,7 +1048,10 @@ function cyco_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'save_edit_node_types';
   $strongarm->value = array(
+    'activity' => 'activity',
+    'badge' => 'badge',
     'page' => 'page',
+    'big_idea' => 'big_idea',
     'blueprint_page' => 'blueprint_page',
     'class' => 'class',
     'class_post' => 'class_post',
@@ -1039,10 +1059,9 @@ function cyco_core_strongarm() {
     'exercise' => 'exercise',
     'model_exercise_solution' => 'model_exercise_solution',
     'pattern' => 'pattern',
+    'pseudent_pose' => 'pseudent_pose',
+    'rubric_item' => 'rubric_item',
     'exercise_submission' => 0,
-    'exercise_submission_rubric_item_' => 0,
-    'pseudent_pose' => 0,
-    'rubric_item' => 0,
   );
   $export['save_edit_node_types'] = $strongarm;
 
@@ -1131,6 +1150,13 @@ function cyco_core_strongarm() {
   $strongarm->name = 'site_default_country';
   $strongarm->value = '';
   $export['site_default_country'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'swim_base_injector_path';
+  $strongarm->value = '/sites/default/files/inject';
+  $export['swim_base_injector_path'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

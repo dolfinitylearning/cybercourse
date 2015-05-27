@@ -1,0 +1,6 @@
+name = CyberCourse event log
+description = Log all kinds of events, for later analysis.
+package = CyberCourse
+core = 7.x
+
+stylesheets[all][] = css/cyco_events_log.css

@@ -28,10 +28,6 @@ function cyco_core_permission() {
       'title' => t('View unpublished blueprint content'),
       'description' => t('User can see blueprint content that has not been published.'),
     ),
-    'toggle event logging' => array(
-      'title' => t('Toggle event logging'),
-      'description' => t('User is able to turn event logging on and off.'),
-    ),
   );
 }
 
@@ -67,13 +63,6 @@ function cyco_core_menu() {
     'access callback' => 'user_access',
     'access arguments' => array('create blueprint_page content'),
   );
-  //Toggle event logging.
-  $items['toggle-event-logging'] = array(
-    'page callback' => '_cyco_toggle_event_logging',
-    'access callback' => 'user_access',
-    'access arguments' => array('toggle event logging'),
-  );
-  
   // Let other files add their own menu items.
   _cyco_core_error_add_menu_items($items);
   _cyco_core_cp_add_menu_items($items);
@@ -81,78 +70,18 @@ function cyco_core_menu() {
   return $items;
 }
 
-/**
- * Implements hook_user_login().
- */
-function cyco_core_user_login(&$edit, $account) {
-  global $base_url;
-  if ( _cyco_core_should_log_events() ) {
-    //Log it.
-    $entity_type = 'cyco_event';
-    $entity = entity_create($entity_type, array('type' => 'log_in'));
-    $wrapper = entity_metadata_wrapper($entity_type, $entity);
-    $wrapper->uid = $account->uid;
-    $wrapper->field_summary->set( 
-        array('value' => t('Login by ') . '<a href="' . $base_url .'/users/' . $account->name 
-          . '">' . $account->name . '</a>',
-          'format'=>'limited_html',
-        )
-      );
-    $wrapper->save();
-  }
-}
-
-/**
- * Implements hook_user_login().
- */
-function cyco_core_user_logout($account) {
-  global $base_url;
-  if ( _cyco_core_should_log_events() ) {
-    //Log it.
-    $entity_type = 'cyco_event';
-    $entity = entity_create($entity_type, array('type' => 'log_out'));
-    $wrapper = entity_metadata_wrapper($entity_type, $entity);
-    $wrapper->uid = $account->uid;
-    $wrapper->field_summary->set( 
-        array('value' => t('Logout by ') . '<a href="' . $base_url .'/users/' . $account->name 
-          . '">' . $account->name . '</a>',
-          'format'=>'limited_html',
-        )
-      );
-    $wrapper->save();
-  }
-}
 
 /**
  * Implements hook_node_view().
  */
 function cyco_core_node_view($node, $view_mode, $langcode) {
-  global $base_url;
-  if ( variable_get('cyco_event_logging', 'off') === 'on' ) {
-    if ( $view_mode == 'full' && cyco_core_current_user_has_role('student') ) {
-      //Log it.
-      $entity_type = 'cyco_event';
-      $entity = entity_create($entity_type, array('type' => 'view_node'));
-      $wrapper = entity_metadata_wrapper($entity_type, $entity);
-      global $user;
-      $wrapper->uid = $user->uid;
-      $user_name = ($user->uid === 0) ? 'Anonymous' : $user->name;
-      $node_link = '<a href="' . $base_url .'/node/' . $node->nid 
-            . '">' . $node->title . '</a>';
-      $user_link = '<a href="' . $base_url .'/users/' . $user_name 
-            . '">' . $user_name . '</a>';
-      $message = t('View node ') . $node_link . t(' by ') . $user_link . '.';
-      $wrapper->field_summary->set( 
-          array('value' => $message,
-            'format'=>'limited_html',
-          )
-        );
-      $wrapper->field_node->set( $node->nid );
-      $wrapper->save();
-    }
-  }
   //Call hooky thing in cyco_core_groups.inc.
   _cyco_core_groups_node_view($node, $view_mode, $langcode);
+  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+    if ( $node->type == 'course_page' || $node->type == 'basic_page' ) {
+      cyco_events_log_log_node_view($node, $view_mode, $langcode);
+    }
+  }
 }
 
 
@@ -187,23 +116,6 @@ function _cyco_new_blueprint() {
  */
 function cyco_core_menu_alter(&$items) {
   $items['user']['title callback'] = '_cyco_core_user_menu_item_title';
-}
-
-/**
- * Toggle event logging.
- */
-function _cyco_toggle_event_logging() {
-  $logging = variable_get('cyco_event_logging', 'off');
-  if ( $logging === 'on' ) {
-    variable_set('cyco_event_logging', 'off');
-    $message = t('Event logging is now off.');
-  }
-  else {
-    variable_set('cyco_event_logging', 'on');
-    $message = t('Event logging is now on.');
-  }
-  drupal_set_message( $message );
-  drupal_goto('control-panel');
 }
 
 /**
@@ -302,86 +214,4 @@ function theme_cyco_reminder($variables) {
   return $result;
 }
 
-/**
-* Implements hook_services_resources().
- * 
- * Define all the services for the exercises module.
-*/
-function cyco_core_services_resources() {
-  $api = array(
-    /** Should save events flag. **/
-    'event_logging' => array(
-      'actions' => array(
-        'shouldLogEvents' => array(
-          'help' => t('Return yes/no, whether should log events for this user.'),
-          'access arguments' => array('access content'),
-          'callback' => '_cyco_core_get_should_log_events',
-        ),
-        'logEvent' => array(
-          'help' => t('Log an event.'),
-          'access arguments' => array('access content'),
-          'callback' => '_cyco_core_log_event',
-          'args' => array(
-            array(
-             'name' => 'data',
-             'type' => 'struct',
-             'description' => 'Event log data',
-             'source' => 'data',
-             'optional' => FALSE,
-             ),
-           ), //End args.
-        ), // End LogEvent
-      ),
-    ),
-  );
-  return $api;
-}
 
-/**
- * Should log events?
- * @return string yes or no.
- */
-function _cyco_core_get_should_log_events() {
-  return 'yes';
-  global $user;
-  if ( variable_get('cyco_event_logging', 'off') === 'on' ) {
-    if (cyco_core_user_has_role($user, 'student') ) {
-      return 'yes';
-    }
-  }
-  return 'no';
-}
-
-/**
- * Should log events?
- * @return boolean True if event logging is on, and the current user is a student.
- */
-function _cyco_core_should_log_events() {
-  return ( _cyco_core_get_should_log_events() == 'yes' );
-}
-
-
-function _cyco_core_log_event($data) {
-  if (_cyco_core_should_log_events() ) {
-    global $user;
-    //Extract data.
-    $bundle = $data['bundle'];
-    $activity_type = $data['activityType'];
-    $summary = $data['summary'];
-    $params = $data['params'];
-    //Log.
-    $entity_type = 'cyco_event';
-    $entity = entity_create($entity_type, array('type' => $bundle));
-    $wrapper = entity_metadata_wrapper($entity_type, $entity);
-    $wrapper->uid = $user->uid;
-    $wrapper->field_summary->set( 
-        array('value' => $summary,
-          'format'=>'limited_html',
-        )
-    );
-    $wrapper->field_activity_type->set( $activity_type );
-    $wrapper->field_activity_params->set( $params );  
-    $wrapper->save();
-    return 'OK';
-  }
-}

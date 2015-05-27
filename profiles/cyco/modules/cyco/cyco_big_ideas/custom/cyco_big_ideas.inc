@@ -204,3 +204,13 @@ function cyco_big_ideas_swim_peek_load_css() {
   return $result;
 }
 
+/**
+ * Implements hook_node_view().
+ */
+function cyco_big_ideas_node_view($node, $view_mode, $langcode) {
+  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+    if ( $node->type == 'big_idea' ) {
+      cyco_events_log_log_node_view($node, $view_mode, $langcode);
+    }
+  }
+}

@@ -54,7 +54,19 @@ function _swim_inject_swim_callback( $param_string, $tag_content ) {
   }
   //Read the file and return it.
   $content = file_get_contents($path);
-  //Shelve it, so Textile doesn't know about it.
+  //Strip out <script>, and include it with drupal_add_js.
+  $regex = '/\<script\>(.*?)\<\/script\>/isg';
+  $content = preg_replace_callback($regex, 
+    function($matches) {
+      //Get the JS.
+      $js = $matches[1];
+      //Insert the JS.
+      drupal_add_js($js, 'inline');
+      //Send MT string to replace the JS.
+      return '';
+    }, 
+    $content); //End preg_replace_callback call.
+  //Shelve what remains, so Textile doesn't know about it.
   $marker = swim_shelve($content);
   return $marker;
 }

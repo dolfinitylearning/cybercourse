@@ -1,0 +1,241 @@
+<?php
+/*
+ * @file
+ * Implements the CyCo events log module.
+ */
+
+require_once realpath( dirname(__FILE__) . '/cyco_events_views.inc' );
+
+/**
+ * Implements hook_help().
+ */
+function cyco_events_log_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#cyco_events_log':
+      return '<p>' . t('Helpy helpy help help, <a href="@jquery">jQuery</a>.', 
+          array(
+            '@jquery' => 'http://jquery.com',
+          )) . '</p>';
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function cyco_events_log_permission() {
+  return array(
+    'toggle event logging' => array(
+      'title' => t('Toggle event logging'),
+      'description' => t('User is able to turn event logging on and off.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cyco_cyco_events_log_menu() {
+  $items = array();
+  //Toggle event logging.
+  $items['toggle-event-logging'] = array(
+    'page callback' => '_cyco_events_log_toggle_event_logging',
+    'access callback' => 'user_access',
+    'access arguments' => array('toggle event logging'),
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function cyco_events_log_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'cyco_events_log'),
+    'template path' => drupal_get_path('module', 'cyco_events_log') . '/templates',
+  );
+}
+
+function cyco_events_log_log_event($data) {
+  if (_cyco_events_log_should_log_events() ) {
+    drupal_add_js(
+      drupal_get_path('module', 'cyco_events_log') . '/js/cyco_events_log.js'
+//      array('type' => 'file', 'preprocess' => TRUE,)
+    );
+    global $user;
+    //Extract data.
+    $bundle = $data['bundle'];
+    $activity_type = $data['activityType'];
+    $summary = $data['summary'];
+    $params = $data['params'];
+    //Log.
+    $entity_type = 'cyco_event';
+    $entity = entity_create($entity_type, array('type' => $bundle));
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    $wrapper->uid = $user->uid;
+    $wrapper->field_summary->set( 
+        array('value' => $summary,
+          'format'=>'limited_html',
+        )
+    );
+    $wrapper->field_activity_type->set( $activity_type );
+    $wrapper->field_activity_params->set( $params );  
+    $wrapper->save();
+    return 'OK';
+  }
+}
+
+
+
+/**
+ * Should log events?
+ * @return string yes or no.
+ */
+function _cyco_events_log_get_should_log_events() {
+  global $user;
+  if (cyco_core_user_has_role($user, 'student') ) {
+    $group_ids = og_get_groups_by_user($user, 'node');
+    foreach( $group_ids as $group_id ) {
+      $group = node_load( $group_id );
+      if ( $group->type == 'class' ) {
+        $log_events = field_get_items('node', $group, 'field_log_events');
+        if ( $log_events[0]['value'] == 1 ) {
+          return 'yes';
+        }
+      }
+    }
+    return 'no';
+  }
+}
+
+/**
+ * Should log events?
+ * @return boolean True if event logging is on, and the current user is a student.
+ */
+function _cyco_events_log_should_log_events() {
+  return ( _cyco_events_log_get_should_log_events() == 'yes' );
+}
+
+/**
+* Implements hook_services_resources().
+ * 
+ * Define all the services for the exercises module.
+*/
+function cyco_events_log_services_resources() {
+  $api = array(
+    /** Should save events flag. **/
+    'event_logging' => array(
+      'actions' => array(
+        'shouldLogEvents' => array(
+          'help' => t('Return yes/no, whether should log events for this user.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cyco_events_log_get_should_log_events',
+        ),
+        'logEvent' => array(
+          'help' => t('Log an event.'),
+          'access arguments' => array('access content'),
+          'callback' => '_cyco_events_log_log_event',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Event log data',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End LogEvent
+      ),
+    ),
+  );
+  return $api;
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function cyco_events_log_user_login(&$edit, $account) {
+  global $base_url;
+  if ( _cyco_events_log_should_log_events() ) {
+    //Log it.
+    $entity_type = 'cyco_event';
+    $entity = entity_create($entity_type, array('type' => 'log_in'));
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    $wrapper->uid = $account->uid;
+    $wrapper->field_summary->set( 
+        array('value' => t('Login by ') . '<a href="' . $base_url .'/users/' . $account->name 
+          . '">' . $account->name . '</a>',
+          'format'=>'limited_html',
+        )
+      );
+    $wrapper->save();
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function cyco_events_log_user_logout($account) {
+  global $base_url;
+  if ( _cyco_events_log_should_log_events() ) {
+    //Log it.
+    $entity_type = 'cyco_event';
+    $entity = entity_create($entity_type, array('type' => 'log_out'));
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    $wrapper->uid = $account->uid;
+    $wrapper->field_summary->set( 
+        array('value' => t('Logout by ') . '<a href="' . $base_url .'/users/' . $account->name 
+          . '">' . $account->name . '</a>',
+          'format'=>'limited_html',
+        )
+      );
+    $wrapper->save();
+  }
+}
+
+/**
+ * Log a node view in full mode. NOT a hook implementation.
+ */
+function cyco_events_log_log_node_view($node, $view_mode, $langcode) {
+  global $base_url;
+  if ( _cyco_events_log_should_log_events() ) {
+    if ( $view_mode == 'full' ) {
+      //Log it.
+      $entity_type = 'cyco_event';
+      $entity = entity_create($entity_type, array('type' => 'view_node'));
+      $wrapper = entity_metadata_wrapper($entity_type, $entity);
+      global $user;
+      $wrapper->uid = $user->uid;
+      $user_name = ($user->uid === 0) ? 'Anonymous' : $user->name;
+      $node_link = '<a href="' . $base_url .'/node/' . $node->nid 
+            . '">' . $node->title . '</a>';
+      $user_link = '<a href="' . $base_url .'/users/' . $user_name 
+            . '">' . $user_name . '</a>';
+      $message = t('View ' . $node->type . ' node ') . $node_link . t(' by ') . $user_link . '.';
+      $wrapper->field_summary->set( 
+          array('value' => $message,
+            'format'=>'limited_html',
+          )
+        );
+      $wrapper->field_node->set( $node->nid );
+      $wrapper->save();
+    }
+  }
+}
+
+/**
+ * Toggle event logging.
+ */
+function _cyco_events_log_toggle_event_logging() {
+  $logging = variable_get('cyco_event_logging', 'off');
+  if ( $logging === 'on' ) {
+    variable_set('cyco_event_logging', 'off');
+    $message = t('Event logging is now off.');
+  }
+  else {
+    variable_set('cyco_event_logging', 'on');
+    $message = t('Event logging is now on.');
+  }
+  drupal_set_message( $message );
+  drupal_goto('control-panel');
+}

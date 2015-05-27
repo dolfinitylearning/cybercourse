@@ -204,3 +204,13 @@ function cyco_activities_swim_peek_load_css() {
   return $result;
 }
 
+/**
+ * Implements hook_node_view().
+ */
+function cyco_activities_node_view($node, $view_mode, $langcode) {
+  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+    if ( $node->type == 'activity' ) {
+      cyco_events_log_log_node_view($node, $view_mode, $langcode);
+    }
+  }
+}
