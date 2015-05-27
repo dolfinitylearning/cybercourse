@@ -55,7 +55,8 @@ function _swim_inject_swim_callback( $param_string, $tag_content ) {
   //Read the file and return it.
   $content = file_get_contents($path);
   //Strip out <script>, and include it with drupal_add_js.
-  $regex = '/\<script\>(.*?)\<\/script\>/isg';
+  $regex = '/\<script\>(.*?)\<\/script\>/is';
+    //KRM removed g from end of this string.
   $content = preg_replace_callback($regex, 
     function($matches) {
       //Get the JS.
