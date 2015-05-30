@@ -26,3 +26,8 @@ p.cyco_reminder {
   margin-left: 2em;
 }
 
+/* Scroll to top - adjust color */
+
+#back-top span#button  {
+  background-color: #259fe6 !important;
+}
