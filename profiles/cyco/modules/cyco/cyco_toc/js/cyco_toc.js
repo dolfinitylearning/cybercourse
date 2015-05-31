@@ -5,6 +5,13 @@
 (function ($) {
   Drupal.behaviors.cycoToc = {
     attach: function (context, settings) {
+      if ( 
+          typeof Drupal.settings.cyco_toc == "undefined"
+          || typeof Drupal.settings.cyco_toc.show_toc == "undefined"
+          || ! Drupal.settings.cyco_toc.show_toc
+          ) {
+        return;
+      }
       var headingTagList 
           = $('.swim h1, .swim h2, .swim h3, .swim h4');
       if ( headingTagList.size() > 0 ) {
