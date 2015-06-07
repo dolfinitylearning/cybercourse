@@ -59,7 +59,7 @@ function cyco_patterns_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -123,7 +123,7 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -175,7 +175,7 @@ function cyco_patterns_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -244,7 +244,7 @@ function cyco_patterns_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -329,6 +329,53 @@ function cyco_patterns_field_default_field_instances() {
       ),
       'type' => 'taxonomy_autocomplete',
       'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-pattern-field_nodes_embedded_in'
+  $field_instances['node-pattern-field_nodes_embedded_in'] = array(
+    'bundle' => 'pattern',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => 0,
+    'description' => 'Which nodes is this node embedded in?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_nodes_embedded_in',
+    'label' => 'Referenced in',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 7,
     ),
   );
 
@@ -420,11 +467,13 @@ function cyco_patterns_field_default_field_instances() {
   t('Internal name');
   t('Keywords');
   t('Keywords describing the pattern.');
+  t('Referenced in');
   t('Situation');
   t('The internal name of the pattern. Lowercase letters, digits, and underscores only, e.g., post_tested_loop1. Use the internal name to insert the pattern in content.');
   t('What is observed.');
   t('What to do when the situation occurs.');
   t('What work needs to be done on this pattern?');
+  t('Which nodes is this node embedded in?');
   t('Why the pattern makes sense.');
   t('Workflow tags');
 

@@ -108,6 +108,8 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_situation']['id'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['table'] = 'field_data_field_situation';
   $handler->display->display_options['fields']['field_situation']['field'] = 'field_situation';
+  $handler->display->display_options['fields']['field_situation']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_situation']['alter']['text'] = '[field_situation-value]';
   $handler->display->display_options['fields']['field_situation']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_situation']['settings'] = array(
     'trim_length' => '300',
@@ -116,10 +118,21 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_actions']['id'] = 'field_actions';
   $handler->display->display_options['fields']['field_actions']['table'] = 'field_data_field_actions';
   $handler->display->display_options['fields']['field_actions']['field'] = 'field_actions';
+  $handler->display->display_options['fields']['field_actions']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_actions']['alter']['text'] = '[field_actions-value]';
   $handler->display->display_options['fields']['field_actions']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_actions']['settings'] = array(
     'trim_length' => '300',
   );
+  /* Field: Content: Referenced in */
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['id'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['table'] = 'field_data_field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['field'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['settings'] = array(
+    'link' => 1,
+  );
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['separator'] = '<br><br>';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
@@ -152,7 +165,7 @@ function cyco_patterns_views_default_views() {
 
   $view = new view();
   $view->name = 'patterns_privilaged';
-  $view->description = 'Pattern list that anyone can see.';
+  $view->description = 'Pattern list that privileged users can see.';
   $view->tag = 'default';
   $view->base_table = 'node';
   $view->human_name = 'Patterns';
@@ -282,6 +295,8 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_situation']['id'] = 'field_situation';
   $handler->display->display_options['fields']['field_situation']['table'] = 'field_data_field_situation';
   $handler->display->display_options['fields']['field_situation']['field'] = 'field_situation';
+  $handler->display->display_options['fields']['field_situation']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_situation']['alter']['text'] = '[field_situation-value]';
   $handler->display->display_options['fields']['field_situation']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_situation']['settings'] = array(
     'trim_length' => '300',
@@ -290,15 +305,27 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['field_actions']['id'] = 'field_actions';
   $handler->display->display_options['fields']['field_actions']['table'] = 'field_data_field_actions';
   $handler->display->display_options['fields']['field_actions']['field'] = 'field_actions';
+  $handler->display->display_options['fields']['field_actions']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_actions']['alter']['text'] = '[field_actions-value]';
   $handler->display->display_options['fields']['field_actions']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_actions']['settings'] = array(
     'trim_length' => '300',
   );
+  /* Field: Content: Referenced in */
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['id'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['table'] = 'field_data_field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['field'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['settings'] = array(
+    'link' => 1,
+  );
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['separator'] = '<br><br>';
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['label'] = '';
+  $handler->display->display_options['fields']['edit_node']['exclude'] = TRUE;
   $handler->display->display_options['fields']['edit_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['edit_node']['text'] = 'Edit';
   /* Field: Content: Delete link */
@@ -306,8 +333,16 @@ function cyco_patterns_views_default_views() {
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['delete_node']['field'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['label'] = '';
+  $handler->display->display_options['fields']['delete_node']['exclude'] = TRUE;
   $handler->display->display_options['fields']['delete_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['delete_node']['text'] = 'Delete';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[edit_node]<br>
+[delete_node]';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';

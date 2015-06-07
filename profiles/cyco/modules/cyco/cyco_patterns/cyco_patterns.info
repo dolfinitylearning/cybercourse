@@ -32,6 +32,7 @@ features[field_instance][] = node-pattern-field_explanation
 features[field_instance][] = node-pattern-field_images
 features[field_instance][] = node-pattern-field_internal_name
 features[field_instance][] = node-pattern-field_keywords
+features[field_instance][] = node-pattern-field_nodes_embedded_in
 features[field_instance][] = node-pattern-field_situation
 features[field_instance][] = node-pattern-field_workflow_tags
 features[node][] = pattern

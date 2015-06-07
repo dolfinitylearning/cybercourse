@@ -68,7 +68,7 @@ function cyco_exercises_submissions_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_exercise',
     'field_permissions' => array(
-      'type' => 0,
+      'type' => 2,
     ),
     'indexes' => array(
       'target_id' => array(
@@ -389,7 +389,7 @@ function cyco_exercises_submissions_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_version',
     'field_permissions' => array(
-      'type' => 0,
+      'type' => 2,
     ),
     'indexes' => array(),
     'locked' => 0,

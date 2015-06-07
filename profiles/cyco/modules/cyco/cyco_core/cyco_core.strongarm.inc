@@ -835,6 +835,8 @@ function cyco_core_strongarm() {
     'message' => 1431801264,
     'message_example' => 1431801209,
     'swim_inject' => 1432126869,
+    'cyco_events_log' => 1432147619,
+    'js_injector' => 1432158328,
   );
   $export['module_filter_recent_modules'] = $strongarm;
 

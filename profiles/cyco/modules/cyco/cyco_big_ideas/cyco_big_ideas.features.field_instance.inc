@@ -21,7 +21,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -85,7 +85,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -101,7 +101,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'module' => 'swim',
         'settings' => array(),
         'type' => 'swim_default_formatter',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -141,7 +141,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -299,6 +299,53 @@ function cyco_big_ideas_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-big_idea-field_nodes_embedded_in'
+  $field_instances['node-big_idea-field_nodes_embedded_in'] = array(
+    'bundle' => 'big_idea',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => 0,
+    'description' => 'Nodes this Big Idea is referenced in.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_nodes_embedded_in',
+    'label' => 'Referenced in',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-big_idea-field_show_table_of_contents'
   $field_instances['node-big_idea-field_show_table_of_contents'] = array(
     'bundle' => 'big_idea',
@@ -314,7 +361,7 @@ function cyco_big_ideas_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -394,6 +441,8 @@ function cyco_big_ideas_field_default_field_instances() {
   t('Internal name');
   t('Keywords');
   t('Keywords describing this big idea.');
+  t('Nodes this Big Idea is referenced in.');
+  t('Referenced in');
   t('Show table of contents');
   t('The internal name of the big idea. Lowercase letters, digits, and underscores only, e.g., write_for_audience. Use the internal name to insert the big idea summary in content.');
   t('What work needs to be done on this Big Idea?');

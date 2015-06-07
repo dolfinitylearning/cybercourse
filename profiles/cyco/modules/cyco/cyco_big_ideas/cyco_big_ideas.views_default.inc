@@ -12,7 +12,7 @@ function cyco_big_ideas_views_default_views() {
 
   $view = new view();
   $view->name = 'big_ideas';
-  $view->description = 'Pattern list that anyone can see.';
+  $view->description = 'Pattern list for privileged users.';
   $view->tag = 'default';
   $view->base_table = 'node';
   $view->human_name = 'Big ideas';
@@ -38,15 +38,27 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '20';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
+    'nid' => 'nid',
     'title' => 'title',
-    'field_actions' => 'field_actions',
-    'delete_node' => 'delete_node',
+    'field_internal_name' => 'field_internal_name',
+    'title_1' => 'title_1',
+    'field_keywords' => 'field_keywords',
+    'field_workflow_tags' => 'field_workflow_tags',
+    'field_body' => 'field_body',
+    'field_nodes_embedded_in' => 'field_nodes_embedded_in',
     'edit_node' => 'edit_node',
-    'field_pattern_categories' => 'field_pattern_categories',
-    'field_situation' => 'field_situation',
+    'delete_node' => 'delete_node',
+    'nothing' => 'nothing',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
+    'nid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'title' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
@@ -54,14 +66,40 @@ function cyco_big_ideas_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_actions' => array(
+    'field_internal_name' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'delete_node' => array(
+    'title_1' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_keywords' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_workflow_tags' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_body' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_nodes_embedded_in' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -71,14 +109,12 @@ function cyco_big_ideas_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_pattern_categories' => array(
+    'delete_node' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_situation' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
+    'nothing' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -143,17 +179,31 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
   $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
-  $handler->display->display_options['fields']['field_body']['label'] = '';
+  $handler->display->display_options['fields']['field_body']['label'] = 'Summary';
+  $handler->display->display_options['fields']['field_body']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_body']['alter']['text'] = '[field_body-summary]';
   $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_body']['settings'] = array(
-    'trim_length' => '600',
+    'trim_length' => '300',
   );
+  /* Field: Content: Referenced in */
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['id'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['table'] = 'field_data_field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['field'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['label'] = 'References';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['settings'] = array(
+    'link' => 1,
+  );
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['multi_type'] = 'ul';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['separator'] = '<br>';
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['label'] = '';
+  $handler->display->display_options['fields']['edit_node']['exclude'] = TRUE;
   $handler->display->display_options['fields']['edit_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['edit_node']['text'] = 'Edit';
   /* Field: Content: Delete link */
@@ -161,8 +211,19 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['delete_node']['table'] = 'views_entity_node';
   $handler->display->display_options['fields']['delete_node']['field'] = 'delete_node';
   $handler->display->display_options['fields']['delete_node']['label'] = '';
+  $handler->display->display_options['fields']['delete_node']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['delete_node']['alter']['text'] = '[edit_node]<br>
+[delete_node]';
+  $handler->display->display_options['fields']['delete_node']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['delete_node']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['delete_node']['text'] = 'Delete';
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Operations';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[edit_node]<br>
+[delete_node]';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
@@ -290,7 +351,7 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['label'] = 'Big Idea';
   $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['text'] = '[title_1]<br>
 [field_keywords]';
@@ -302,12 +363,24 @@ function cyco_big_ideas_views_default_views() {
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
   $handler->display->display_options['fields']['field_body']['table'] = 'field_data_field_body';
   $handler->display->display_options['fields']['field_body']['field'] = 'field_body';
-  $handler->display->display_options['fields']['field_body']['label'] = '';
+  $handler->display->display_options['fields']['field_body']['label'] = 'Summary';
+  $handler->display->display_options['fields']['field_body']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_body']['alter']['text'] = '[field_body-summary]';
   $handler->display->display_options['fields']['field_body']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_body']['type'] = 'swim_summary_or_trimmed_formatter';
   $handler->display->display_options['fields']['field_body']['settings'] = array(
     'trim_length' => '600',
   );
+  /* Field: Content: Referenced in */
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['id'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['table'] = 'field_data_field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['field'] = 'field_nodes_embedded_in';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['label'] = 'References';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['settings'] = array(
+    'link' => 1,
+  );
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['delta_offset'] = '0';
+  $handler->display->display_options['fields']['field_nodes_embedded_in']['separator'] = '<br><br>';
   /* Sort criterion: Content: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';

@@ -410,6 +410,9 @@ function cyco_exercises_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'author' => 'author',
+      'grader' => 'grader',
+      'instructor' => 'instructor',
+      'reviewer' => 'reviewer',
     ),
     'module' => 'field_permissions',
   );

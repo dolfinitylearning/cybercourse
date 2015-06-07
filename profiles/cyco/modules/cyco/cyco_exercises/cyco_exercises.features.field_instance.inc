@@ -21,7 +21,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -85,7 +85,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -130,53 +130,6 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-exercise-field_course_page'
-  $field_instances['node-exercise-field_course_page'] = array(
-    'bundle' => 'exercise',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => 'Course page this exercise is inserted in.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => 1,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 9,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'exclude_cv' => 0,
-    'field_name' => 'field_course_page',
-    'label' => 'Course page',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'exclude_cv' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 5,
-    ),
-  );
-
   // Exported field_instance: 'node-exercise-field_hidden_attachments'
   $field_instances['node-exercise-field_hidden_attachments'] = array(
     'bundle' => 'exercise',
@@ -188,7 +141,7 @@ function cyco_exercises_field_default_field_instances() {
         'module' => 'file',
         'settings' => array(),
         'type' => 'file_default',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -252,7 +205,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -266,7 +219,7 @@ function cyco_exercises_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 8,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -335,7 +288,7 @@ function cyco_exercises_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -422,6 +375,53 @@ function cyco_exercises_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-exercise-field_nodes_embedded_in'
+  $field_instances['node-exercise-field_nodes_embedded_in'] = array(
+    'bundle' => 'exercise',
+    'default_value' => NULL,
+    'default_value_function' => '',
+    'deleted' => 0,
+    'description' => 'Nodes this exercise is referenced in',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 1,
+    'field_name' => 'field_nodes_embedded_in',
+    'label' => 'Referenced in',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'status' => 0,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'node-exercise-field_notes'
   $field_instances['node-exercise-field_notes'] = array(
     'bundle' => 'exercise',
@@ -456,7 +456,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -503,7 +503,7 @@ function cyco_exercises_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -918,8 +918,6 @@ function cyco_exercises_field_default_field_instances() {
   t('Categories');
   t('Categories this rubric item belongs to, e.g., code, formatting, output.');
   t('Choose the rubric items used to grade exercise submissions.');
-  t('Course page');
-  t('Course page this exercise is inserted in.');
   t('Feedback (good)');
   t('Feedback (needs work)');
   t('Feedback (poor)');
@@ -935,8 +933,10 @@ function cyco_exercises_field_default_field_instances() {
   t('Internal name');
   t('Keywords');
   t('Lets you insert images in your submission. ');
+  t('Nodes this exercise is referenced in');
   t('Notes');
   t('Notes for instructors and graders.');
+  t('Referenced in');
   t('Rubric items');
   t('The internal name of the exercise. Lowercase letters, digits, and underscores only, e.g., muskrat_love_exercise1. Use the internal name to insert the exercise in content. ');
   t('The main text of the exercise.');
