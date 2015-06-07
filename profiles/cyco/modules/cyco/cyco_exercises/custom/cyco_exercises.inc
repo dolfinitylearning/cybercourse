@@ -450,41 +450,6 @@ function cyco_exercises_form_exercise_node_form_alter(&$form, $form_state) {
     '#markup' => $ui_html,
     '#weight' => $form['field_rubric_items']['#weight'],
   );
-  //Model solutions.
-  //When creating an exercise, there is no nid.
-  /*
-  if ( isset( $form['#entity']->nid ) ) {
-    $exer_nid = $form['#entity']->nid;
-    $models = array();
-    $models_efq = new EntityFieldQuery;
-    $models_efq
-      ->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'model_exercise_solution')
-      ->propertyCondition('status', 1)
-      ->fieldCondition('field_exercise_solved', 'target_id', $exer_nid)
-      ->propertyOrderBy('title');
-    $query_result = $models_efq->execute();
-    if ( isset( $query_result['node'] ) ) {
-      //Create the HTML.
-      foreach ( $query_result['node'] as $nid => $ignore ) {
-        $node = node_load( $nid );
-        $models[$nid] = $node->title;
-      }
-    }
-    $models_html = theme(
-        'cyco_exercises_model_solutions', 
-        array(
-          'exer_nid' => $exer_nid,
-          'models' => $models,
-        ) 
-    );
-    $form['models'] = array(
-      '#type' => 'markup',
-      '#markup' => $models_html,
-      '#weight' => $form['field_rubric_items']['#weight'],
-    );
-  }
-  */
 }
 
 function _cyco_exercise_form_validate($form, &$form_state) {
@@ -505,14 +470,15 @@ function _cyco_exercises_exercise_form_submit($form, &$form_state) {
 }
 
 /**
- * Alter the course page edit form.
+ * Alter some edit forms. Registier exercise tag for code that updates
+ * references from embedded nodes to the nodes in which they are embedded.
  */
-function cyco_exercises_form_course_page_node_form_alter(&$form, $form_state) {
-  //Hide the exercise field. 
-  if ( ! cyco_core_current_user_has_role('administrator') ) {
-    $form['field_exercises']['#access'] = FALSE;
-  }
-  $form['#submit'][] = '_cyco_exercises_store_exercise_refs';
+function cyco_exercises_form_node_form_alter(&$form, $form_state) {
+  $types_exers_can_be_embedded = array('course_page', 'blueprint_page');
+  if ( in_array($form['#node']->type, $types_exers_can_be_embedded) ) {
+    swim_register_embedded_refs_tag($form, 'exercise', 'exercise');
+  }    
+  
 }
 
 /**
@@ -1607,63 +1573,6 @@ function cyco_exercises_preprocess_node(&$variables) {
   
 }
 
-/**
- * Implements hook_swim_textile2html_TAG_alter
- * @param stdClass $args Content to translate
- */
-//function cyco_exercises_swim_textile2html_exercise_alter( &$args ) {
-//  $exercise_nid = intval($args->args);
-//  $exercise_node = node_load($exercise_nid);
-//  //Make sure that this is the right type of node.
-//  if ($exercise_node == FALSE || !node_access('view', $exercise_node) || !$exercise_node->status || $exercise_node->type != 'exercise') {
-//    $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
-//    drupal_set_message($message);
-//    watchdog('cyco_exercises', $message);
-//    return '<p>' . $message . '</p>';
-//  }
-//  //Make the submission links.
-//  global $user;
-//  $labeled_links = '';
-//  $too_bad_so_sad_message = '';
-//  if ( ! cyco_core_user_has_role($user, 'student') ) {
-//    $too_bad_so_sad_message = t('(If you were logged in as a student, '
-//        . 'you could submit an exercise solution, and get some feedback.)'
-//    );
-//  }
-//  else {
-//    //If there is no submission, there is only a link to create a new one.
-//    //If there is an existing submission:
-//    //  If there is no feedback yet, there is only an edit link.
-//    //  If there is feedback, there is a Review link, and a new version link.
-//    global $base_url;
-//    //Create submission links for this exercise.
-//    drupal_add_js(
-//        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-//        . '/custom/js/cyco_exercises_submission_links.js'
-//    );
-//    //Send current user uid to client.
-//    drupal_add_js(
-//        array('cyco_exercises' => 
-//          array(
-//            'uid' => $user->uid,
-//          ),
-//        ),
-//        'setting'
-//    );
-//  }
-//  $body_content = swim_textile2html(
-//      $exercise_node->field_body[LANGUAGE_NONE][0]['value']
-//  );
-//  $result = theme('cyco_embedded_exercise', array(
-//    'exercise_nid' => $exercise_nid,
-//    'title' => $exercise_node->title,
-//    'body' => $body_content,
-//    'labeled_links' => $labeled_links,
-//    'too_bad_so_sad_message' => $too_bad_so_sad_message,
-//  ));  
-//  $args->replacement_content = $result;
-//  $args->current_line ++;
-//}
 
 /**
  * Callback to generate HTML for the exercise custom tag.
@@ -1730,33 +1639,6 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
   }
   //Make the submission links.
   $too_bad_so_sad_message = _cyco_exercises_make_submit_links();
-//  global $user;
-//  $labeled_links = '';
-//  $too_bad_so_sad_message = '';
-//  if ( ! cyco_core_user_has_role($user, 'student') ) {
-//    $too_bad_so_sad_message = '<p>' . t( TOO_BAD_SO_SAD ) . '</p>';
-//  }
-//  else {
-//    //If there is no submission, there is only a link to create a new one.
-//    //If there is an existing submission:
-//    //  If there is no feedback yet, there is only an edit link.
-//    //  If there is feedback, there is a Review link, and a new version link.
-//    global $base_url;
-//    //Create submission links for this exercise.
-//    drupal_add_js(
-//        $base_url . '/' . drupal_get_path('module', 'cyco_exercises')
-//        . '/custom/js/cyco_exercises_submission_links.js'
-//    );
-//    //Send current user uid to client.
-//    drupal_add_js(
-//        array('cyco_exercises' => 
-//          array(
-//            'uid' => $user->uid,
-//          ),
-//        ),
-//        'setting'
-//    );
-//  }
   $body_content = swim_textile2html(
       $exercise_node->field_body[LANGUAGE_NONE][0]['value'],
       TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),

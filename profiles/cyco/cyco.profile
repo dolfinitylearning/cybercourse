@@ -1523,36 +1523,6 @@ function _cyco_add_links_cp_menu1() {
       ),
     ),
   );
-  $items[] = array(
-    'link_path' => 'list-model-solutions',
-    'link_title' => 'List model solutions',
-    'weight' => 60,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $_cyco_install_cp_top_level_mlids['exercises'],
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Good solutions to exercises.',
-      ),
-    ),
-  );
-  $items[] = array(
-    'link_path' => 'node/add/model-exercise-solution',
-    'link_title' => 'Add model solution',
-    'weight' => 70,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $_cyco_install_cp_top_level_mlids['exercises'],
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Add a new model exercise solution.',
-      ),
-    ),
-  );
   foreach ($items as $item) {
     menu_link_save($item);
   }

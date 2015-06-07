@@ -258,3 +258,14 @@ function cyco_patterns_node_view($node, $view_mode, $langcode) {
     }
   }
 }
+
+/**
+ * Alter some edit forms. Registier pattern tag for code that updates
+ * references from embedded nodes to the nodes in which they are embedded.
+ */
+function cyco_patterns_form_node_form_alter(&$form, $form_state) {
+  $types_exers_can_be_embedded = array('course_page', 'blueprint_page', 'page');
+  if ( in_array($form['#node']->type, $types_exers_can_be_embedded) ) {
+    swim_register_embedded_refs_tag($form, 'pattern', 'pattern');
+  }    
+}

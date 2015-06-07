@@ -214,3 +214,16 @@ function cyco_big_ideas_node_view($node, $view_mode, $langcode) {
     }
   }
 }
+
+/**
+ * Alter edit forms for nodes a big idea can be embedded in. 
+ * Register the big idea node type and tag, so SWIM will
+ * update refs to where a BI is embedded when it saves 
+ * the BI node.
+ */
+function cyco_big_ideas_form_node_form_alter(&$form, $form_state) {
+  $types_exers_can_be_embedded = array('course_page', 'blueprint_page', 'page');
+  if ( in_array($form['#node']->type, $types_exers_can_be_embedded) ) {
+    swim_register_embedded_refs_tag($form, 'big_idea', 'big-idea');
+  }
+}

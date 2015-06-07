@@ -100,7 +100,7 @@ function swim_declare_custom_tags( $custom_tag_parser, $mode ) {
     $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
         . ' bad mode: ' . $mode;
     cyco_core_handle_error( $message );
-    return;    
+    return;
   }
   $custom_tag_definitions = module_invoke_all('swim_custom_tag_' . $mode . '_info');
   if ( sizeof( $custom_tag_definitions ) == 0 ) {
@@ -282,7 +282,6 @@ function swim_field_is_empty($item, $field) {
 function _swim_field_widget_value($element, $input = FALSE, $form_state = array()) {
   if ( $input !== FALSE ) {
     $result = swim_ckhtml2textile($input);
-//    $result = _swim_ckhtml2rest($input);
     return $result;
   }
 }
@@ -1129,4 +1128,200 @@ function swim_shelve($content) {
   $shelf = SwimShelf::getInstance();
   $marker = $shelf->shelve($content);
   return $marker;
+}
+
+/*
+ * Callback from embeddable content types.
+ * Scan body for tags that embed other nodes (exercises, patterns, big ideas).
+ * Update those nodes references to the current node.
+ * In form_alter(), embeddable nodes should call swim_register_embedded_refs_tag() to register
+ * their tags for this function. swim_register_embedded_refs_tag() adds to
+ * value form fields:
+ *  embedded_node_type: bundles, e.g., exercise
+ *  embedded_node_tag: tags that inserts node ref into SWIM, e.g,. exercise
+ * Each of them is a comma-separated list.
+ * Assumes that the field field_nodes_embedded_in‎ exists in the embedded node.
+ * Multivalued.
+ * Assumes that the field field_internal_name exists, too.
+ */
+function swim_store_embedded_refs($form, &$form_state) {
+  //Get node types and tags from custom fields.
+  if ( ! isset( $form_state['values']['embedded_node_type'] )) {
+    $error_nid = isset( $form['nid']['#value'] ) ? $form['nid']['#value'] : 'New';
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: no embedded_node_type for nid: ' . $error_nid;
+    cyco_core_handle_error( $message );
+    return;
+  }
+  $embedded_node_types = explode(',', $form_state['values']['embedded_node_type']);
+  if ( ! isset( $form_state['values']['embedded_node_tag'] )) {
+    $error_nid = isset( $form['nid']['#value'] ) ? $form['nid']['#value'] : 'New';
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . 'SWIM error: no embedded_node_tsg for nid: ' . $error_nid;
+    cyco_core_handle_error( $message );
+    return;
+  }
+  $embedded_node_tags = explode(',', $form_state['values']['embedded_node_tag']);
+  //Loop across the bundles/tags to test.
+  $tag_count = 0;
+  for ( $tag_count = 0; $tag_count < sizeof($embedded_node_types); $tag_count++ ) {
+    $embedded_node_type = $embedded_node_types[$tag_count];
+    $embedded_node_tag = $embedded_node_tags[$tag_count];  
+    $matches = array();
+    $body_content = 
+        $form_state['values']['field_body'][LANGUAGE_NONE][0]['value'];
+    preg_match_all(
+        '/^\/\@\@cyco\s+' . $embedded_node_tag . '\s+(.+)\s*$/mi', 
+        $body_content,
+        $matches
+    );
+    if ( sizeof( $matches ) > 0 ) {
+      $host_page_nid = $form['nid']['#value'];
+      //Make an array of embedded node ids inserted in the page.
+      $embedded_nids_referenced = array();
+      foreach ( $matches[1] as $index => $embedded_internal_name ) {
+        //Get nid of embedded node with given machine name.
+        $exer_efq = new EntityFieldQuery;
+        $exer_efq
+          ->entityCondition('entity_type', 'node')
+          ->entityCondition('bundle', $embedded_node_type)
+          ->fieldCondition('field_internal_name', 'value', 
+              trim($embedded_internal_name) );
+        $query_result = $exer_efq->execute();
+        if ( isset( $query_result['node'] ) ) {
+          $nids = array_keys($query_result['node']);
+          //Remember the exer's nid.
+          $embedded_nids_referenced[] = $nids[0];
+        }
+      }
+      //Update embedded node to link to the host page.
+      foreach ($embedded_nids_referenced as $embedded_nid) {
+        $embedded_node = node_load($embedded_nid);
+  //      drupal_set_message('<pre>' . print_r($embedded_node, TRUE) . '</pre>');
+        $update = FALSE; //Flag - whether to save embedded node
+        if ( ! isset($embedded_node->field_nodes_embedded_in[LANGUAGE_NONE][0]['target_id']) ) {
+          //Nothing is set.
+          //Store host page nid in embedded page ref field.
+          $embedded_node->field_nodes_embedded_in[LANGUAGE_NONE][0] = array('target_id' => $host_page_nid);
+          $update = TRUE;
+        }
+        else {
+          //Is the host page id in the current list of target ids already?
+          $in_list = FALSE;
+          foreach ( $embedded_node->field_nodes_embedded_in[LANGUAGE_NONE] as $index => $ref ) {
+            if ( $ref['target_id'] == $host_page_nid ) {
+              $in_list = TRUE;
+              break;
+            }
+          }//End foreach
+          //Already in list?
+          if ( ! $in_list ) {
+            //Add to list.
+            $embedded_node->field_nodes_embedded_in[LANGUAGE_NONE][] = 
+                array('target_id' => $host_page_nid);
+            $update = TRUE;
+          }
+        } //End else
+        if ( $update ) {
+          node_save($embedded_node);
+        }
+      } //End foreach embedded nid.
+      //Need to remove refs to host?
+      //Load nodes that have a ref to the host node. If any of them are not in the
+      //current list of embedded nodes, remove them.
+      $exer_efq = new EntityFieldQuery;
+      $exer_efq
+        ->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', $embedded_node_type)
+        ->fieldCondition('field_nodes_embedded_in', 'target_id', $host_page_nid );
+      $query_result = $exer_efq->execute();
+      if ( isset($query_result['node']) ) {
+        $embedded_nids_referencing_host_node = array_keys($query_result['node']);
+        foreach ( $embedded_nids_referencing_host_node as $embedded_nid_referencing_host_node) {
+          if ( ! in_array($embedded_nid_referencing_host_node, $embedded_nids_referenced) ) {
+            //Exer no longer embedded in page.
+            //Clear the reference.
+            $embedded_node = node_load($embedded_nid_referencing_host_node);
+            $new_nid_list = array();
+            $old_nid_list = $embedded_node->field_nodes_embedded_in[LANGUAGE_NONE];
+            $i = 0;
+            foreach( $old_nid_list as $old_nid ) {
+              if ( $old_nid['target_id'] != $host_page_nid ) {
+                $new_nid_list[$i] = array( 'target_id' => $old_nid );
+                $i++;
+              }
+            }
+            if ( sizeof($new_nid_list) == 0 ) {
+              $embedded_node->field_nodes_embedded_in = array();
+            }
+            else {
+              $embedded_node->field_nodes_embedded_in[LANGUAGE_NONE] = $new_nid_list;
+            }
+            node_save($embedded_node);
+          }
+        } //End foreach 
+      }
+    } //End there were exercise insertions into the course page.
+  }//End for each $embedded_node_tags.
+}
+
+/*
+ * When SWIM saves a node, it finds embedded refs in the text to 
+ * embeddable nodes (exercises, patterns, big ideas) and updates a field
+ * in the embedded nodes to show that the node being saved refers to it. 
+ * swim_store_embedded_refs() above does that updating. It needs to know
+ * which tags to search for that embed a node, the content type of the 
+ * embedded node (to use in EFQs, though I might be able to remove
+ * that param if I tried - maybe later (HA! Dream on!)). 
+ * 
+ * This function lets other modules register an embedding tag that the code in
+ * swim_store_embedded_refs() will search for. Other modules should call this
+ * function in form_alter events. 
+ */
+function swim_register_embedded_refs_tag(&$form, $node_type, $node_tag) {
+  //The value fields embedded_node_type and embedded_node_tag are added
+  //to $form, if they don't already exist. A submission call to 
+  //swim_store_embedded_refs() is added as well.
+  if ( ! isset($form['#submit']) ) {
+    //Don't think this should happen.
+    $form['#submit'] = array();
+  }
+  if ( !in_array('swim_store_embedded_refs', $form['#submit']) ) {
+    $form['#submit'][] = 'swim_store_embedded_refs';
+  }
+  _swim_create_form_field($form, 'embedded_node_type', 'value');
+  _swim_append_form_field_value($form, 'embedded_node_type', $node_type);
+  _swim_create_form_field($form, 'embedded_node_tag', 'value');
+  _swim_append_form_field_value($form, 'embedded_node_tag', $node_tag);
+}
+
+/**
+ * Create a form field if it does not exist.
+ * 
+ * @param array $form The form, as from hook_form_alter().
+ * @param string $field_name Field to create.
+ * @param string $field_type Field type, e.g, hidden, or value.
+ */
+function _swim_create_form_field(&$form, $field_name, $field_type) {
+  if ( ! isset($form[$field_name])) {
+    $form[$field_name] = array(
+      '#type' => $field_type,
+    );
+  }
+}
+
+/*
+ * Append a value to a form field's current value, separated by a comma.
+ * 
+ * @param array $form The form, as from hook_form_alter().
+ * @param string $field_name Field to append to.
+ * @param string $value Value to append.
+ */
+function _swim_append_form_field_value(&$form, $field_name, $value) {
+  if ( isset( $form[$field_name]['#value'] ) ) {
+    $form[$field_name]['#value'] .= ',' . $value;
+  }
+  else {
+    $form[$field_name]['#value'] = $value;
+  }
 }
