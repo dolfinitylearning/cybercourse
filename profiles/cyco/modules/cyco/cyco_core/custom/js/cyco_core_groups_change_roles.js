@@ -6,6 +6,7 @@ When adding users to a class, select the student role.
 (function ($) {
   Drupal.behaviors.cycoGroupsSelectStudentRole = {
     attach: function() {
+      return;
       //Get the index of the student role sent by server, if it exists.
       if ( 
               Drupal.settings.cycoGroupsSelectStudentRole
