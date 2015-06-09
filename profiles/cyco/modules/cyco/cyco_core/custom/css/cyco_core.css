@@ -31,3 +31,15 @@ p.cyco_reminder {
 #back-top span#button  {
   background-color: #259fe6 !important;
 }
+
+/* Views exposed filters */
+.view-filters .views-exposed-form {
+  border: 2px #ddd solid;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.view-filters .views-exposed-form .views-exposed-widgets {
+  margin-bottom: 0;
+}
