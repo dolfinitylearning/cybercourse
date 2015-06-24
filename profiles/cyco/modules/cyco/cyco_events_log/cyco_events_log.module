@@ -56,6 +56,29 @@ function cyco_events_log_views_api() {
   );
 }
 
+/**
+ * Implements hook_page_alter.
+ */
+function cyco_events_log_page_build(&$page) {
+  //Show log in reminder.
+  _cyco_events_show_log_in_reminder();
+}
+
+/**
+ * For anonymous, show a reminder to log in.
+ */
+function _cyco_events_show_log_in_reminder() {
+  global $user;
+  //Only show for anon.
+  if ( $user->uid == 0 ) {
+    $subsequent_destination = base_path() . current_path();
+    $link = l(t('login'), 'user/login', array('query' => array('destination' => $subsequent_destination)));
+    $message = t('If you are a student, please ' . $link . t('.'));
+    drupal_set_message($message);
+  }
+}
+
+
 function cyco_events_log_log_event($data) {
   if (_cyco_events_log_should_log_events() ) {
     drupal_add_js(
@@ -88,24 +111,33 @@ function cyco_events_log_log_event($data) {
 
 
 /**
- * Should log events?
+ * Should log events? Yes, iff global logging var is on, and user is a 
+ * student in a class where logging is on.
  * @return string yes or no.
  */
 function _cyco_events_log_get_should_log_events() {
-  global $user;
-  if (cyco_core_user_has_role($user, 'student') ) {
-    $group_ids = og_get_groups_by_user($user, 'node');
-    foreach( $group_ids as $group_id ) {
-      $group = node_load( $group_id );
-      if ( $group->type == 'class' ) {
-        $log_events = field_get_items('node', $group, 'field_log_events');
-        if ( $log_events[0]['value'] == 1 ) {
-          return 'yes';
+  $logging_on = &drupal_static(__FUNCTION__); 
+  if ( ! isset($logging_on) ) {
+    $logging_on = 'no'; //Init, change to yes if logging should be on.
+    $global_logging = variable_get('cyco_event_logging', 'off');
+    if ( $global_logging == 'on' ) {
+      global $user;
+      if (cyco_core_user_has_role($user, 'student') ) {
+        $group_ids = og_get_groups_by_user($user, 'node');
+        foreach( $group_ids as $group_id ) {
+          $group = node_load( $group_id );
+          if ( $group->type == 'class' ) {
+            $log_events = field_get_items('node', $group, 'field_log_events');
+            if ( $log_events[0]['value'] == 1 ) {
+              $logging_on = 'yes';
+              break;
+            }
+          }
         }
-      }
-    }
-    return 'no';
-  }
+      } //End user is student.
+    } //end global logging is on.
+  } //var not cached.
+  return $logging_on;
 }
 
 /**
