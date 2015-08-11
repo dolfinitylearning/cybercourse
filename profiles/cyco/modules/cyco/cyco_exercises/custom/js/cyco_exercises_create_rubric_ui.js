@@ -337,7 +337,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            cycoCoreServices.csrfToken);
+            Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -422,7 +422,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            cycoCoreServices.csrfToken);
+            Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -506,7 +506,7 @@
         url: webServiceUrl,
         beforeSend: function (request) {
           request.setRequestHeader("X-CSRF-Token", 
-            cycoCoreServices.csrfToken);
+            Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
       .done(function(result) {

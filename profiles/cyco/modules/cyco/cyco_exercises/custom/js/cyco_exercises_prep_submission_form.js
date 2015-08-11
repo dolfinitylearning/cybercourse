@@ -21,7 +21,6 @@
       window.onbeforeunload = function (event) {
         if ( uiNamespace.saving ) {
           //Show AJAX throbber.
-//          console.log("dog");
           $("#edit-actions").after(
              "<div class='ajax-progress ajax-progress-throbber'>"
             +  "Saving..."

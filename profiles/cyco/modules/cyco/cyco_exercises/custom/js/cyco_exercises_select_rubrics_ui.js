@@ -27,31 +27,23 @@
       $("#rubric-select-ui").hide();
       $(".rubric-select-current-item-container").hide();
       uiNamespace.showAjaxThrobber();
-      $.when(
-        cycoCoreServices.getCsrfToken()
+      //Grab vocab terms and rubric items from server.
+      $.when( 
+        uiNamespace.fetchTerms(),
+        uiNamespace.fetchRubrics()
       )
       .then(function() {
-        //Grab vocab terms and rubric items from server.
-        $.when( 
-          uiNamespace.fetchTerms(),
-          uiNamespace.fetchRubrics()
-        )
-        .then(function() {
-          //Prep the UI.
-          uiNamespace.prepareUi();
-          //Prep the add new item UI.
-          Drupal.behaviors.cycoCreateRubricUi.startMeUp();
-          //Check the All checkbox to start.
-          var tree = $("#term-tree").fancytree("getTree");
-          tree.activateKey(0);
-          uiNamespace.hideAjaxThrobber();
-        })
-        .fail(function() {
-          alert("Exercise fetchTerms fetchRubrics died.");
-        });
+        //Prep the UI.
+        uiNamespace.prepareUi();
+        //Prep the add new item UI.
+        Drupal.behaviors.cycoCreateRubricUi.startMeUp();
+        //Check the All checkbox to start.
+        var tree = $("#term-tree").fancytree("getTree");
+        tree.activateKey(0);
+        uiNamespace.hideAjaxThrobber();
       })
       .fail(function() {
-        alert("Exercise getCsrfToken died.");
+        alert("Exercise fetchTerms fetchRubrics died.");
       });
     },
     /**
@@ -64,7 +56,7 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json", url: webServiceUrl,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
+          request.setRequestHeader("X-CSRF-Token", Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
@@ -87,7 +79,7 @@
         dataType: "json", 
         url: webServiceUrl,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
+          request.setRequestHeader("X-CSRF-Token", Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {

@@ -1767,7 +1767,7 @@ function cyco_exercises_erase_feedback( $submission_nid ) {
 }
 
 /**
- * Take feedback data from a submission and paskage in an array.
+ * Take feedback data from a submission and package in an array.
  * @param stdClass $submission Submission node.
  * @return array Feedback data.
  */
@@ -1779,7 +1779,10 @@ function cyco_exercises_package_submission_node_feedback( $submission ) {
   $rubric_ratings 
       = $submission->field_rubric_item_ratings[$submission->language][0]['value'];
   $complete = $submission->field_complete[$submission->language][0]['value'];
-  $message = $submission->field_feedback[$submission->language][0]['value'];
+  $message = '';
+  if ( isset($submission->field_feedback[$submission->language][0]['value']) ) {
+    $message = $submission->field_feedback[$submission->language][0]['value'];
+  }
   $feedback_data = array(
     'submission_nid' => $submission_nid,
     'student_uid' => $student_uid,

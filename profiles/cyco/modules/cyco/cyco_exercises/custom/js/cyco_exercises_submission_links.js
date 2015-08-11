@@ -61,31 +61,18 @@
         //Keep a reference to the throbber, in case of a refresh by a popup window.
         uiNamespace.throbbbers[exerciseNid] = throbber;
         throbber.show();
-        $.when(
-          cycoCoreServices.getCsrfToken()
-          //uiNamespace.getCsrfToken()
+        //Grab vocab terms and rubric items from server.
+        $.when( 
+          uiNamespace.fetchSubmissionMetaData( studentUid, exerciseNid )
         )
         .then(function() {
-          //Grab vocab terms and rubric items from server.
-          $.when( 
-            uiNamespace.fetchSubmissionMetaData( studentUid, exerciseNid )
-          )
-          .then(function() {
-            //Prep the UI.
-            uiNamespace.prepareUi( studentUid, exerciseNid );
-            throbber.hide();
-          })
-          .fail(function(jqXHR, textStatus, errorThrown) {
-            Drupal.behaviors.cycoErrorHandler.reportError(
-              "fetchSubmissionMetaData request failed in "
-                + "cyco_exercises_submission_links. " 
-                + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
-            );
-          });
+          //Prep the UI.
+          uiNamespace.prepareUi( studentUid, exerciseNid );
+          throbber.hide();
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
           Drupal.behaviors.cycoErrorHandler.reportError(
-            "getCsrfToken request failed in "
+            "fetchSubmissionMetaData request failed in "
               + "cyco_exercises_submission_links. " 
               + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
           );
@@ -151,7 +138,7 @@
         url: webServiceUrl,
         data: dataToSend,
         beforeSend: function (request) {
-          request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
+          request.setRequestHeader("X-CSRF-Token", Drupal.settings.cycoCoreServices.csrfToken);
         }
       })
         .done(function(result) {
