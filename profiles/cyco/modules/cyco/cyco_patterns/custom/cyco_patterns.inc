@@ -1,11 +1,5 @@
 <?php
 /**
- * @file
- * Process callback for hook_filter. Finds [[[cycopattern (node_id)]]]
- * and passes match data onto function that will do the insertion.
- */
-
-/**
  * Implements hook_help().
  * @todo Write patterny help in hook_help.
  */
