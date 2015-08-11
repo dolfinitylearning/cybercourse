@@ -1,0 +1,9 @@
+<?php
+/**
+ * @file
+ * Code for the Cybercourse fill-in-the-blank feature.
+ */
+
+include_once 'cyco_fill_in_the_blank.features.inc';
+
+require_once realpath(dirname(__FILE__)) . '/custom/cyco_fill_in_the_blank.inc';

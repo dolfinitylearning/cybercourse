@@ -1,0 +1,162 @@
+<?php
+/**
+ * @file
+ * Responds to client requests.
+ */
+
+/**
+* Implements hook_services_resources().
+ * 
+ * Define all the services for the fill-in-the-blank module.
+*/
+function cyco_fill_in_the_blank_services_services_resources() {
+  $api = array(
+    /** Rubric item **/
+    'fill_in_the_blank' =>array(
+      'actions' => array(
+        'check' => array(
+          'help' => 'Checks user\'s answer',
+          'callback' => '_cyco_fib_check_answer',
+          'access callback' => '_cyco_fib_check_answer_access',
+          'access arguments' => array('view'),
+          'access arguments append' => TRUE,
+          'args' => array(
+            array(
+              'name' => 'data',
+              'type' => 'struct',
+              'description' => 'The answer object',
+              'source' => 'data',
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+  return $api;
+}
+
+function _cyco_fib_check_answer_access($operation, $args) {
+  return TRUE;
+}
+
+
+/**
+ * Check an answer to a fill-in-the-blank question.
+ * @param array $data Data from client.
+ */
+function _cyco_fib_check_answer($data) {
+  global $user;
+  //Item nid.
+  $fib_nid = $data['fib_nid'];
+  //Student uid.
+  $student_uid = $data['student_uid'];
+  //Answer.
+  $answer = $data['answer'];
+  $fib_node = node_load($fib_nid);
+  if ( ! $fib_node ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' could not load fib nid=' . $fib_nid;
+    cyco_core_handle_services_error( $message );
+    return;
+  }  
+  //Check the answer.
+  $message = ''; //Message to send along with result of test. MT unless error.
+  $fib_type = $fib_node->field_response_type[LANGUAGE_NONE][0]['value'];
+  $answer = trim($answer);
+  if ( $answer == '' ) {
+    $testResult = 'error';
+    $message = 'No answer passed to server.';
+  }
+  else if ( $fib_type == 'number' ) {
+    if ( !is_numeric($answer) ) {
+      $testResult = 'error';
+      $message = 'Expected a number.';
+    }
+    else {
+      //Check whether the user was right.
+      $low = isset( $fib_node->field_lowest[LANGUAGE_NONE][0]['value'] )
+          ? $fib_node->field_lowest[LANGUAGE_NONE][0]['value']
+          : NULL;
+      $high = isset( $fib_node->field_highest[LANGUAGE_NONE][0]['value'] )
+          ? $fib_node->field_highest[LANGUAGE_NONE][0]['value']
+          : NULL;
+      //If both high and low are set, then use between test.
+      if ( $low != NULL && $high != NULL ) {
+        $testResult = ( $answer >= $low && $answer <= $high )
+          ? 'right'
+          : 'wrong';
+      }
+      //See if just low is set. Test as = test.
+      else if ( $low != NULL && $high == NULL ) {
+        $testResult = ( $answer == $low )
+          ? 'right'
+          : 'wrong';
+      }
+      //See if just high is set. Test as = test.
+      else if ( $low == NULL && $high != NULL ) {
+        $testResult = ( $answer == $high )
+          ? 'right'
+          : 'wrong';
+      }
+      else {
+        $testResult = 'error';
+        $message = 'In item definition, low and high both MT?';
+      }
+    } //Answer was a valid number.
+  }
+  else if ( $fib_type == 'text' ) {
+    //Case sensitive?
+    $case_sensitive = FALSE;
+    if ( isset($fib_node->field_case_sensitive[LANGUAGE_NONE][0]['value']) ) {
+      $temp = strtolower(
+          $fib_node->field_case_sensitive[LANGUAGE_NONE][0]['value'] );
+      if ( $temp == 'yes' ) {
+        $case_sensitive = TRUE;
+      }
+    }
+    if ( ! isset($fib_node->field_correct_text_answers[LANGUAGE_NONE][0]['value'] ) ) {
+      $testResult = 'error';
+      $message = 'In item definition, no correct text answers?';
+    }
+    else {
+      //There are answers to check against.
+      $correct_answers = $fib_node->field_correct_text_answers[LANGUAGE_NONE];
+      $testResult = 'wrong';
+      foreach( $correct_answers as $correct_answer ) {
+        $correct_answer = trim($correct_answer['value']);
+        if ( $case_sensitive ) {
+          $got_right = ( $answer == $correct_answer );
+        }
+        else {
+          $got_right = ( strtolower($answer) == strtolower($correct_answer) );
+        }
+        if ( $got_right ) {
+          $testResult = 'right';
+          break;
+        }
+      }
+    }
+  }// End fibType is text
+  else {
+    $testResult = 'error';
+    $message = 'Strange test type.';
+  }
+  //Return test result to client.
+  $transactionResult = array(
+    'fibNid' => $fib_nid,
+    'result' => $testResult,
+    'message' => $message,
+  );
+  return $transactionResult;
+  
+  //Make sure the answer is from the logged in user.
+  if ( $user->uid != $student_uid ) {
+    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
+        . ' answer not for current user. =' . $sub_nid;
+    cyco_core_handle_services_error( $message );
+    return;
+  }
+}
+  
+  

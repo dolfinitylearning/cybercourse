@@ -1,0 +1,10 @@
+/*
+Styles for fill-in-the-blank views.
+*/
+.view-fill-in-the-blanks .views-field-title {
+  font-size: 150%;
+}
+
+.view-fill-in-the-blanks .views-row {
+  margin-bottom: 1.5em;
+}

@@ -1,0 +1,6 @@
+name = CyberCourse fill-in-the-blank services
+description = Defines REST services for the CyberCourse fill-in-the-blank system
+package = CyberCourse
+core = 7.x
+version = 7.1
+dependencies[] = cyco_fill_in_the_blank
