@@ -34,7 +34,7 @@ function cyco_events_log_permission() {
 /**
  * Implements hook_menu().
  */
-function cyco_cyco_events_log_menu() {
+function cyco_events_log_menu() {
   $items = array();
   //Toggle event logging.
   $items['toggle-event-logging'] = array(
@@ -57,11 +57,44 @@ function cyco_events_log_views_api() {
 }
 
 /**
- * Implements hook_page_alter.
+ * Implements hook_init.
+ * 
+ * Set a JS var to show whether events should be logged.
+ */
+function cyco_events_log_init() {
+  drupal_add_js(
+      array('cycoLogEvents' => 
+        array('logEvents' => _cyco_events_log_get_should_log_events()) ),
+      'setting'
+  );
+  if ( _cyco_events_log_get_should_log_events() == 'yes' ) {
+    drupal_add_js(
+      drupal_get_path('module', 'cyco_events_log') . '/js/cyco_events_log.js'
+//      array('type' => 'file', 'preprocess' => TRUE,)
+    );    
+  }
+}
+
+/**
+ * Implements hook_page_build.
  */
 function cyco_events_log_page_build(&$page) {
   //Show log in reminder.
   _cyco_events_show_log_in_reminder();
+  if ( _cyco_events_log_should_log_events() ) {
+    //Log page view.
+    cyco_events_log_log_page_view();
+    //Send logging data to JS, to log page leaving event.
+    drupal_add_js(
+        array('cycoLogEvents' => 
+          array(
+            'eventType' => 'leave_page',
+            'path' => current_path(),
+          ) 
+        ),
+        'setting'
+    );
+  }
 }
 
 /**
@@ -78,13 +111,94 @@ function _cyco_events_show_log_in_reminder() {
   }
 }
 
+/**
+ * Log a page view.
+ */
+function cyco_events_log_log_page_view() {
+  if ( _cyco_events_log_should_log_events() ) {
+    global $user;
+    $path = current_path();
+    $bundle = 'view_page';
+    $user_link = l($user->name, 'users/' . $user->name);
+    $path_link = l($path, $path);
+    $summary = t('User ') . $user_link . t(' viewed ') . $path_link;
+    //Log.
+    $entity_type = 'cyco_event';
+    $entity = entity_create($entity_type, array('type' => $bundle));
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    $wrapper->uid = $user->uid;
+    if ( isset($wrapper->field_summary) ) {
+      $wrapper->field_summary->set( 
+          array('value' => $summary,
+            'format'=>'limited_html',
+          )
+      );
+    }
+    if ( isset($wrapper->field_path) ) {
+      $wrapper->field_path->set( $path );
+    }
+    $wrapper->save();
+  }
+}
 
-function cyco_events_log_log_event($data) {
+/**
+ * Log leaving a page. Called from JS through Services.
+ */
+function cyco_events_log_log_page_leaving($data) {
+  if ( _cyco_events_log_should_log_events() ) {
+    global $user;
+    $path = $data['path'];
+    $bundle = 'leave_page';
+    $user_link = l($user->name, 'users/' . $user->name);
+    $path_link = l($path, $path);
+    $summary = t('User ') . $user_link . t(' left ') . $path_link;
+    //Log.
+    $entity_type = 'cyco_event';
+    $entity = entity_create($entity_type, array('type' => $bundle));
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    $wrapper->uid = $user->uid;
+    if ( isset($wrapper->field_summary) ) {
+      $wrapper->field_summary->set( 
+          array('value' => $summary,
+            'format'=>'limited_html',
+          )
+      );
+    }
+    if ( isset($wrapper->field_path) ) {
+      $wrapper->field_path->set( $path );
+    }
+    $wrapper->save();
+    return 'OK';
+  }
+}
+
+//function cyco_events_log_node_view($node, $view_mode, $langcode) {
+//  if ( _cyco_events_log_get_should_log_events() == 'yes' ) {
+//    drupal_add_js(
+//        array('cycoLogEvents' => 
+//          array(
+//            'eventType' => 
+//            'nid' => $node->nid,
+//          ) 
+//        ),
+//        'setting'
+//    );
+//    
+//  }
+//  
+//}
+
+/**
+ * Log an Other event. Called by JS, through Services.
+ * @param type $data
+ * @return string Status, OK for OK.
+ */
+function cyco_events_log_log_other_event($data) {
   if (_cyco_events_log_should_log_events() ) {
-    drupal_add_js(
-      drupal_get_path('module', 'cyco_events_log') . '/js/cyco_events_log.js'
-//      array('type' => 'file', 'preprocess' => TRUE,)
-    );
+//    drupal_add_js(
+//      drupal_get_path('module', 'cyco_events_log') . '/js/cyco_events_log.js'
+////      array('type' => 'file', 'preprocess' => TRUE,)
+//    );
     global $user;
     //Extract data.
     $bundle = $data['bundle'];
@@ -96,13 +210,19 @@ function cyco_events_log_log_event($data) {
     $entity = entity_create($entity_type, array('type' => $bundle));
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
     $wrapper->uid = $user->uid;
-    $wrapper->field_summary->set( 
-        array('value' => $summary,
-          'format'=>'limited_html',
-        )
-    );
-    $wrapper->field_activity_type->set( $activity_type );
-    $wrapper->field_activity_params->set( $params );  
+    if ( isset($wrapper->field_summary) ) {
+      $wrapper->field_summary->set( 
+          array('value' => $summary,
+            'format'=>'limited_html',
+          )
+      );
+    }
+    if ( isset($wrapper->field_activity_type) ) {
+      $wrapper->field_activity_type->set( $activity_type );
+    }
+    if ( isset($wrapper->field_activity_params) ) {
+      $wrapper->field_activity_params->set( $params );  
+    }
     $wrapper->save();
     return 'OK';
   }
@@ -158,25 +278,39 @@ function cyco_events_log_services_resources() {
     /** Should save events flag. **/
     'event_logging' => array(
       'actions' => array(
-        'shouldLogEvents' => array(
-          'help' => t('Return yes/no, whether should log events for this user.'),
+//        'shouldLogEvents' => array(
+//          'help' => t('Return yes/no, whether should log events for this user.'),
+//          'access arguments' => array('access content'),
+//          'callback' => '_cyco_events_log_get_should_log_events',
+//        ),
+        'logOtherEvent' => array(
+          'help' => t('Log an Other event.'),
           'access arguments' => array('access content'),
-          'callback' => '_cyco_events_log_get_should_log_events',
-        ),
-        'logEvent' => array(
-          'help' => t('Log an event.'),
-          'access arguments' => array('access content'),
-          'callback' => '_cyco_events_log_log_event',
+          'callback' => 'cyco_events_log_log_other_event',
           'args' => array(
             array(
              'name' => 'data',
              'type' => 'struct',
-             'description' => 'Event log data',
+             'description' => 'Event log Other event',
              'source' => 'data',
              'optional' => FALSE,
              ),
            ), //End args.
-        ), // End LogEvent
+        ), // End LogOtherEvent
+        'logPageLeaveEvent' => array(
+          'help' => t('Log a page leave event.'),
+          'access arguments' => array('access content'),
+          'callback' => 'cyco_events_log_log_page_leaving',
+          'args' => array(
+            array(
+             'name' => 'data',
+             'type' => 'struct',
+             'description' => 'Event log Page leave event',
+             'source' => 'data',
+             'optional' => FALSE,
+             ),
+           ), //End args.
+        ), // End logPageLeaveEvent
       ),
     ),
   );
@@ -228,32 +362,32 @@ function cyco_events_log_user_logout($account) {
 /**
  * Log a node view in full mode. NOT a hook implementation.
  */
-function cyco_events_log_log_node_view($node, $view_mode, $langcode) {
-  global $base_url;
-  if ( _cyco_events_log_should_log_events() ) {
-    if ( $view_mode == 'full' ) {
-      //Log it.
-      $entity_type = 'cyco_event';
-      $entity = entity_create($entity_type, array('type' => 'view_node'));
-      $wrapper = entity_metadata_wrapper($entity_type, $entity);
-      global $user;
-      $wrapper->uid = $user->uid;
-      $user_name = ($user->uid === 0) ? 'Anonymous' : $user->name;
-      $node_link = '<a href="' . $base_url .'/node/' . $node->nid 
-            . '">' . $node->title . '</a>';
-      $user_link = '<a href="' . $base_url .'/users/' . $user_name 
-            . '">' . $user_name . '</a>';
-      $message = t('View ' . $node->type . ' node ') . $node_link . t(' by ') . $user_link . '.';
-      $wrapper->field_summary->set( 
-          array('value' => $message,
-            'format'=>'limited_html',
-          )
-        );
-      $wrapper->field_node->set( $node->nid );
-      $wrapper->save();
-    }
-  }
-}
+//function cyco_events_log_log_node_view($node, $view_mode, $langcode) {
+//  global $base_url;
+//  if ( _cyco_events_log_should_log_events() ) {
+//    if ( $view_mode == 'full' ) {
+//      //Log it.
+//      $entity_type = 'cyco_event';
+//      $entity = entity_create($entity_type, array('type' => 'view_node'));
+//      $wrapper = entity_metadata_wrapper($entity_type, $entity);
+//      global $user;
+//      $wrapper->uid = $user->uid;
+//      $user_name = ($user->uid === 0) ? 'Anonymous' : $user->name;
+//      $node_link = '<a href="' . $base_url .'/node/' . $node->nid 
+//            . '">' . $node->title . '</a>';
+//      $user_link = '<a href="' . $base_url .'/users/' . $user_name 
+//            . '">' . $user_name . '</a>';
+//      $message = t('View ' . $node->type . ' node ') . $node_link . t(' by ') . $user_link . '.';
+//      $wrapper->field_summary->set( 
+//          array('value' => $message,
+//            'format'=>'limited_html',
+//          )
+//        );
+//      $wrapper->field_node->set( $node->nid );
+//      $wrapper->save();
+//    }
+//  }
+//}
 
 /**
  * Toggle event logging.
@@ -270,4 +404,36 @@ function _cyco_events_log_toggle_event_logging() {
   }
   drupal_set_message( $message );
   drupal_goto('control-panel');
+}
+
+/**
+ * Implements hook_webform_select_options_info.
+ * @return array Prebuilt option lists for Webform that are to be defined.
+ */
+function cyco_events_log_webform_select_options_info() {
+  drupal_set_message('dog');
+  $lists = array();
+  $lists['agree_disagree_7'] = array(
+    'title' => t('Agree/disagree - 7-point'),
+    'options callback' => '_cyco_events_log_agree_disagree_7_point_labels',    
+  );
+  return $lists;
+}
+
+/**
+ * Define prebuilt option list for Webform with 7-point agree/disagree scale.
+ * @return array Options.
+ */
+function _cyco_events_log_agree_disagree_7_point_labels($component, $flat, $arguments) {
+  $options = array();
+  $options = array(
+    7 => 'Strongly agree',
+    6 => 'Agree',
+    5 => 'Somewhat agree',
+    4 => 'Neither agree nor disagree',
+    3 => 'Somewhat disagree',
+    2 => 'Disagree',
+    1 => 'Strongly disagree',
+  );
+  return $options;
 }

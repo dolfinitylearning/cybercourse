@@ -7,72 +7,61 @@
 var cycoEventsLog = cycoEventsLog || {};
 
 (function($) {
+  
+  $(document).ready(function(){
+    window.onunload = function() {
+      if ( Drupal.settings.cycoLogEvents.logEvents == "yes" ) {
+        if ( Drupal.settings.cycoLogEvents.eventType 
+             && Drupal.settings.cycoLogEvents.eventType == "leave_page" ) {
+          var dataToSend = {};
+          dataToSend.path = Drupal.settings.cycoLogEvents.path;
+          $.when(
+            cycoEventsLog.sendEventToServer( "logPageLeaveEvent", dataToSend )
+          )
+          .then(function() {
+            //Nothing to do.
+          })
+          .fail(function() {
+            alert("cycoEventsLog.logPageLeaveEvent died.");
+          });
+          
+        }
+      }
+    };
+  });
+  
   /**
-   * Log an event.
+   * Log an Other event.
    * @param string bundle Usually "other".
    * @param string activityType E.g., simulation run
    * @param string summary Summary of the event.
    * @param object params Object with event parameters.
    */
-  cycoEventsLog.logEvent = function( bundle, activityType, summary, params ) {
-    $.when(
-      cycoEventsLog.getShouldLogOtherEvent( activityType )
-    )
-    .then(function() {
-      if ( cycoEventsLog.shouldLogOtherEvent == "yes" ) {
-        $.when(
-          cycoEventsLog.sendEventToServer( bundle, activityType, summary, params )
-        )
-        .then(function() {
-          //Nothing to do.
-        })
-        .fail(function() {
-          alert("cycoEventsLog.logEvent died.");
-        });
-      }
-    });
+  cycoEventsLog.logOtherEvent = function( activityType, summary, params ) {
+    if ( Drupal.settings.cycoLogEvents.logEvents == 'yes' ) {
+      var dataToSend = {};
+      dataToSend.bundle = 'other';
+      dataToSend.activityType = activityType;
+      dataToSend.summary = summary;
+      dataToSend.params = JSON.stringify( params );
+      $.when(
+        cycoEventsLog.sendEventToServer( "logOtherEvent", dataToSend )
+      )
+      .then(function() {
+        //Nothing to do.
+      })
+      .fail(function() {
+        alert("cycoEventsLog.logOtherEvent died.");
+      });
+    }
   };
   
   /**
-   * Ask the server whether an Other event should be logged.
-   * @param string activityType Type of activity to log.
-   * @returns boolean Whether to log event.
-   */
-  cycoEventsLog.getShouldLogOtherEvent = function( activityType ) {
-//    console.log('start fetchEventLogFlag');
-    var webServiceUrl = 
-            Drupal.settings.basePath + "event_logging/event_logging/shouldLogEvents";
-    var promise = $.ajax({
-      type: "POST",
-      contentType: "application/json; charset=utf-8",
-      dataType: "json", 
-      data: activityType,
-      url: webServiceUrl,
-      beforeSend: function (request) {
-        request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
-      }
-    })
-    .done(function(result) {
-//      console.log('done fetchEventLogFlag');
-      cycoEventsLog.shouldLogOtherEvent = result[0];
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      alert('getJSON request in fetchEventLogFlag failed! ' + errorThrown);
-    });
-//    console.log('end fetchEventLogFlag');
-    return promise;
-  };
-
-  /**
    * Send event log data to server.
    */
-  cycoEventsLog.sendEventToServer = function(bundle, activityType, summary, params) {
-    var webServiceUrl = Drupal.settings.basePath + "event_logging/event_logging/logEvent";
-    var dataToSend = {};
-    dataToSend.bundle = bundle;
-    dataToSend.activityType = activityType;
-    dataToSend.summary = summary;
-    dataToSend.params = JSON.stringify( params );
+  cycoEventsLog.sendEventToServer = function( controller, dataToSend ) {
+    var webServiceUrl = Drupal.settings.basePath 
+            + "event_logging/event_logging/" + controller;
     var promise = $.ajax({
       type: "POST",
       contentType: "application/json; charset=utf-8",
@@ -80,7 +69,8 @@ var cycoEventsLog = cycoEventsLog || {};
       data: JSON.stringify(dataToSend),
       url: webServiceUrl,
       beforeSend: function (request) {
-        request.setRequestHeader("X-CSRF-Token", cycoCoreServices.csrfToken);
+        request.setRequestHeader("X-CSRF-Token", 
+          Drupal.settings.cycoCoreServices.csrfToken); //cycoCoreServices.csrfToken);
       }
     })
     .done(function(result) {
