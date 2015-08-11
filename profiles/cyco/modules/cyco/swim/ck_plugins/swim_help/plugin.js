@@ -17,15 +17,10 @@
           else {
             //Don't have help yet. Get it and show.
             $.when(
-              cycoCoreServices.getCsrfToken()
+              cycoSwimHelp.getHelpFromServer()
             )
             .then(function() {
-              $.when(
-                cycoSwimHelp.getHelpFromServer()
-              )
-              .then(function() {
-                cycoSwimHelp.showHelpPopup();
-              });
+              cycoSwimHelp.showHelpPopup();
             });
           }
         }

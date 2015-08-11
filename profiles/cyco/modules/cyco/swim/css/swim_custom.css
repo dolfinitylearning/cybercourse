@@ -177,3 +177,7 @@ This is for custom styles the user wants to use in authoring SWIM content.
 .swim .small {
   font-size: 80%;
 }
+
+.swim .styleable-code {
+  font-family: monospace;
+}
