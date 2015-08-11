@@ -52,7 +52,7 @@ function _cyco_core_cp_flush_cache() {
     cyco_badges_clear_cache();
     drupal_set_message( t('Badges cache cleared.') );
   }
-  drupal_goto('user/control-panel');
+  drupal_goto('control-panel');
 }
 
 /**

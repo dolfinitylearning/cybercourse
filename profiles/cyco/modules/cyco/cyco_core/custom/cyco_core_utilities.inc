@@ -12,6 +12,7 @@ function _cyco_core_config_client_services() {
   global $base_url;
   $settings = array(
     'baseUrl' => $base_url,
+    'csrfToken' => drupal_get_token('services'),
   );
   drupal_add_js(
       array('cycoCoreServices' => $settings),
@@ -476,7 +477,7 @@ function cyco_core_validate_internal_name_field(
   $efq = new EntityFieldQuery;
   $efq
     ->entityCondition('entity_type', 'node')
-//    ->entityCondition('bundle', $node->type)
+//    ->entityCondition('bundle', $node->type) - Bundle dinna matter, lassie.
     ->fieldCondition($field_name, 'value', $internal_name, '=');
   $query_result = $efq->execute();
   $nids_using_internal_name = array();

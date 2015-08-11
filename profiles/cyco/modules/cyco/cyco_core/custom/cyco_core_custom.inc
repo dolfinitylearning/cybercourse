@@ -77,11 +77,11 @@ function cyco_core_menu() {
 function cyco_core_node_view($node, $view_mode, $langcode) {
   //Call hooky thing in cyco_core_groups.inc.
   _cyco_core_groups_node_view($node, $view_mode, $langcode);
-  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
-    if ( $node->type == 'course_page' || $node->type == 'basic_page' ) {
-      cyco_events_log_log_node_view($node, $view_mode, $langcode);
-    }
-  }
+//  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+//    if ( $node->type == 'course_page' || $node->type == 'basic_page' ) {
+//      cyco_events_log_log_node_view($node, $view_mode, $langcode);
+//    }
+//  }
 }
 
 
