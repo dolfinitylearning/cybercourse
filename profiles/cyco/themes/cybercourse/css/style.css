@@ -128,7 +128,14 @@ For view for managing student submissions.
   margin-bottom: 15px;
 }
 
-/** Patters list. **/
+/** Patterns list. **/
 div.view-patterns div.categories {
   margin-top: 1em;
+}
+
+/** All views **/
+div.view .views-label {
+  font-variant: small-caps;
+  font-weight: bold;
+  color: seagreen;
 }
