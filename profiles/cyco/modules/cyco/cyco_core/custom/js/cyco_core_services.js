@@ -7,36 +7,6 @@
 var cycoCoreServices = cycoCoreServices || {};
 
 (function($) {
-  /*
-  * Get the CSRF token.
-  * @returns {unresolved} Promise.
-  */
-//  cycoCoreServices.getCsrfToken = function(){
-//   if ( cycoCoreServices.csrfToken ) {
-//     //Already have it.
-//     return;
-//   }
-//   //Connect and get token.
-//   var webServiceUrl 
-//     = Drupal.settings.cycoCoreServices.baseUrl + Drupal.settings.basePath 
-//       + "services/session/token";
-//   var promise = $.ajax({ 
-//       type: "GET",
-//       url: webServiceUrl,
-//       dataType: "text"
-//      })
-//     .done(function(token){
-//       cycoCoreServices.csrfToken = token;
-//     })
-//     .fail(function(jqXHR, textStatus, errorThrown) {
-//        Drupal.behaviors.cycoErrorHandler.reportError(
-//          "Token request failed in cycoErrorHandler.getCsrfToken. " 
-//            + "textStatus: " + textStatus + ", errorThrown: " + errorThrown
-//        );
-//     });
-//   return promise;
-//  };
-  
   /**
    * Make the HTML for a wait throbber.
    * @param {string} idToUse Id to give the throbber. If omitted, throbber

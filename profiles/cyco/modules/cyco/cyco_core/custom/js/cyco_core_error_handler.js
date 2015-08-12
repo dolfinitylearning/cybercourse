@@ -6,12 +6,23 @@
 */
 "use strict";
 (function ($) {
+  $.cycoPageUnloading = false;
+  $(document).ready(function(){
+    $.cycoPageUnloading = false;
+    window.onbeforeunload = function (){
+      $.cycoPageUnloading = true;
+    };
+  });
+  
   var nameSpaceyThing; //Convenience reference.
   Drupal.behaviors.cycoErrorHandler = {
     attach: function(context, settings) {
       nameSpaceyThing = this;
     }, //End attach
     reportError: function( message ) {
+      if ( $.cycoPageUnloading ) {
+        return;
+      }
       //Show a "Please wait" display.
       nameSpaceyThing.showAjaxWaitDisplay( message );
       $.when(
@@ -107,6 +118,9 @@
      * @param {string} message Original error message.
      */
     showMetaError: function( message ) {
+      if ( $.cycoPageUnloading ) {
+        return;
+      }
       if ( ! message ) {
         message = "(I don't even know that! Man, this sucks. For real, baby.)";
       }
