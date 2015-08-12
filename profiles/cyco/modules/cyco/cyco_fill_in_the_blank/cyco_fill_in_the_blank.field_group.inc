@@ -21,7 +21,7 @@ function cyco_fill_in_the_blank_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Correct number',
-    'weight' => '6',
+    'weight' => '5',
     'children' => array(
       0 => 'field_lowest',
       1 => 'field_highest',
@@ -49,7 +49,7 @@ function cyco_fill_in_the_blank_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Correct text',
-    'weight' => '7',
+    'weight' => '6',
     'children' => array(
       0 => 'field_case_sensitive',
       1 => 'field_correct_text_answers',

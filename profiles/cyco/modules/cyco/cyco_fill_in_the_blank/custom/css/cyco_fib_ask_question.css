@@ -62,7 +62,7 @@ fieldset.cyco-fib legend.cyco-fib-legend span {
 }
 
 .cyco-fib .cyco-fib-correct {
-  background-color: #9bff9b;
+  background-color: PaleGreen;
   border-color: #A6DEA6;
 }
 
@@ -71,7 +71,8 @@ fieldset.cyco-fib legend.cyco-fib-legend span {
   border-color: yellow;
 }
 
-.cyco-fib .cyco-fib-hint-container .cyco-fib-hint {
+.cyco-fib .cyco-fib-hint, 
+.cyco-fib .cyco-fib-explanation {
   margin-top: 1em;
 }
 

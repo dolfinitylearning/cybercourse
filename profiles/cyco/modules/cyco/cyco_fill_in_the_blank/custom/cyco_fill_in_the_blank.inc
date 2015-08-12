@@ -37,6 +37,7 @@ function cyco_fill_in_the_blank_theme() {
         'title' => '(no title)',
         'body' => '(no body)',
         'hints' => '',
+        'explanation' => '',
       ),
     ),
   );
@@ -133,6 +134,14 @@ function _cyco_fill_in_the_blank_swim_callback( $fib_internal_name, $tag_content
                //to avoid Certain Things.
         )
       : '';
+  $explanation = 
+        isset( $fib_node->field_explanation[LANGUAGE_NONE][0]['value'] )
+      ? swim_textile2html( 
+          $fib_node->field_explanation[LANGUAGE_NONE][0]['value'],
+          TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
+               //to avoid Certain Things.
+        )
+      : '';
   $response_type = $fib_node->field_response_type[LANGUAGE_NONE][0]['value'];
   $result = theme('fill_in_the_blank_inserted', 
       array(
@@ -141,6 +150,7 @@ function _cyco_fill_in_the_blank_swim_callback( $fib_internal_name, $tag_content
         'title' => $fib_node->title,
         'body' => $body,
         'hints' => $hints,
+        'explanation' => $explanation,
       )
   );
   global $base_url;

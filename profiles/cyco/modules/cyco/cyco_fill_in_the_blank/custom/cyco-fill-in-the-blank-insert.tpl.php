@@ -24,7 +24,9 @@ Template for displaying a fill-in-the-blank quesion inside a node
   </div>
   <div class="cyco-fib-correct" style="display: none;">
     You got it!
-  </div>  
+    <div class="cyco-fib-explanation">
+      <?php print $explanation; ?>
+    </div>  </div>  
   <div class="cyco-fib-hint-container" style="display: none;">
     Sorry, that's not it.
     <div class="cyco-fib-hint">

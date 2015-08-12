@@ -137,6 +137,45 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-fill_in_the_blank-field_explanation'
+  $field_instances['node-fill_in_the_blank-field_explanation'] = array(
+    'bundle' => 'fill_in_the_blank',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Explanation of the correct answer.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'swim',
+        'settings' => array(),
+        'type' => 'swim_default_formatter',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_explanation',
+    'label' => 'Explanation',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'swim',
+      'settings' => array(),
+      'type' => 'swim_with_summary_widget',
+      'weight' => 8,
+    ),
+  );
+
   // Exported field_instance: 'node-fill_in_the_blank-field_highest'
   $field_instances['node-fill_in_the_blank-field_highest'] = array(
     'bundle' => 'fill_in_the_blank',
@@ -220,7 +259,7 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 9,
+      'weight' => 7,
     ),
   );
 
@@ -391,7 +430,7 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 10,
+      'weight' => 9,
     ),
   );
 
@@ -440,6 +479,8 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
   t('Case-sensitive');
   t('Correct answer for text questions.');
   t('Correct answers');
+  t('Explanation');
+  t('Explanation of the correct answer.');
   t('For numbers, the highest value that will be considered correct. Leave blank for integers.');
   t('For numbers, the lowest value that will be considered correct. Leave blank for integers.');
   t('For text responses, is the correct response case-sensitive?');
