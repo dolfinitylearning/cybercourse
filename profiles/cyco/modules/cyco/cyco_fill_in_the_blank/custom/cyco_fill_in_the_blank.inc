@@ -49,7 +49,7 @@ function cyco_fill_in_the_blank_theme() {
  */
 function cyco_fill_in_the_blank_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   switch ($root_path) {
-    case 'fill_in_the_blank':
+    case 'fill-in-the-blanks':
       if ( cyco_core_current_user_has_role( array('author', 'administrator') ) ) {
         //Link to add fib.
         $item = menu_get_item('node/add/fill-in-the-blank');
@@ -64,14 +64,14 @@ function cyco_fill_in_the_blank_menu_local_tasks_alter(&$data, $router_item, $ro
       $path = $router_item['href'];
       list( $ignore, $nid ) = explode('/', $path);
       $node = node_load($nid);
-      if ( $node->type == 'fill-in-the-blank' ) {
+      if ( $node->type == 'fill_in_the_blank' ) {
           $item = menu_get_item('node/add/fill-in-the-blank');
           $item['title'] = t('Add fill-in-the-blank');
           $data['actions']['output'][] = array(
             '#theme' => 'menu_local_action',
             '#link' => $item,
           );
-          $item = menu_get_item('fill_in_the_blanks');
+          $item = menu_get_item('fill-in-the-blanks');
           $item['title'] = t('List fill-in-the-blanks');
           $data['actions']['output'][] = array(
             '#theme' => 'menu_local_action',

@@ -63,6 +63,7 @@ function cyco_fill_in_the_blank_views_default_views() {
   $handler->display->display_options['fields']['field_keywords']['id'] = 'field_keywords';
   $handler->display->display_options['fields']['field_keywords']['table'] = 'field_data_field_keywords';
   $handler->display->display_options['fields']['field_keywords']['field'] = 'field_keywords';
+  $handler->display->display_options['fields']['field_keywords']['element_wrapper_type'] = 'div';
   $handler->display->display_options['fields']['field_keywords']['delta_offset'] = '0';
   /* Field: Content: Body */
   $handler->display->display_options['fields']['field_body']['id'] = 'field_body';
@@ -104,6 +105,10 @@ function cyco_fill_in_the_blank_views_default_views() {
   $handler->display->display_options['fields']['field_case_sensitive']['id'] = 'field_case_sensitive';
   $handler->display->display_options['fields']['field_case_sensitive']['table'] = 'field_data_field_case_sensitive';
   $handler->display->display_options['fields']['field_case_sensitive']['field'] = 'field_case_sensitive';
+  /* Field: Content: Explanation */
+  $handler->display->display_options['fields']['field_explanation']['id'] = 'field_explanation';
+  $handler->display->display_options['fields']['field_explanation']['table'] = 'field_data_field_explanation';
+  $handler->display->display_options['fields']['field_explanation']['field'] = 'field_explanation';
   /* Field: Content: Hints */
   $handler->display->display_options['fields']['field_hints']['id'] = 'field_hints';
   $handler->display->display_options['fields']['field_hints']['table'] = 'field_data_field_hints';
