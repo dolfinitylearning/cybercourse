@@ -139,3 +139,42 @@ div.view .views-label {
   font-weight: bold;
   color: seagreen;
 }
+
+/** For the feedback module. **/
+#block-feedback-form {
+  top: 0;
+  bottom: auto;
+  z-index: 2000;
+}
+
+#block-feedback-form .feedback-help {
+  font-size: inherit;
+}
+
+#block-feedback-form form {
+  max-width: 400px;
+}
+
+#block-feedback-form h2 {
+  margin-top: 4px;
+}
+
+  
+#block-feedback-form .feedback-link {
+  color: white;
+  font-size: 16px;
+}
+
+#block-feedback-form .feedback-link * {
+    display: inline;
+    font-size: 16px;
+}
+
+#feedback-status-message {
+  border: none;
+  border-radius: 10px;
+  background-color: orange;
+  color: white;
+  padding: 10px;
+  
+}
