@@ -1087,6 +1087,21 @@ function _cyco_add_links_cp_menu1() {
     ),
   );
   $items[] = array(
+    'link_path' => 'fill-in-the-blanks',
+    'link_title' => 'Fill in the blanks',
+    'weight' => -13,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $plid,
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Fill-in-the-blank qestions.',
+      ),
+    ),
+  );
+  $items[] = array(
     'link_path' => 'badges',
     'link_title' => 'Badges',
     'weight' => -10,
@@ -1395,41 +1410,6 @@ function _cyco_add_links_cp_menu1() {
     menu_link_save($item);
   }
 
-  //Activities.
-  $items[] = array(
-    'link_path' => 'activities',
-    'link_title' => 'List activities',
-    'weight' => 0,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $_cyco_install_cp_top_level_mlids['activities'],
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'See all activities (including unpublished).',
-      ),
-    ),
-  );
-  $items[] = array(
-    'link_path' => 'node/add/activity',
-    'link_title' => 'Create a new activity',
-    'weight' => 10,
-    'expanded' => TRUE,
-    'menu_name' => $menu_name,
-    'language' => $language,
-    'plid' => $_cyco_install_cp_top_level_mlids['activities'],
-    'module' => $module,
-    'options' => array(
-      'attributes' => array(
-        'title' => 'Create a new activity.',
-      ),
-    ),
-  );
-  foreach ($items as $item) {
-    menu_link_save($item);
-  }
-
   //Exercises and rubics submenu
   $items = array();
   $items[] = array(
@@ -1557,6 +1537,42 @@ function _cyco_add_links_cp_menu1() {
   $menu_name = 'menu-cp-actions';
   $language = LANGUAGE_NONE;
   $module = 'cyco_core';
+
+  //Fill-in-the-blanks submenu
+  $items = array();
+  $items[] = array(
+    'link_path' => 'fill-in-the-blanks',
+    'link_title' => 'Fill-in-the-blanks',
+    'weight' => 0,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['fill-in-the-blanks'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Show fill-in-the-blanks questions.',
+      ),
+    ),
+  );
+  $items[] = array(
+    'link_path' => 'node/add/fill-in-the-blank',
+    'link_title' => 'Add fill-in-the-blank',
+    'weight' => 10,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['fill-in-the-blanks'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Create a new fill-in-the-blank question.',
+      ),
+    ),
+  );
+  foreach ($items as $item) {
+    menu_link_save($item);
+  }
 
   //Badges submenu
   $items = array();
@@ -1866,6 +1882,21 @@ function _cyco_add_links_cp_menu1() {
   $module = 'cyco_core';
 //Other submenu
   $items = array();
+  $items[] = array(
+    'link_path' => 'admin/reports/feedback',
+    'link_title' => 'Feedback',
+    'weight' => -10,
+    'expanded' => TRUE,
+    'menu_name' => $menu_name,
+    'language' => $language,
+    'plid' => $_cyco_install_cp_top_level_mlids['admin/content'],
+    'module' => $module,
+    'options' => array(
+      'attributes' => array(
+        'title' => 'Look at feedback people have given.',
+      ),
+    ),
+  );
   $items[] = array(
     'link_path' => 'admin/content',
     'link_title' => 'All content',
