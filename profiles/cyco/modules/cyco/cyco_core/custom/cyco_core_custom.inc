@@ -124,6 +124,13 @@ function cyco_core_menu_alter(&$items) {
 function cyco_core_form_alter(&$form, $form_state, $form_id) {
   _cyco_core_utilities_form_alter($form, $form_state, $form_id);
   _cyco_core_groups_form_alter($form, $form_state, $form_id);
+  if (module_exists('feedback') && $form_id == 'feedback_form' ) {
+    $form['help']['#markup'] = t(
+      'Spot an error? Got a suggestion? Let us know! '
+      . 'Feel free to cut-and-paste.'
+    );
+    $form['message']['#cols'] = 40;
+  }
 }
 
 /**
