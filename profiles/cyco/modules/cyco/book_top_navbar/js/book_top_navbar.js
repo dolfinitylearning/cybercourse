@@ -7,10 +7,10 @@
   Drupal.behaviors.bookTopNavbar = {
     attach: function (context, settings) {
       //If settings exist...
-      if ( Drupal.settings.bookTopBNavbar ) {
+      if ( Drupal.settings.bookTopNavbar ) {
         //If suppressing kids...
-        if ( Drupal.settings.bookTopBNavbar.supressKids ) {
-          var topNavbar = $(".book-navigation .menu").get(0);
+        if ( Drupal.settings.bookTopNavbar.supressKids ) {
+          var topNavbar = $("#book-top-navbar-top-navbar .book-navigation .menu");
           $(topNavbar).remove();
         }
       }
