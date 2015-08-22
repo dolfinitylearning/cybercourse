@@ -123,7 +123,6 @@ function _cyco_fill_in_the_blank_swim_callback( $fib_internal_name, $tag_content
           $fib_node->field_body[LANGUAGE_NONE][0]['value'],
           TRUE //Flag as embedded call (swim_textile2html w/in swim_textile2html),
            //to avoid Certain Things.
-
         )
       : '';
   $hints = 
@@ -153,7 +152,6 @@ function _cyco_fill_in_the_blank_swim_callback( $fib_internal_name, $tag_content
         'explanation' => $explanation,
       )
   );
-  global $base_url;
   //Add CSS
   $path = drupal_get_path('module', 'cyco_fill_in_the_blank')
       . '/custom/css/cyco_fib_ask_question.css';
