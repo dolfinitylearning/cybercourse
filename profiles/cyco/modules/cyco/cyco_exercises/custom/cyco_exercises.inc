@@ -1580,40 +1580,11 @@ function cyco_exercises_preprocess_node(&$variables) {
  * @param string $tag_content Inner tag content. Not used.
  */
 function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) {
-//  $efq = new EntityFieldQuery;
-//  $efq->entityCondition('entity_type', 'node')
-//    ->entityCondition('bundle', 'exercise')
-//    ->propertyCondition('status', 1)
-//    ->fieldCondition('field_internal_name', 'value', $exercise_internal_name, '=');
-//  $query_result = $efq->execute();
   $exercise_nid = cyco_core_nid_for_internal_name( $exercise_internal_name );
   if ( is_null($exercise_nid) ) {
     //Error already reported in function. 
     return '';
   }
-//  
-//  $sql = 'select entity_id from {field_data_field_internal_name} '
-//      . 'where entity_type=\'node\' '
-////      . 'where entity_type=\'node\' and bundle=\'exercise\' '
-//      . 'and field_internal_name_value=\'' 
-//      . check_plain($exercise_internal_name) . '\'';
-//  $query_result = db_query($sql);
-//  $nids = array();
-//  foreach( $query_result as $row ) {
-//    $nids[] = $row->entity_id;
-//  }
-//  $num_nids_returned = sizeof($nids);
-//  if ( $num_nids_returned > 1 ) {
-//    //This should never happen.
-//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-//        . ' Duplicates for internal name ' . $exercise_internal_name . '.';
-//    cyco_core_handle_error( $message );
-//    form_set_error(
-//        'field_internal_name', 
-//        t('Internal error: ' . $message . "\n\nPlease tell someone.")
-//    );
-//    return '';
-//  }
   //Exit if not found.
   if ( $exercise_nid == 0 ) {
     $message = t('Not found exercise internal name: @name', 
@@ -1621,7 +1592,6 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
     watchdog('cyco_exercises', $message);
     return '';
   }
-//  $exercise_nid = $nids[0];
   $exercise_node = node_load($exercise_nid);
   if ( ! $exercise_node->status ) {
     $message = t('Tried to show unpublished exercise: @name (@nid)', 
