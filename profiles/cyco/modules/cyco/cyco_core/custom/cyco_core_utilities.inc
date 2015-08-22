@@ -573,3 +573,18 @@ function cyco_core_internal_name_valid( $name_to_check ) {
   $result = ( preg_match('/[^a-z0-9_]/', $name_to_check) === 0 );
   return $result;
 }
+
+
+//See http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
+function cyco_core_starts_with($haystack, $needle) {
+     $length = strlen($needle);
+     return (substr($haystack, 0, $length) === $needle);
+}
+
+function cyco_core_ends_with($haystack, $needle) {
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+    return (substr($haystack, -$length) === $needle);
+}

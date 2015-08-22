@@ -140,6 +140,46 @@ function cyco_core_form_alter(&$form, $form_state, $form_id) {
         . '</p>';
     $form['message']['#cols'] = 40;
   }
+  //Tweak node edit forms.
+  if (strpos($form_id, 'node') !== FALSE) {
+    $settings = array(
+      'enabled' => TRUE,
+    );
+    drupal_add_js(
+        array('cycoNodeEditTweaks' => $settings),
+        'setting'
+    );
+    drupal_add_js(
+        drupal_get_path('module', 'cyco_core') 
+          . '/custom/js/cyco_node_edit_tweaks.js'
+    );
+    drupal_add_css(
+        drupal_get_path('module', 'cyco_core') 
+          . '/custom/css/cyco_node_edit_tweaks.css'
+    );
+    if (isset($form['field_attachments'])) {
+      //Create the fieldset
+      $form['attachments_fieldset'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Attach files'),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+      if (isset($form['field_attachments']['#weight'])) {
+        $form['attachments_fieldset']['#weight'] = $form['field_attachments']['#weight'];
+      }
+      // Move the field into the fieldset
+      $form['attachments_fieldset']['field_attachments'] = $form['field_attachments'];
+      // Unset the original field
+      unset($form['field_attachments']);
+      // Are there hidden attachments?
+      if (isset($form['field_hidden_attachments'])) {
+        $form['attachments_fieldset']['field_hidden_attachments'] 
+            = $form['field_hidden_attachments'];
+        unset( $form['field_hidden_attachments'] );
+      }
+    }
+  }
 }
 
 /**
