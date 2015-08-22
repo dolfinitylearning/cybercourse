@@ -438,6 +438,8 @@ function _cyco_pseudents_swim_edit_callback( $pseudent_internal_name, $content )
   $usable_url = cyco_core_uri2path(
      $node->field_image[LANGUAGE_NONE][0]['uri']
   );
+  //brs add spacing to reduce problems with not being able to
+  //put cursor before/after pseudent block.
   $html =   '<div class="pseudent" data-pseudent-internal-name="' 
           .       $pseudent_internal_name . '" >'
           .   '<div class="pseudent-image-container">'
@@ -478,9 +480,9 @@ function _cyco_pseudents_make_textile_replacements($matches) {
   $content = $matches[2];
   //May have extra <p></p> wrapped around content.
   $content = trim($content);
-  if ( substr($content, 0, 3) == '<p>' && substr($content, -4, 4) == '</p>' ) {
-    $content = substr($content, 3, strlen($content) - 7 );
-  }
+//  if ( substr($content, 0, 3) == '<p>' && substr($content, -4, 4) == '</p>' ) {
+//    $content = substr($content, 3, strlen($content) - 7 );
+//  }
   $replacement = 
     SwimCustomTagParser::START_CUSTOM_TAG . ' pseudent ' . $internal_name . "\n"
       . $content . "\n"
