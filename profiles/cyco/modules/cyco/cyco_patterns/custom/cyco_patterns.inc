@@ -108,27 +108,6 @@ function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
     //Error already reported in function. 
     return '';
   }
-//  $sql = 'select entity_id from {field_data_field_internal_name} '
-//      . 'where entity_type=\'node\' and bundle=\'pattern\' '
-//      . 'and field_internal_name_value=\'' 
-//      . check_plain($pattern_internal_name) . '\'';
-//  $query_result = db_query($sql);
-//  $nids = array();
-//  foreach( $query_result as $row ) {
-//    $nids[] = $row->entity_id;
-//  }
-//  $num_nids_returned = sizeof($nids);
-//  if ( $num_nids_returned > 1 ) {
-//    //This should never happen.
-//    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
-//        . ' Duplicates for internal name ' . $pattern_internal_name . '.';
-//    cyco_core_handle_error( $message );
-//    form_set_error(
-//        'field_internal_name', 
-//        t('Internal error: ' . $message . "\n\nPlease tell someone.")
-//    );
-//    return '';
-//  }
   //Exit if not found.
   if ( $pattern_nid == 0 ) {
     $message = t('Not found pattern internal name: @name', 
@@ -175,32 +154,9 @@ function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
                //to avoid Certain Things.
         )
       : '';
-/*
-  //Make pattern category links.
-  $pattern_category_links = array();
-  $pattern_category_links_rendered = '';
-  if ( sizeof( $pattern_node->field_pattern_categories ) > 0 ) {
-    $done_first = FALSE;
-    foreach ($pattern_node->field_pattern_categories[LANGUAGE_NONE] as $item) {
-      $tid = $item['tid'];
-      $term = taxonomy_term_load($tid);
-      $term_name = $term->name;
-      $pattern_category_links[] = array('tid' => $tid, 'term' => $term_name);
-      $path_to_term = drupal_lookup_path('alias', 'taxonomy/term/' . $tid);
-      $link_html = l($term_name, $path_to_term );
-      if ( $done_first ) {
-        $pattern_category_links_rendered .= ', ';
-      }
-      $done_first = TRUE;
-      $pattern_category_links_rendered .= $link_html;
-    }
-  }
- */
   $result = theme('pattern_inserted', 
       array(
         'title' => $pattern_node->title,
-//        'category_links' => $pattern_category_links,
-//        'category_links_rendered' => $pattern_category_links_rendered,
         'situation' => $situation,
         'actions' => $actions,
         'more_link_destination' => '/node/' . $pattern_nid,
