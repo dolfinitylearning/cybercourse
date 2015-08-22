@@ -1,6 +1,0 @@
-name = Node edit tweaks
-description = Tweak the node edit form.
-package = CyberCourse
-core = 7.x
-version = 7.x-1.0
-
