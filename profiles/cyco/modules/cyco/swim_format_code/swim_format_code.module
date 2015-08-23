@@ -6,46 +6,6 @@
  */
 
 /**
- * Implements hook_init().
- */
-function swim_format_code_init() {
-  // Try to load the cookie library, and check if that worked.
-  $library = libraries_load('google-code-prettify');
-  if ( ! $library['loaded'] ) {
-    return swim_plugin_error('format_code: ' 
-        . t('Code prettifier did not load.'));
-  }
-  drupal_add_css( 
-      drupal_get_path('module', 'swim_format_code') 
-        . '/css/swim_format_code.css',
-      array(
-        'type' => 'file', 
-        'every_page' => TRUE, 
-        'preprocess' => TRUE,
-      )
-  );
-}
-
-/**
- * Implements hook_libraries_info().
- */
-function swim_format_code_libraries_info() {
-  $libraries = array();
-  $libraries['google-code-prettify'] = array(
-    'name' => 'Google code prettify',
-    'vendor url' => 'https://code.google.com/p/google-code-prettify/',
-    'download url' => 'https://code.google.com/p/google-code-prettify/downloads/list',
-    'version' => 'March 13, 2013',
-    'files' => array(
-      'js' => array(
-        'run_prettify.js',
-      ),
-    ),
-  );
-  return $libraries;
-}
-
-/**
  * Implements hook_help().
  */
 function swim_format_code_help($path, $arg) {
@@ -80,32 +40,41 @@ function swim_format_code_swim_custom_tag_view_info() {
  */
 function _swim_format_code_swim_callback( $param_string, $tag_content ) {
   $param_string = trim($param_string);
-  $line_num_given = FALSE;
+  $start_line_num = -1;
   if ( $param_string ) {
     $params = explode(' ', $param_string);
     foreach( $params as $param ) {
       if (is_numeric($param) ) {
-        $line_num_given = TRUE;
+        $start_line_num = $param;
       }
-      if ( substr($param, 0, 5) == 'lang-') {
-        //Language was specified. Load the lang definition file.
-        $lang_file = $param;
-        $path = libraries_get_path('google-code-prettify') 
-            . '/' . $lang_file . '.js';
-        drupal_add_js(
-          $path,
-          array('preprocess' => FALSE)
-        );
-      }// End there is a lang.
     }
   }
-  //Compute the classes string.
-  $classes = 'prettyprint ' . ($line_num_given ? 'linenums ' : '') . $param_string;
-  $output = '<xmp class="' . $classes . '">'
-      .$tag_content
-      . '</xmp>';
+  $markup = '<ol class="swim-code"' 
+      . ( ($start_line_num == -1) ? '' : (' start="' . $start_line_num . '"') )
+      . '>' . PHP_EOL;
+  $tag_content = str_replace("\r", '', $tag_content);
+  $content_lines = explode("\n", $tag_content);
+  $content_lines_last_index = sizeof( $content_lines ) - 1;
+  foreach( $content_lines as $index => $line ) {
+    //Skip the last line if it's MT.
+    if ( $index == $content_lines_last_index && trim($line) == '' ) {
+      continue;
+    }
+    $line = str_replace(' ', '&nbsp;', $line);
+    $line = str_replace('<', '&lt;', $line);
+    $line = str_replace('>', '&gt;', $line);
+    //Replace markers with highlighting spans.
+    $line = str_replace('&gt;&gt;&gt;&gt;', '<span class="swim-code-emph3">', $line);
+    $line = str_replace('&lt;&lt;&lt;&lt;', '</span>', $line);
+    $line = str_replace('&gt;&gt;&gt;', '<span class="swim-code-emph2">', $line);
+    $line = str_replace('&lt;&lt;&lt;', '</span>', $line);
+    $line = str_replace('&gt;&gt;', '<span class="swim-code-emph1">', $line);
+    $line = str_replace('&lt;&lt;', '</span>', $line);
+    $markup .= '<li>' . $line . '</li>' . PHP_EOL;
+  }
+  $markup .= '</ol>' . PHP_EOL;
   //Shelve it, so Textile doesn't know about it.
-  $marker = swim_shelve($output);
+  $marker = swim_shelve($markup);
   return $marker;
 }
 
@@ -123,18 +92,5 @@ function swim_format_code_swim_peek_load_css() {
   return $result;
 }
 
-/**
- * Implements hook_swim_peek_load_js().
- * 
- * Return JS file to show code in peek.
- */
-function swim_format_code_swim_peek_load_js() {
-  global $base_url;
-  $result = array(
-    $base_url . base_path() . libraries_get_path('google-code-prettify') 
-      . '/run_prettify.js',
-  );
-  return $result;
-}
 
 

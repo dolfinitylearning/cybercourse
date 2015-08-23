@@ -254,6 +254,7 @@ function cyco_core_theme() {
   );
   //Let other files add their stuff.
   _cyco_control_panel_theme($theme_defs);
+  _cyco_groups_theme($theme_defs);
   return $theme_defs;
 }
 

@@ -389,18 +389,39 @@ function cyco_core_og_ui_get_group_admin() {
  */
 function _cyco_core_groups_add_menu_items(&$items) {
   $items['group/%/%/admin/approve-deny-membership-requests'] = array(
-//    'title' => 'thing',
-//    'title callback' => '_cyco_core_groups_approve_deny_title',
     'title callback' => 'og_ui_menu_title_callback',
     'title arguments' => array('Membership requests for group @group', 1, 2),
     'description' => 'Approve/deny group membership requests.',
     'page callback' => '_cyco_core_groups_approve_deny_membership_requests',
     'page arguments' => array(1, 2),
-//    'access callback' => TRUE,
     'access callback' => 'og_ui_user_access_group',
     'access arguments' => array('manage members', 1, 2),
     'weight' => -12,
   );
+  $items['node/%/class'] = array(
+    'title' => 'Reports',
+    'page callback' => '_cyco_core_groups_report_menu',
+    'page arguments' => array(1),
+    'access callback' => TRUE, //'og_ui_user_access_group',
+//    'access arguments' => array('manage members', 1, 2),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 5,
+  );
+}
+
+
+function _cyco_core_groups_report_menu($gid) {
+  $result = theme('cyco_exercise_submission_count_per_student', 
+    array(
+      'gid' => $gid,
+      'exercise_count_report_link' => 
+        l(
+          'Count of exercises submitted by each student',
+          'count-exer-submitted-each-student/' . $gid
+        ),
+    )
+  );
+  return $result;
 }
 
 //See og_ui_menu_title_callback.
@@ -509,3 +530,16 @@ function _cyco_core_deny_student_membership_action($og_membership, $context) {
   $og_membership->delete();
 }
 
+/**
+ * Contributes hook_theme() pieces.
+ */
+function _cyco_groups_theme( &$theme_defs ) {
+  $theme_defs['cyco_exercise_submission_count_per_student'] = array(
+    'template' => 'custom/templates/cyco-groups-reports-list',
+    // Default variable values
+    'variables' => array(
+      'gid' => '',
+      'exercise_count_report_url' => '',
+    ),
+   );
+}

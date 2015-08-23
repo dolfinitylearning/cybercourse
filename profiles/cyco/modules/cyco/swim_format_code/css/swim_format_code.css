@@ -1,8 +1,24 @@
-.swim li.L0, 
-.swim li.L1,
-.swim li.L2, 
-.swim li.L3,
-.swim li.L5, 
-.swim li.L6, 
-.swim li.L7, 
-.swim li.L8 { list-style-type: decimal !important }
+.swim .swim-code {
+  font-family: monospace;
+}
+
+.swim .swim-code .swim-code-emph1 {
+  background-color: #ff9900;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.swim .swim-code .swim-code-emph2 {
+  background-color: #00cc33;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.swim .swim-code .swim-code-emph3 {
+  background-color: #cc00cc;
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+}
