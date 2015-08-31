@@ -96,7 +96,7 @@ function cyco_fill_in_the_blank_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '10',
+          'weight' => '11',
         ),
       ),
       'display' => array(),

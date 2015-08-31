@@ -263,6 +263,93 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-fill_in_the_blank-field_images'
+  $field_instances['node-fill_in_the_blank-field_images'] = array(
+    'bundle' => 'fill_in_the_blank',
+    'deleted' => 0,
+    'description' => 'Images for your content .',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_images',
+    'label' => 'Images',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'exclude_cv' => FALSE,
+      'file_directory' => 'cycourse/bucket',
+      'file_extensions' => 'png gif jpg jpeg svg',
+      'max_filesize' => '5mb',
+      'max_resolution' => '1200x1200',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'filefield_sources' => array(
+          'filefield_sources' => array(
+            'attach' => 0,
+            'clipboard' => 0,
+            'imce' => 'imce',
+            'reference' => 0,
+            'remote' => 0,
+            'upload' => 'upload',
+          ),
+          'source_attach' => array(
+            'absolute' => 0,
+            'attach_mode' => 'move',
+            'path' => 'file_attach',
+          ),
+          'source_imce' => array(
+            'imce_mode' => 1,
+          ),
+          'source_reference' => array(
+            'autocomplete' => 0,
+          ),
+        ),
+        'insert' => 0,
+        'insert_absolute' => 0,
+        'insert_class' => '',
+        'insert_default' => 'auto',
+        'insert_styles' => array(
+          'auto' => 'auto',
+          'icon_link' => 0,
+          'image' => 0,
+          'image_large' => 0,
+          'image_medium' => 0,
+          'image_thumbnail' => 0,
+          'link' => 0,
+        ),
+        'insert_width' => '',
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'node-fill_in_the_blank-field_internal_name'
   $field_instances['node-fill_in_the_blank-field_internal_name'] = array(
     'bundle' => 'fill_in_the_blank',
@@ -430,7 +517,7 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
       'module' => 'swim',
       'settings' => array(),
       'type' => 'swim_widget',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -487,6 +574,8 @@ function cyco_fill_in_the_blank_field_default_field_instances() {
   t('Highest');
   t('Hints');
   t('Hints given to student after a wrong response.');
+  t('Images');
+  t('Images for your content .');
   t('Internal name');
   t('Internal name, used when embedding this into lessons.');
   t('Keywords');

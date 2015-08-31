@@ -28,6 +28,7 @@ features[field_instance][] = node-fill_in_the_blank-field_correct_text_answers
 features[field_instance][] = node-fill_in_the_blank-field_explanation
 features[field_instance][] = node-fill_in_the_blank-field_highest
 features[field_instance][] = node-fill_in_the_blank-field_hints
+features[field_instance][] = node-fill_in_the_blank-field_images
 features[field_instance][] = node-fill_in_the_blank-field_internal_name
 features[field_instance][] = node-fill_in_the_blank-field_keywords
 features[field_instance][] = node-fill_in_the_blank-field_lowest
