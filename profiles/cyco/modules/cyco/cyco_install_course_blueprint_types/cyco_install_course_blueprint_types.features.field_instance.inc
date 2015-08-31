@@ -85,7 +85,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -252,6 +252,45 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       ),
       'type' => 'image_image',
       'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-blueprint_page-field_notes'
+  $field_instances['node-blueprint_page-field_notes'] = array(
+    'bundle' => 'blueprint_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'swim',
+        'settings' => array(),
+        'type' => 'swim_default_formatter',
+        'weight' => 7,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_notes',
+    'label' => 'Notes',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'swim',
+      'settings' => array(),
+      'type' => 'swim_widget',
+      'weight' => 7,
     ),
   );
 
@@ -668,6 +707,45 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-course_page-field_notes'
+  $field_instances['node-course_page-field_notes'] = array(
+    'bundle' => 'course_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'swim',
+        'settings' => array(),
+        'type' => 'swim_default_formatter',
+        'weight' => 8,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_notes',
+    'label' => 'Notes',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'swim',
+      'settings' => array(),
+      'type' => 'swim_widget',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'node-course_page-field_short_title'
   $field_instances['node-course_page-field_short_title'] = array(
     'bundle' => 'course_page',
@@ -804,6 +882,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Keywords');
   t('Keywords describing this page.');
   t('Keywords relevant to course design. Shown in the blueprint only.');
+  t('Notes');
   t('Short title');
   t('Show table of contents');
   t('Tasks for this page.');

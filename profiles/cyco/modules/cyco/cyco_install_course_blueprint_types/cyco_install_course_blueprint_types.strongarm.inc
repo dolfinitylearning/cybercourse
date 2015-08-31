@@ -123,7 +123,7 @@ function cyco_install_course_blueprint_types_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '8',
+          'weight' => '9',
         ),
       ),
       'display' => array(),
