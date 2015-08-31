@@ -52,9 +52,6 @@ function _swim_format_code_swim_callback( $param_string, $tag_content ) {
       . ( ($start_line_num == -1) ? '' : (' start="' . $start_line_num . '"') )
       . '>' . PHP_EOL;
   $tag_content = str_replace("\r", '', $tag_content);
-  //Remove zero-width spaces. They show up when pasting text from
-  //Excel's VBE. (OK, this is a slimy hack.)
-  $tag_content = str_replace("&#8203;", '', $tag_content);
   $content_lines = explode("\n", $tag_content);
   $content_lines_last_index = sizeof( $content_lines ) - 1;
   foreach( $content_lines as $index => $line ) {
@@ -79,6 +76,30 @@ function _swim_format_code_swim_callback( $param_string, $tag_content ) {
   $marker = swim_shelve($markup);
   return $marker;
 }
+
+/**
+ * Implements hook_swim_custom_tag_edit_info().
+ */
+//function swim_format_code_swim_custom_tag_edit_info() {
+//  $definition = array(
+//    'tag' => 'format-code',
+//    'callback' => '_swim_format_code_swim_edit_callback',
+//  );
+//  return $definition;
+//}
+//
+//function _swim_format_code_swim_edit_callback( $internal_name, $content ) {
+//  //Remove zero-width spaces. They show up when pasting text from
+//  //Excel's VBE. (OK, this is a slimy hack.)
+//  $x = strstr("&#8203;", $content);
+//  $y = strstr("&#8203;" . PHP_EOL, $content);
+//  $z = strstr("&#8203;\n", $content);
+//  $z1 = htmlentities($content);
+//  
+//  $content = str_replace("&#8203;", '', $content);
+//  return $content;
+//  
+//}
 
 /**
  * Implements hook_swim_peek_load_css().
