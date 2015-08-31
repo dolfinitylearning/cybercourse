@@ -844,6 +844,9 @@ function swim_ckhtml2textile( $content ) {
   $content = str_replace('&nbsp;', ' ', $content);
   //Replace &#39; with real quotes.
   $content = str_replace('&#39;', '\'', $content);
+  //Remove zero-width spaces. They show up when pasting text from
+  //Excel's VBE. (OK, this is a slimy hack.)
+  $content = str_replace('&#8203;', '\'', $content);
   //Remove the <br>s, leaving just the \ns.
   $content = _swim_remove_brs( $content );
   //Trigger other module's translators. 
