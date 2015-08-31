@@ -13,7 +13,6 @@ function swim_format_code_help($path, $arg) {
     case 'admin/help#swim_format_code':
       return '<p>' . t('Format code (HTML, PHP... Syntax:') . '</p>'
           . '<p><code>@@cyco format-code STARTING_LINE_NUMBER [LANG-name]</code></p>'
-//          . '<p>' . t('STARTING LINE NUMBER defaults to 1.') . '</p>'
           . '<p>' . t('Examples:') . '</p>' 
           . '<p><code>@@cyco format-code 1</code></p>'
           . '<p><code>@@cyco format-code 23</code></p>'
@@ -53,6 +52,9 @@ function _swim_format_code_swim_callback( $param_string, $tag_content ) {
       . ( ($start_line_num == -1) ? '' : (' start="' . $start_line_num . '"') )
       . '>' . PHP_EOL;
   $tag_content = str_replace("\r", '', $tag_content);
+  //Remove zero-width spaces. They show up when pasting text from
+  //Excel's VBE. (OK, this is a slimy hack.)
+  $tag_content = str_replace("&#8203;", '', $tag_content);
   $content_lines = explode("\n", $tag_content);
   $content_lines_last_index = sizeof( $content_lines ) - 1;
   foreach( $content_lines as $index => $line ) {
