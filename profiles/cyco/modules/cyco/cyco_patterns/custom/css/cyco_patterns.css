@@ -78,3 +78,9 @@ fieldset.cyco-pattern-insert legend.cyco-pattern-insert-legend span {
   float: none !important;
   height: auto !important;
 }
+
+/* Patterns view */
+
+.view-patterns tr .views-field .swim p {
+  margin-top: 0;
+}
