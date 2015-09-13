@@ -52,25 +52,6 @@ app.NewRubricComment = function() {
 /**
  * Constructor.
  */
-//app.ModelSolution = function() {
-//  this.modelSolutionNid = null;
-//  //Exercise this is for.
-//  this.exerciseNid = null;
-//  //HTML for the solution, including links to files.
-//  this.renderedSolution = null;
-//  this.notes = null;
-//};
-
-/**
- * Contains all model solutions fetched during grading. Used as cache.
- * Index is nid.
- * @type Array
- */
-//app.allModelSolutions = new Array();
-
-/**
- * Constructor.
- */
 app.Exercise = function() {
   this.exerciseNid = null;
   this.title = null;

@@ -287,6 +287,7 @@ body {
   padding: 5px;
   background-color: #FAFAFA;
   color: blue;
+  display: inline-block;
 }
 
 .cybercourse-rubric-item-new-comment-container {
@@ -375,16 +376,30 @@ body {
   display: none;
 }
 
-#model-solution-pane .cybercourse-grading-model-number {
+#exercise-notes-pane .cybercourse-grading-model-number {
   font-weight: bold;
   margin-top: 0.5em;
 }
 
-#model-solution-pane .cybercourse-grading-num-models {
+#exercise-notes-pane .cybercourse-grading-num-models {
   border-bottom: 1px solid #DDD;
   padding-top: 3px;
   padding-bottom: 3px;
 }
+
+.cyco-change-comment {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/pen.png);
+  background-repeat: no-repeat;
+  margin-left: 5px;
+  border: 1px #DDD solid;
+  box-shadow: inset 3px 3px 0 rgba(255, 255, 255, 0.4), 3px 3px 1px rgba(0, 0, 0, 0.2);        
+  background-position: center center;
+  float: right;
+}
+
 
 .cyco-save-off, .cyco-save-on {
   display: inline-block;

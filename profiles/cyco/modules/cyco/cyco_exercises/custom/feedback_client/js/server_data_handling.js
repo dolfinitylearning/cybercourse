@@ -214,11 +214,11 @@ app.loadExerciseFromServer = function( exerciseNid ) {
       }
       //Load any missing rubric definitions from the server.
       app.loadRubricItemsFromServer( app.allExercises[ exerciseNid ].rubricItems );
-      //Is there a model solution?
-//      if ( result.models ) {
-//        //Extract it from the server data.
-//        app.loadModelSolutionsFromExercise( exerciseNid, result.models );
-//      }
+      //Are there exercise notes?
+      if ( result.notes ) {
+        //Add to server data.
+        app.allExercises[ exerciseNid ].notes = result.notes;
+      }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
       Drupal.behaviors.cycoErrorHandler.reportError(

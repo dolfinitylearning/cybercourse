@@ -101,7 +101,7 @@ app.rubricPane.resetRubricPaneForSubmission = function() {
         var textarea = $ ( event.target );
         app.rubricPane.choosePopulatedTextarea(textarea);        
       }
-  );  
+  );
   //When user clicks a comment, show it as the Chosen One, collapse
   //rubric item display.
   $(".pane-content").on("click", ".cybercourse-rubric-item-comment", function(event) {
@@ -139,6 +139,22 @@ app.rubricPane.resetRubricPaneForSubmission = function() {
     if ( ! app.rubricPane.simClickDuringReset ) {
       app.submissionsToGrade[ app.currentState.submissionNid ].dirty = true;
     }
+  });
+  //User clicked the customize comment button.
+  $(".pane-content").on("click", ".cyco-change-comment", function(event) {
+    //Find comment element.
+    var commentElement = $(event.target)
+            .closest(".cybercourse-rubric-item-comment-container")
+            .find(".cybercourse-rubric-item-comment");
+    //Get current comment.
+    var currentComment = commentElement.text().trim();
+    //Allow user to change.
+    var newComment = prompt("Text?", currentComment);
+    if ( newComment ) {
+      commentElement.text( newComment );
+    }
+    //Replace current.
+    
   });
   //When the user clicks to collapse button...
   $(".display-state").on("click", function(event) {

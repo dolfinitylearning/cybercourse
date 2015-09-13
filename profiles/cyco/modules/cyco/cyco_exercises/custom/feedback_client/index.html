@@ -76,7 +76,10 @@
           {{set}}
         </div>
         {{#each comments}}
-          <div class="cybercourse-rubric-item-comment">{{comment}}</div>
+          <div class="cybercourse-rubric-item-comment-container">
+            <div class="cybercourse-rubric-item-comment">{{comment}}</div>
+            <div class="cyco-change-comment" title="Customize text">&nbsp;</div>
+          </div>
         {{/each}}
         {{#each newComments}}
           {{> newCommentContainer }}
@@ -134,16 +137,16 @@
     <!-- Outer west -->
     <div class="ui-layout-west" id="outer-west">
 
-      <div id="model-solution-pane" class="ui-layout-center">
-        <header>Model solution</header>
-        <div class="pane-content"></div>
-      </div>
-
-      <div id="exercise-pane" class="ui-layout-south">
+      <div id="exercise-pane" class="ui-layout-center">
         <header>Exercise</header>
         <div class="pane-content"></div>
       </div>
       
+      <div id="exercise-notes-pane" class="ui-layout-south">
+        <header>Exercise notes</header>
+        <div class="pane-content"></div>
+      </div>
+
     </div>
 
     <!-- Outer center -->
@@ -248,7 +251,7 @@
     <script src="js/submission_list_view_controller.js"></script>
     <script src="js/submission_pane_view_controller.js"></script>
     <script src="js/exercise_pane_view_controller.js"></script>
-    <script src="js/model_solution_view_controller.js"></script>
+    <script src="js/exercise_notes_pane_view_controller.js"></script>
     <script src="js/rubric_pane_view_controller.js"></script>
     <script src="js/feedback_pane_view_controller.js"></script>
     <script>
