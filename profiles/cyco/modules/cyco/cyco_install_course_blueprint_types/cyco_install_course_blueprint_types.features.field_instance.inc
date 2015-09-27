@@ -578,7 +578,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -746,6 +746,54 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-course_page-field_order_in_book'
+  $field_instances['node-course_page-field_order_in_book'] = array(
+    'bundle' => 'course_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'DO NOT EDIT. Order of this node in course.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_integer',
+        'weight' => 9,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'exclude_cv' => 0,
+    'field_name' => 'field_order_in_book',
+    'label' => 'Order in book',
+    'required' => 0,
+    'settings' => array(
+      'exclude_cv' => FALSE,
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
+    ),
+  );
+
   // Exported field_instance: 'node-course_page-field_short_title'
   $field_instances['node-course_page-field_short_title'] = array(
     'bundle' => 'course_page',
@@ -873,6 +921,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Blueprint keywords');
   t('Body');
   t('Course page');
+  t('DO NOT EDIT. Order of this node in course.');
   t('Do you want to show a table of contents on this page?');
   t('Files attached to this page.');
   t('Files for this page.');
@@ -883,6 +932,7 @@ function cyco_install_course_blueprint_types_field_default_field_instances() {
   t('Keywords describing this page.');
   t('Keywords relevant to course design. Shown in the blueprint only.');
   t('Notes');
+  t('Order in book');
   t('Short title');
   t('Show table of contents');
   t('Tasks for this page.');
