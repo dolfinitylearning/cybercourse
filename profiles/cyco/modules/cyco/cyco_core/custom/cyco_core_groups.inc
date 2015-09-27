@@ -402,7 +402,7 @@ function _cyco_core_groups_add_menu_items(&$items) {
     'title' => 'Reports',
     'page callback' => '_cyco_core_groups_report_menu',
     'page arguments' => array(1),
-    'access callback' => TRUE, //'og_ui_user_access_group',
+    'access callback' => FALSE, //'og_ui_user_access_group',
 //    'access arguments' => array('manage members', 1, 2),
     'type' => MENU_LOCAL_TASK,
     'weight' => 5,
