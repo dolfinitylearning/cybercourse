@@ -14,6 +14,48 @@ define('CBB_MAX_CHARS', 50);
 define('CBB_MAX_RECURSION_LEVELS', 20);
 
 /**
+ * Implements hook_menu().
+ */
+function cyco_book_blocks_menu() {
+  $items = array();
+  $items['admin/config/cyco/tree-menu'] = array(
+    'title' => 'Tree menu',
+    'description' => 'Cconfiguration of the tree menu.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cyco_book_blocks_settings_form'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Define base config form.
+ */
+function cyco_book_blocks_settings_form($form, &$form_state) {
+  $form['explanation'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p>' . t(
+      'If the tree menus get out of sync with the course/blueprint '
+        . 'pages, click this button to rebuild the tree menus.' . '</p>'
+    ),
+  );
+  $form['clear_cache'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear tree menu caches'),
+    '#submit' => array('cyco_book_blocks_admin_flush_tree_menu_caches'),
+  );
+  return $form;
+}
+
+/** 
+ * Flush all the tree menu caches for admin.
+ */
+function cyco_book_blocks_admin_flush_tree_menu_caches() {
+  cyco_book_blocks_flush_all_tree_menu_caches();
+  drupal_goto('admin/config/cyco/tree-menu');
+}
+
+/**
  * Implements hook_permission().
  * 
  * Create a permission for each book root content type (course_page and
