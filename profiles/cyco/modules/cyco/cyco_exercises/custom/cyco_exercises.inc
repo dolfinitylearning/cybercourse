@@ -470,7 +470,7 @@ function _cyco_exercises_exercise_form_submit($form, &$form_state) {
 }
 
 /**
- * Alter some edit forms. Registier exercise tag for code that updates
+ * Alter some edit forms. Register exercise tag for code that updates
  * references from embedded nodes to the nodes in which they are embedded.
  */
 function cyco_exercises_form_node_form_alter(&$form, $form_state) {
@@ -480,101 +480,6 @@ function cyco_exercises_form_node_form_alter(&$form, $form_state) {
   }    
   
 }
-
-/**
- * Store references to exercises in the course page.
- * Erase references to exercises that are no longer referenced.
- * Called on form submit.
- */
-//function _cyco_exercises_store_exercise_refs($form, &$form_state) {
-//  global $base_url;
-//  $matches = array();
-//  $body_content = 
-//      $form_state['values']['field_body'][LANGUAGE_NONE][0]['value'];
-//  preg_match_all(
-//      '/^\/\@\@cyco\s+exercise\s+(.+)\s*$/mi', 
-//      $body_content,
-//      $matches
-//  );
-//  if ( sizeof( $matches ) > 0 ) {
-//    $course_page_nid = $form['nid']['#value'];
-//    //Make an array of exercise ids inserted in the page.
-//    $exercise_nids_referenced = array();
-//    foreach ( $matches[1] as $index => $exercise_internal_name ) {
-//      //Get nid of exercise with given machine name.
-//      $exer_efq = new EntityFieldQuery;
-//      $exer_efq
-//        ->entityCondition('entity_type', 'node')
-//        ->entityCondition('bundle', 'exercise')
-//        ->fieldCondition('field_internal_name', 'value', 
-//            trim($exercise_internal_name) );
-//      $query_result = $exer_efq->execute();
-//      if ( isset( $query_result['node'] ) ) {
-//        $nids = array_keys($query_result['node']);
-//        //Remember the exer's nid.
-//        $exercise_nids_referenced[] = $nids[0];
-//      }
-//    }
-//    //Update exer node to link to this course page.
-//    //Array to contain nids of pages that were being pointed to by
-//    //an exer, and are now being taken over to point to the current pages.
-//    //Warn user to check them for duplicate references the an exercise.
-//    $course_page_nids_with_duplicate_embeds = array();
-//    foreach ($exercise_nids_referenced as $exer_nid) {
-//      $exer_node = node_load($exer_nid);
-//      $update = TRUE;
-//      if ( ! isset($exer_node->field_course_page[LANGUAGE_NONE][0]['target_id']) ) {
-//        //Nothing is set.
-//        $update = TRUE;
-//      }
-//      else {
-//        $existing_course_page_nid = $exer_node->field_course_page[LANGUAGE_NONE][0]['target_id'];
-//        if ( $existing_course_page_nid != $course_page_nid ) {
-//          $course_page_nids_with_duplicate_embeds[$exer_nid] = $existing_course_page_nid;
-//          $update = TRUE;
-//        }
-//      }
-//      if ( $update ) {
-//        $exer_node->field_course_page[LANGUAGE_NONE][0]['target_id'] = $course_page_nid;
-//        node_save($exer_node);
-//      }
-//    }
-//    //User may have deleted an exercise from the course page.
-//    $exer_efq = new EntityFieldQuery;
-//    $exer_efq
-//      ->entityCondition('entity_type', 'node')
-//      ->entityCondition('bundle', 'exercise')
-//      ->fieldCondition('field_course_page', 'target_id', $course_page_nid );
-//    $query_result = $exer_efq->execute();
-//    if ( isset($query_result['node']) ) {
-//      foreach ( $query_result['node'] as $prior_exer_nid => $stuff) {
-//        if ( ! in_array($prior_exer_nid, $exercise_nids_referenced) ) {
-//          //Exer no longer embedded in page.
-//          //Clear the reference.
-//          $exer_node = node_load($prior_exer_nid);
-//          $exer_node->field_course_page = array();
-//          node_save($exer_node);
-//        }
-//      } //End foreach 
-//    }
-//    //Warn user if there might be duplicate references to an exer, on the 
-//    //current page, and another.
-//    foreach( $course_page_nids_with_duplicate_embeds as $exer_nid => $page_nid ) {
-//      $exer_node = node_load($exer_nid);
-//      $page_node = node_load($page_nid);
-//      $message = t('Warning! The course page') 
-//          . ' <a href="' . $base_url . '/node/' . $page_nid . '" target="_blank">' 
-//          .   $page_node->title
-//          . '</a> ' . t('also has the exercise')
-//          . ' <a href="' . $base_url . '/node/' . $exer_nid . '" target="_blank">' 
-//          .   $exer_node->title
-//          . '</a> ' 
-//          . t('in it. Each exercise should only be inserted in one page. '
-//          .   'Please remove the exercise from one of the pages.'); 
-//      drupal_set_message($message, 'warning');
-//    }
-//  } //End there were exercise insertions into the course page.
-//}
 
 /**
  * Implements hook_libraries_info().
@@ -1587,24 +1492,30 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
   }
   //Exit if not found.
   if ( $exercise_nid == 0 ) {
-    $message = t('Not found exercise internal name: @name', 
-        array('@name' => $exercise_internal_name));
-    watchdog('cyco_exercises', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found exercise internal name: @name', 
+          array('@name' => $exercise_internal_name));
+      watchdog('cyco_exercises', $message);
+    }
     return '';
   }
   $exercise_node = node_load($exercise_nid);
   if ( ! $exercise_node->status ) {
-    $message = t('Tried to show unpublished exercise: @name (@nid)', 
-        array('@name' => $exercise_internal_name, '@nid' => $exercise_nid)
-        );
-    watchdog('cyco_exercises', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Tried to show unpublished exercise: @name (@nid)', 
+          array('@name' => $exercise_internal_name, '@nid' => $exercise_nid)
+          );
+      watchdog('cyco_exercises', $message);
+    }
     return '';    
   }
   //Make sure that this is the right type of node.
   if ($exercise_node == FALSE || !node_access('view', $exercise_node) || $exercise_node->type != 'exercise') {
     $message = t('Invalid exercise id: @id', array('@id' => $exercise_nid));
     drupal_set_message($message);
-    watchdog('cyco_exercises', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      watchdog('cyco_exercises', $message);
+    }
     return '<p>' . $message . '</p>';
   }
   //Make the submission links.
