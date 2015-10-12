@@ -43,8 +43,8 @@ function book_top_navbar_admin_settings() {
         variable_get('book_top_navbar_content_field_names', 
             BOOK_TOP_NAVBAR_CONTENT_FIELD_NAMES),
     '#description' => t(
-        'Possible names of field containing main content, separated by'
-        . 'spaces. Checked left to right. Used to determine length of'
+        'Possible names of field containing main content, separated by '
+        . 'spaces. Checked left to right. Used to determine length of '
         . 'content to decide whether the show the top navbar.'
     ),
   );

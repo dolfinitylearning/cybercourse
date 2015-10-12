@@ -41,11 +41,13 @@ function book_top_navbar_node_view($node, $view_mode, $langcode) {
       $field_name = _book_top_navbar_find_field( $node->content );
       if ( is_null($field_name) ) {
         //Didn't find a candidate field.
-        watchdog(
-          'Book top navbar', 
-          'Couldn\'t find a content field, for node ' . $node->nid . '. '
-            . ' Check the content field names in the administration form.'
-        );
+        //Probably means there is no content in the node, rather than
+        //the field does not exist. Error report not necessary, probably.
+//        watchdog(
+//          'Book top navbar', 
+//          'Couldn\'t find a content field, for node ' . $node->nid . '. '
+//            . ' Check the content field names in the administration form.'
+//        );
         return;
       }
       $content = $node->content[$field_name][0]['#markup'];
