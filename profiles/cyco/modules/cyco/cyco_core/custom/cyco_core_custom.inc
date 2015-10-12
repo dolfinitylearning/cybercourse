@@ -45,7 +45,7 @@ function cyco_core_menu() {
     'file path' => drupal_get_path('module', 'system'),
   );
   $items['admin/config/cyco/base'] = array(
-    'title' => 'Basic CyberCourse stuff',
+    'title' => 'Basic CyberCourse settings',
     'description' => 'Base configuration of the CyberCourse system.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('cyco_core_settings_form'),
@@ -210,35 +210,21 @@ function cyco_core_init() {
  * Define base config form.
  */
 function cyco_core_settings_form($form, &$form_state) {
-  $form['explanation'] = array(
-    '#type' => 'markup',
-    '#markup' => '<p>' . t(
-      'If the tree menus get out of sync with the course/blueprint '
-        . 'pages, click this button to rebuild the tree menus.' . '</p>'
+  $form['cyco_core_log_notices'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Log Cyco notices'),
+    '#default_value' =>
+        variable_get('cyco_core_log_notices', FALSE),
+    '#description' => t(
+        'If this is on, Cyco will record all notices in the system '
+        . 'log, even for events which are probably not issues. '
+        . 'Mostly for debugging, and tracking suspect external requests, '
+        . 'such as requests to show unpublished exercises. '
+        . 'Recommend you leave it off, as it '
+        . 'adds a slight system load.'
     ),
   );
-  $form['clear_cache'] = array(
-    '#type' => 'submit',
-    '#value' => t('Clear tree menu caches'),
-    '#submit' => array('cyco_core_flush_tree_menu_caches'),
-  );
-  return $form;
-}
-
-/** 
- * Flush all the tree menu caches.
- */
-function cyco_core_flush_tree_menu_caches() {
-  if (function_exists('cyco_book_blocks_flush_all_tree_menu_caches')) {
-    cyco_book_blocks_flush_all_tree_menu_caches();
-    drupal_set_message(t('Tree menu caches cleared.'));
-  }
-  else {
-    $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__
-        . ' Flush function not found.';
-    cyco_core_handle_error( $message );
-  }
-  drupal_goto('admin/config/cyco/base');
+  return system_settings_form($form);
 }
 
 /**
