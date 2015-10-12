@@ -94,17 +94,21 @@ function _cyco_fill_in_the_blank_swim_callback( $fib_internal_name, $tag_content
     return '';
   }
   if ( $fib_nid == 0 ) {
-    $message = t('Not found fill-in-the-blank internal name: @name', 
-        array('@name' => $fib_internal_name));
-    watchdog('cyco_fill_in_the_blank', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found fill-in-the-blank internal name: @name', 
+          array('@name' => $fib_internal_name));
+      watchdog('cyco_fill_in_the_blank', $message);
+    }
     return '';
   }
   $fib_node = node_load($fib_nid);
   if ( ! $fib_node->status ) {
-    $message = t('Tried to show unpublished fill-in-the-blank: @name (@nid)', 
-        array('@name' => $fib_internal_name, '@nid' => $fib_nid)
-        );
-    watchdog('cyco_fill_in_the_blank', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Tried to show unpublished fill-in-the-blank: @name (@nid)', 
+          array('@name' => $fib_internal_name, '@nid' => $fib_nid)
+          );
+      watchdog('cyco_fill_in_the_blank', $message);
+    }
     return '';    
   }
   //Make sure that this is the right type of node.
