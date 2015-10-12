@@ -110,17 +110,21 @@ function _cyco_patterns_swim_callback( $pattern_internal_name, $tag_content ) {
   }
   //Exit if not found.
   if ( $pattern_nid == 0 ) {
-    $message = t('Not found pattern internal name: @name', 
-        array('@name' => $pattern_internal_name));
-    watchdog('cyco_pattern', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found pattern internal name: @name', 
+          array('@name' => $pattern_internal_name));
+      watchdog('cyco_pattern', $message);
+    }
     return '';
   }
   $pattern_node = node_load($pattern_nid);
   if ( ! $pattern_node->status ) {
-    $message = t('Tried to show unpublished pattern: @name (@nid)', 
-        array('@name' => $pattern_internal_name, '@nid' => $pattern_nid)
-        );
-    watchdog('cyco_pattern', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Tried to show unpublished pattern: @name (@nid)', 
+          array('@name' => $pattern_internal_name, '@nid' => $pattern_nid)
+          );
+      watchdog('cyco_pattern', $message);
+    }
     return '';    
   }
   //Make sure that this is the right type of node.
@@ -202,7 +206,9 @@ function cyco_patterns_swim_peek_load_css() {
  * Implements hook_node_view().
  */
 function cyco_patterns_node_view($node, $view_mode, $langcode) {
-  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+  if ( module_exists('cyco_events_log') 
+      && _cyco_events_log_should_log_events() 
+      && $view_mode == 'full') {
     if ( $node->type == 'pattern' ) {
       cyco_events_log_log_node_view($node, $view_mode, $langcode);
     }
