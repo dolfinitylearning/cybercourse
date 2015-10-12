@@ -367,9 +367,11 @@ function _cyco_pseudents_swim_view_callback( $pseudent_internal_name, $tag_conte
     return '';
   }
   if ( $pseudent_nid == 0 ) {
-    $message = t('Not found pseudent internal name: @name', 
-        array('@name' => $pseudent_internal_name));
-    watchdog('cyco_pseudent', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found pseudent internal name: @name', 
+          array('@name' => $pseudent_internal_name));
+      watchdog('cyco_pseudent', $message);
+    }
     return '';
   }
   $pseudent_node = node_load($pseudent_nid);
@@ -415,9 +417,11 @@ function _cyco_pseudents_swim_edit_callback( $pseudent_internal_name, $content )
   }
   //Exit if not found.
   if ( $pseudent_nid == 0 ) {
-    $message = t('Not found pseudent internal name: @name', 
-        array('@name' => $pseudent_internal_name));
-    watchdog('cyco_pseudents', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found pseudent internal name: @name', 
+          array('@name' => $pseudent_internal_name));
+      watchdog('cyco_pseudents', $message);
+    }
     return '';
   }
   //Load pseudent data.
