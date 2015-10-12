@@ -18,12 +18,12 @@ define('BOOK_TOP_NAVBAR_CONTENT_FIELD_NAMES', 'body field_body');
  */
 function book_top_navbar_menu() {
   $items['admin/config/cyco/book-top-navbar'] = array(
-    'title' => 'Book top navbar',
+    'title' => 'Book top navigation bar',
     'description' => 'Change how the top navigation bar for books behaves',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('book_top_navbar_admin_settings'),
     'access arguments' => array('administer site configuration'),
-    'type' => MENU_NORMAL_ITEM,
+//    'type' => MENU_NORMAL_ITEM,
     'file' => 'book_top_navbar.admin.inc',
   );
   return $items;
@@ -43,11 +43,13 @@ function book_top_navbar_node_view($node, $view_mode, $langcode) {
         //Didn't find a candidate field.
         //Probably means there is no content in the node, rather than
         //the field does not exist. Error report not necessary, probably.
-//        watchdog(
-//          'Book top navbar', 
-//          'Couldn\'t find a content field, for node ' . $node->nid . '. '
-//            . ' Check the content field names in the administration form.'
-//        );
+        if ( variable_get('cyco_core_log_notices', FALSE) ) {
+          watchdog(
+            'Book top navbar', 
+            'Couldn\'t find a content field, for node ' . $node->nid . '. '
+              . ' Check the content field names in the administration form.'
+          );
+        }
         return;
       }
       $content = $node->content[$field_name][0]['#markup'];
