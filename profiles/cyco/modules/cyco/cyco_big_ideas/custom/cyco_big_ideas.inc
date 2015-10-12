@@ -107,17 +107,21 @@ function _cyco_big_ideas_swim_callback( $big_idea_internal_name, $tag_content ) 
   }
   //Exit if not found.
   if ( $big_idea_nid == 0 ) {
-    $message = t('Not found big idea internal name: @name', 
-        array('@name' => $big_idea_internal_name));
-    watchdog('cyco_big_idea', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Not found big idea internal name: @name', 
+          array('@name' => $big_idea_internal_name));
+      watchdog('cyco_big_idea', $message);
+    }
     return '';
   }
   $big_idea_node = node_load($big_idea_nid);
   if ( ! $big_idea_node->status ) {
-    $message = t('Tried to show unpublished big idea: @name (@nid)', 
-        array('@name' => $big_idea_internal_name, '@nid' => $big_idea_nid)
-        );
-    watchdog('cyco_big_idea', $message);
+    if ( variable_get('cyco_core_log_notices', FALSE) ) {
+      $message = t('Tried to show unpublished big idea: @name (@nid)', 
+          array('@name' => $big_idea_internal_name, '@nid' => $big_idea_nid)
+          );
+      watchdog('cyco_big_idea', $message);
+    }
     return '';    
   }
   //Make sure that this is the right type of node.
@@ -208,7 +212,9 @@ function cyco_big_ideas_swim_peek_load_css() {
  * Implements hook_node_view().
  */
 function cyco_big_ideas_node_view($node, $view_mode, $langcode) {
-  if ( module_exists('cyco_events_log') && $view_mode == 'full') {
+  if ( module_exists('cyco_events_log') 
+      && _cyco_events_log_should_log_events() 
+      && $view_mode == 'full') {
     if ( $node->type == 'big_idea' ) {
       cyco_events_log_log_node_view($node, $view_mode, $langcode);
     }
