@@ -391,6 +391,7 @@ function cyco_book_blocks_theme() {
  */
 function _cyco_book_blocks_make_tree( $mlid, $nid, $title, $published,
   $current_recusion_level ) {
+return;
 watchdog('book tree', '_cyco_book_blocks_make_tree');  
   global $node_order;
   $this_level = array(); 
