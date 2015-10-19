@@ -107,6 +107,8 @@ function cyco_book_blocks_menu_link_alter(&$item) {
  * Clear caches of all book tree menus.
  */
 function cyco_book_blocks_flush_all_tree_menu_caches() {
+  watchdog('book tree', 'flushing'); 
+  
   //Get bids (nids of root nodes) for all relevant book types.
   $root_types = cyco_core_get_book_root_types();
   $all_bids = array();
