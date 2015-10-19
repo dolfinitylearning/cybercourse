@@ -132,6 +132,7 @@ watchdog('book tree', 'cyco_book_blocks_flush_all_tree_menu_caches');
  * @param type $bid Book id (also nid of book root node)
  */
 function _cbb_clear_book_tree_menu_caches( $bid ) {
+return;
 watchdog('book tree', '_cbb_clear_book_tree_menu_caches');  
   $see_unpublished = TRUE;
   $cache_name = _ccbb_compute_cache_name($bid, $see_unpublished );
