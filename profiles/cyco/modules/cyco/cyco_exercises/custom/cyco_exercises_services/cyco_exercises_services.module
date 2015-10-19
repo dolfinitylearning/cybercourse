@@ -967,10 +967,13 @@ function _cycoex_get_sub_rendered( $data ) {
     cyco_core_handle_services_error( $message );
     return;
   }
-  $w = $submission->field_version;
-  $x = $submission->field_submitted_files;
-  $y = $submission->field_when_submitted;
-  $solution = $submission->field_solution[LANGUAGE_NONE][0]['value'];
+//  $w = $submission->field_version;
+//  $x = $submission->field_submitted_files;
+//  $y = $submission->field_when_submitted;
+  $solution = '';
+  if ( $submission->field_solution[LANGUAGE_NONE][0]['value'] ) {
+    $solution = $submission->field_solution[LANGUAGE_NONE][0]['value'];
+  }
   //Solution is plain text.
   //Replace line feeds with <br>s.
   $solution_rendered = str_replace("\n", '<br>', $solution);
@@ -1404,13 +1407,13 @@ function _cycoex_save_feedback($feedback_data) {
       __FILE__, __LINE__, __FUNCTION__
   );  
   //Create the pseudent HTML.
-  $rating_nids = array();
-  foreach ( $query_result['node'] as $nid => $value ) {  
-    $rating_nids[] = $nid;
-  }
-  if ( sizeof($rating_nids) > 0 ) {
-    node_delete_multiple( $rating_nids );
-  }
+//  $rating_nids = array();
+//  foreach ( $query_result['node'] as $nid => $value ) {  
+//    $rating_nids[] = $nid;
+//  }
+//  if ( sizeof($rating_nids) > 0 ) {
+//    node_delete_multiple( $rating_nids );
+//  }
   //Fill in fields in exercise_submission node.
   $submission_node = node_load( $submission_nid );
   //Record current date/time as the feedback date/time.
