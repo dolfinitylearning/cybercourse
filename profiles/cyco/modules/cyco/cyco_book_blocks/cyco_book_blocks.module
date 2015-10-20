@@ -13,11 +13,31 @@ define('CBB_MAX_CHARS', 50);
  */
 define('CBB_MAX_RECURSION_LEVELS', 20);
 
+
+function cyco_set_message( $message ) {
+  if ( isset($_GET['dog']) ) {
+    drupal_set_message( $message );
+  }
+}
+
+/**
+ * Implements hook_init().
+ * 
+ * Reset flag to show whether rebuilding tree.
+ * Need it to prevent code from responding to menu updates when
+ * rebuilding
+ */
+function cyco_book_blocks_init() {
+  global $_cbb_rebuilding_tree;
+  $_cbb_rebuilding_tree = FALSE;
+}
+
+
 /**
  * Implements hook_menu().
  */
 function cyco_book_blocks_menu() {
-watchdog('book tree', 'cyco_book_blocks_menu');  
+cyco_set_message( 'cyco_book_blocks_menu');  
   $items = array();
   $items['admin/config/cyco/tree-menu'] = array(
     'title' => 'Tree menu',
@@ -33,6 +53,7 @@ watchdog('book tree', 'cyco_book_blocks_menu');
  * Define base config form.
  */
 function cyco_book_blocks_settings_form($form, &$form_state) {
+cyco_set_message('cyco_book_blocks_settings_form');
   $form['explanation'] = array(
     '#type' => 'markup',
     '#markup' => '<p>' . t(
@@ -52,8 +73,9 @@ function cyco_book_blocks_settings_form($form, &$form_state) {
  * Flush all the tree menu caches for admin.
  */
 function cyco_book_blocks_admin_flush_tree_menu_caches() {
-watchdog('book tree', 'cyco_book_blocks_admin_flush_tree_menu_caches');  
+cyco_set_message('cyco_book_blocks_admin_flush_tree_menu_caches');  
   cyco_book_blocks_flush_all_tree_menu_caches();
+  drupal_set_message('Tree menu caches cleared.');
   drupal_goto('admin/config/cyco/tree-menu');
 }
 
@@ -65,6 +87,7 @@ watchdog('book tree', 'cyco_book_blocks_admin_flush_tree_menu_caches');
  * nodes in the menu tree.
  */
 function cyco_book_blocks_permission() {
+cyco_set_message('cyco_book_blocks_permission');
   $permissions = array();
   $book_types = cyco_core_get_book_root_types();
   foreach ($book_types as $book_type) {
@@ -84,8 +107,7 @@ function cyco_book_blocks_permission() {
  * @param type $form_state
  */
 function cyco_book_blocks_form_book_admin_edit_alter(&$form, $form_state) {
-watchdog('book tree', 'cyco_book_blocks_form_book_admin_edit_alter');  
-  
+cyco_set_message('cyco_book_blocks_form_book_admin_edit_alter');  
   $form['#submit'][] = 'cyco_book_blocks_flush_all_tree_menu_caches';
 }
 
@@ -97,7 +119,11 @@ watchdog('book tree', 'cyco_book_blocks_form_book_admin_edit_alter');
  * but its menu data has not.
  */
 function cyco_book_blocks_menu_link_alter(&$item) {
-watchdog('book tree', 'cyco_book_blocks_menu_link_alter');  
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('cyco_book_blocks_menu_link_alter');  
   if ( isset( $item['bid'] ) ) {
     $bid = $item['bid'];
     $book_root = node_load($bid);
@@ -112,8 +138,11 @@ watchdog('book tree', 'cyco_book_blocks_menu_link_alter');
  * Clear caches of all book tree menus.
  */
 function cyco_book_blocks_flush_all_tree_menu_caches() {
-return;
-watchdog('book tree', 'cyco_book_blocks_flush_all_tree_menu_caches');  
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('cyco_book_blocks_flush_all_tree_menu_caches');  
   //Get bids (nids of root nodes) for all relevant book types.
   $root_types = cyco_core_get_book_root_types();
   $all_bids = array();
@@ -132,8 +161,11 @@ watchdog('book tree', 'cyco_book_blocks_flush_all_tree_menu_caches');
  * @param type $bid Book id (also nid of book root node)
  */
 function _cbb_clear_book_tree_menu_caches( $bid ) {
-return;
-watchdog('book tree', '_cbb_clear_book_tree_menu_caches');  
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('_cbb_clear_book_tree_menu_caches');  
   $see_unpublished = TRUE;
   $cache_name = _ccbb_compute_cache_name($bid, $see_unpublished );
   variable_del($cache_name);
@@ -146,6 +178,7 @@ watchdog('book tree', '_cbb_clear_book_tree_menu_caches');
  * Implements hook_block_info().
  */
 function cyco_book_blocks_block_info() {
+cyco_set_message('cyco_book_blocks_block_info');
   $blocks = _cbb_block_info_for_type('course_page', 'Course');
   $blocks += _cbb_block_info_for_type('blueprint_page', 'Blueprint');
   //Get course roots.
@@ -159,6 +192,7 @@ function cyco_book_blocks_block_info() {
  * @return array Block info array.
  */
 function _cbb_block_info_for_type( $content_type, $type_label ) {
+cyco_set_message('_cbb_block_info_for_type');
   //Get the nids of book roots.
   $nids = _cbb_get_nids_book_roots( $content_type );
   $block_info = array();
@@ -177,6 +211,7 @@ function _cbb_block_info_for_type( $content_type, $type_label ) {
  * Implements hook_block_view().
  */
 function cyco_book_blocks_block_view($delta = '') {
+cyco_set_message('cyco_book_blocks_block_view');
   //Is this a block for this module?
   $pos = strpos($delta, 'cbb_');
   if ( $pos === FALSE ) {
@@ -205,6 +240,7 @@ function cyco_book_blocks_block_view($delta = '') {
  * @return string Content representing the block.
  */
 function _cbb_create_block_content( $root_nid ) {
+cyco_set_message('_cbb_create_block_content');
   if ( is_nan($root_nid) ) {
       $message = __FILE__ . ' (line ' . __LINE__ . ') ' . __FUNCTION__ 
           . ' Not numeric : ' . $root_nid;
@@ -221,8 +257,7 @@ function _cbb_create_block_content( $root_nid ) {
  * @return array The nids.
  */
 function _cbb_get_nids_book_roots( $bundle_name ) {
-watchdog('book tree', '_cbb_get_nids_book_roots');  
-
+cyco_set_message('_cbb_get_nids_book_roots');  
   $result = array();
   $sql = 
     "SELECT DISTINCT 
@@ -244,8 +279,11 @@ watchdog('book tree', '_cbb_get_nids_book_roots');
  * @return string Content.
  */
 function _cbb_get_book_tree( $root_nid ) {
-watchdog('book tree', '_cbb_get_book_tree');  
-
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('_cbb_get_book_tree');  
   global $node_order;
   $node_order = 0;
   //Send path of current page. Client code will highlight the path to that page.
@@ -274,12 +312,14 @@ watchdog('book tree', '_cbb_get_book_tree');
   $cache_name = _ccbb_compute_cache_name($root_nid, $see_unpublished );
   $cache = variable_get($cache_name, NULL);
   if ( ! is_null($cache) ) {
+cyco_set_message('Found cache');    
     return $cache;
   }
   //Regenerate the menu.
   $current_recusion_level = 0;
   $tree = array();
   $title_to_use = _cbb_get_node_title( $root_node );
+  $_cbb_rebuilding_tree = TRUE;
   $tree[$title_to_use] = _cyco_book_blocks_make_tree(
       $root_node->book['mlid'],
       $root_node->nid,
@@ -287,6 +327,7 @@ watchdog('book tree', '_cbb_get_book_tree');
       $root_node->status,
       $current_recusion_level
   );
+  $_cbb_rebuilding_tree = FALSE;
   $trail = array( current_path() );
   global $_cbb_root_path;
   $_cbb_root_path = 'node/' . $root_nid;
@@ -311,12 +352,14 @@ watchdog('book tree', '_cbb_get_book_tree');
  * @param boolean $see_unpublished True if current user can see unpublished pages.
  */
 function _ccbb_compute_cache_name( $nid, $see_unpublished ) {
+cyco_set_message('_ccbb_compute_cache_name');
   if ( $see_unpublished ) {
     $name = '_cbb_menu_cache_w_unpublished' . $nid;
   }
   else {
     $name = '_cbb_menu_cache_wo_unpublished' . $nid;
   }
+cyco_set_message('Name: ' . $name);
   return $name;
 }
 
@@ -326,6 +369,7 @@ function _ccbb_compute_cache_name( $nid, $see_unpublished ) {
  * @return string Title to use.
  */
 function _cbb_get_node_title( $node ) {
+cyco_set_message('_cbb_get_node_title');
   if ( isset( $node->field_short_title[LANGUAGE_NONE][0]['value'] ) ) {
     return $node->field_short_title[LANGUAGE_NONE][0]['value'];
   }
@@ -337,6 +381,7 @@ function _cbb_get_node_title( $node ) {
  * Tells Drupal about custom theme functions.
  */
 function cyco_book_blocks_theme() {
+cyco_set_message('cyco_book_blocks_theme');
   return array(
     
     'cbb_book_tree' => array(
@@ -391,8 +436,8 @@ function cyco_book_blocks_theme() {
  */
 function _cyco_book_blocks_make_tree( $mlid, $nid, $title, $published,
   $current_recusion_level ) {
-return;
-watchdog('book tree', '_cyco_book_blocks_make_tree');  
+cyco_set_message('_cyco_book_blocks_make_tree mlid: ' . $mlid . ' nid: ' . $nid 
+    . ' title: ' . $title . ' current_recrsion_level: ' . $current_recusion_level);  
   global $node_order;
   $this_level = array(); 
   $sql= "SELECT DISTINCT n.nid as nid, m.plid as plid, m.mlid as mlid,  
@@ -444,6 +489,7 @@ watchdog('book tree', '_cyco_book_blocks_make_tree');
 }
 
 function theme_cbb_book_tree($variables) {
+cyco_set_message('theme_cbb_book_tree');
   //Block title has already been t'd in _cbb_get_book_tree.
   $block_title = $variables['root_title'];
   $root_nid = $variables['root_nid'];
@@ -470,6 +516,7 @@ function cbb_recursive_link_creator(
     $items = array(), 
     $parentid = ''
 ) {
+cyco_set_message('cbb_recursive_link_creator');
   static $menucount = 0;
   $count = 0;
   $output = '';
@@ -545,6 +592,7 @@ function cbb_recursive_link_creator(
  * Render a list item containing one or more links.
  */
 function theme_cbb_listitem($variables) {
+cyco_set_message('theme_cbb_listitem');
   $item         = $variables['item'];
   $id           = $variables['id'];
   $link_text    = $variables['link_text'];
@@ -593,6 +641,7 @@ function theme_cbb_listitem($variables) {
  * Render a single link, possibly with open/close link and/or edit button.
  */
 function theme_cbb_links($variables) {
+cyco_set_message('theme_cbb_links');
   // create values from the parameter array
   $link_text    = $variables["link_text"];
   $path         = $variables["path"];
@@ -634,6 +683,7 @@ function theme_cbb_links($variables) {
  * Render a block title.
  */
 function theme_cbb_block_title($variables) {
+cyco_set_message('theme_cbb_block_title');
   // create values from the parameter array
   $link_text    = $variables["link_text"];
   $path         = $variables["path"];
@@ -647,6 +697,7 @@ function theme_cbb_block_title($variables) {
  * @return string Limited string
  */
 function _cbb_max_len($string) {
+cyco_set_message('_cbb_max_len');
   if ( strlen($string) > ( CBB_MAX_CHARS - 3 ) ) {
     $string = drupal_substr($string, 0, CBB_MAX_CHARS - 3) . '...';
   }
@@ -654,16 +705,31 @@ function _cbb_max_len($string) {
 }
 
 function cyco_book_blocks_node_update($node) {
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('cyco_book_blocks_node_update');
   _ccbb_maybe_erase_menu_cache( $node );
 }
 
 
 function cyco_book_blocks_node_insert($node) {
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('cyco_book_blocks_node_insert');
   _ccbb_maybe_erase_menu_cache( $node );
 }
 
 
 function cyco_book_blocks_node_delete($node) {
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('cyco_book_blocks_node_delete');
   _ccbb_maybe_erase_menu_cache( $node );
 }
 
@@ -671,6 +737,11 @@ function cyco_book_blocks_node_delete($node) {
  * Erase the cache for book menu a node is in.
  */
 function _ccbb_maybe_erase_menu_cache( $node ) {
+  global $_cbb_rebuilding_tree;
+  if ( $_cbb_rebuilding_tree ) {
+    return;
+  }
+cyco_set_message('_ccbb_maybe_erase_menu_cache');
   if ( isset($node->book['bid']) ) {
     if ( cyco_core_is_book_content_type( $node ) ) {
       $bid = $node->book['bid'];
@@ -679,4 +750,3 @@ function _ccbb_maybe_erase_menu_cache( $node ) {
     }
   }
 }
-
