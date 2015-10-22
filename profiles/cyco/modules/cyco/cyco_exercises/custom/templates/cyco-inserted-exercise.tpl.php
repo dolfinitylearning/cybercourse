@@ -46,4 +46,9 @@
     <?php //This is completed by JavaScript. The class name cannot change. ?>
   </div>
   <?php } ?>
+  <?php
+  if ( $direct_link ) { ?>
+    <p><?php print $direct_link; ?></p>
+  <?php }
+  ?>
 </div>

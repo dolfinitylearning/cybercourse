@@ -260,8 +260,10 @@ function cyco_exercises_theme() {
       'variables' => array(
         'title' => '(no title)',
         'body' => '(MT)',
-//        'labeled_links' => array(),
         'too_bad_so_sad_message' => '',
+        //Link to let author/instructor/others jump to exercise page.
+        //Not visible to most users.
+        'direct_link' => '',
       ),
     ),
     'cyco_feedback_phrases' => array(
@@ -270,13 +272,6 @@ function cyco_exercises_theme() {
         'phrases_groups' => array(),
       )
     ),
-//    'cyco_exercises_model_solutions' => array(
-//      'template' => 'custom/templates/cyco-exercises-model-solutions',
-//      'variables' => array(
-//        'exer_nid' => NULL,
-//        'models' => array(),
-//      )
-//    )
   );
   return $result;
 }
@@ -1537,13 +1532,19 @@ function _cyco_exercises_swim_callback( $exercise_internal_name, $tag_content ) 
       $attached_file_links[] = $link;
     }
   }
+  $direct_link = '';
+  if (cyco_core_current_user_has_role(
+      array('author', 'instructor', 'grader', 'administrator')) 
+  ){
+    $direct_link = l( t('View exercise'), 'node/' . $exercise_nid );
+  }
   $result = theme('cyco_embedded_exercise', array(
     'exercise_nid' => $exercise_nid,
     'title' => $exercise_node->title,
     'body' => $body_content,
-//    'labeled_links' => $labeled_links,
     'attached_file_links' => $attached_file_links,
     'too_bad_so_sad_message' => $too_bad_so_sad_message,
+    'direct_link' => $direct_link,
   ));  
   return $result;
 }
