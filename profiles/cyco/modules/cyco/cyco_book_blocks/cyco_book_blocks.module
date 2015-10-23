@@ -102,7 +102,7 @@ cyco_set_message('cyco_book_blocks_permission');
 }
 
 /**
- * When user saves gook rearrange form, flush the tree caches.
+ * When user saves book rearrange form, flush the tree caches.
  * @param array $form
  * @param type $form_state
  */
@@ -119,6 +119,7 @@ cyco_set_message('cyco_book_blocks_form_book_admin_edit_alter');
  * but its menu data has not.
  */
 function cyco_book_blocks_menu_link_alter(&$item) {
+  return;
   global $_cbb_rebuilding_tree;
   if ( $_cbb_rebuilding_tree ) {
     return;
@@ -704,13 +705,79 @@ cyco_set_message('_cbb_max_len');
   return $string;
 }
 
+/**
+ * Implements hook_form_alter.
+ * 
+ * For course and blueprint pages, store the original titla and short titles 
+ * of the node. Later, check to see whether they have changed. If so,
+ * clear tree menu caches.
+ */
+function cyco_book_blocks_form_alter(&$form, &$form_state, $form_id) {
+  if ( $form_id == 'course_page_node_form' 
+      || $form_id == 'blueprint_page_node_form' ) {
+    $form['_cyco_book_blocks_original_title'] = array(
+      '#type' => 'value',
+      '#value' => $form['title']['#default_value'],
+    );
+    if ( isset($form['field_short_title'][LANGUAGE_NONE][0]
+          ['value']['#default_value']) ) {
+      $form['_cyco_book_blocks_original_short_title']  = array(
+        '#type' => 'value',
+        '#value' => $form['field_short_title'][LANGUAGE_NONE][0]
+            ['value']['#default_value'],
+      );
+    }
+  }
+  $form['#submit'][] = '_cyco_book_blocks_node_submit';
+}
+
+/**
+ * If either the title or the short title of a page has changed,
+ * clear the tree menu caches.
+ */
+function _cyco_book_blocks_node_submit($form, &$form_state) {
+  global $_cbb_clear_tree_menu_caches;
+  $_cbb_clear_tree_menu_caches = FALSE;
+  //Has the node's title changed?
+  $old_title = $form_state['values']['_cyco_book_blocks_original_title'];
+  $new_title = $form_state['values']['title'];
+  if ( $old_title != $new_title ) {
+    $_cbb_clear_tree_menu_caches = TRUE;
+  }
+  if ( ! $_cbb_clear_tree_menu_caches ) {
+    //Has the short title changed?
+    $old_short_title_defined 
+        = isset( $form_state['values']['_cyco_book_blocks_original_short_title'] );
+    $new_short_title_defined 
+        = isset( $form_state['values']['field_short_title'][LANGUAGE_NONE][0]['value'] );
+    if ( $old_short_title_defined != $new_short_title_defined ) {
+      //There was no short title, but now there is, or vice versa.
+      $_cbb_clear_tree_menu_caches = TRUE;
+    }
+    elseif ($old_short_title_defined && $new_short_title_defined) {
+      //Both are defined. Have they changed?
+      $old_short_title 
+          = $form_state['values']['_cyco_book_blocks_original_short_title'];
+      $new_short_title
+          = $form_state['values']['field_short_title'][LANGUAGE_NONE][0]['value'];
+      if ( $old_short_title != $new_short_title ) {
+        $_cbb_clear_tree_menu_caches = TRUE;
+      }
+    }
+  }
+}
+
 function cyco_book_blocks_node_update($node) {
   global $_cbb_rebuilding_tree;
   if ( $_cbb_rebuilding_tree ) {
     return;
   }
 cyco_set_message('cyco_book_blocks_node_update');
-  _ccbb_maybe_erase_menu_cache( $node );
+  //Clear tree menu cache if title or short title has changed.
+  global $_cbb_clear_tree_menu_caches;
+  if ( $_cbb_clear_tree_menu_caches ) {
+    _ccbb_maybe_erase_menu_cache( $node );
+  }
 }
 
 
