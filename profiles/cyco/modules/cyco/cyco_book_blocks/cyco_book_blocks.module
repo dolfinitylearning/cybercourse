@@ -739,8 +739,13 @@ function _cyco_book_blocks_node_submit($form, &$form_state) {
   global $_cbb_clear_tree_menu_caches;
   $_cbb_clear_tree_menu_caches = FALSE;
   //Has the node's title changed?
-  $old_title = $form_state['values']['_cyco_book_blocks_original_title'];
-  $new_title = $form_state['values']['title'];
+  $old_title 
+      = isset($form_state['values']['_cyco_book_blocks_original_title'])
+        ? $form_state['values']['_cyco_book_blocks_original_title']
+        : '';
+  $new_title = isset($form_state['values']['title'])
+      ? $form_state['values']['title']
+      : '';
   if ( $old_title != $new_title ) {
     $_cbb_clear_tree_menu_caches = TRUE;
   }
