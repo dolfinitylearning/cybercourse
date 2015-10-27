@@ -467,9 +467,9 @@ cyco_set_message('_cyco_book_blocks_make_tree mlid: ' . $mlid . ' nid: ' . $nid
   );
   //Update node's order in the book.
   $node_order += 10;
-  $node_wrapper = entity_metadata_wrapper('node', $nid);
-  $node_wrapper->field_order_in_book = $node_order;
-  $node_wrapper->save();
+//  $node_wrapper = entity_metadata_wrapper('node', $nid);
+//  $node_wrapper->field_order_in_book = $node_order;
+//  $node_wrapper->save();
   $current_recusion_level++;
   if ( $current_recusion_level < CBB_MAX_RECURSION_LEVELS ) {
     $children = array();
