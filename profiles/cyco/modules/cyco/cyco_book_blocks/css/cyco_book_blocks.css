@@ -31,7 +31,7 @@ ul.cyco-book-tree-menu li span.no-branch {
 
 ul.cyco-book-tree-menu li span.close-branch {
   background-image: url(../images/minus_alt.svg);
-  margin-top: 0.2em;
+  /*margin-top: 0.2em;*/
 }
 ul.cyco-book-tree-menu li span.open-branch {
   background-image: url(../images/plus_alt.svg);
@@ -39,10 +39,10 @@ ul.cyco-book-tree-menu li span.open-branch {
 }
 ul.cyco-book-tree-menu li span.no-branch {
   background-image: url(../images/stop.svg);
-  width: 0.6em;
+/*  width: 0.6em;
   height: 0.6em;
   margin-top: 0.4em;
-  margin-left: 0.2em;
+  margin-left: 0.2em;*/
 }
 
 ul.cyco-book-tree-menu li a {
@@ -65,6 +65,21 @@ ul.cyco-book-tree-menu li a {
     height: 1em;
     background-size: 1em;
   }
+  ul.cyco-book-tree-menu li span.close-branch {
+    /*background-image: url(../images/minus_alt.svg);*/
+    margin-top: 0.2em;
+  }
+  ul.cyco-book-tree-menu li span.open-branch {
+    /*background-image: url(../images/plus_alt.svg);*/
+    margin-top: 0.2em;
+  }
+  ul.cyco-book-tree-menu li span.no-branch {
+    /*background-image: url(../images/stop.svg);*/
+    width: 0.6em;
+    height: 0.6em;
+    margin-top: 0.4em;
+    margin-left: 0.2em;
+  }
 }
 
 /* Tablet */
@@ -76,6 +91,21 @@ ul.cyco-book-tree-menu li a {
     height: 1.3em;
     background-size: 1.3em;
   }  
+  ul.cyco-book-tree-menu li span.close-branch {
+    /*background-image: url(../images/minus_alt.svg);*/
+    margin-top: 0.2em;
+  }
+  ul.cyco-book-tree-menu li span.open-branch {
+    /*background-image: url(../images/plus_alt.svg);*/
+    margin-top: 0.2em;
+  }
+  ul.cyco-book-tree-menu li span.no-branch {
+    /*background-image: url(../images/stop.svg);*/
+    width: 0.6em;
+    height: 0.6em;
+    margin-top: 0.4em;
+    margin-left: 0.2em;
+  }
 }
 
 /* Phone */
@@ -88,8 +118,22 @@ ul.cyco-book-tree-menu li a {
     background-size: 2em;
   }  
   ul.cyco-book-tree-menu li span.open-branch {
-    background-image: url(../images/plus_alt.svg);
+    /*background-image: url(../images/plus_alt.svg);*/
+    margin-top: -0.4em;
+    margin-right: 0.5em;
+  }
+  ul.cyco-book-tree-menu li span.close-branch {
+    /*background-image: url(../images/minus_alt.svg);*/
+    margin-top: -0.4em;
+    margin-right: 0.5em;
+  }
+  ul.cyco-book-tree-menu li span.no-branch {
+    background-image: url(../images/stop.svg);
+    width: 1.6em;
+    height: 1.6em;
     margin-top: 0.4em;
+    margin-left: 0.2em;
+    margin-right: 0.5em;
   }
 }
 
