@@ -18,19 +18,15 @@ ul.cyco-book-tree-menu .currentPage > span + a {
   font-weight: bold;
 }
 
-/*ul.cyco-book-tree-menu li span {
-  border: 1px transparent solid;
-}
-*/
 ul.cyco-book-tree-menu li span.open-branch,
 ul.cyco-book-tree-menu li span.close-branch,
 ul.cyco-book-tree-menu li span.no-branch {
   display: block;
   float: left;
-  width: 1em;
-  height: 1em;
+/*  width: 1em;
+  height: 1em;*/
   cursor: pointer;
-  background-size: 1em;
+  /*background-size: 1em;*/
 }
 
 ul.cyco-book-tree-menu li span.close-branch {
@@ -53,3 +49,45 @@ ul.cyco-book-tree-menu li a {
   display: block;
   margin-left: 1.2em;
 }
+
+
+/* 
+  Change size of branch open/close clickables, depending on device.
+  Breakpoints are from AdaptiveTheme.
+*/
+
+/* Desktop */
+@media only screen and (min-width:1025px) {
+  ul.cyco-book-tree-menu li span.open-branch,
+  ul.cyco-book-tree-menu li span.close-branch,
+  ul.cyco-book-tree-menu li span.no-branch {
+    width: 1em;
+    height: 1em;
+    background-size: 1em;
+  }
+}
+
+/* Tablet */
+@media only screen and (min-width:769px) and (max-width:1024px) {
+  ul.cyco-book-tree-menu li span.open-branch,
+  ul.cyco-book-tree-menu li span.close-branch,
+  ul.cyco-book-tree-menu li span.no-branch {
+    width: 1.3em;
+    height: 1.3em;
+    background-size: 1.3em;
+  }  
+}
+
+/* Phone */
+@media only screen and (min-width:321px) and (max-width:480px) {
+  ul.cyco-book-tree-menu li span.open-branch,
+  ul.cyco-book-tree-menu li span.close-branch,
+  ul.cyco-book-tree-menu li span.no-branch {
+    width: 1.8em;
+    height: 1.8em;
+    background-size: 1.8em;
+  }  
+}
+
+
+
