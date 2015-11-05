@@ -35,7 +35,7 @@ ul.cyco-book-tree-menu li span.close-branch {
 }
 ul.cyco-book-tree-menu li span.open-branch {
   background-image: url(../images/plus_alt.svg);
-  margin-top: 0.2em;
+  /*margin-top: 0.2em;*/
 }
 ul.cyco-book-tree-menu li span.no-branch {
   background-image: url(../images/stop.svg);
@@ -83,10 +83,14 @@ ul.cyco-book-tree-menu li a {
   ul.cyco-book-tree-menu li span.open-branch,
   ul.cyco-book-tree-menu li span.close-branch,
   ul.cyco-book-tree-menu li span.no-branch {
-    width: 1.8em;
-    height: 1.8em;
-    background-size: 1.8em;
+    width: 2em;
+    height: 2em;
+    background-size: 2em;
   }  
+  ul.cyco-book-tree-menu li span.open-branch {
+    background-image: url(../images/plus_alt.svg);
+    margin-top: 0.4em;
+  }
 }
 
 
