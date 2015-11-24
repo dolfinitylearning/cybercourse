@@ -912,9 +912,9 @@ function _cyco_exercises_submission_form_submission($form, &$form_state) {
   global $user;
   $user_data = user_load($user->uid);
   $user_language = $user_data->language ? $user_data->language : LANGUAGE_NONE;
-  $first_name = $user_data->field_first_name[ $user_language ][0]['value'];
-  $last_name = $user_data->field_last_name[ $user_language ][0]['value'];
-  $full_name = $user->name;
+  $first_name = trim($user_data->field_first_name[ $user_language ][0]['value']);
+  $last_name = trim($user_data->field_last_name[ $user_language ][0]['value']);
+  $full_name = trim($user->name);
   if ( $first_name || $last_name ) {
     $full_name .= ' (' 
         . $first_name 
